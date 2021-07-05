@@ -7,26 +7,22 @@ services:
       - _JAVA_OPTIONS=-Xmx512m -Xms256m
       - SPRING_PROFILES_ACTIVE=prod,api-docs
       - MANAGEMENT_METRICS_EXPORT_PROMETHEUS_ENABLED=true
-      - SPRING_DATASOURCE_URL=jdbc:sqlserver://moneyroomba-mssql:1433;database=moneyRoomba
-      - SPRING_LIQUIBASE_URL=jdbc:sqlserver://moneyroomba-mssql:1433;database=moneyRoomba
-      - JHIPSTER_SLEEP=60 # gives time for mssql server to start
+      - SPRING_DATASOURCE_URL=jdbc:mysql://moneyroomba-mysql:3306/moneyroomba?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
+      - SPRING_LIQUIBASE_URL=jdbc:mysql://moneyroomba-mysql:3306/moneyroomba?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
+      - JHIPSTER_SLEEP=30 # gives time for other services to boot before the application
     # If you want to expose these ports outside your dev PC,
     # remove the "127.0.0.1:" prefix
     ports:
       - 127.0.0.1:8080:8080
-  moneyroomba-mssql:
-    image: mcr.microsoft.com/mssql/server:2019-CU11-ubuntu-20.04
-    # volumes are not supported on macOS
+  moneyroomba-mysql:
+    image: mysql:8.0.25
     # volumes:
-    #   - ~/volumes/jhipster/tempdb/mssql/:/var/opt/mssql/data/
+    #   - ~/volumes/jhipster/moneyRoomba/mysql/:/var/lib/mysql/
     environment:
-      - ACCEPT_EULA=Y
-      - MSSQL_PID=Express
-      - SA_PASSWORD=yourStrong(!)Password
-      - MSSQL_DATABASE=moneyRoomba
-      - MSSQL_SLEEP=60
+      - MYSQL_ALLOW_EMPTY_PASSWORD=yes
+      - MYSQL_DATABASE=moneyroomba
     # If you want to expose these ports outside your dev PC,
     # remove the "127.0.0.1:" prefix
     ports:
-      - 127.0.0.1:1433:1433
-    command: /bin/bash -c '/opt/mssql/bin/sqlservr & echo "wait $$MSSQL_SLEEP sec for DB to start "; sleep $$MSSQL_SLEEP; /opt/mssql-tools/bin/sqlcmd -U sa -P $$SA_PASSWORD -d tempdb -q "EXIT(CREATE DATABASE $$MSSQL_DATABASE)"; wait;'
+      - 127.0.0.1:3306:3306
+    command: mysqld --lower_case_table_names=1 --skip-ssl --character_set_server=utf8mb4 --explicit_defaults_for_timestamp

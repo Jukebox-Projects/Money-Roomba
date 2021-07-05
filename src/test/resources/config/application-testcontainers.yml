@@ -6,18 +6,15 @@
 # To activate this configuration launch integration tests with the 'testcontainers' profile
 #
 # More information on database containers: https://www.testcontainers.org/modules/databases/
-#
-# You are required to accept EULA license for SQL server containers.
-# Follow the instructions at https://www.testcontainers.org/modules/databases/mssqlserver/
 # ===================================================================
 
 spring:
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
     driver-class-name: org.testcontainers.jdbc.ContainerDatabaseDriver
-    url: jdbc:tc:sqlserver:2019-CU11-ubuntu-20.04://;database=moneyRoomba?TC_TMPFS=/testtmpfs:rw
-    username: SA
-    password: yourStrong(!)Password
+    url: jdbc:tc:mysql:8.0.25:///moneyRoomba?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=${user.timezone}&TC_TMPFS=/testtmpfs:rw
+    username: root
+    password:
     hikari:
       poolName: Hikari
       auto-commit: false
@@ -27,4 +24,4 @@ spring:
         prepStmtCacheSqlLimit: 2048
         useServerPrepStmts: true
   jpa:
-    database-platform: org.hibernate.dialect.SQLServer2012Dialect
+    database-platform: org.hibernate.dialect.MySQL8Dialect
