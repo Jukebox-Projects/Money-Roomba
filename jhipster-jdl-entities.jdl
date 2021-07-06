@@ -1,0 +1,189 @@
+entity UserDetails(T_USER) {
+	country String required,
+    phone String required,
+    apiKey String,
+    notifications Boolean required,
+    isActive Boolean required,
+    isTemporaryPassword Boolean required
+}
+
+entity Wallet(T_WALLET) {
+	name String required,
+    description String,
+    inReports Boolean required,
+    isActive Boolean required,
+    balance Double required
+}
+
+entity Transaction(T_TRANSACTION) {
+    name String required,
+    description String,
+    dateAdded LocalDate required,
+    amount Double min(0),
+    originalAmount Double required min(0),
+    movementType MovementType required,
+    scheduled Boolean required,
+    addToReports Boolean required,
+    incomingTransaction Boolean required,
+    transactionType TransactionType required
+}
+
+enum TransactionType {
+	MANUAL ("Creada manualmente"),
+    SCHEDULED ("Programada"),
+    EMAIL ("Recibida por correo"),
+    API ("Recibida por API"),
+    SHARED  ("Recibida de otro usuario")
+}
+
+entity ScheduledTransaction(T_SCHEDULED_TRANSACTION) {
+    name String required,
+    description String,
+    originalAmount Double required min(0),
+    movementType MovementType required,
+    startDate LocalDate required,
+    endDate LocalDate,
+    addToReports Boolean required,
+    incomingTransaction Boolean required
+}
+
+
+entity SchedulePattern(T_SCHEDULE_PATTERN){
+	recurringType RecurringType required,
+    separationCount Integer min(0),
+    maxNumberOfOcurrences Integer,
+    dayOfWeek Integer min(0) max(6),
+    weekOfMonth Integer min(0) max(5),
+    dayOfMonth Integer min(0) max(31),
+    monthOfYear Integer min(0) max(11)
+}
+
+enum RecurringType {
+	DAILY ("Diariamente"),
+    WEEKLY ("Semanalmente"),
+    MONTHLY ("Mensualmente"),
+    YEARLY ("Anualmente")
+}
+
+enum MovementType {
+	INCOME ("Ingreso"),
+    EXPENSE ("Egreso")
+}
+
+entity Attachment(T_ATTACHMENT) {
+	url String required,
+    name String required
+}
+
+entity Category(T_CATEGORY) {
+   name String required,
+   isActive Boolean required,
+   userCreated Boolean required
+}
+
+entity Invoice(T_INVOICE) {
+   companyName String required,
+   userName String required,
+   userLastName String required,
+   userEmail String required,
+   dateCreated LocalDate required,
+   total Double required min(0),
+   subTotal Double required min(0),
+   tax Double min(0),
+   purchaseDescription String,
+   itemQuantity Integer required min(0),
+   itemPrice Double required min(0)
+}
+
+entity License (T_LICENSE) {
+   code UUID required unique,
+   isAssigned Boolean required,
+   isActive Boolean required,
+   createMethod LicenseCreateMethod required
+}
+
+enum LicenseCreateMethod {
+	MANUAL ("Manual"),
+    BULK ("En bloque")
+}
+
+entity Currency (T_CURRENCY) {
+	code String required,
+	name String required,
+	conversionRate Float required
+}
+
+entity Icon (T_ICON) {
+    url String required,
+    name String required
+}
+
+entity Notification (T_NOTIFICATION) {
+    dateOpened LocalDate required,
+    opened Boolean required
+}
+
+entity Event {
+	eventType EventType required,
+    dateAdded LocalDate required,
+    sourceId Long required,
+    sourceEntity SourceEntity required,
+    userName String required,
+    userLastName String required
+}
+
+entity SystemSetting {
+	key String required,
+    value Double required
+}
+
+enum SourceEntity {
+	TRANSACTION ("Transacción"),
+    CONTACT ("Contacto favorito"),
+    SCHEDULEDTRANSACTION ("Transacción programada"),
+    LICENSE ("Licencia")
+}
+
+enum EventType {
+	TRANSCTION_RECEIVED ("Transacción entrante"),
+    TRANSACTION_SENT ("Transacción enviada"),
+    REPORT_IS_READY ("Reporte listo"),
+    LICENSE_PURCHASED ("Licencia comprada"),
+    LICENSE_GIFTED ("Licencia regalada")
+    ADDED_AS_FAVORITE ("Añadido como contacto favorito"),
+    POSSIBLE_TRANSACTION_ADDED_EMAIL("Transacción potencial añadida"),
+    CREATE ("Creación"),
+    UPDATE ("Actualización"),
+    DELETE ("Eliminación"),
+    GET ("Recuperar")
+}
+
+
+relationship OneToMany {
+  UserDetails to Wallet{user},
+  Wallet to Transaction{wallet(name)},
+  Currency to Transaction{currency(code)},
+  Currency to ScheduledTransaction{currency},
+  Icon to Category{icon(name)},
+  Icon to Wallet{icon(name)},
+  Category to Category{parent(name)},
+  Category to Transaction{category(name)},
+  Currency to Transaction{currency(code)},
+  Currency to Wallet {currency(code)}
+  ScheduledTransaction to SchedulePattern{scheduleTransaction},
+  UserDetails to Category {user},
+  UserDetails to Event {user},
+  UserDetails to Transaction {sourceUser},
+  Currency to Invoice{currency(code)},
+  UserDetails to UserDetails {contact}
+}
+
+relationship OneToOne {
+  UserDetails{internalUser} to User,
+  UserDetails{license} to License,
+  License {invoice} to Invoice,
+  Transaction{attachment} to Attachment,
+  Event {notification} to Notification {event}
+}
+
+filter SystemSetting, Currency, Icon, Wallet, Transaction, Category, ScheduledTransaction, Invoice, Event, License

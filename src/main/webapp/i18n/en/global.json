@@ -7,6 +7,20 @@
       "jhipster-needle-menu-add-element": "JHipster will add additional menu entries here (do not translate!)",
       "entities": {
         "main": "Entities",
+        "userDetails": "User Details",
+        "wallet": "Wallet",
+        "transaction": "Transaction",
+        "scheduledTransaction": "Scheduled Transaction",
+        "schedulePattern": "Schedule Pattern",
+        "attachment": "Attachment",
+        "category": "Category",
+        "invoice": "Invoice",
+        "license": "License",
+        "currency": "Currency",
+        "icon": "Icon",
+        "notification": "Notification",
+        "event": "Event",
+        "systemSetting": "System Setting",
         "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)"
       },
       "account": {

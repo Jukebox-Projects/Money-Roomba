@@ -1,0 +1,78 @@
+<div class="row justify-content-center">
+  <div class="col-8">
+    <div *ngIf="invoice">
+      <h2 data-cy="invoiceDetailsHeading"><span jhiTranslate="moneyRoombaApp.invoice.detail.title">Invoice</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span jhiTranslate="global.field.id">ID</span></dt>
+        <dd>
+          <span>{{ invoice.id }}</span>
+        </dd>
+        <dt><span jhiTranslate="moneyRoombaApp.invoice.companyName">Company Name</span></dt>
+        <dd>
+          <span>{{ invoice.companyName }}</span>
+        </dd>
+        <dt><span jhiTranslate="moneyRoombaApp.invoice.userName">User Name</span></dt>
+        <dd>
+          <span>{{ invoice.userName }}</span>
+        </dd>
+        <dt><span jhiTranslate="moneyRoombaApp.invoice.userLastName">User Last Name</span></dt>
+        <dd>
+          <span>{{ invoice.userLastName }}</span>
+        </dd>
+        <dt><span jhiTranslate="moneyRoombaApp.invoice.userEmail">User Email</span></dt>
+        <dd>
+          <span>{{ invoice.userEmail }}</span>
+        </dd>
+        <dt><span jhiTranslate="moneyRoombaApp.invoice.dateCreated">Date Created</span></dt>
+        <dd>
+          <span>{{ invoice.dateCreated | formatMediumDate }}</span>
+        </dd>
+        <dt><span jhiTranslate="moneyRoombaApp.invoice.total">Total</span></dt>
+        <dd>
+          <span>{{ invoice.total }}</span>
+        </dd>
+        <dt><span jhiTranslate="moneyRoombaApp.invoice.subTotal">Sub Total</span></dt>
+        <dd>
+          <span>{{ invoice.subTotal }}</span>
+        </dd>
+        <dt><span jhiTranslate="moneyRoombaApp.invoice.tax">Tax</span></dt>
+        <dd>
+          <span>{{ invoice.tax }}</span>
+        </dd>
+        <dt><span jhiTranslate="moneyRoombaApp.invoice.purchaseDescription">Purchase Description</span></dt>
+        <dd>
+          <span>{{ invoice.purchaseDescription }}</span>
+        </dd>
+        <dt><span jhiTranslate="moneyRoombaApp.invoice.itemQuantity">Item Quantity</span></dt>
+        <dd>
+          <span>{{ invoice.itemQuantity }}</span>
+        </dd>
+        <dt><span jhiTranslate="moneyRoombaApp.invoice.itemPrice">Item Price</span></dt>
+        <dd>
+          <span>{{ invoice.itemPrice }}</span>
+        </dd>
+        <dt><span jhiTranslate="moneyRoombaApp.invoice.currency">Currency</span></dt>
+        <dd>
+          <div *ngIf="invoice.currency">
+            <a [routerLink]="['/currency', invoice.currency?.id, 'view']">{{ invoice.currency?.code }}</a>
+          </div>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
+      </button>
+
+      <button type="button" [routerLink]="['/invoice', invoice.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
+      </button>
+    </div>
+  </div>
+</div>

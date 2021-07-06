@@ -32,9 +32,9 @@ spring:
       indent-output: true
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
-    url: jdbc:mysql://kkjkar7q0xdh378i:bgffvja84by48jl5@s465z7sj4pwhp7fn.cbetxkdyhwsb.us-east-1.rds.amazonaws.com:3306/d9wm4gzva8kszrfi
-    username: kkjkar7q0xdh378i
-    password: bgffvja84by48jl5
+    url: jdbc:mysql://u8a8twvnmhn5emq5:huiwwmm562n76fpw@s465z7sj4pwhp7fn.cbetxkdyhwsb.us-east-1.rds.amazonaws.com:3306/cucsxujqgsr752d8?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
+    username: u8a8twvnmhn5emq5
+    password: huiwwmm562n76fpw
     hikari:
       poolName: Hikari
       auto-commit: false
@@ -44,7 +44,6 @@ spring:
         prepStmtCacheSqlLimit: 2048
         useServerPrepStmts: true
   jpa:
-    show-sql: true
   liquibase:
     # Remove 'faker' if you do not want the sample data to be loaded automatically
     contexts: dev, faker

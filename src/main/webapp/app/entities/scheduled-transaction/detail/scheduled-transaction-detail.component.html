@@ -1,0 +1,70 @@
+<div class="row justify-content-center">
+  <div class="col-8">
+    <div *ngIf="scheduledTransaction">
+      <h2 data-cy="scheduledTransactionDetailsHeading">
+        <span jhiTranslate="moneyRoombaApp.scheduledTransaction.detail.title">Scheduled Transaction</span>
+      </h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span jhiTranslate="global.field.id">ID</span></dt>
+        <dd>
+          <span>{{ scheduledTransaction.id }}</span>
+        </dd>
+        <dt><span jhiTranslate="moneyRoombaApp.scheduledTransaction.name">Name</span></dt>
+        <dd>
+          <span>{{ scheduledTransaction.name }}</span>
+        </dd>
+        <dt><span jhiTranslate="moneyRoombaApp.scheduledTransaction.description">Description</span></dt>
+        <dd>
+          <span>{{ scheduledTransaction.description }}</span>
+        </dd>
+        <dt><span jhiTranslate="moneyRoombaApp.scheduledTransaction.originalAmount">Original Amount</span></dt>
+        <dd>
+          <span>{{ scheduledTransaction.originalAmount }}</span>
+        </dd>
+        <dt><span jhiTranslate="moneyRoombaApp.scheduledTransaction.movementType">Movement Type</span></dt>
+        <dd>
+          <span jhiTranslate="{{ 'moneyRoombaApp.MovementType.' + scheduledTransaction.movementType }}">{{
+            scheduledTransaction.movementType
+          }}</span>
+        </dd>
+        <dt><span jhiTranslate="moneyRoombaApp.scheduledTransaction.startDate">Start Date</span></dt>
+        <dd>
+          <span>{{ scheduledTransaction.startDate | formatMediumDate }}</span>
+        </dd>
+        <dt><span jhiTranslate="moneyRoombaApp.scheduledTransaction.endDate">End Date</span></dt>
+        <dd>
+          <span>{{ scheduledTransaction.endDate | formatMediumDate }}</span>
+        </dd>
+        <dt><span jhiTranslate="moneyRoombaApp.scheduledTransaction.addToReports">Add To Reports</span></dt>
+        <dd>
+          <span>{{ scheduledTransaction.addToReports }}</span>
+        </dd>
+        <dt><span jhiTranslate="moneyRoombaApp.scheduledTransaction.incomingTransaction">Incoming Transaction</span></dt>
+        <dd>
+          <span>{{ scheduledTransaction.incomingTransaction }}</span>
+        </dd>
+        <dt><span jhiTranslate="moneyRoombaApp.scheduledTransaction.currency">Currency</span></dt>
+        <dd>
+          <div *ngIf="scheduledTransaction.currency">
+            <a [routerLink]="['/currency', scheduledTransaction.currency?.id, 'view']">{{ scheduledTransaction.currency?.id }}</a>
+          </div>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
+      </button>
+
+      <button type="button" [routerLink]="['/scheduled-transaction', scheduledTransaction.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
+      </button>
+    </div>
+  </div>
+</div>

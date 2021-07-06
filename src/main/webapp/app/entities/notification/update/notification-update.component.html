@@ -1,0 +1,78 @@
+<div class="row justify-content-center">
+  <div class="col-8">
+    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2
+        id="jhi-notification-heading"
+        data-cy="NotificationCreateUpdateHeading"
+        jhiTranslate="moneyRoombaApp.notification.home.createOrEditLabel"
+      >
+        Create or edit a Notification
+      </h2>
+
+      <div>
+        <jhi-alert-error></jhi-alert-error>
+
+        <div class="form-group" [hidden]="editForm.get('id')!.value == null">
+          <label class="form-control-label" jhiTranslate="global.field.id" for="field_id">ID</label>
+          <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" jhiTranslate="moneyRoombaApp.notification.dateOpened" for="field_dateOpened">Date Opened</label>
+          <div class="input-group">
+            <input
+              id="field_dateOpened"
+              data-cy="dateOpened"
+              type="text"
+              class="form-control"
+              name="dateOpened"
+              ngbDatepicker
+              #dateOpenedDp="ngbDatepicker"
+              formControlName="dateOpened"
+            />
+            <span class="input-group-append">
+              <button type="button" class="btn btn-secondary" (click)="dateOpenedDp.toggle()">
+                <fa-icon icon="calendar-alt"></fa-icon>
+              </button>
+            </span>
+          </div>
+          <div *ngIf="editForm.get('dateOpened')!.invalid && (editForm.get('dateOpened')!.dirty || editForm.get('dateOpened')!.touched)">
+            <small
+              class="form-text text-danger"
+              *ngIf="editForm.get('dateOpened')?.errors?.required"
+              jhiTranslate="entity.validation.required"
+            >
+              This field is required.
+            </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" jhiTranslate="moneyRoombaApp.notification.opened" for="field_opened">Opened</label>
+          <input type="checkbox" class="form-check" name="opened" id="field_opened" data-cy="opened" formControlName="opened" />
+          <div *ngIf="editForm.get('opened')!.invalid && (editForm.get('opened')!.dirty || editForm.get('opened')!.touched)">
+            <small class="form-text text-danger" *ngIf="editForm.get('opened')?.errors?.required" jhiTranslate="entity.validation.required">
+              This field is required.
+            </small>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

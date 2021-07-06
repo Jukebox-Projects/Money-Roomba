@@ -1,0 +1,90 @@
+<div>
+  <h2 id="page-heading" data-cy="EventHeading">
+    <span jhiTranslate="moneyRoombaApp.event.home.title">Events</span>
+
+    <div class="d-flex justify-content-end">
+      <button class="btn btn-info mr-2" (click)="loadAll()" [disabled]="isLoading">
+        <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
+        <span jhiTranslate="moneyRoombaApp.event.home.refreshListLabel">Refresh List</span>
+      </button>
+
+      <button
+        id="jh-create-entity"
+        data-cy="entityCreateButton"
+        class="btn btn-primary jh-create-entity create-event"
+        [routerLink]="['/event/new']"
+      >
+        <fa-icon icon="plus"></fa-icon>
+        <span jhiTranslate="moneyRoombaApp.event.home.createLabel"> Create a new Event </span>
+      </button>
+    </div>
+  </h2>
+
+  <jhi-alert-error></jhi-alert-error>
+
+  <jhi-alert></jhi-alert>
+
+  <div class="alert alert-warning" id="no-result" *ngIf="events?.length === 0">
+    <span jhiTranslate="moneyRoombaApp.event.home.notFound">No events found</span>
+  </div>
+
+  <div class="table-responsive" id="entities" *ngIf="events && events.length > 0">
+    <table class="table table-striped" aria-describedby="page-heading">
+      <thead>
+        <tr>
+          <th scope="col"><span jhiTranslate="global.field.id">ID</span></th>
+          <th scope="col"><span jhiTranslate="moneyRoombaApp.event.eventType">Event Type</span></th>
+          <th scope="col"><span jhiTranslate="moneyRoombaApp.event.dateAdded">Date Added</span></th>
+          <th scope="col"><span jhiTranslate="moneyRoombaApp.event.sourceId">Source Id</span></th>
+          <th scope="col"><span jhiTranslate="moneyRoombaApp.event.sourceEntity">Source Entity</span></th>
+          <th scope="col"><span jhiTranslate="moneyRoombaApp.event.userName">User Name</span></th>
+          <th scope="col"><span jhiTranslate="moneyRoombaApp.event.userLastName">User Last Name</span></th>
+          <th scope="col"><span jhiTranslate="moneyRoombaApp.event.notification">Notification</span></th>
+          <th scope="col"><span jhiTranslate="moneyRoombaApp.event.user">User</span></th>
+          <th scope="col"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let event of events; trackBy: trackId" data-cy="entityTable">
+          <td>
+            <a [routerLink]="['/event', event.id, 'view']">{{ event.id }}</a>
+          </td>
+          <td jhiTranslate="{{ 'moneyRoombaApp.EventType.' + event.eventType }}">{{ event.eventType }}</td>
+          <td>{{ event.dateAdded | formatMediumDate }}</td>
+          <td>{{ event.sourceId }}</td>
+          <td jhiTranslate="{{ 'moneyRoombaApp.SourceEntity.' + event.sourceEntity }}">{{ event.sourceEntity }}</td>
+          <td>{{ event.userName }}</td>
+          <td>{{ event.userLastName }}</td>
+          <td>
+            <div *ngIf="event.notification">
+              <a [routerLink]="['/notification', event.notification?.id, 'view']">{{ event.notification?.id }}</a>
+            </div>
+          </td>
+          <td>
+            <div *ngIf="event.user">
+              <a [routerLink]="['/user-details', event.user?.id, 'view']">{{ event.user?.id }}</a>
+            </div>
+          </td>
+          <td class="text-right">
+            <div class="btn-group">
+              <button type="submit" [routerLink]="['/event', event.id, 'view']" class="btn btn-info btn-sm" data-cy="entityDetailsButton">
+                <fa-icon icon="eye"></fa-icon>
+                <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
+              </button>
+
+              <button type="submit" [routerLink]="['/event', event.id, 'edit']" class="btn btn-primary btn-sm" data-cy="entityEditButton">
+                <fa-icon icon="pencil-alt"></fa-icon>
+                <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
+              </button>
+
+              <button type="submit" (click)="delete(event)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
+                <fa-icon icon="times"></fa-icon>
+                <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

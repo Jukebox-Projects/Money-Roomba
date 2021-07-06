@@ -1,0 +1,64 @@
+<div class="row justify-content-center">
+  <div class="col-8">
+    <div *ngIf="event">
+      <h2 data-cy="eventDetailsHeading"><span jhiTranslate="moneyRoombaApp.event.detail.title">Event</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span jhiTranslate="global.field.id">ID</span></dt>
+        <dd>
+          <span>{{ event.id }}</span>
+        </dd>
+        <dt><span jhiTranslate="moneyRoombaApp.event.eventType">Event Type</span></dt>
+        <dd>
+          <span jhiTranslate="{{ 'moneyRoombaApp.EventType.' + event.eventType }}">{{ event.eventType }}</span>
+        </dd>
+        <dt><span jhiTranslate="moneyRoombaApp.event.dateAdded">Date Added</span></dt>
+        <dd>
+          <span>{{ event.dateAdded | formatMediumDate }}</span>
+        </dd>
+        <dt><span jhiTranslate="moneyRoombaApp.event.sourceId">Source Id</span></dt>
+        <dd>
+          <span>{{ event.sourceId }}</span>
+        </dd>
+        <dt><span jhiTranslate="moneyRoombaApp.event.sourceEntity">Source Entity</span></dt>
+        <dd>
+          <span jhiTranslate="{{ 'moneyRoombaApp.SourceEntity.' + event.sourceEntity }}">{{ event.sourceEntity }}</span>
+        </dd>
+        <dt><span jhiTranslate="moneyRoombaApp.event.userName">User Name</span></dt>
+        <dd>
+          <span>{{ event.userName }}</span>
+        </dd>
+        <dt><span jhiTranslate="moneyRoombaApp.event.userLastName">User Last Name</span></dt>
+        <dd>
+          <span>{{ event.userLastName }}</span>
+        </dd>
+        <dt><span jhiTranslate="moneyRoombaApp.event.notification">Notification</span></dt>
+        <dd>
+          <div *ngIf="event.notification">
+            <a [routerLink]="['/notification', event.notification?.id, 'view']">{{ event.notification?.id }}</a>
+          </div>
+        </dd>
+        <dt><span jhiTranslate="moneyRoombaApp.event.user">User</span></dt>
+        <dd>
+          <div *ngIf="event.user">
+            <a [routerLink]="['/user-details', event.user?.id, 'view']">{{ event.user?.id }}</a>
+          </div>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
+      </button>
+
+      <button type="button" [routerLink]="['/event', event.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
+      </button>
+    </div>
+  </div>
+</div>

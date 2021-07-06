@@ -1,0 +1,33 @@
+{
+  "moneyRoombaApp": {
+    "scheduledTransaction": {
+      "home": {
+        "title": "Scheduled Transactions",
+        "refreshListLabel": "Refrescar lista",
+        "createLabel": "Crear nuevo Scheduled Transaction",
+        "createOrEditLabel": "Crear o editar Scheduled Transaction",
+        "notFound": "Ningún Scheduled Transactions encontrado"
+      },
+      "created": "Un nuevo Scheduled Transaction ha sido creado con el identificador {{ param }}",
+      "updated": "Un Scheduled Transaction ha sido actualizado con el identificador {{ param }}",
+      "deleted": "Un Scheduled Transaction ha sido eliminado con el identificador {{ param }}",
+      "delete": {
+        "question": "¿Seguro que quiere eliminar Scheduled Transaction {{ id }}?"
+      },
+      "detail": {
+        "title": "Scheduled Transaction"
+      },
+      "id": "ID",
+      "name": "Name",
+      "description": "Description",
+      "originalAmount": "Original Amount",
+      "movementType": "Movement Type",
+      "startDate": "Start Date",
+      "endDate": "End Date",
+      "addToReports": "Add To Reports",
+      "incomingTransaction": "Incoming Transaction",
+      "schedulePattern": "Schedule Pattern",
+      "currency": "Currency"
+    }
+  }
+}
