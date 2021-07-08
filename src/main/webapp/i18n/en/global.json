@@ -56,7 +56,15 @@
       "confirmpassword.label": "New password confirmation",
       "confirmpassword.placeholder": "Confirm the new password",
       "email.label": "Email",
-      "email.placeholder": "Your email"
+      "email.placeholder": "Your email",
+      "name.label": "Name",
+      "name.placeholder": "Your name",
+      "lastName.label": "Last name",
+      "lastName.placeholder": "Your last name",
+      "country.label": "Country",
+      "country.placeholder": "Your country",
+      "phone.label": "Phone",
+      "phone.placeholder": "Your phone"
     },
     "messages": {
       "info": {

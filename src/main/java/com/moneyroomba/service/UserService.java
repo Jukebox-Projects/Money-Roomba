@@ -3,12 +3,15 @@ package com.moneyroomba.service;
 import com.moneyroomba.config.Constants;
 import com.moneyroomba.domain.Authority;
 import com.moneyroomba.domain.User;
+import com.moneyroomba.domain.UserDetails;
 import com.moneyroomba.repository.AuthorityRepository;
 import com.moneyroomba.repository.PersistentTokenRepository;
+import com.moneyroomba.repository.UserDetailsRepository;
 import com.moneyroomba.repository.UserRepository;
 import com.moneyroomba.security.AuthoritiesConstants;
 import com.moneyroomba.security.SecurityUtils;
 import com.moneyroomba.service.dto.AdminUserDTO;
+import com.moneyroomba.service.dto.NewUserDTO;
 import com.moneyroomba.service.dto.UserDTO;
 import java.time.Instant;
 import java.time.LocalDate;
@@ -37,6 +40,8 @@ public class UserService {
 
     private final UserRepository userRepository;
 
+    private final UserDetailsRepository userDetailsRepository;
+
     private final PasswordEncoder passwordEncoder;
 
     private final PersistentTokenRepository persistentTokenRepository;
@@ -47,12 +52,14 @@ public class UserService {
 
     public UserService(
         UserRepository userRepository,
+        UserDetailsRepository userDetailsRepository,
         PasswordEncoder passwordEncoder,
         PersistentTokenRepository persistentTokenRepository,
         AuthorityRepository authorityRepository,
         CacheManager cacheManager
     ) {
         this.userRepository = userRepository;
+        this.userDetailsRepository = userDetailsRepository;
         this.passwordEncoder = passwordEncoder;
         this.persistentTokenRepository = persistentTokenRepository;
         this.authorityRepository = authorityRepository;
@@ -105,7 +112,7 @@ public class UserService {
             );
     }
 
-    public User registerUser(AdminUserDTO userDTO, String password) {
+    public User registerUser(AdminUserDTO userDTO, NewUserDTO newUserDTO, String password) {
         userRepository
             .findOneByLogin(userDTO.getLogin().toLowerCase())
             .ifPresent(
@@ -127,6 +134,7 @@ public class UserService {
                 }
             );
         User newUser = new User();
+        UserDetails userDetails = new UserDetails();
         String encryptedPassword = passwordEncoder.encode(password);
         newUser.setLogin(userDTO.getLogin().toLowerCase());
         // new user gets initially a generated password
@@ -148,6 +156,12 @@ public class UserService {
         userRepository.save(newUser);
         this.clearUserCaches(newUser);
         log.debug("Created Information for User: {}", newUser);
+
+        //User Details
+        userDetails.setPhone(newUserDTO.getPhone());
+        userDetails.setCountry(newUserDTO.getCountry().toUpperCase());
+        userDetails.setId(newUser.getId());
+        userDetailsRepository.save(userDetails);
         return newUser;
     }
 
@@ -161,9 +175,10 @@ public class UserService {
         return true;
     }
 
-    public User createUser(AdminUserDTO userDTO) {
+    public User createUser(NewUserDTO userDTO) {
         User user = new User();
-        user.setLogin(userDTO.getLogin().toLowerCase());
+        UserDetails userDetails = new UserDetails();
+        user.setLogin(userDTO.getEmail().toLowerCase());
         user.setFirstName(userDTO.getFirstName());
         user.setLastName(userDTO.getLastName());
         if (userDTO.getEmail() != null) {
@@ -180,6 +195,7 @@ public class UserService {
         user.setResetKey(RandomUtil.generateResetKey());
         user.setResetDate(Instant.now());
         user.setActivated(true);
+
         if (userDTO.getAuthorities() != null) {
             Set<Authority> authorities = userDTO
                 .getAuthorities()
@@ -193,6 +209,12 @@ public class UserService {
         userRepository.save(user);
         this.clearUserCaches(user);
         log.debug("Created Information for User: {}", user);
+
+        //User Details
+        userDetails.setPhone(userDTO.getPhone());
+        userDetails.setCountry(userDTO.getCountry().toUpperCase());
+        userDetails.setId(user.getId());
+        userDetailsRepository.save(userDetails);
         return user;
     }
 
