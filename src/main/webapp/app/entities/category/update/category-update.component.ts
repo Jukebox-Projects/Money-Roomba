@@ -11,6 +11,8 @@ import { IIcon } from 'app/entities/icon/icon.model';
 import { IconService } from 'app/entities/icon/service/icon.service';
 import { IUserDetails } from 'app/entities/user-details/user-details.model';
 import { UserDetailsService } from 'app/entities/user-details/service/user-details.service';
+import { Authority } from '../../../config/authority.constants';
+import { AccountService } from '../../../core/auth/account.service';
 
 @Component({
   selector: 'jhi-category-update',
@@ -26,17 +28,15 @@ export class CategoryUpdateComponent implements OnInit {
   editForm = this.fb.group({
     id: [],
     name: [null, [Validators.required]],
-    isActive: [null, [Validators.required]],
-    userCreated: [null, [Validators.required]],
     icon: [],
     parent: [],
-    user: [],
   });
 
   constructor(
     protected categoryService: CategoryService,
     protected iconService: IconService,
     protected userDetailsService: UserDetailsService,
+    protected accountService: AccountService,
     protected activatedRoute: ActivatedRoute,
     protected fb: FormBuilder
   ) {}
@@ -132,7 +132,7 @@ export class CategoryUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<IIcon[]>) => res.body ?? []))
       .pipe(map((icons: IIcon[]) => this.iconService.addIconToCollectionIfMissing(icons, this.editForm.get('icon')!.value)))
       .subscribe((icons: IIcon[]) => (this.iconsSharedCollection = icons));
-
+    /*
     this.userDetailsService
       .query()
       .pipe(map((res: HttpResponse<IUserDetails[]>) => res.body ?? []))
@@ -141,19 +141,27 @@ export class CategoryUpdateComponent implements OnInit {
           this.userDetailsService.addUserDetailsToCollectionIfMissing(userDetails, this.editForm.get('user')!.value)
         )
       )
-      .subscribe((userDetails: IUserDetails[]) => (this.userDetailsSharedCollection = userDetails));
+      .subscribe((userDetails: IUserDetails[]) => (this.userDetailsSharedCollection = userDetails));*/
   }
 
   protected createFromForm(): ICategory {
-    return {
+    const newCategory: ICategory = {
       ...new Category(),
       id: this.editForm.get(['id'])!.value,
       name: this.editForm.get(['name'])!.value,
-      isActive: this.editForm.get(['isActive'])!.value,
-      userCreated: this.editForm.get(['userCreated'])!.value,
+      isActive: true,
       icon: this.editForm.get(['icon'])!.value,
       parent: this.editForm.get(['parent'])!.value,
-      user: this.editForm.get(['user'])!.value,
+      userCreated: true,
     };
+    if (this.isAdmin()) {
+      newCategory.userCreated = false;
+    }
+
+    return newCategory;
+  }
+
+  private isAdmin(): boolean {
+    return this.accountService.hasAnyAuthority(Authority.ADMIN);
   }
 }
