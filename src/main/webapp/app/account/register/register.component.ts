@@ -26,8 +26,11 @@ export class RegisterComponent implements AfterViewInit {
     phone: ['', [Validators.required]],
     country: ['', [Validators.required]],
     email: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(254), Validators.email]],
-    password: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(50)]],
-    confirmPassword: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(50)]],
+    password: ['', [Validators.required, Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&])[A-Za-z\d$@$!%*?&]{8,10}/)]],
+    confirmPassword: [
+      '',
+      [Validators.required, Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&])[A-Za-z\d$@$!%*?&]{8,10}/)],
+    ],
   });
 
   constructor(private translateService: TranslateService, private registerService: RegisterService, private fb: FormBuilder) {}
@@ -49,12 +52,13 @@ export class RegisterComponent implements AfterViewInit {
       this.doNotMatch = true;
     } else {
       const email = this.registerForm.get(['email'])!.value;
-      const firstName = this.registerForm.get(['name'])!.value;
+      const login = email;
+      const firstName = this.registerForm.get(['firstName'])!.value;
       const lastName = this.registerForm.get(['lastName'])!.value;
       const country = this.registerForm.get(['country'])!.value;
       const phone = this.registerForm.get(['phone'])!.value;
       this.registerService
-        .save({ email, password, firstName, lastName, country, phone, langKey: this.translateService.currentLang })
+        .save({ login, email, password, firstName, lastName, country, phone, langKey: this.translateService.currentLang })
         .subscribe(
           () => (this.success = true),
           response => this.processError(response)

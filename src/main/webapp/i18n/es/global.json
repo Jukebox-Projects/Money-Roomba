@@ -47,8 +47,8 @@
       "language": "Idioma"
     },
     "form": {
-      "username.label": "Usuario",
-      "username.placeholder": "Nombre de usuario",
+      "username.label": "Correo electrónico",
+      "username.placeholder": "Correo electrónico",
       "currentpassword.label": "Contraseña actual",
       "currentpassword.placeholder": "Contraseña actual",
       "newpassword.label": "Nueva contraseña",
@@ -57,8 +57,8 @@
       "confirmpassword.placeholder": "Confirmación de la nueva contraseña",
       "email.label": "Correo electrónico",
       "email.placeholder": "Su correo electrónico",
-      "name.label": "Nombre",
-      "name.placeholder": "Su nombre",
+      "firstName.label": "Nombre",
+      "firstName.placeholder": "Su nombre",
       "lastName.label": "Apellido",
       "lastName.placeholder": "Su apellido",
       "country.label": "País",

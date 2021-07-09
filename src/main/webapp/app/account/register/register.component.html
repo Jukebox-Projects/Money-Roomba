@@ -29,22 +29,26 @@
     <div class="col-md-8">
       <form name="form" role="form" (ngSubmit)="register()" [formGroup]="registerForm" *ngIf="!success">
         <div class="form-group">
-          <label class="form-control-label" for="firstName" jhiTranslate="global.form.name.label">Name</label>
+          <label class="form-control-label" for="firstName" jhiTranslate="global.form.firstName.label">Name</label>
           <input
             type="text"
             class="form-control"
             id="firstName"
             name="firstName"
-            placeholder="{{ 'global.form.name.placeholder' | translate }}"
+            placeholder="{{ 'global.form.firstName.placeholder' | translate }}"
             formControlName="firstName"
             data-cy="firstName"
           />
 
-          <div *ngIf="registerForm.get('firstName')!.invalid && (registerForm.get('name')!.dirty || registerForm.get('name')!.touched)">
+          <div
+            *ngIf="
+              registerForm.get('firstName')!.invalid && (registerForm.get('firstName')!.dirty || registerForm.get('firstName')!.touched)
+            "
+          >
             <small
               class="form-text text-danger"
               *ngIf="registerForm.get('firstName')?.errors?.required"
-              jhiTranslate="global.messages.validate.name.required"
+              jhiTranslate="global.messages.validate.firstName.required"
             >
               Your name is required.
             </small>

@@ -47,8 +47,8 @@
       "language": "Language"
     },
     "form": {
-      "username.label": "Username",
-      "username.placeholder": "Your username",
+      "username.label": "Email",
+      "username.placeholder": "Your email",
       "currentpassword.label": "Current password",
       "currentpassword.placeholder": "Current password",
       "newpassword.label": "New password",
@@ -57,8 +57,8 @@
       "confirmpassword.placeholder": "Confirm the new password",
       "email.label": "Email",
       "email.placeholder": "Your email",
-      "name.label": "Name",
-      "name.placeholder": "Your name",
+      "firstName.label": "Name",
+      "firstName.placeholder": "Your name",
       "lastName.label": "Last name",
       "lastName.placeholder": "Your last name",
       "country.label": "Country",

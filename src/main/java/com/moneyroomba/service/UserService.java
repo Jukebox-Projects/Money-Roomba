@@ -11,7 +11,6 @@ import com.moneyroomba.repository.UserRepository;
 import com.moneyroomba.security.AuthoritiesConstants;
 import com.moneyroomba.security.SecurityUtils;
 import com.moneyroomba.service.dto.AdminUserDTO;
-import com.moneyroomba.service.dto.NewUserDTO;
 import com.moneyroomba.service.dto.UserDTO;
 import java.time.Instant;
 import java.time.LocalDate;
@@ -112,7 +111,7 @@ public class UserService {
             );
     }
 
-    public User registerUser(AdminUserDTO userDTO, NewUserDTO newUserDTO, String password) {
+    public User registerUser(AdminUserDTO userDTO, String password) {
         userRepository
             .findOneByLogin(userDTO.getLogin().toLowerCase())
             .ifPresent(
@@ -146,10 +145,11 @@ public class UserService {
         }
         newUser.setImageUrl(userDTO.getImageUrl());
         newUser.setLangKey(userDTO.getLangKey());
-        // new user is not active
-        newUser.setActivated(false);
+        // new user is active **
+        newUser.setActivated(true);
         // new user gets registration key
-        newUser.setActivationKey(RandomUtil.generateActivationKey());
+        newUser.setActivationKey(null);
+        //newUser.setActivationKey(RandomUtil.generateActivationKey());
         Set<Authority> authorities = new HashSet<>();
         authorityRepository.findById(AuthoritiesConstants.USER).ifPresent(authorities::add);
         newUser.setAuthorities(authorities);
@@ -158,9 +158,12 @@ public class UserService {
         log.debug("Created Information for User: {}", newUser);
 
         //User Details
-        userDetails.setPhone(newUserDTO.getPhone());
-        userDetails.setCountry(newUserDTO.getCountry().toUpperCase());
-        userDetails.setId(newUser.getId());
+        userDetails.setPhone(userDTO.getPhone());
+        userDetails.setCountry(userDTO.getCountry().toUpperCase());
+        userDetails.setInternalUser(newUser);
+        userDetails.setIsActive(true);
+        userDetails.setIsTemporaryPassword(false);
+        userDetails.setNotifications(true);
         userDetailsRepository.save(userDetails);
         return newUser;
     }
@@ -175,12 +178,13 @@ public class UserService {
         return true;
     }
 
-    public User createUser(NewUserDTO userDTO) {
+    public User createUser(AdminUserDTO userDTO) {
         User user = new User();
         UserDetails userDetails = new UserDetails();
         user.setLogin(userDTO.getEmail().toLowerCase());
         user.setFirstName(userDTO.getFirstName());
         user.setLastName(userDTO.getLastName());
+
         if (userDTO.getEmail() != null) {
             user.setEmail(userDTO.getEmail().toLowerCase());
         }
@@ -213,7 +217,10 @@ public class UserService {
         //User Details
         userDetails.setPhone(userDTO.getPhone());
         userDetails.setCountry(userDTO.getCountry().toUpperCase());
-        userDetails.setId(user.getId());
+        userDetails.setInternalUser(user);
+        userDetails.setIsActive(true);
+        userDetails.setIsTemporaryPassword(false);
+        userDetails.setNotifications(true);
         userDetailsRepository.save(userDetails);
         return user;
     }
