@@ -50,36 +50,6 @@ public class CacheConfiguration {
             createCache(cm, com.moneyroomba.domain.User.class.getName() + ".authorities");
             createCache(cm, com.moneyroomba.domain.PersistentToken.class.getName());
             createCache(cm, com.moneyroomba.domain.User.class.getName() + ".persistentTokens");
-            createCache(cm, com.moneyroomba.domain.UserDetails.class.getName());
-            createCache(cm, com.moneyroomba.domain.UserDetails.class.getName() + ".wallets");
-            createCache(cm, com.moneyroomba.domain.UserDetails.class.getName() + ".categories");
-            createCache(cm, com.moneyroomba.domain.UserDetails.class.getName() + ".events");
-            createCache(cm, com.moneyroomba.domain.UserDetails.class.getName() + ".transactions");
-            createCache(cm, com.moneyroomba.domain.UserDetails.class.getName() + ".userDetails");
-            createCache(cm, com.moneyroomba.domain.Wallet.class.getName());
-            createCache(cm, com.moneyroomba.domain.Wallet.class.getName() + ".transactions");
-            createCache(cm, com.moneyroomba.domain.Transaction.class.getName());
-            createCache(cm, com.moneyroomba.domain.ScheduledTransaction.class.getName());
-            createCache(cm, com.moneyroomba.domain.ScheduledTransaction.class.getName() + ".schedulePatterns");
-            createCache(cm, com.moneyroomba.domain.SchedulePattern.class.getName());
-            createCache(cm, com.moneyroomba.domain.Attachment.class.getName());
-            createCache(cm, com.moneyroomba.domain.Category.class.getName());
-            createCache(cm, com.moneyroomba.domain.Category.class.getName() + ".categories");
-            createCache(cm, com.moneyroomba.domain.Category.class.getName() + ".transactions");
-            createCache(cm, com.moneyroomba.domain.Invoice.class.getName());
-            createCache(cm, com.moneyroomba.domain.License.class.getName());
-            createCache(cm, com.moneyroomba.domain.Currency.class.getName());
-            createCache(cm, com.moneyroomba.domain.Currency.class.getName() + ".transactions");
-            createCache(cm, com.moneyroomba.domain.Currency.class.getName() + ".scheduledTransactions");
-            createCache(cm, com.moneyroomba.domain.Currency.class.getName() + ".wallets");
-            createCache(cm, com.moneyroomba.domain.Currency.class.getName() + ".invoices");
-            createCache(cm, com.moneyroomba.domain.Icon.class.getName());
-            createCache(cm, com.moneyroomba.domain.Icon.class.getName() + ".categories");
-            createCache(cm, com.moneyroomba.domain.Icon.class.getName() + ".wallets");
-            createCache(cm, com.moneyroomba.domain.Notification.class.getName());
-            createCache(cm, com.moneyroomba.domain.Event.class.getName());
-            createCache(cm, com.moneyroomba.domain.SystemSetting.class.getName());
-            createCache(cm, com.moneyroomba.domain.Category.class.getName() + ".icons");
             // jhipster-needle-ehcache-add-entry
         };
     }

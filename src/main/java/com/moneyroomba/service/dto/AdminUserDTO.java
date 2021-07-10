@@ -30,11 +30,6 @@ public class AdminUserDTO {
     @Size(min = 5, max = 254)
     private String email;
 
-    @Size(max = 2)
-    private String country;
-
-    private String phone;
-
     @Size(max = 256)
     private String imageUrl;
 
@@ -71,8 +66,6 @@ public class AdminUserDTO {
         this.lastModifiedBy = user.getLastModifiedBy();
         this.lastModifiedDate = user.getLastModifiedDate();
         this.authorities = user.getAuthorities().stream().map(Authority::getName).collect(Collectors.toSet());
-        this.country = user.getCountry();
-        this.phone = user.getPhone();
     }
 
     public Long getId() {
@@ -105,22 +98,6 @@ public class AdminUserDTO {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
-    }
-
-    public String getCountry() {
-        return country;
-    }
-
-    public void setCountry(String country) {
-        this.country = country;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
     }
 
     public String getEmail() {

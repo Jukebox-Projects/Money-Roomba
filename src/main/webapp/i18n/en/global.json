@@ -7,20 +7,6 @@
       "jhipster-needle-menu-add-element": "JHipster will add additional menu entries here (do not translate!)",
       "entities": {
         "main": "Entities",
-        "userDetails": "User Details",
-        "wallet": "Wallet",
-        "transaction": "Transaction",
-        "scheduledTransaction": "Scheduled Transaction",
-        "schedulePattern": "Schedule Pattern",
-        "attachment": "Attachment",
-        "category": "Category",
-        "invoice": "Invoice",
-        "license": "License",
-        "currency": "Currency",
-        "icon": "Icon",
-        "notification": "Notification",
-        "event": "Event",
-        "systemSetting": "System Setting",
         "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)"
       },
       "account": {
@@ -47,8 +33,8 @@
       "language": "Language"
     },
     "form": {
-      "username.label": "Email",
-      "username.placeholder": "Your email",
+      "username.label": "Username",
+      "username.placeholder": "Your username",
       "currentpassword.label": "Current password",
       "currentpassword.placeholder": "Current password",
       "newpassword.label": "New password",
@@ -56,15 +42,7 @@
       "confirmpassword.label": "New password confirmation",
       "confirmpassword.placeholder": "Confirm the new password",
       "email.label": "Email",
-      "email.placeholder": "Your email",
-      "firstName.label": "Name",
-      "firstName.placeholder": "Your name",
-      "lastName.label": "Last name",
-      "lastName.placeholder": "Your last name",
-      "country.label": "Country",
-      "country.placeholder": "Your country",
-      "phone.label": "Phone",
-      "phone.placeholder": "Your phone"
+      "email.placeholder": "Your email"
     },
     "messages": {
       "info": {
@@ -83,35 +61,21 @@
       },
       "validate": {
         "newpassword": {
-          "pattern": "The password requires a minimum of 8 characters, atleast one uppercase, one lowercase, one number, and a special character.",
-          "required": "The password requires a minimum of 8 characters, uppercase, lowercase, a number, and a special character.",
-          "minlength": "Your password is required to be at least 8 characters.",
-          "maxlength": "Your password cannot be longer than 25 characters.",
+          "required": "Your password is required.",
+          "minlength": "Your password is required to be at least 4 characters.",
+          "maxlength": "Your password cannot be longer than 50 characters.",
           "strength": "Password strength:"
         },
         "confirmpassword": {
-          "pattern": "The password requires a minimum of 8 characters, atleast one uppercase, one lowercase, one number, and a special character.",
           "required": "Your confirmation password is required.",
-          "minlength": "Your confirmation password is required to be at least 8 characters.",
-          "maxlength": "Your confirmation password cannot be longer than 25 characters."
+          "minlength": "Your confirmation password is required to be at least 4 characters.",
+          "maxlength": "Your confirmation password cannot be longer than 50 characters."
         },
         "email": {
           "required": "Your email is required.",
           "invalid": "Your email is invalid.",
           "minlength": "Your email is required to be at least 5 characters.",
           "maxlength": "Your email cannot be longer than 50 characters."
-        },
-        "firstName": {
-          "required": "Your first name is required."
-        },
-        "lastName": {
-          "required": "Your last name is required."
-        },
-        "country": {
-          "required": "Your country is required."
-        },
-        "phone": {
-          "required": "Your phone is required."
         }
       }
     },

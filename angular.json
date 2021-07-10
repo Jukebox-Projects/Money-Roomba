@@ -109,7 +109,6 @@
   },
   "defaultProject": "money-roomba",
   "cli": {
-    "analytics": "818b05c0-db25-4b38-a8d7-e47eafbf42a8",
     "packageManager": "npm"
   }
 }
