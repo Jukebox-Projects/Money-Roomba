@@ -12,6 +12,7 @@ import com.moneyroomba.security.AuthoritiesConstants;
 import com.moneyroomba.security.SecurityUtils;
 import com.moneyroomba.service.dto.AdminUserDTO;
 import com.moneyroomba.service.dto.UserDTO;
+import com.moneyroomba.service.exception.NoSuchElementFoundException;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
@@ -398,5 +399,34 @@ public class UserService {
         if (user.getEmail() != null) {
             Objects.requireNonNull(cacheManager.getCache(UserRepository.USERS_BY_EMAIL_CACHE)).evict(user.getEmail());
         }
+    }
+
+    private Optional<String> getCurrentUserLogin() {
+        return SecurityUtils.getCurrentUserLogin();
+    }
+
+    @Transactional(readOnly = true)
+    public boolean currentUserIsAdmin() {
+        return SecurityUtils.hasCurrentUserThisAuthority(AuthoritiesConstants.ADMIN);
+    }
+
+    @Transactional(readOnly = true)
+    public boolean currentUserIsRegularUser() {
+        return SecurityUtils.hasCurrentUserThisAuthority(AuthoritiesConstants.USER);
+    }
+
+    /*
+    @Transactional(readOnly = true)
+    public boolean currentUserIsPremiumUser() {
+        return SecurityUtils.hasCurrentUserThisAuthority(AuthoritiesConstants.PREMIUM_USER);
+    }*/
+
+    @Transactional(readOnly = true)
+    public Optional<UserDetails> getUserDetailsByLogin() {
+        Optional<User> user = userRepository.findOneByLogin(
+            this.getCurrentUserLogin().orElseThrow(() -> new NoSuchElementFoundException("No Login found"))
+        );
+
+        return userDetailsRepository.findOneByInternalUser(user.orElseThrow(() -> new NoSuchElementFoundException("No User found")));
     }
 }
