@@ -1,3 +1,5 @@
+import { AccountDeleteDialogComponent } from './delete/delete-dialog.component';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { UserDetails } from './../../entities/user-details/user-details.model';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
@@ -25,7 +27,12 @@ export class SettingsComponent implements OnInit {
     langKey: [undefined],
   });
 
-  constructor(private accountService: AccountService, private fb: FormBuilder, private translateService: TranslateService) {}
+  constructor(
+    private accountService: AccountService,
+    private fb: FormBuilder,
+    private translateService: TranslateService,
+    protected modalService: NgbModal
+  ) {}
 
   ngOnInit(): void {
     this.accountService.identity().subscribe(account => {
@@ -48,6 +55,16 @@ export class SettingsComponent implements OnInit {
       });
       this.userDetails.country = userDetails.country;
       this.userDetails.phone = userDetails.phone;
+    });
+  }
+
+  delete(): void {
+    const modalRef = this.modalService.open(AccountDeleteDialogComponent, { size: 'lg', backdrop: 'static' });
+    // unsubscribe not needed because closed completes on modal close
+    modalRef.closed.subscribe(reason => {
+      if (reason === 'deleted') {
+        //cambiar con logout
+      }
     });
   }
 

@@ -203,6 +203,15 @@ public class AccountResource {
         return userDetails.get();
     }
 
+    @DeleteMapping("/account")
+    public void deleteAccount() {
+        Optional<User> user = userRepository.findOneByLogin(
+            SecurityUtils.getCurrentUserLogin().orElseThrow(() -> new AccountResourceException("Current user login not found"))
+        );
+
+        userService.deleteUser(user.get().getLogin());
+    }
+
     /**
      * {@code DELETE  /account/sessions?series={series}} : invalidate an existing session.
      *

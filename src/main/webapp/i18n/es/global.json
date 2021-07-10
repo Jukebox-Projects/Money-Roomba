@@ -140,7 +140,8 @@
       "value": "Valor"
     },
     "delete": {
-      "title": "Confirmar operación de borrado"
+      "title": "Confirmar operación de borrado",
+      "account": "¿Está seguro de que quiere eliminar su cuenta?"
     },
     "validation": {
       "required": "Este campo es obligatorio.",
