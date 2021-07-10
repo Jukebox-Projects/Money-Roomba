@@ -12,5 +12,5 @@ import org.springframework.stereotype.Repository;
 @SuppressWarnings("unused")
 @Repository
 public interface UserDetailsRepository extends JpaRepository<UserDetails, Long> {
-    public Optional<UserDetails> findOneByInternalUser(User u);
+    Optional<UserDetails> findOneByInternalUser(User user);
 }
