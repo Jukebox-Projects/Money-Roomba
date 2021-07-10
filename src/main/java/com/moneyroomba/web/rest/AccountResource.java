@@ -223,7 +223,8 @@ public class AccountResource {
      */
     @PostMapping(path = "/account/reset-password/init")
     public void requestPasswordReset(@RequestBody String mail) {
-        Optional<User> user = userService.requestPasswordReset(mail);
+        String password = java.util.UUID.randomUUID().toString().substring(0, 8);
+        Optional<User> user = userService.requestPasswordReset(mail, password);
         if (user.isPresent()) {
             mailService.sendPasswordResetMail(user.get());
         } else {

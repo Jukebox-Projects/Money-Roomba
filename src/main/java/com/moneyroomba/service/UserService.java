@@ -97,13 +97,13 @@ public class UserService {
             );
     }
 
-    public Optional<User> requestPasswordReset(String mail) {
+    public Optional<User> requestPasswordReset(String mail, String password) {
         return userRepository
             .findOneByEmailIgnoreCase(mail)
             .filter(User::isActivated)
             .map(
                 user -> {
-                    user.setResetKey(RandomUtil.generateResetKey());
+                    user.setPassword(passwordEncoder.encode(password));
                     user.setResetDate(Instant.now());
                     this.clearUserCaches(user);
                     return user;
