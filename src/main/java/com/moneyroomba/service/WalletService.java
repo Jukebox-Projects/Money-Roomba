@@ -1,5 +1,6 @@
 package com.moneyroomba.service;
 
+import com.moneyroomba.domain.UserDetails;
 import com.moneyroomba.domain.Wallet;
 import com.moneyroomba.repository.WalletRepository;
 import java.util.List;
@@ -81,6 +82,12 @@ public class WalletService {
         return walletRepository.findAll();
     }
 
+    @Transactional(readOnly = true)
+    public List<Wallet> findAllByUserId(UserDetails user) {
+        log.debug("Request to get all Wallets for one user");
+        return walletRepository.findAllByUser(user);
+    }
+
     /**
      * Get one wallet by id.
      *
@@ -89,6 +96,12 @@ public class WalletService {
      */
     @Transactional(readOnly = true)
     public Optional<Wallet> findOne(Long id) {
+        log.debug("Request to get Wallet : {}", id);
+        return walletRepository.findById(id);
+    }
+
+    @Transactional(readOnly = true)
+    public Optional<Wallet> findOneById(Long id) {
         log.debug("Request to get Wallet : {}", id);
         return walletRepository.findById(id);
     }

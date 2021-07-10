@@ -1,7 +1,12 @@
 package com.moneyroomba.web.rest;
 
+import com.moneyroomba.domain.User;
+import com.moneyroomba.domain.UserDetails;
 import com.moneyroomba.domain.Wallet;
+import com.moneyroomba.repository.UserDetailsRepository;
+import com.moneyroomba.repository.UserRepository;
 import com.moneyroomba.repository.WalletRepository;
+import com.moneyroomba.security.SecurityUtils;
 import com.moneyroomba.service.WalletQueryService;
 import com.moneyroomba.service.WalletService;
 import com.moneyroomba.service.criteria.WalletCriteria;
@@ -28,6 +33,13 @@ import tech.jhipster.web.util.ResponseUtil;
 @RequestMapping("/api")
 public class WalletResource {
 
+    private static class AccountResourceException extends RuntimeException {
+
+        private AccountResourceException(String message) {
+            super(message);
+        }
+    }
+
     private final Logger log = LoggerFactory.getLogger(WalletResource.class);
 
     private static final String ENTITY_NAME = "wallet";
@@ -39,12 +51,24 @@ public class WalletResource {
 
     private final WalletRepository walletRepository;
 
+    private final UserRepository userRepository;
+
+    private final UserDetailsRepository userDetailsRepository;
+
     private final WalletQueryService walletQueryService;
 
-    public WalletResource(WalletService walletService, WalletRepository walletRepository, WalletQueryService walletQueryService) {
+    public WalletResource(
+        WalletService walletService,
+        WalletRepository walletRepository,
+        WalletQueryService walletQueryService,
+        UserRepository userRepository,
+        UserDetailsRepository userDetailsRepository
+    ) {
         this.walletService = walletService;
         this.walletRepository = walletRepository;
         this.walletQueryService = walletQueryService;
+        this.userRepository = userRepository;
+        this.userDetailsRepository = userDetailsRepository;
     }
 
     /**
@@ -60,6 +84,11 @@ public class WalletResource {
         if (wallet.getId() != null) {
             throw new BadRequestAlertException("A new wallet cannot already have an ID", ENTITY_NAME, "idexists");
         }
+        Optional<User> user = userRepository.findOneByLogin(
+            SecurityUtils.getCurrentUserLogin().orElseThrow(() -> new AccountResourceException("Current user login not found"))
+        );
+        Optional<UserDetails> userDetails = userDetailsRepository.findOneByInternalUser(user.get());
+        wallet.setUser(userDetails.get());
         Wallet result = walletService.save(wallet);
         return ResponseEntity
             .created(new URI("/api/wallets/" + result.getId()))
@@ -147,6 +176,22 @@ public class WalletResource {
     public ResponseEntity<List<Wallet>> getAllWallets(WalletCriteria criteria) {
         log.debug("REST request to get Wallets by criteria: {}", criteria);
         List<Wallet> entityList = walletQueryService.findByCriteria(criteria);
+        return ResponseEntity.ok().body(entityList);
+    }
+
+    /**
+     * {@code GET  /wallets} : get all the wallets.
+     *
+     * @param id the criteria which the requested entities should match.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of wallets in body.
+     */
+    @GetMapping("/wallets/user/{id}")
+    public ResponseEntity<List<Wallet>> getAllWalletsByUserId() {
+        Optional<User> user = userRepository.findOneByLogin(
+            SecurityUtils.getCurrentUserLogin().orElseThrow(() -> new AccountResourceException("Current user login not found"))
+        );
+        Optional<UserDetails> userDetails = userDetailsRepository.findOneByInternalUser(user.get());
+        List<Wallet> entityList = walletRepository.findAllByUser(userDetails.get());
         return ResponseEntity.ok().body(entityList);
     }
 
