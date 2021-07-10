@@ -132,6 +132,7 @@ public class UserService {
                     }
                 }
             );
+
         User newUser = new User();
         UserDetails userDetails = new UserDetails();
         String encryptedPassword = passwordEncoder.encode(password);

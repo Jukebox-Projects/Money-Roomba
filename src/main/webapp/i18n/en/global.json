@@ -83,21 +83,35 @@
       },
       "validate": {
         "newpassword": {
-          "required": "Your password is required.",
-          "minlength": "Your password is required to be at least 4 characters.",
-          "maxlength": "Your password cannot be longer than 50 characters.",
+          "pattern": "The password requires a minimum of 8 characters, atleast one uppercase, one lowercase, one number, and a special character.",
+          "required": "The password requires a minimum of 8 characters, uppercase, lowercase, a number, and a special character.",
+          "minlength": "Your password is required to be at least 8 characters.",
+          "maxlength": "Your password cannot be longer than 25 characters.",
           "strength": "Password strength:"
         },
         "confirmpassword": {
+          "pattern": "The password requires a minimum of 8 characters, atleast one uppercase, one lowercase, one number, and a special character.",
           "required": "Your confirmation password is required.",
-          "minlength": "Your confirmation password is required to be at least 4 characters.",
-          "maxlength": "Your confirmation password cannot be longer than 50 characters."
+          "minlength": "Your confirmation password is required to be at least 8 characters.",
+          "maxlength": "Your confirmation password cannot be longer than 25 characters."
         },
         "email": {
           "required": "Your email is required.",
           "invalid": "Your email is invalid.",
           "minlength": "Your email is required to be at least 5 characters.",
           "maxlength": "Your email cannot be longer than 50 characters."
+        },
+        "firstName": {
+          "required": "Your first name is required."
+        },
+        "lastName": {
+          "required": "Your last name is required."
+        },
+        "country": {
+          "required": "Your country is required."
+        },
+        "phone": {
+          "required": "Your phone is required."
         }
       }
     },
