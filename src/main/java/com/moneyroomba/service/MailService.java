@@ -99,6 +99,12 @@ public class MailService {
     }
 
     @Async
+    public void sendProfileChange(User user) {
+        log.debug("Sending alert of profile changes to '{}'", user.getEmail());
+        sendEmailFromTemplate(user, "mail/profileChanges", "profile.title");
+    }
+
+    @Async
     public void sendCreationEmail(User user) {
         log.debug("Sending creation email to '{}'", user.getEmail());
         sendEmailFromTemplate(user, "mail/creationEmail", "email.activation.title");

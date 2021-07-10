@@ -32,9 +32,9 @@ spring:
       indent-output: true
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
-    url: jdbc:mysql://localhost:3306/moneyroomba?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
-    username: root
-    password: root
+    url: jdbc:mysql://ikn7cp12d0maxh48:zyht3ah3clt7zouy@pk1l4ihepirw9fob.cbetxkdyhwsb.us-east-1.rds.amazonaws.com:3306/bzavahbosdx1rt1p?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
+    username: u8a8twvnmhn5emq5
+    password: huiwwmm562n76fpw
     hikari:
       poolName: Hikari
       auto-commit: false
@@ -48,10 +48,10 @@ spring:
     # Remove 'faker' if you do not want the sample data to be loaded automatically
     contexts: dev, faker
   mail:
-    host: localhost
-    port: 25
-    username:
-    password:
+    host: smtp.mailtrap.io
+    port: 587
+    username: 06df9f00a6292f
+    password: b1865999017097
   messages:
     cache-duration: PT1S # 1 second, see the ISO 8601 standard
   thymeleaf:
