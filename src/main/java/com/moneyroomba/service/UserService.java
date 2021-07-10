@@ -3,13 +3,16 @@ package com.moneyroomba.service;
 import com.moneyroomba.config.Constants;
 import com.moneyroomba.domain.Authority;
 import com.moneyroomba.domain.User;
+import com.moneyroomba.domain.UserDetails;
 import com.moneyroomba.repository.AuthorityRepository;
 import com.moneyroomba.repository.PersistentTokenRepository;
+import com.moneyroomba.repository.UserDetailsRepository;
 import com.moneyroomba.repository.UserRepository;
 import com.moneyroomba.security.AuthoritiesConstants;
 import com.moneyroomba.security.SecurityUtils;
 import com.moneyroomba.service.dto.AdminUserDTO;
 import com.moneyroomba.service.dto.UserDTO;
+import com.moneyroomba.web.rest.CategoryResource;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
@@ -37,6 +40,8 @@ public class UserService {
 
     private final UserRepository userRepository;
 
+    private final UserDetailsRepository userDetailsRepository;
+
     private final PasswordEncoder passwordEncoder;
 
     private final PersistentTokenRepository persistentTokenRepository;
@@ -47,12 +52,14 @@ public class UserService {
 
     public UserService(
         UserRepository userRepository,
+        UserDetailsRepository userDetailsRepository,
         PasswordEncoder passwordEncoder,
         PersistentTokenRepository persistentTokenRepository,
         AuthorityRepository authorityRepository,
         CacheManager cacheManager
     ) {
         this.userRepository = userRepository;
+        this.userDetailsRepository = userDetailsRepository;
         this.passwordEncoder = passwordEncoder;
         this.persistentTokenRepository = persistentTokenRepository;
         this.authorityRepository = authorityRepository;
@@ -369,4 +376,14 @@ public class UserService {
             Objects.requireNonNull(cacheManager.getCache(UserRepository.USERS_BY_EMAIL_CACHE)).evict(user.getEmail());
         }
     }
+    /*
+    @Transactional(readOnly = true)
+    public Optional<UserDetails> getUserDetailsByLogin(String login) {
+        Optional<User> user = userRepository.findOneByLogin(login);
+
+
+        UserDetails userDetails = new UserDetails();
+        return userDetails;
+        //return userDetailsRepository.findOneByInternalUser(user.get());
+    }*/
 }

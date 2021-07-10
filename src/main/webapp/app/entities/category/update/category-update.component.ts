@@ -11,8 +11,6 @@ import { IIcon } from 'app/entities/icon/icon.model';
 import { IconService } from 'app/entities/icon/service/icon.service';
 import { IUserDetails } from 'app/entities/user-details/user-details.model';
 import { UserDetailsService } from 'app/entities/user-details/service/user-details.service';
-import { Authority } from '../../../config/authority.constants';
-import { AccountService } from '../../../core/auth/account.service';
 
 @Component({
   selector: 'jhi-category-update',
@@ -36,7 +34,6 @@ export class CategoryUpdateComponent implements OnInit {
     protected categoryService: CategoryService,
     protected iconService: IconService,
     protected userDetailsService: UserDetailsService,
-    protected accountService: AccountService,
     protected activatedRoute: ActivatedRoute,
     protected fb: FormBuilder
   ) {}
@@ -132,20 +129,10 @@ export class CategoryUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<IIcon[]>) => res.body ?? []))
       .pipe(map((icons: IIcon[]) => this.iconService.addIconToCollectionIfMissing(icons, this.editForm.get('icon')!.value)))
       .subscribe((icons: IIcon[]) => (this.iconsSharedCollection = icons));
-    /*
-    this.userDetailsService
-      .query()
-      .pipe(map((res: HttpResponse<IUserDetails[]>) => res.body ?? []))
-      .pipe(
-        map((userDetails: IUserDetails[]) =>
-          this.userDetailsService.addUserDetailsToCollectionIfMissing(userDetails, this.editForm.get('user')!.value)
-        )
-      )
-      .subscribe((userDetails: IUserDetails[]) => (this.userDetailsSharedCollection = userDetails));*/
   }
 
   protected createFromForm(): ICategory {
-    const newCategory: ICategory = {
+    return {
       ...new Category(),
       id: this.editForm.get(['id'])!.value,
       name: this.editForm.get(['name'])!.value,
@@ -154,14 +141,5 @@ export class CategoryUpdateComponent implements OnInit {
       parent: this.editForm.get(['parent'])!.value,
       userCreated: true,
     };
-    if (this.isAdmin()) {
-      newCategory.userCreated = false;
-    }
-
-    return newCategory;
-  }
-
-  private isAdmin(): boolean {
-    return this.accountService.hasAnyAuthority(Authority.ADMIN);
   }
 }

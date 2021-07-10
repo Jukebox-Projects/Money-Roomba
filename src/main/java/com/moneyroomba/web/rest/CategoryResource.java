@@ -1,7 +1,10 @@
 package com.moneyroomba.web.rest;
 
 import com.moneyroomba.domain.Category;
+import com.moneyroomba.domain.User;
 import com.moneyroomba.repository.CategoryRepository;
+import com.moneyroomba.repository.UserRepository;
+import com.moneyroomba.security.SecurityUtils;
 import com.moneyroomba.service.CategoryQueryService;
 import com.moneyroomba.service.CategoryService;
 import com.moneyroomba.service.criteria.CategoryCriteria;
@@ -41,14 +44,25 @@ public class CategoryResource {
 
     private final CategoryQueryService categoryQueryService;
 
+    private final UserRepository userRepository;
+
     public CategoryResource(
         CategoryService categoryService,
         CategoryRepository categoryRepository,
-        CategoryQueryService categoryQueryService
+        CategoryQueryService categoryQueryService,
+        UserRepository userRepository
     ) {
         this.categoryService = categoryService;
         this.categoryRepository = categoryRepository;
         this.categoryQueryService = categoryQueryService;
+        this.userRepository = userRepository;
+    }
+
+    private static class CategoryResourceException extends RuntimeException {
+
+        private CategoryResourceException(String message) {
+            super(message);
+        }
     }
 
     /**
@@ -64,6 +78,12 @@ public class CategoryResource {
         if (category.getId() != null) {
             throw new BadRequestAlertException("A new category cannot already have an ID", ENTITY_NAME, "idexists");
         }
+        String userLogin = SecurityUtils
+            .getCurrentUserLogin()
+            .orElseThrow(() -> new CategoryResourceException("Current user login not found"));
+
+        Optional<User> user = userRepository.findOneByLogin(userLogin);
+        // category.setUser(user.get());
         Category result = categoryService.save(category);
         return ResponseEntity
             .created(new URI("/api/categories/" + result.getId()))
