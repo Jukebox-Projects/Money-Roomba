@@ -106,6 +106,31 @@ public class UserService {
                     user.setPassword(passwordEncoder.encode(password));
                     user.setResetDate(Instant.now());
                     this.clearUserCaches(user);
+
+                    userDetailsRepository
+                        .findOneByInternalUserId(user.getId())
+                        .map(
+                            userDetails -> {
+                                userDetails.setIsTemporaryPassword(true);
+
+                                return userDetails;
+                            }
+                        );
+
+                    return user;
+                }
+            );
+    }
+
+    public Optional<User> requestPasswordReset(String mail) {
+        return userRepository
+            .findOneByEmailIgnoreCase(mail)
+            .filter(User::isActivated)
+            .map(
+                user -> {
+                    user.setResetKey(RandomUtil.generateResetKey());
+                    user.setResetDate(Instant.now());
+                    this.clearUserCaches(user);
                     return user;
                 }
             );
@@ -321,6 +346,16 @@ public class UserService {
                     user.setPassword(encryptedPassword);
                     this.clearUserCaches(user);
                     log.debug("Changed password for User: {}", user);
+
+                    userDetailsRepository
+                        .findOneByInternalUserId(user.getId())
+                        .map(
+                            userDetails -> {
+                                userDetails.setIsTemporaryPassword(false);
+
+                                return userDetails;
+                            }
+                        );
                 }
             );
     }
