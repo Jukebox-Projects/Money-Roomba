@@ -1,3 +1,3 @@
 export class AccountDetail {
-  constructor(public isTemporaryPassword: boolean, public country: String, public isActive: String) {}
+  constructor(public isTemporaryPassword: boolean | false, public country: string, public isActive: string | true, public phone: string) {}
 }

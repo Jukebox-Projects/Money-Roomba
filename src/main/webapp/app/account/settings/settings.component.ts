@@ -1,3 +1,4 @@
+import { UserDetails } from './../../entities/user-details/user-details.model';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
@@ -12,12 +13,15 @@ import { LANGUAGES } from 'app/config/language.constants';
 })
 export class SettingsComponent implements OnInit {
   account!: Account;
+  userDetails!: UserDetails;
   success = false;
   languages = LANGUAGES;
   settingsForm = this.fb.group({
     firstName: [undefined, [Validators.required, Validators.minLength(1), Validators.maxLength(50)]],
     lastName: [undefined, [Validators.required, Validators.minLength(1), Validators.maxLength(50)]],
     email: [undefined, [Validators.required, Validators.minLength(5), Validators.maxLength(254), Validators.email]],
+    phone: [undefined, [Validators.required]],
+    country: [undefined, [Validators.required]],
     langKey: [undefined],
   });
 
@@ -36,6 +40,15 @@ export class SettingsComponent implements OnInit {
         this.account = account;
       }
     });
+
+    this.accountService.fetchUserData().subscribe(userDetails => {
+      this.settingsForm.patchValue({
+        country: userDetails.country,
+        phone: userDetails.phone,
+      });
+      this.userDetails.country = userDetails.country;
+      this.userDetails.phone = userDetails.phone;
+    });
   }
 
   save(): void {
@@ -45,6 +58,8 @@ export class SettingsComponent implements OnInit {
     this.account.lastName = this.settingsForm.get('lastName')!.value;
     this.account.email = this.settingsForm.get('email')!.value;
     this.account.langKey = this.settingsForm.get('langKey')!.value;
+    this.account.phone = this.settingsForm.get('phone')!.value;
+    this.account.country = this.settingsForm.get('country')!.value;
 
     this.accountService.save(this.account).subscribe(() => {
       this.success = true;
