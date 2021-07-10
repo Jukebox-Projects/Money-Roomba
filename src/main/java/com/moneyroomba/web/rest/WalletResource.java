@@ -1,11 +1,13 @@
 package com.moneyroomba.web.rest;
 
+import com.moneyroomba.domain.Authority;
 import com.moneyroomba.domain.User;
 import com.moneyroomba.domain.UserDetails;
 import com.moneyroomba.domain.Wallet;
 import com.moneyroomba.repository.UserDetailsRepository;
 import com.moneyroomba.repository.UserRepository;
 import com.moneyroomba.repository.WalletRepository;
+import com.moneyroomba.security.AuthoritiesConstants;
 import com.moneyroomba.security.SecurityUtils;
 import com.moneyroomba.service.WalletQueryService;
 import com.moneyroomba.service.WalletService;
@@ -22,6 +24,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import tech.jhipster.web.util.HeaderUtil;
 import tech.jhipster.web.util.ResponseUtil;
@@ -84,17 +87,21 @@ public class WalletResource {
         if (wallet.getId() != null) {
             throw new BadRequestAlertException("A new wallet cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        Optional<User> user = userRepository.findOneByLogin(
-            SecurityUtils.getCurrentUserLogin().orElseThrow(() -> new AccountResourceException("Current user login not found"))
-        );
 
-        Optional<UserDetails> userDetails = userDetailsRepository.findOneByInternalUser(user.get());
-        wallet.setUser(userDetails.get());
-        Wallet result = walletService.save(wallet);
-        return ResponseEntity
-            .created(new URI("/api/wallets/" + result.getId()))
-            .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
-            .body(result);
+        if (!SecurityUtils.hasCurrentUserThisAuthority(AuthoritiesConstants.ADMIN)) {
+            Optional<User> user = userRepository.findOneByLogin(
+                SecurityUtils.getCurrentUserLogin().orElseThrow(() -> new AccountResourceException("Current user login not found"))
+            );
+            Optional<UserDetails> userDetails = userDetailsRepository.findOneByInternalUser(user.get());
+            wallet.setUser(userDetails.get());
+            Wallet result = walletService.save(wallet);
+            return ResponseEntity
+                .created(new URI("/api/wallets/" + result.getId()))
+                .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
+                .body(result);
+        } else {
+            throw new BadRequestAlertException("Los administradores no pueden crear carteras", ENTITY_NAME, "idexists");
+        }
     }
 
     /**
