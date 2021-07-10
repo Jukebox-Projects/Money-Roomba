@@ -35,7 +35,22 @@
     "clientTheme": "none",
     "clientThemeVariant": "",
     "applicationIndex": 0,
-    "entities": [],
+    "entities": [
+      "UserDetails",
+      "Wallet",
+      "Transaction",
+      "ScheduledTransaction",
+      "SchedulePattern",
+      "Attachment",
+      "Category",
+      "Invoice",
+      "License",
+      "Currency",
+      "Icon",
+      "Notification",
+      "Event",
+      "SystemSetting"
+    ],
     "skipCheckLengthOfIdentifier": false,
     "skipFakeData": false,
     "blueprints": [],
@@ -43,6 +58,7 @@
     "pages": [],
     "creationTimestamp": 1625453009443,
     "rememberMeKey": "a63996ecd0ff2c3b6edd5260b9bc1034480ab134d76669465508fb8452b7f550a12942effb5056a3dae8f82cef64b6b76186",
-    "devServerPort": 4200
+    "devServerPort": 4200,
+    "lastLiquibaseTimestamp": 1625538941000
   }
 }

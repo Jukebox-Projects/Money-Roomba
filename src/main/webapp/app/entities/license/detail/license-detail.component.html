@@ -1,0 +1,50 @@
+<div class="row justify-content-center">
+  <div class="col-8">
+    <div *ngIf="license">
+      <h2 data-cy="licenseDetailsHeading"><span jhiTranslate="moneyRoombaApp.license.detail.title">License</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span jhiTranslate="global.field.id">ID</span></dt>
+        <dd>
+          <span>{{ license.id }}</span>
+        </dd>
+        <dt><span jhiTranslate="moneyRoombaApp.license.code">Code</span></dt>
+        <dd>
+          <span>{{ license.code }}</span>
+        </dd>
+        <dt><span jhiTranslate="moneyRoombaApp.license.isAssigned">Is Assigned</span></dt>
+        <dd>
+          <span>{{ license.isAssigned }}</span>
+        </dd>
+        <dt><span jhiTranslate="moneyRoombaApp.license.isActive">Is Active</span></dt>
+        <dd>
+          <span>{{ license.isActive }}</span>
+        </dd>
+        <dt><span jhiTranslate="moneyRoombaApp.license.createMethod">Create Method</span></dt>
+        <dd>
+          <span jhiTranslate="{{ 'moneyRoombaApp.LicenseCreateMethod.' + license.createMethod }}">{{ license.createMethod }}</span>
+        </dd>
+        <dt><span jhiTranslate="moneyRoombaApp.license.invoice">Invoice</span></dt>
+        <dd>
+          <div *ngIf="license.invoice">
+            <a [routerLink]="['/invoice', license.invoice?.id, 'view']">{{ license.invoice?.id }}</a>
+          </div>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
+      </button>
+
+      <button type="button" [routerLink]="['/license', license.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
+      </button>
+    </div>
+  </div>
+</div>

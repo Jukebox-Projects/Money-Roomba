@@ -1,0 +1,68 @@
+<div class="row justify-content-center">
+  <div class="col-8">
+    <div *ngIf="userDetails">
+      <h2 data-cy="userDetailsDetailsHeading"><span jhiTranslate="moneyRoombaApp.userDetails.detail.title">User Details</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span jhiTranslate="global.field.id">ID</span></dt>
+        <dd>
+          <span>{{ userDetails.id }}</span>
+        </dd>
+        <dt><span jhiTranslate="moneyRoombaApp.userDetails.country">Country</span></dt>
+        <dd>
+          <span>{{ userDetails.country }}</span>
+        </dd>
+        <dt><span jhiTranslate="moneyRoombaApp.userDetails.phone">Phone</span></dt>
+        <dd>
+          <span>{{ userDetails.phone }}</span>
+        </dd>
+        <dt><span jhiTranslate="moneyRoombaApp.userDetails.apiKey">Api Key</span></dt>
+        <dd>
+          <span>{{ userDetails.apiKey }}</span>
+        </dd>
+        <dt><span jhiTranslate="moneyRoombaApp.userDetails.notifications">Notifications</span></dt>
+        <dd>
+          <span>{{ userDetails.notifications }}</span>
+        </dd>
+        <dt><span jhiTranslate="moneyRoombaApp.userDetails.isActive">Is Active</span></dt>
+        <dd>
+          <span>{{ userDetails.isActive }}</span>
+        </dd>
+        <dt><span jhiTranslate="moneyRoombaApp.userDetails.isTemporaryPassword">Is Temporary Password</span></dt>
+        <dd>
+          <span>{{ userDetails.isTemporaryPassword }}</span>
+        </dd>
+        <dt><span jhiTranslate="moneyRoombaApp.userDetails.internalUser">Internal User</span></dt>
+        <dd>
+          <span>{{ userDetails.internalUser?.id }}</span>
+        </dd>
+        <dt><span jhiTranslate="moneyRoombaApp.userDetails.license">License</span></dt>
+        <dd>
+          <div *ngIf="userDetails.license">
+            <a [routerLink]="['/license', userDetails.license?.id, 'view']">{{ userDetails.license?.id }}</a>
+          </div>
+        </dd>
+        <dt><span jhiTranslate="moneyRoombaApp.userDetails.contact">Contact</span></dt>
+        <dd>
+          <div *ngIf="userDetails.contact">
+            <a [routerLink]="['/user-details', userDetails.contact?.id, 'view']">{{ userDetails.contact?.id }}</a>
+          </div>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
+      </button>
+
+      <button type="button" [routerLink]="['/user-details', userDetails.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
+      </button>
+    </div>
+  </div>
+</div>

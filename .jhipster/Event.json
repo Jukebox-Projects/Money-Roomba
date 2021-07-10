@@ -1,0 +1,62 @@
+{
+  "name": "Event",
+  "fields": [
+    {
+      "fieldName": "eventType",
+      "fieldType": "EventType",
+      "fieldValues": "TRANSCTION_RECEIVED (Transacción entrante),TRANSACTION_SENT (Transacción enviada),REPORT_IS_READY (Reporte listo),LICENSE_PURCHASED (Licencia comprada),LICENSE_GIFTED (Licencia regalada),ADDED_AS_FAVORITE (Añadido como contacto favorito),POSSIBLE_TRANSACTION_ADDED_EMAIL (Transacción potencial añadida),CREATE (Creación),UPDATE (Actualización),DELETE (Eliminación),GET (Recuperar)",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "dateAdded",
+      "fieldType": "LocalDate",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "sourceId",
+      "fieldType": "Long",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "sourceEntity",
+      "fieldType": "SourceEntity",
+      "fieldValues": "TRANSACTION (Transacción),CONTACT (Contacto favorito),SCHEDULEDTRANSACTION (Transacción programada),LICENSE (Licencia)",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "userName",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "userLastName",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipType": "one-to-one",
+      "otherEntityName": "notification",
+      "otherEntityRelationshipName": "event",
+      "relationshipName": "notification",
+      "ownerSide": true
+    },
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "userDetails",
+      "otherEntityRelationshipName": "event",
+      "relationshipName": "user"
+    }
+  ],
+  "entityTableName": "event",
+  "dto": "no",
+  "pagination": "no",
+  "service": "serviceClass",
+  "jpaMetamodelFiltering": true,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "applications": "*",
+  "changelogDate": "20210706023540"
+}

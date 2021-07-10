@@ -1,0 +1,68 @@
+<div class="row justify-content-center">
+  <div class="col-8">
+    <div *ngIf="schedulePattern">
+      <h2 data-cy="schedulePatternDetailsHeading">
+        <span jhiTranslate="moneyRoombaApp.schedulePattern.detail.title">Schedule Pattern</span>
+      </h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span jhiTranslate="global.field.id">ID</span></dt>
+        <dd>
+          <span>{{ schedulePattern.id }}</span>
+        </dd>
+        <dt><span jhiTranslate="moneyRoombaApp.schedulePattern.recurringType">Recurring Type</span></dt>
+        <dd>
+          <span jhiTranslate="{{ 'moneyRoombaApp.RecurringType.' + schedulePattern.recurringType }}">{{
+            schedulePattern.recurringType
+          }}</span>
+        </dd>
+        <dt><span jhiTranslate="moneyRoombaApp.schedulePattern.separationCount">Separation Count</span></dt>
+        <dd>
+          <span>{{ schedulePattern.separationCount }}</span>
+        </dd>
+        <dt><span jhiTranslate="moneyRoombaApp.schedulePattern.maxNumberOfOcurrences">Max Number Of Ocurrences</span></dt>
+        <dd>
+          <span>{{ schedulePattern.maxNumberOfOcurrences }}</span>
+        </dd>
+        <dt><span jhiTranslate="moneyRoombaApp.schedulePattern.dayOfWeek">Day Of Week</span></dt>
+        <dd>
+          <span>{{ schedulePattern.dayOfWeek }}</span>
+        </dd>
+        <dt><span jhiTranslate="moneyRoombaApp.schedulePattern.weekOfMonth">Week Of Month</span></dt>
+        <dd>
+          <span>{{ schedulePattern.weekOfMonth }}</span>
+        </dd>
+        <dt><span jhiTranslate="moneyRoombaApp.schedulePattern.dayOfMonth">Day Of Month</span></dt>
+        <dd>
+          <span>{{ schedulePattern.dayOfMonth }}</span>
+        </dd>
+        <dt><span jhiTranslate="moneyRoombaApp.schedulePattern.monthOfYear">Month Of Year</span></dt>
+        <dd>
+          <span>{{ schedulePattern.monthOfYear }}</span>
+        </dd>
+        <dt><span jhiTranslate="moneyRoombaApp.schedulePattern.scheduleTransaction">Schedule Transaction</span></dt>
+        <dd>
+          <div *ngIf="schedulePattern.scheduleTransaction">
+            <a [routerLink]="['/scheduled-transaction', schedulePattern.scheduleTransaction?.id, 'view']">{{
+              schedulePattern.scheduleTransaction?.id
+            }}</a>
+          </div>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
+      </button>
+
+      <button type="button" [routerLink]="['/schedule-pattern', schedulePattern.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
+      </button>
+    </div>
+  </div>
+</div>

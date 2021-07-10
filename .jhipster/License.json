@@ -1,0 +1,45 @@
+{
+  "name": "License",
+  "fields": [
+    {
+      "fieldName": "code",
+      "fieldType": "UUID",
+      "fieldValidateRules": ["required", "unique"]
+    },
+    {
+      "fieldName": "isAssigned",
+      "fieldType": "Boolean",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "isActive",
+      "fieldType": "Boolean",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "createMethod",
+      "fieldType": "LicenseCreateMethod",
+      "fieldValues": "MANUAL (Manual),BULK (En bloque)",
+      "fieldValidateRules": ["required"]
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipType": "one-to-one",
+      "otherEntityName": "invoice",
+      "otherEntityRelationshipName": "license",
+      "relationshipName": "invoice",
+      "ownerSide": true
+    }
+  ],
+  "entityTableName": "t_license",
+  "dto": "no",
+  "pagination": "no",
+  "service": "serviceClass",
+  "jpaMetamodelFiltering": true,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "applications": "*",
+  "changelogDate": "20210706023536"
+}
