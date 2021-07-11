@@ -118,6 +118,13 @@ public class CategoryResource {
             throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
         }
 
+        UserDetails newUserDetails = userService
+            .getUserDetailsByLogin()
+            .orElseThrow(() -> new CategoryResourceException("No Internal User found"));
+
+        category.setUser(newUserDetails);
+        category.setUserCreated(!userService.currentUserIsAdmin());
+
         Category result = categoryService.save(category);
         return ResponseEntity
             .ok()
