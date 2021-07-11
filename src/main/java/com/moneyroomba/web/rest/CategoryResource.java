@@ -52,6 +52,8 @@ public class CategoryResource {
 
     private final UserService userService;
 
+    private final UserRepository userRepository;
+
     private final UserDetailsRepository userDetailsRepository;
 
     public CategoryResource(
