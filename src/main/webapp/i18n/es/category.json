@@ -11,8 +11,18 @@
       "created": "Una nueva Categoría ha sido creada con el identificador {{ param }}",
       "updated": "Una Categoría ha sido actualizada con el identificador {{ param }}",
       "deleted": "Una Categoría ha sido eliminada con el identificador {{ param }}",
+      "activated": "Una Categoría ha sido activada con el identificador {{ param }}",
+      "deactivated": "Una Categoría ha sido desactivada con el identificador {{ param }}",
       "delete": {
         "question": "¿Seguro que quiere eliminar la Categoría {{ id }}?"
+      },
+      "activate": {
+        "question": "¿Seguro que quiere activar la Categoría {{ id }}?",
+        "questionBulk": "¿Seguro que quiere activar la Categoría {{ id }} y  todas sus categorías hijas?"
+      },
+      "deactivate": {
+        "question": "¿Seguro que quiere desactivar la Categoría {{ id }}?",
+        "questionBulk": "¿Seguro que quiere desactivar la Categoría {{ id }} y  todas sus categorías hijas?"
       },
       "detail": {
         "title": "Categoría"

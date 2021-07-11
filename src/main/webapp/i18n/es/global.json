@@ -133,7 +133,9 @@
       "edit": "Editar",
       "open": "Abrir",
       "save": "Guardar",
-      "view": "Vista"
+      "view": "Vista",
+      "activate": "Activar",
+      "deactivate": "Desactivar"
     },
     "detail": {
       "field": "Campo",
