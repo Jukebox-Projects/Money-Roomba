@@ -12,7 +12,9 @@ import { WalletDeleteDialogComponent } from '../delete/wallet-delete-dialog.comp
 })
 export class WalletComponent implements OnInit {
   wallets?: IWallet[];
+  allwallets?: IWallet[];
   isLoading = false;
+  inputText = '';
 
   constructor(protected walletService: WalletService, protected modalService: NgbModal) {}
 
@@ -23,6 +25,7 @@ export class WalletComponent implements OnInit {
       (res: HttpResponse<IWallet[]>) => {
         this.isLoading = false;
         this.wallets = res.body ?? [];
+        this.allwallets = res.body ?? [];
       },
       () => {
         this.isLoading = false;
@@ -36,6 +39,22 @@ export class WalletComponent implements OnInit {
 
   trackId(index: number, item: IWallet): number {
     return item.id!;
+  }
+
+  filterWallets(): void {
+    /* eslint-disable no-console */
+    if (this.wallets !== undefined) {
+      this.wallets = this.wallets.filter(wallet => {
+        if (wallet.name !== undefined) {
+          return wallet.name.toLowerCase().includes(this.inputText.toLowerCase());
+        } else {
+          return false;
+        }
+      });
+    }
+    if (this.inputText === '') {
+      this.wallets = this.allwallets;
+    }
   }
 
   delete(wallet: IWallet): void {
