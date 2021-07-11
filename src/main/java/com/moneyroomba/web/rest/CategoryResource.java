@@ -1,12 +1,11 @@
 package com.moneyroomba.web.rest;
 
 import com.moneyroomba.domain.Category;
-import com.moneyroomba.domain.User;
+import com.moneyroomba.domain.UserDetails;
 import com.moneyroomba.repository.CategoryRepository;
-import com.moneyroomba.repository.UserRepository;
-import com.moneyroomba.security.SecurityUtils;
 import com.moneyroomba.service.CategoryQueryService;
 import com.moneyroomba.service.CategoryService;
+import com.moneyroomba.service.UserService;
 import com.moneyroomba.service.criteria.CategoryCriteria;
 import com.moneyroomba.web.rest.errors.BadRequestAlertException;
 import java.net.URI;
@@ -44,18 +43,18 @@ public class CategoryResource {
 
     private final CategoryQueryService categoryQueryService;
 
-    private final UserRepository userRepository;
+    private final UserService userService;
 
     public CategoryResource(
         CategoryService categoryService,
         CategoryRepository categoryRepository,
         CategoryQueryService categoryQueryService,
-        UserRepository userRepository
+        UserService userService
     ) {
         this.categoryService = categoryService;
         this.categoryRepository = categoryRepository;
         this.categoryQueryService = categoryQueryService;
-        this.userRepository = userRepository;
+        this.userService = userService;
     }
 
     private static class CategoryResourceException extends RuntimeException {
@@ -78,12 +77,13 @@ public class CategoryResource {
         if (category.getId() != null) {
             throw new BadRequestAlertException("A new category cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        String userLogin = SecurityUtils
-            .getCurrentUserLogin()
-            .orElseThrow(() -> new CategoryResourceException("Current user login not found"));
+        UserDetails newUserDetails = userService
+            .getUserDetailsByLogin()
+            .orElseThrow(() -> new CategoryResourceException("No Internal User found"));
 
-        Optional<User> user = userRepository.findOneByLogin(userLogin);
-        // category.setUser(user.get());
+        category.setUser(newUserDetails);
+        category.setUserCreated(!userService.currentUserIsAdmin());
+
         Category result = categoryService.save(category);
         return ResponseEntity
             .created(new URI("/api/categories/" + result.getId()))
