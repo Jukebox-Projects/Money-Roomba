@@ -9,9 +9,9 @@
         "searchbar": "Search",
         "notFound": "No Wallets found"
       },
-      "created": "A new Wallet is created with identifier {{ param }}",
-      "updated": "A Wallet is updated with identifier {{ param }}",
-      "deleted": "A Wallet is deleted with identifier {{ param }}",
+      "created": "A new Wallet has been created.",
+      "updated": "A Wallet has been updated.",
+      "deleted": "A Wallet has been deleted.",
       "delete": {
         "question": "Are you sure you want to delete Wallet {{ id }}?"
       },

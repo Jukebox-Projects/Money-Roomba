@@ -191,7 +191,6 @@ public class WalletResource {
                 .orElseThrow(() -> new BadRequestAlertException("A new wallet cannot already have an ID", ENTITY_NAME, "idexists"))
         );
         Optional<UserDetails> userDetails = userDetailsRepository.findOneByInternalUser(user.get());
-        System.out.println(userDetails.toString());
         List<Wallet> entityList = walletRepository.findAll();
         List<Wallet> res = new ArrayList<Wallet>();
         if (
@@ -201,11 +200,13 @@ public class WalletResource {
                 SecurityUtils.hasCurrentUserThisAuthority(AuthoritiesConstants.PREMIUM_USER)
             )
         ) {
-            for (Wallet wallet : entityList) {
-                if (wallet.getUser() == null) {} else {
-                    if (wallet.getUser().equals(userDetails.get())) {
-                        res.add(wallet);
-                        System.out.println(res.size());
+            if (userDetails.isPresent()) {
+                for (Wallet wallet : entityList) {
+                    if (wallet.getUser() == null) {} else {
+                        if (wallet.getUser().equals(userDetails.get())) {
+                            res.add(wallet);
+                            System.out.println(res.size());
+                        }
                     }
                 }
             }

@@ -46,7 +46,7 @@ export class WalletComponent implements OnInit {
     if (this.wallets !== undefined) {
       this.wallets = this.wallets.filter(wallet => {
         if (wallet.name !== undefined) {
-          return wallet.name.includes(this.inputText);
+          return wallet.name.toLowerCase().includes(this.inputText.toLowerCase());
         } else {
           return false;
         }
