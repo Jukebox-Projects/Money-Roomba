@@ -191,24 +191,17 @@ public class CategoryResource {
             return ResponseEntity.ok().body(res);
         } else {
             for (Category category : entityList) {
-                if (category.getUser() == null) {} else {
+                if (category.getUser() == null) {
                     if (category.getUserCreated().equals(false)) {
                         resAll.add(category);
-                    } else if (category.getUser().equals(userDetails.get())) {
-                        resAll.add(category);
                     }
+                    System.out.println(category.getUserCreated());
+                } else if (category.getUser().equals(userDetails.get())) {
+                    resAll.add(category);
                 }
             }
-            /*
-            List<Category> resAll = categoryRepository.findAll();
-            resAll.removeIf((category -> category.getUser().equals(userDetails)));
-            log.debug("Request to get all Categories created by user");
-            return ResponseEntity.ok().body(resAll);*/
         }
-        /*
-            log.debug("REST request to get Categories by criteria: {}", criteria);
-            List<Category> entityList = categoryQueryService.findByCriteria(criteria);
-            return ResponseEntity.ok().body(entityList);*/
+        //resAll.removeIf(c -> c.getIsActive().equals(false));
         return ResponseEntity.ok().body(resAll);
     }
 
