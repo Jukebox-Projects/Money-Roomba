@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
 import { finalize, map } from 'rxjs/operators';
 
 import { ICategory, Category } from '../category.model';
-import { CategoryService } from '../service/category.service';
+import { CategoryService, EntityArrayResponseType } from '../service/category.service';
 import { IIcon } from 'app/entities/icon/icon.model';
 import { IconService } from 'app/entities/icon/service/icon.service';
 import { IUserDetails } from 'app/entities/user-details/user-details.model';
@@ -42,7 +42,7 @@ export class CategoryUpdateComponent implements OnInit {
     this.activatedRoute.data.subscribe(({ category }) => {
       this.updateForm(category);
 
-      this.loadRelationshipsOptions();
+      this.loadRelationshipsOptions(category);
     });
   }
 
@@ -113,9 +113,11 @@ export class CategoryUpdateComponent implements OnInit {
     );
   }
 
-  protected loadRelationshipsOptions(): void {
+  protected loadRelationshipsOptions(category?: ICategory): void {
+    // Category dropdown only shows parent categories (child categories cannot have childs) and does not show the same category
+
     this.categoryService
-      .query()
+      .query(category?.id ? { 'parentId.specified': false, 'id.notEquals': category.id } : { 'parentId.specified': false })
       .pipe(map((res: HttpResponse<ICategory[]>) => res.body ?? []))
       .pipe(
         map((categories: ICategory[]) =>
@@ -139,7 +141,6 @@ export class CategoryUpdateComponent implements OnInit {
       isActive: true,
       icon: this.editForm.get(['icon'])!.value,
       parent: this.editForm.get(['parent'])!.value,
-      userCreated: true,
     };
   }
 }

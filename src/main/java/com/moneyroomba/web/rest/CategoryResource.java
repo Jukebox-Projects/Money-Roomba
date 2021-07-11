@@ -10,6 +10,7 @@ import com.moneyroomba.security.AuthoritiesConstants;
 import com.moneyroomba.security.SecurityUtils;
 import com.moneyroomba.service.CategoryQueryService;
 import com.moneyroomba.service.CategoryService;
+import com.moneyroomba.service.UserService;
 import com.moneyroomba.service.criteria.CategoryCriteria;
 import com.moneyroomba.service.exception.NoSuchElementFoundException;
 import com.moneyroomba.web.rest.errors.BadRequestAlertException;
@@ -49,7 +50,7 @@ public class CategoryResource {
 
     private final CategoryQueryService categoryQueryService;
 
-    private final UserRepository userRepository;
+    private final UserService userService;
 
     private final UserDetailsRepository userDetailsRepository;
 
@@ -58,13 +59,15 @@ public class CategoryResource {
         CategoryRepository categoryRepository,
         CategoryQueryService categoryQueryService,
         UserRepository userRepository,
-        UserDetailsRepository userDetailsRepository
+        UserDetailsRepository userDetailsRepository,
+        UserService userService
     ) {
         this.categoryService = categoryService;
         this.categoryRepository = categoryRepository;
         this.categoryQueryService = categoryQueryService;
         this.userRepository = userRepository;
         this.userDetailsRepository = userDetailsRepository;
+        this.userService = userService;
     }
 
     private static class CategoryResourceException extends RuntimeException {
@@ -87,12 +90,13 @@ public class CategoryResource {
         if (category.getId() != null) {
             throw new BadRequestAlertException("A new category cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        String userLogin = SecurityUtils
-            .getCurrentUserLogin()
-            .orElseThrow(() -> new CategoryResourceException("Current user login not found"));
+        UserDetails newUserDetails = userService
+            .getUserDetailsByLogin()
+            .orElseThrow(() -> new CategoryResourceException("No Internal User found"));
 
-        Optional<User> user = userRepository.findOneByLogin(userLogin);
-        // category.setUser(user.get());
+        category.setUser(newUserDetails);
+        category.setUserCreated(!userService.currentUserIsAdmin());
+
         Category result = categoryService.save(category);
         return ResponseEntity
             .created(new URI("/api/categories/" + result.getId()))
@@ -126,6 +130,13 @@ public class CategoryResource {
         if (!categoryRepository.existsById(id)) {
             throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
         }
+
+        UserDetails newUserDetails = userService
+            .getUserDetailsByLogin()
+            .orElseThrow(() -> new CategoryResourceException("No Internal User found"));
+
+        category.setUser(newUserDetails);
+        category.setUserCreated(!userService.currentUserIsAdmin());
 
         Category result = categoryService.save(category);
         return ResponseEntity

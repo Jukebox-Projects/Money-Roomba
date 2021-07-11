@@ -2,6 +2,8 @@ package com.moneyroomba.service;
 
 import com.moneyroomba.domain.Category;
 import com.moneyroomba.repository.CategoryRepository;
+import com.moneyroomba.service.exception.Category.CategoryDepthException;
+import com.moneyroomba.service.exception.Category.ParentCategoryIsSameCategory;
 import java.util.List;
 import java.util.Optional;
 import org.slf4j.Logger;
@@ -32,6 +34,15 @@ public class CategoryService {
      */
     public Category save(Category category) {
         log.debug("Request to save Category : {}", category);
+        // Checks category depth. It can only goes 2 levels deep
+        if (category.getParent() != null) {
+            if (category.getParent().getId().equals(category.getId())) {
+                throw new ParentCategoryIsSameCategory("The parent category cannot be the same category");
+            } else if (category.getParent().getParent() != null) {
+                throw new CategoryDepthException("Child category cannot be a parent category");
+            }
+        }
+
         return categoryRepository.save(category);
     }
 

@@ -24,8 +24,8 @@
       "category": "Category",
       "transaction": "Transaction",
       "icon": "Icon",
-      "parent": "Parent",
-      "user": "User"
+      "parent": "Parent category",
+      "user": "Category owner"
     }
   }
 }
