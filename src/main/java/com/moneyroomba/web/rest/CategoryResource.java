@@ -1,15 +1,22 @@
 package com.moneyroomba.web.rest;
 
 import com.moneyroomba.domain.Category;
+import com.moneyroomba.domain.User;
 import com.moneyroomba.domain.UserDetails;
 import com.moneyroomba.repository.CategoryRepository;
+import com.moneyroomba.repository.UserDetailsRepository;
+import com.moneyroomba.repository.UserRepository;
+import com.moneyroomba.security.AuthoritiesConstants;
+import com.moneyroomba.security.SecurityUtils;
 import com.moneyroomba.service.CategoryQueryService;
 import com.moneyroomba.service.CategoryService;
 import com.moneyroomba.service.UserService;
 import com.moneyroomba.service.criteria.CategoryCriteria;
+import com.moneyroomba.service.exception.NoSuchElementFoundException;
 import com.moneyroomba.web.rest.errors.BadRequestAlertException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -45,15 +52,21 @@ public class CategoryResource {
 
     private final UserService userService;
 
+    private final UserDetailsRepository userDetailsRepository;
+
     public CategoryResource(
         CategoryService categoryService,
         CategoryRepository categoryRepository,
         CategoryQueryService categoryQueryService,
+        UserRepository userRepository,
+        UserDetailsRepository userDetailsRepository,
         UserService userService
     ) {
         this.categoryService = categoryService;
         this.categoryRepository = categoryRepository;
         this.categoryQueryService = categoryQueryService;
+        this.userRepository = userRepository;
+        this.userDetailsRepository = userDetailsRepository;
         this.userService = userService;
     }
 
@@ -176,9 +189,31 @@ public class CategoryResource {
      */
     @GetMapping("/categories")
     public ResponseEntity<List<Category>> getAllCategories(CategoryCriteria criteria) {
-        log.debug("REST request to get Categories by criteria: {}", criteria);
-        List<Category> entityList = categoryQueryService.findByCriteria(criteria);
-        return ResponseEntity.ok().body(entityList);
+        Optional<User> user = userRepository.findOneByLogin(
+            SecurityUtils.getCurrentUserLogin().orElseThrow(() -> new NoSuchElementFoundException("No Login found"))
+        );
+        Optional<UserDetails> userDetails = userDetailsRepository.findOneByInternalUser(user.get());
+        List<Category> entityList = categoryRepository.findAll();
+        List<Category> resAll = new ArrayList<Category>();
+        if (SecurityUtils.hasCurrentUserThisAuthority(AuthoritiesConstants.ADMIN)) {
+            List<Category> res = categoryRepository.findAll();
+            res.removeIf((category -> category.getUserCreated().equals(true)));
+            log.debug("Request to get all Categories created by Admin");
+            return ResponseEntity.ok().body(res);
+        } else {
+            for (Category category : entityList) {
+                if (category.getUser() == null) {
+                    if (category.getUserCreated().equals(false)) {
+                        resAll.add(category);
+                    }
+                    System.out.println(category.getUserCreated());
+                } else if (category.getUser().equals(userDetails.get())) {
+                    resAll.add(category);
+                }
+            }
+        }
+        //resAll.removeIf(c -> c.getIsActive().equals(false));
+        return ResponseEntity.ok().body(resAll);
     }
 
     /**
