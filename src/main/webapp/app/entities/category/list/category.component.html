@@ -3,6 +3,8 @@
     <span jhiTranslate="moneyRoombaApp.category.home.title">Categories</span>
 
     <div class="d-flex justify-content-end">
+      <input jhiTranslate="moneyRoombaApp.category.home.searchbar" type="text" [(ngModel)]="inputText" (input)="filterCategory()" />
+
       <button class="btn btn-info mr-2" (click)="loadAll()" [disabled]="isLoading">
         <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
         <span jhiTranslate="moneyRoombaApp.category.home.refreshListLabel">Refresh List</span>

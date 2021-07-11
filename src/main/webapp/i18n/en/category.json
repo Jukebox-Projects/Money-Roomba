@@ -6,6 +6,7 @@
         "refreshListLabel": "Refresh list",
         "createLabel": "Create a new Category",
         "createOrEditLabel": "Create or edit a Category",
+        "searchbar": "Search",
         "notFound": "No Categories found"
       },
       "created": "A new Category is created with identifier {{ param }}",

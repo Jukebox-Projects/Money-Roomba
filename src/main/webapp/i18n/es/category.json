@@ -6,6 +6,7 @@
         "refreshListLabel": "Refrescar lista",
         "createLabel": "Crear una nueva Categoría",
         "createOrEditLabel": "Crear o editar una Categoría",
+        "searchbar": "Buscar",
         "notFound": "Ninguna Categoría encontrada"
       },
       "created": "Una nueva Categoría ha sido creada con el identificador {{ param }}",

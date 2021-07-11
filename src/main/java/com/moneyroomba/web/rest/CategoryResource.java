@@ -209,7 +209,7 @@ public class CategoryResource {
                         resAll.add(category);
                     }
                     System.out.println(category.getUserCreated());
-                } else if (category.getUser().equals(userDetails.get())) {
+                } else if (category.getUser().equals(userDetails.get()) | (category.getUserCreated().equals(false))) {
                     resAll.add(category);
                 }
             }
