@@ -192,7 +192,9 @@ public class CategoryResource {
         } else {
             for (Category category : entityList) {
                 if (category.getUser() == null) {} else {
-                    if (category.getUser().equals(userDetails.get())) {
+                    if (category.getUserCreated().equals(false)) {
+                        resAll.add(category);
+                    } else if (category.getUser().equals(userDetails.get())) {
                         resAll.add(category);
                     }
                 }
@@ -203,11 +205,11 @@ public class CategoryResource {
             log.debug("Request to get all Categories created by user");
             return ResponseEntity.ok().body(resAll);*/
         }
-        return ResponseEntity.ok().body(resAll);
         /*
             log.debug("REST request to get Categories by criteria: {}", criteria);
             List<Category> entityList = categoryQueryService.findByCriteria(criteria);
             return ResponseEntity.ok().body(entityList);*/
+        return ResponseEntity.ok().body(resAll);
     }
 
     /**
