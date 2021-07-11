@@ -205,11 +205,10 @@ public class AccountResource {
 
     @DeleteMapping("/account")
     public void deleteAccount() {
-        Optional<User> user = userRepository.findOneByLogin(
+        log.debug("Current user login", SecurityUtils.getCurrentUserLogin());
+        userService.deleteUser(
             SecurityUtils.getCurrentUserLogin().orElseThrow(() -> new AccountResourceException("Current user login not found"))
         );
-
-        userService.deleteUser(user.get().getLogin());
     }
 
     /**
