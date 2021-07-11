@@ -6,6 +6,7 @@
         "refreshListLabel": "Refrescar lista",
         "createLabel": "Crear nuevo Wallet",
         "createOrEditLabel": "Crear o editar Wallet",
+        "searchbar": "Buscar",
         "notFound": "Ningún Wallets encontrado"
       },
       "created": "Un nuevo Wallet ha sido creado con el identificador {{ param }}",

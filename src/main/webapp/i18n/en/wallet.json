@@ -6,6 +6,7 @@
         "refreshListLabel": "Refresh list",
         "createLabel": "Create a new Wallet",
         "createOrEditLabel": "Create or edit a Wallet",
+        "searchbar": "Search",
         "notFound": "No Wallets found"
       },
       "created": "A new Wallet is created with identifier {{ param }}",
