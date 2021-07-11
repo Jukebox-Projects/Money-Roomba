@@ -2,6 +2,8 @@ package com.moneyroomba.web.rest;
 
 import com.moneyroomba.domain.Category;
 import com.moneyroomba.repository.CategoryRepository;
+import com.moneyroomba.security.AuthoritiesConstants;
+import com.moneyroomba.security.SecurityUtils;
 import com.moneyroomba.service.CategoryQueryService;
 import com.moneyroomba.service.CategoryService;
 import com.moneyroomba.service.criteria.CategoryCriteria;
@@ -149,9 +151,16 @@ public class CategoryResource {
      */
     @GetMapping("/categories")
     public ResponseEntity<List<Category>> getAllCategories(CategoryCriteria criteria) {
-        log.debug("REST request to get Categories by criteria: {}", criteria);
-        List<Category> entityList = categoryQueryService.findByCriteria(criteria);
-        return ResponseEntity.ok().body(entityList);
+        if (SecurityUtils.hasCurrentUserThisAuthority(AuthoritiesConstants.ADMIN)) {
+            List<Category> res = categoryRepository.findAll();
+            res.removeIf((category -> category.getUserCreated().equals(true)));
+            log.debug("Request to get all Categories created by Admin");
+            return ResponseEntity.ok().body(res);
+        } else {
+            log.debug("REST request to get Categories by criteria: {}", criteria);
+            List<Category> entityList = categoryQueryService.findByCriteria(criteria);
+            return ResponseEntity.ok().body(entityList);
+        }
     }
 
     /**

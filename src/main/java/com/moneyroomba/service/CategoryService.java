@@ -3,6 +3,8 @@ package com.moneyroomba.service;
 import com.moneyroomba.domain.Category;
 import com.moneyroomba.domain.UserDetails;
 import com.moneyroomba.repository.CategoryRepository;
+import com.moneyroomba.security.AuthoritiesConstants;
+import com.moneyroomba.security.SecurityUtils;
 import java.util.List;
 import java.util.Optional;
 import org.slf4j.Logger;
@@ -86,18 +88,6 @@ public class CategoryService {
     public Optional<Category> findOne(Long id) {
         log.debug("Request to get Category : {}", id);
         return categoryRepository.findById(id);
-    }
-
-    /**
-     * Get all categories from one user
-     *
-     * @param user the entity.
-     * @return all categories of the user.
-     */
-    @Transactional(readOnly = true)
-    public List<Category> findAllByUserId(UserDetails user) {
-        log.debug("Request to get all categories from one user");
-        return categoryRepository.findAllByUser(user);
     }
 
     /**
