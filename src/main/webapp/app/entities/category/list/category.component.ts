@@ -50,9 +50,10 @@ export class CategoryComponent implements OnInit {
           return false;
         }
       });
-    }
-    if (this.inputText === '') {
-      this.categories = this.allCategories;
+      if (this.inputText === '') {
+        console.log('WEBOS');
+        this.categories = this.allCategories;
+      }
     }
   }
 
