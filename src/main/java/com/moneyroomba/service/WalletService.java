@@ -25,6 +25,13 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class WalletService {
 
+    private static class WalletServiceException extends RuntimeException {
+
+        private WalletServiceException(String message) {
+            super(message);
+        }
+    }
+
     private static final String ENTITY_NAME = "wallet";
 
     private final Logger log = LoggerFactory.getLogger(WalletService.class);
@@ -49,18 +56,22 @@ public class WalletService {
      */
     public Wallet save(Wallet wallet) {
         log.debug("Request to save Wallet : {}", wallet);
-        // if (!SecurityUtils.hasCurrentUserThisAuthority(AuthoritiesConstants.ADMIN)) {
-        //     Optional<User> user = userRepository.findOneByLogin(
-        //         SecurityUtils.getCurrentUserLogin().get()//.orElseThrow(() -> new Exception("Current user login not found"))
-        //     );
-        //     Optional<UserDetails> userDetails = userDetailsRepository.findOneByInternalUser(user.get());
-        //     wallet.setUser(userDetails.get());
-        //     Wallet result = walletRepository.save(wallet);
-        //     return result;
-        // } else {
-        //     throw new Exception("Admins cannot register wallets");
-        // }
-        return walletRepository.save(wallet);
+        int walletCount = 0;
+        Optional<User> user = userRepository.findOneByLogin(
+            SecurityUtils.getCurrentUserLogin().orElseThrow(() -> new WalletServiceException("Current user login not found"))
+        );
+        Optional<UserDetails> userDetails = userDetailsRepository.findOneByInternalUser(user.get());
+        wallet.setUser(userDetails.get());
+        List<Wallet> userWallets = walletRepository.findAllByUser(userDetails.get());
+        if (!SecurityUtils.hasCurrentUserThisAuthority(AuthoritiesConstants.PREMIUM_USER)) {
+            if (userWallets.size() >= 3) {
+                throw new WalletServiceException("User cannot register more wallets.");
+            } else {
+                return walletRepository.save(wallet);
+            }
+        } else {
+            return walletRepository.save(wallet);
+        }
     }
 
     /**

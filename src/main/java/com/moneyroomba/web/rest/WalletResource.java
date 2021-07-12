@@ -88,13 +88,7 @@ public class WalletResource {
         if (wallet.getId() != null) {
             throw new BadRequestAlertException("A new wallet cannot already have an ID", ENTITY_NAME, "idexists");
         }
-
         if (!SecurityUtils.hasCurrentUserThisAuthority(AuthoritiesConstants.ADMIN)) {
-            Optional<User> user = userRepository.findOneByLogin(
-                SecurityUtils.getCurrentUserLogin().orElseThrow(() -> new AccountResourceException("Current user login not found"))
-            );
-            Optional<UserDetails> userDetails = userDetailsRepository.findOneByInternalUser(user.get());
-            wallet.setUser(userDetails.get());
             Wallet result = walletService.save(wallet);
             return ResponseEntity
                 .created(new URI("/api/wallets/" + result.getId()))
