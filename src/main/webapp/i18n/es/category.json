@@ -2,30 +2,30 @@
   "moneyRoombaApp": {
     "category": {
       "home": {
-        "title": "Categories",
+        "title": "Categorías",
         "refreshListLabel": "Refrescar lista",
-        "createLabel": "Crear nuevo Category",
-        "createOrEditLabel": "Crear o editar Category",
-        "notFound": "Ningún Categories encontrado"
+        "createLabel": "Crear una nueva Categoría",
+        "createOrEditLabel": "Crear o editar una Categoría",
+        "notFound": "Ninguna Categoría encontrada"
       },
-      "created": "Un nuevo Category ha sido creado con el identificador {{ param }}",
-      "updated": "Un Category ha sido actualizado con el identificador {{ param }}",
-      "deleted": "Un Category ha sido eliminado con el identificador {{ param }}",
+      "created": "Una nueva Categoría ha sido creada con el identificador {{ param }}",
+      "updated": "Una Categoría ha sido actualizada con el identificador {{ param }}",
+      "deleted": "Una Categoría ha sido eliminada con el identificador {{ param }}",
       "delete": {
-        "question": "¿Seguro que quiere eliminar Category {{ id }}?"
+        "question": "¿Seguro que quiere eliminar la Categoría {{ id }}?"
       },
       "detail": {
-        "title": "Category"
+        "title": "Categoría"
       },
       "id": "ID",
-      "name": "Name",
-      "isActive": "Is Active",
-      "userCreated": "User Created",
-      "category": "Category",
-      "transaction": "Transaction",
-      "icon": "Icon",
-      "parent": "Parent",
-      "user": "User"
+      "name": "Nombre",
+      "isActive": "Activa",
+      "userCreated": "Creada por usuario",
+      "category": "Categoría",
+      "transaction": "Transacción",
+      "icon": "Ícono",
+      "parent": "Categoría padre",
+      "user": "Dueño de la Categoría"
     }
   }
 }

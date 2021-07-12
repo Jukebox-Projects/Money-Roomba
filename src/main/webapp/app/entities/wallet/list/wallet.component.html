@@ -3,6 +3,8 @@
     <span jhiTranslate="moneyRoombaApp.wallet.home.title">Wallets</span>
 
     <div class="d-flex justify-content-end">
+      <input jhiTranslate="moneyRoombaApp.wallet.home.searchbar" type="text" [(ngModel)]="inputText" (input)="filterWallets()" />
+
       <button class="btn btn-info mr-2" (click)="loadAll()" [disabled]="isLoading">
         <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
         <span jhiTranslate="moneyRoombaApp.wallet.home.refreshListLabel">Refresh List</span>
@@ -27,7 +29,6 @@
   <div class="alert alert-warning" id="no-result" *ngIf="wallets?.length === 0">
     <span jhiTranslate="moneyRoombaApp.wallet.home.notFound">No wallets found</span>
   </div>
-
   <div class="table-responsive" id="entities" *ngIf="wallets && wallets.length > 0">
     <table class="table table-striped" aria-describedby="page-heading">
       <thead>

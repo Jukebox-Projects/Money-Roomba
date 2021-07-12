@@ -1,13 +1,21 @@
 package com.moneyroomba.web.rest;
 
+import com.moneyroomba.domain.Authority;
+import com.moneyroomba.domain.User;
+import com.moneyroomba.domain.UserDetails;
 import com.moneyroomba.domain.Wallet;
+import com.moneyroomba.repository.UserDetailsRepository;
+import com.moneyroomba.repository.UserRepository;
 import com.moneyroomba.repository.WalletRepository;
+import com.moneyroomba.security.AuthoritiesConstants;
+import com.moneyroomba.security.SecurityUtils;
 import com.moneyroomba.service.WalletQueryService;
 import com.moneyroomba.service.WalletService;
 import com.moneyroomba.service.criteria.WalletCriteria;
 import com.moneyroomba.web.rest.errors.BadRequestAlertException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -17,6 +25,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import tech.jhipster.web.util.HeaderUtil;
 import tech.jhipster.web.util.ResponseUtil;
@@ -27,6 +36,13 @@ import tech.jhipster.web.util.ResponseUtil;
 @RestController
 @RequestMapping("/api")
 public class WalletResource {
+
+    private static class AccountResourceException extends RuntimeException {
+
+        private AccountResourceException(String message) {
+            super(message);
+        }
+    }
 
     private final Logger log = LoggerFactory.getLogger(WalletResource.class);
 
@@ -39,12 +55,24 @@ public class WalletResource {
 
     private final WalletRepository walletRepository;
 
+    private final UserRepository userRepository;
+
+    private final UserDetailsRepository userDetailsRepository;
+
     private final WalletQueryService walletQueryService;
 
-    public WalletResource(WalletService walletService, WalletRepository walletRepository, WalletQueryService walletQueryService) {
+    public WalletResource(
+        WalletService walletService,
+        WalletRepository walletRepository,
+        WalletQueryService walletQueryService,
+        UserRepository userRepository,
+        UserDetailsRepository userDetailsRepository
+    ) {
         this.walletService = walletService;
         this.walletRepository = walletRepository;
         this.walletQueryService = walletQueryService;
+        this.userRepository = userRepository;
+        this.userDetailsRepository = userDetailsRepository;
     }
 
     /**
@@ -60,11 +88,21 @@ public class WalletResource {
         if (wallet.getId() != null) {
             throw new BadRequestAlertException("A new wallet cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        Wallet result = walletService.save(wallet);
-        return ResponseEntity
-            .created(new URI("/api/wallets/" + result.getId()))
-            .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
-            .body(result);
+
+        if (!SecurityUtils.hasCurrentUserThisAuthority(AuthoritiesConstants.ADMIN)) {
+            Optional<User> user = userRepository.findOneByLogin(
+                SecurityUtils.getCurrentUserLogin().orElseThrow(() -> new AccountResourceException("Current user login not found"))
+            );
+            Optional<UserDetails> userDetails = userDetailsRepository.findOneByInternalUser(user.get());
+            wallet.setUser(userDetails.get());
+            Wallet result = walletService.save(wallet);
+            return ResponseEntity
+                .created(new URI("/api/wallets/" + result.getId()))
+                .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
+                .body(result);
+        } else {
+            throw new BadRequestAlertException("Los administradores no pueden crear carteras", ENTITY_NAME, "idexists");
+        }
     }
 
     /**
@@ -144,18 +182,42 @@ public class WalletResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of wallets in body.
      */
     @GetMapping("/wallets")
-    public ResponseEntity<List<Wallet>> getAllWallets(WalletCriteria criteria) {
+    public ResponseEntity<List<Wallet>> getAllWallets(WalletCriteria criteria) throws URISyntaxException {
         log.debug("REST request to get Wallets by criteria: {}", criteria);
-        List<Wallet> entityList = walletQueryService.findByCriteria(criteria);
-        return ResponseEntity.ok().body(entityList);
+        //List<Wallet> entityList = walletQueryService.findByCriteria(criteria);
+        Optional<User> user = userRepository.findOneByLogin(
+            SecurityUtils
+                .getCurrentUserLogin()
+                .orElseThrow(() -> new BadRequestAlertException("A new wallet cannot already have an ID", ENTITY_NAME, "idexists"))
+        );
+        Optional<UserDetails> userDetails = userDetailsRepository.findOneByInternalUser(user.get());
+        List<Wallet> entityList = walletRepository.findAll();
+        List<Wallet> res = new ArrayList<Wallet>();
+        if (
+            (!SecurityUtils.hasCurrentUserThisAuthority(AuthoritiesConstants.ADMIN)) &&
+            (
+                SecurityUtils.hasCurrentUserThisAuthority(AuthoritiesConstants.USER) ||
+                SecurityUtils.hasCurrentUserThisAuthority(AuthoritiesConstants.PREMIUM_USER)
+            )
+        ) {
+            if (userDetails.isPresent()) {
+                for (Wallet wallet : entityList) {
+                    if (wallet.getUser() == null) {} else {
+                        if (wallet.getUser().equals(userDetails.get())) {
+                            res.add(wallet);
+                            System.out.println(res.size());
+                        }
+                    }
+                }
+            }
+        } else {
+            if (SecurityUtils.hasCurrentUserThisAuthority(AuthoritiesConstants.ADMIN)) {
+                res = entityList;
+            }
+        }
+        return ResponseEntity.ok().body(res);
     }
 
-    /**
-     * {@code GET  /wallets/count} : count all the wallets.
-     *
-     * @param criteria the criteria which the requested entities should match.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the count in body.
-     */
     @GetMapping("/wallets/count")
     public ResponseEntity<Long> countWallets(WalletCriteria criteria) {
         log.debug("REST request to count Wallets by criteria: {}", criteria);
