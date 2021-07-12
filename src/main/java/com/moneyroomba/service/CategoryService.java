@@ -22,8 +22,11 @@ public class CategoryService {
 
     private final CategoryRepository categoryRepository;
 
-    public CategoryService(CategoryRepository categoryRepository) {
+    private final UserService userService;
+
+    public CategoryService(CategoryRepository categoryRepository, UserService userService) {
         this.categoryRepository = categoryRepository;
+        this.userService = userService;
     }
 
     /**
@@ -73,6 +76,36 @@ public class CategoryService {
                 }
             )
             .map(categoryRepository::save);
+    }
+
+    /**
+     * Partially update a category.
+     *
+     * @param id the entity to update partially.
+     * @return the persisted entity.
+     */
+    public Optional<Category> statusCategoryUpdate(Long id) {
+        log.debug("Request to update Category status : {}", id);
+
+        return categoryRepository
+            .findById(id)
+            .map(
+                //(!category.userCreated && adminUser) || (category.userCreated && !adminUser)
+                existingCategory -> {
+                    final boolean expectedStatus = !existingCategory.getIsActive();
+                    if ((long) existingCategory.getCategories().size() > 0) {
+                        existingCategory.getCategories().forEach(category -> childStatusChange(category, expectedStatus));
+                    }
+                    existingCategory.setIsActive(expectedStatus);
+                    return existingCategory;
+                }
+            )
+            .map(categoryRepository::save);
+    }
+
+    private void childStatusChange(Category category, boolean status) {
+        log.debug("Request to update child Category status : {} {}", category.getId(), category);
+        category.setIsActive(status);
     }
 
     /**
