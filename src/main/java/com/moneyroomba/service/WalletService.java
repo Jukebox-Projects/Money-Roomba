@@ -9,6 +9,7 @@ import com.moneyroomba.repository.WalletRepository;
 import com.moneyroomba.security.AuthoritiesConstants;
 import com.moneyroomba.security.SecurityUtils;
 import com.moneyroomba.web.rest.errors.BadRequestAlertException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import org.hibernate.procedure.internal.Util.ResultClassesResolutionContext;
@@ -23,6 +24,8 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @Transactional
 public class WalletService {
+
+    private static final String ENTITY_NAME = "wallet";
 
     private final Logger log = LoggerFactory.getLogger(WalletService.class);
 
@@ -103,7 +106,37 @@ public class WalletService {
     @Transactional(readOnly = true)
     public List<Wallet> findAll() {
         log.debug("Request to get all Wallets");
-        return walletRepository.findAll();
+        Optional<User> user = userRepository.findOneByLogin(
+            SecurityUtils
+                .getCurrentUserLogin()
+                .orElseThrow(() -> new BadRequestAlertException("A new wallet cannot already have an ID", ENTITY_NAME, "idexists"))
+        );
+        Optional<UserDetails> userDetails = userDetailsRepository.findOneByInternalUser(user.get());
+        List<Wallet> entityList = walletRepository.findAll();
+        List<Wallet> res = new ArrayList<Wallet>();
+        if (
+            (!SecurityUtils.hasCurrentUserThisAuthority(AuthoritiesConstants.ADMIN)) &&
+            (
+                SecurityUtils.hasCurrentUserThisAuthority(AuthoritiesConstants.USER) ||
+                SecurityUtils.hasCurrentUserThisAuthority(AuthoritiesConstants.PREMIUM_USER)
+            )
+        ) {
+            if (userDetails.isPresent()) {
+                for (Wallet wallet : entityList) {
+                    if (wallet.getUser() == null) {} else {
+                        if (wallet.getUser().equals(userDetails.get())) {
+                            res.add(wallet);
+                            System.out.println(res.size());
+                        }
+                    }
+                }
+            }
+        } else {
+            if (SecurityUtils.hasCurrentUserThisAuthority(AuthoritiesConstants.ADMIN)) {
+                res = entityList;
+            }
+        }
+        return res;
     }
 
     @Transactional(readOnly = true)
