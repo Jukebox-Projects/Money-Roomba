@@ -51,7 +51,6 @@ export class CategoryComponent implements OnInit {
         }
       });
       if (this.inputText === '') {
-        console.log('WEBOS');
         this.categories = this.allCategories;
       }
     }
