@@ -15,7 +15,9 @@ import { Authority } from '../../../config/authority.constants';
 })
 export class CategoryComponent implements OnInit {
   categories?: ICategory[];
+  allCategories?: ICategory[];
   isLoading = false;
+  inputText = '';
   adminUser = false;
 
   constructor(protected categoryService: CategoryService, protected modalService: NgbModal, protected accountService: AccountService) {}
@@ -27,6 +29,7 @@ export class CategoryComponent implements OnInit {
       (res: HttpResponse<ICategory[]>) => {
         this.isLoading = false;
         this.categories = res.body ?? [];
+        this.allCategories = res.body ?? [];
       },
       () => {
         this.isLoading = false;
@@ -41,6 +44,21 @@ export class CategoryComponent implements OnInit {
 
   trackId(index: number, item: ICategory): number {
     return item.id!;
+  }
+
+  filterCategory(): void {
+    if (this.categories !== undefined) {
+      this.categories = this.categories.filter(category => {
+        if (category.name !== undefined) {
+          return category.name.toLowerCase().includes(this.inputText.toLowerCase());
+        } else {
+          return false;
+        }
+      });
+      if (this.inputText === '') {
+        this.categories = this.allCategories;
+      }
+    }
   }
 
   delete(category: ICategory): void {

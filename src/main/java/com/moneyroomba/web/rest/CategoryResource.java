@@ -25,6 +25,7 @@ import javax.validation.constraints.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import tech.jhipster.web.util.HeaderUtil;
@@ -231,8 +232,7 @@ public class CategoryResource {
                     if (category.getUserCreated().equals(false)) {
                         resAll.add(category);
                     }
-                    System.out.println(category.getUserCreated());
-                } else if (category.getUser().equals(userDetails.get())) {
+                } else if (category.getUser().equals(userDetails.get()) | (category.getUserCreated().equals(false))) {
                     resAll.add(category);
                 }
             }
@@ -273,12 +273,24 @@ public class CategoryResource {
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/categories/{id}")
-    public ResponseEntity<Void> deleteCategory(@PathVariable Long id) {
-        log.debug("REST request to delete Category : {}", id);
-        categoryService.delete(id);
-        return ResponseEntity
-            .noContent()
-            .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()))
-            .build();
+    public ResponseEntity<String> deleteCategory(@PathVariable Long id) {
+        Optional<Category> category = categoryService.findOne(id);
+        if (SecurityUtils.hasCurrentUserThisAuthority(AuthoritiesConstants.USER) && category.get().getUserCreated().equals(true)) {
+            log.debug("REST request to delete Category : {}", id);
+            categoryService.delete(id);
+            return ResponseEntity
+                .noContent()
+                .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()))
+                .build();
+        } else if (SecurityUtils.hasCurrentUserThisAuthority(AuthoritiesConstants.ADMIN)) {
+            log.debug("REST request to delete Category : {}", id);
+            categoryService.delete(id);
+            return ResponseEntity
+                .noContent()
+                .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()))
+                .build();
+        } else {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("No se pueden eliminar categorias por defecto");
+        }
     }
 }
