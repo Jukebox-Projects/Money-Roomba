@@ -1,3 +1,4 @@
+import { AccountDetail } from './accountDetail.model';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
@@ -74,6 +75,10 @@ export class AccountService {
 
   getAuthenticationState(): Observable<Account | null> {
     return this.authenticationState.asObservable();
+  }
+
+  fetchUserData(): Observable<AccountDetail> {
+    return this.http.get<AccountDetail>(this.applicationConfigService.getEndpointFor('api/account/getTempPassword'));
   }
 
   private fetch(): Observable<Account> {
