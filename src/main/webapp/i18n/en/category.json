@@ -12,8 +12,18 @@
       "created": "A new Category is created with identifier {{ param }}",
       "updated": "A Category is updated with identifier {{ param }}",
       "deleted": "A Category is deleted with identifier {{ param }}",
+      "activated": "A Category is activated with identifier {{ param }}",
+      "deactivated": "A Category is deactivated with identifier {{ param }}",
       "delete": {
         "question": "Are you sure you want to delete Category {{ id }}?"
+      },
+      "activate": {
+        "question": "Are you sure you want to activate Category {{ id }}?",
+        "questionBulk": "Are you sure you want to activate Category {{ id }} and all its childs?"
+      },
+      "deactivate": {
+        "question": "Are you sure you want to deactivate Category {{ id }}?",
+        "questionBulk": "Are you sure you want to deactivate Category {{ id }} and all its childs?"
       },
       "detail": {
         "title": "Category"

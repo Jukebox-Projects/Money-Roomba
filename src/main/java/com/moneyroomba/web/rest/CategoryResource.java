@@ -185,6 +185,29 @@ public class CategoryResource {
     }
 
     /**
+     * {@code PATCH  /categories/status/id} : Partial updates given fields of an existing category, field will ignore if it is null
+     *
+     * @param id the id of the category to save.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated category,
+     * or with status {@code 400 (Bad Request)} if the category is not valid,
+     * or with status {@code 404 (Not Found)} if the category is not found,
+     * or with status {@code 500 (Internal Server Error)} if the category couldn't be updated.
+     * @throws URISyntaxException if the Location URI syntax is incorrect.
+     */
+    @PatchMapping(value = "/categories/status/{id}")
+    public ResponseEntity<Category> partialStatusUpdate(@PathVariable Long id) throws URISyntaxException {
+        log.debug("REST request to partial status update Category : {}", id);
+
+        if (!categoryRepository.existsById(id)) {
+            throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
+        }
+
+        Optional<Category> result = categoryService.statusCategoryUpdate(id);
+
+        return ResponseUtil.wrapOrNotFound(result, HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, id.toString()));
+    }
+
+    /**
      * {@code GET  /categories} : get all the categories.
      *
      * @param criteria the criteria which the requested entities should match.
