@@ -142,7 +142,8 @@
       "value": "Value"
     },
     "delete": {
-      "title": "Confirm delete operation"
+      "title": "Confirm delete operation",
+      "account": "Are you sure you want to delete your account?"
     },
     "activate": {
       "title": "Confirm activate operation"

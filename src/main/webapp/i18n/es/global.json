@@ -142,7 +142,8 @@
       "value": "Valor"
     },
     "delete": {
-      "title": "Confirmar operación de borrado"
+      "title": "Confirmar operación de borrado",
+      "account": "¿Está seguro de que quiere eliminar su cuenta?"
     },
     "activate": {
       "title": "Confirmar operación de activación"
