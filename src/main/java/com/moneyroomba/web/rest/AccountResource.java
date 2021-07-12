@@ -2,14 +2,15 @@ package com.moneyroomba.web.rest;
 
 import com.moneyroomba.domain.PersistentToken;
 import com.moneyroomba.domain.User;
+import com.moneyroomba.domain.UserDetails;
 import com.moneyroomba.repository.PersistentTokenRepository;
+import com.moneyroomba.repository.UserDetailsRepository;
 import com.moneyroomba.repository.UserRepository;
 import com.moneyroomba.security.SecurityUtils;
 import com.moneyroomba.service.MailService;
 import com.moneyroomba.service.UserService;
 import com.moneyroomba.service.dto.AdminUserDTO;
 import com.moneyroomba.service.dto.PasswordChangeDTO;
-import com.moneyroomba.service.dto.UserDTO;
 import com.moneyroomba.web.rest.errors.*;
 import com.moneyroomba.web.rest.vm.KeyAndPasswordVM;
 import com.moneyroomba.web.rest.vm.ManagedUserVM;
@@ -42,6 +43,8 @@ public class AccountResource {
 
     private final UserRepository userRepository;
 
+    private final UserDetailsRepository userDetailsRepository;
+
     private final UserService userService;
 
     private final MailService mailService;
@@ -50,11 +53,14 @@ public class AccountResource {
 
     public AccountResource(
         UserRepository userRepository,
+        UserDetailsRepository userDetailsRepository,
+        UserDetailsRepository userDetailsRepository1,
         UserService userService,
         MailService mailService,
         PersistentTokenRepository persistentTokenRepository
     ) {
         this.userRepository = userRepository;
+        this.userDetailsRepository = userDetailsRepository;
         this.userService = userService;
         this.mailService = mailService;
         this.persistentTokenRepository = persistentTokenRepository;
@@ -143,8 +149,11 @@ public class AccountResource {
             userDTO.getLastName(),
             userDTO.getEmail(),
             userDTO.getLangKey(),
-            userDTO.getImageUrl()
+            userDTO.getImageUrl(),
+            userDTO.getPhone(),
+            userDTO.getCountry()
         );
+        mailService.sendProfileChange(user.get());
     }
 
     /**
@@ -180,6 +189,25 @@ public class AccountResource {
                     SecurityUtils.getCurrentUserLogin().orElseThrow(() -> new AccountResourceException("Current user login not found"))
                 )
                 .orElseThrow(() -> new AccountResourceException("User could not be found"))
+        );
+    }
+
+    @GetMapping("/account/getTempPassword")
+    public UserDetails getUserDetails() {
+        Optional<User> user = userRepository.findOneByLogin(
+            SecurityUtils.getCurrentUserLogin().orElseThrow(() -> new AccountResourceException("Current user login not found"))
+        );
+
+        Optional<UserDetails> userDetails = userDetailsRepository.findOneByInternalUserId(user.get().getId());
+
+        return userDetails.get();
+    }
+
+    @DeleteMapping("/account")
+    public void deleteAccount() {
+        log.debug("Current user login", SecurityUtils.getCurrentUserLogin());
+        userService.deleteUser(
+            SecurityUtils.getCurrentUserLogin().orElseThrow(() -> new AccountResourceException("Current user login not found"))
         );
     }
 
@@ -223,9 +251,10 @@ public class AccountResource {
      */
     @PostMapping(path = "/account/reset-password/init")
     public void requestPasswordReset(@RequestBody String mail) {
-        Optional<User> user = userService.requestPasswordReset(mail);
+        String password = java.util.UUID.randomUUID().toString().substring(0, 6);
+        Optional<User> user = userService.requestPasswordReset(mail, password);
         if (user.isPresent()) {
-            mailService.sendPasswordResetMail(user.get());
+            mailService.sendPasswordResetMail(user.get(), password);
         } else {
             // Pretend the request has been successful to prevent checking which emails really exist
             // but log that an invalid attempt has been made

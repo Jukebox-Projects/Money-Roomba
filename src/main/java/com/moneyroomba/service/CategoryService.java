@@ -2,6 +2,8 @@ package com.moneyroomba.service;
 
 import com.moneyroomba.domain.Category;
 import com.moneyroomba.repository.CategoryRepository;
+import com.moneyroomba.service.exception.Category.CategoryDepthException;
+import com.moneyroomba.service.exception.Category.ParentCategoryIsSameCategory;
 import java.util.List;
 import java.util.Optional;
 import org.slf4j.Logger;
@@ -20,8 +22,11 @@ public class CategoryService {
 
     private final CategoryRepository categoryRepository;
 
-    public CategoryService(CategoryRepository categoryRepository) {
+    private final UserService userService;
+
+    public CategoryService(CategoryRepository categoryRepository, UserService userService) {
         this.categoryRepository = categoryRepository;
+        this.userService = userService;
     }
 
     /**
@@ -32,6 +37,15 @@ public class CategoryService {
      */
     public Category save(Category category) {
         log.debug("Request to save Category : {}", category);
+        // Checks category depth. It can only goes 2 levels deep
+        if (category.getParent() != null) {
+            if (category.getParent().getId().equals(category.getId())) {
+                throw new ParentCategoryIsSameCategory("The parent category cannot be the same category");
+            } else if (category.getParent().getParent() != null) {
+                throw new CategoryDepthException("Child category cannot be a parent category");
+            }
+        }
+
         return categoryRepository.save(category);
     }
 
@@ -62,6 +76,36 @@ public class CategoryService {
                 }
             )
             .map(categoryRepository::save);
+    }
+
+    /**
+     * Partially update a category.
+     *
+     * @param id the entity to update partially.
+     * @return the persisted entity.
+     */
+    public Optional<Category> statusCategoryUpdate(Long id) {
+        log.debug("Request to update Category status : {}", id);
+
+        return categoryRepository
+            .findById(id)
+            .map(
+                //(!category.userCreated && adminUser) || (category.userCreated && !adminUser)
+                existingCategory -> {
+                    final boolean expectedStatus = !existingCategory.getIsActive();
+                    if ((long) existingCategory.getCategories().size() > 0) {
+                        existingCategory.getCategories().forEach(category -> childStatusChange(category, expectedStatus));
+                    }
+                    existingCategory.setIsActive(expectedStatus);
+                    return existingCategory;
+                }
+            )
+            .map(categoryRepository::save);
+    }
+
+    private void childStatusChange(Category category, boolean status) {
+        log.debug("Request to update child Category status : {} {}", category.getId(), category);
+        category.setIsActive(status);
     }
 
     /**

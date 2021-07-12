@@ -98,6 +98,31 @@ public class UserService {
             );
     }
 
+    public Optional<User> requestPasswordReset(String mail, String password) {
+        return userRepository
+            .findOneByEmailIgnoreCase(mail)
+            .filter(User::isActivated)
+            .map(
+                user -> {
+                    user.setPassword(passwordEncoder.encode(password));
+                    user.setResetDate(Instant.now());
+                    this.clearUserCaches(user);
+
+                    userDetailsRepository
+                        .findOneByInternalUserId(user.getId())
+                        .map(
+                            userDetails -> {
+                                userDetails.setIsTemporaryPassword(true);
+
+                                return userDetails;
+                            }
+                        );
+
+                    return user;
+                }
+            );
+    }
+
     public Optional<User> requestPasswordReset(String mail) {
         return userRepository
             .findOneByEmailIgnoreCase(mail)
@@ -268,11 +293,13 @@ public class UserService {
     }
 
     public void deleteUser(String login) {
+        log.debug("Llego acà", login);
         userRepository
             .findOneByLogin(login)
             .ifPresent(
                 user -> {
-                    userRepository.delete(user);
+                    user.setActivated(false);
+                    //userRepository.save(user);
                     this.clearUserCaches(user);
                     log.debug("Deleted User: {}", user);
                 }
@@ -288,7 +315,7 @@ public class UserService {
      * @param langKey   language key.
      * @param imageUrl  image URL of user.
      */
-    public void updateUser(String firstName, String lastName, String email, String langKey, String imageUrl) {
+    public void updateUser(String firstName, String lastName, String email, String langKey, String imageUrl, String phone, String country) {
         SecurityUtils
             .getCurrentUserLogin()
             .flatMap(userRepository::findOneByLogin)
@@ -298,9 +325,21 @@ public class UserService {
                     user.setLastName(lastName);
                     if (email != null) {
                         user.setEmail(email.toLowerCase());
+                        user.setLogin(email.toLowerCase());
                     }
                     user.setLangKey(langKey);
                     user.setImageUrl(imageUrl);
+
+                    userDetailsRepository
+                        .findOneByInternalUserId(user.getId())
+                        .ifPresent(
+                            userDetails -> {
+                                userDetails.setPhone(phone);
+                                userDetails.setCountry(country);
+                                log.debug("Changed Information for UserDetails: {}", userDetails);
+                            }
+                        );
+
                     this.clearUserCaches(user);
                     log.debug("Changed Information for User: {}", user);
                 }
@@ -322,6 +361,16 @@ public class UserService {
                     user.setPassword(encryptedPassword);
                     this.clearUserCaches(user);
                     log.debug("Changed password for User: {}", user);
+
+                    userDetailsRepository
+                        .findOneByInternalUserId(user.getId())
+                        .map(
+                            userDetails -> {
+                                userDetails.setIsTemporaryPassword(false);
+
+                                return userDetails;
+                            }
+                        );
                 }
             );
     }

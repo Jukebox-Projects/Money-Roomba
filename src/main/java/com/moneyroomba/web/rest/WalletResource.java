@@ -15,6 +15,7 @@ import com.moneyroomba.service.criteria.WalletCriteria;
 import com.moneyroomba.web.rest.errors.BadRequestAlertException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -181,34 +182,42 @@ public class WalletResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of wallets in body.
      */
     @GetMapping("/wallets")
-    public ResponseEntity<List<Wallet>> getAllWallets(WalletCriteria criteria) {
+    public ResponseEntity<List<Wallet>> getAllWallets(WalletCriteria criteria) throws URISyntaxException {
         log.debug("REST request to get Wallets by criteria: {}", criteria);
-        List<Wallet> entityList = walletQueryService.findByCriteria(criteria);
-        return ResponseEntity.ok().body(entityList);
-    }
-
-    /**
-     * {@code GET  /wallets} : get all the wallets.
-     *
-     * @param id the criteria which the requested entities should match.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of wallets in body.
-     */
-    @GetMapping("/wallets/user/{id}")
-    public ResponseEntity<List<Wallet>> getAllWalletsByUserId() {
+        //List<Wallet> entityList = walletQueryService.findByCriteria(criteria);
         Optional<User> user = userRepository.findOneByLogin(
-            SecurityUtils.getCurrentUserLogin().orElseThrow(() -> new AccountResourceException("Current user login not found"))
+            SecurityUtils
+                .getCurrentUserLogin()
+                .orElseThrow(() -> new BadRequestAlertException("A new wallet cannot already have an ID", ENTITY_NAME, "idexists"))
         );
         Optional<UserDetails> userDetails = userDetailsRepository.findOneByInternalUser(user.get());
-        List<Wallet> entityList = walletRepository.findAllByUser(userDetails.get());
-        return ResponseEntity.ok().body(entityList);
+        List<Wallet> entityList = walletRepository.findAll();
+        List<Wallet> res = new ArrayList<Wallet>();
+        if (
+            (!SecurityUtils.hasCurrentUserThisAuthority(AuthoritiesConstants.ADMIN)) &&
+            (
+                SecurityUtils.hasCurrentUserThisAuthority(AuthoritiesConstants.USER) ||
+                SecurityUtils.hasCurrentUserThisAuthority(AuthoritiesConstants.PREMIUM_USER)
+            )
+        ) {
+            if (userDetails.isPresent()) {
+                for (Wallet wallet : entityList) {
+                    if (wallet.getUser() == null) {} else {
+                        if (wallet.getUser().equals(userDetails.get())) {
+                            res.add(wallet);
+                            System.out.println(res.size());
+                        }
+                    }
+                }
+            }
+        } else {
+            if (SecurityUtils.hasCurrentUserThisAuthority(AuthoritiesConstants.ADMIN)) {
+                res = entityList;
+            }
+        }
+        return ResponseEntity.ok().body(res);
     }
 
-    /**
-     * {@code GET  /wallets/count} : count all the wallets.
-     *
-     * @param criteria the criteria which the requested entities should match.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the count in body.
-     */
     @GetMapping("/wallets/count")
     public ResponseEntity<Long> countWallets(WalletCriteria criteria) {
         log.debug("REST request to count Wallets by criteria: {}", criteria);

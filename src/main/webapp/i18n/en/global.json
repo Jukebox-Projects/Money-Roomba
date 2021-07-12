@@ -133,14 +133,23 @@
       "edit": "Edit",
       "open": "Open",
       "save": "Save",
-      "view": "View"
+      "view": "View",
+      "activate": "Activate",
+      "deactivate": "Deactivate"
     },
     "detail": {
       "field": "Field",
       "value": "Value"
     },
     "delete": {
-      "title": "Confirm delete operation"
+      "title": "Confirm delete operation",
+      "account": "Are you sure you want to delete your account?"
+    },
+    "activate": {
+      "title": "Confirm activate operation"
+    },
+    "deactivate": {
+      "title": "Confirm deactivate operation"
     },
     "validation": {
       "required": "This field is required.",
