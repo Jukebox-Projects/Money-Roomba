@@ -89,7 +89,7 @@
               </button>
 
               <button
-                *ngIf="(!category.userCreated && adminUser) || (category.userCreated && !adminUser)"
+                *ngIf="!category.userCreated && adminUser"
                 type="submit"
                 (click)="status(category)"
                 class="btn btn-secondary btn-sm"
