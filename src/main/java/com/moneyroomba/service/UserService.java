@@ -313,7 +313,7 @@ public class UserService {
      * @param langKey   language key.
      * @param imageUrl  image URL of user.
      */
-    public void updateUser(String firstName, String lastName, String email, String langKey, String imageUrl) {
+    public void updateUser(String firstName, String lastName, String email, String langKey, String imageUrl, String phone, String country) {
         SecurityUtils
             .getCurrentUserLogin()
             .flatMap(userRepository::findOneByLogin)
@@ -323,9 +323,21 @@ public class UserService {
                     user.setLastName(lastName);
                     if (email != null) {
                         user.setEmail(email.toLowerCase());
+                        user.setLogin(email.toLowerCase());
                     }
                     user.setLangKey(langKey);
                     user.setImageUrl(imageUrl);
+
+                    userDetailsRepository
+                        .findOneByInternalUserId(user.getId())
+                        .ifPresent(
+                            userDetails -> {
+                                userDetails.setPhone(phone);
+                                userDetails.setCountry(country);
+                                log.debug("Changed Information for UserDetails: {}", userDetails);
+                            }
+                        );
+
                     this.clearUserCaches(user);
                     log.debug("Changed Information for User: {}", user);
                 }
