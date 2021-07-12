@@ -78,6 +78,7 @@
               </button>
 
               <button
+                *ngIf="(!category.userCreated && adminUser) || (category.userCreated && !adminUser)"
                 type="submit"
                 [routerLink]="['/category', category.id, 'edit']"
                 class="btn btn-primary btn-sm"
@@ -87,12 +88,28 @@
                 <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
               </button>
 
-              <button type="submit" (click)="delete(category)" class="btn btn-secondary btn-sm" data-cy="entityDeleteButton">
+              <button
+                *ngIf="(!category.userCreated && adminUser) || (category.userCreated && !adminUser)"
+                type="submit"
+                (click)="status(category)"
+                class="btn btn-secondary btn-sm"
+                data-cy="entityStatusButton"
+              >
                 <fa-icon icon="times"></fa-icon>
-                <span class="d-none d-md-inline" jhiTranslate="entity.action.activate">Activate</span>
+                <span
+                  class="d-none d-md-inline"
+                  jhiTranslate="{{ category.isActive ? 'entity.action.deactivate' : 'entity.action.activate' }}"
+                  >Activate</span
+                >
               </button>
 
-              <button type="submit" (click)="delete(category)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
+              <button
+                *ngIf="(!category.userCreated && adminUser) || (category.userCreated && !adminUser)"
+                type="submit"
+                (click)="delete(category)"
+                class="btn btn-danger btn-sm"
+                data-cy="entityDeleteButton"
+              >
                 <fa-icon icon="times"></fa-icon>
                 <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
               </button>

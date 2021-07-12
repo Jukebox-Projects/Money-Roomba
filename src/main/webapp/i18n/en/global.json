@@ -144,6 +144,12 @@
     "delete": {
       "title": "Confirm delete operation"
     },
+    "activate": {
+      "title": "Confirm activate operation"
+    },
+    "deactivate": {
+      "title": "Confirm deactivate operation"
+    },
     "validation": {
       "required": "This field is required.",
       "minlength": "This field is required to be at least {{ min }} characters.",

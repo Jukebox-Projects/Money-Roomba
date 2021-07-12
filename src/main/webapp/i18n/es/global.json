@@ -144,6 +144,12 @@
     "delete": {
       "title": "Confirmar operación de borrado"
     },
+    "activate": {
+      "title": "Confirmar operación de activación"
+    },
+    "deactivate": {
+      "title": "Confirmar operación de desactivación"
+    },
     "validation": {
       "required": "Este campo es obligatorio.",
       "minlength": "Este campo requiere al menos {{min}} caracteres.",
