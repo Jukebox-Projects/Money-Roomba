@@ -82,7 +82,7 @@ export class AccountService {
   }
 
   fetchUserData(): Observable<AccountDetail> {
-    return this.http.get<AccountDetail>(this.applicationConfigService.getEndpointFor('api/account/getTempPassword'));
+    return this.http.get<AccountDetail>(this.applicationConfigService.getEndpointFor('api/account/userDetails'));
   }
 
   private fetch(): Observable<Account> {

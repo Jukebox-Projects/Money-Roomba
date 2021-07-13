@@ -87,6 +87,9 @@ public class User extends AbstractAuditingEntity implements Serializable {
     @Transient
     private String phone;
 
+    @Transient
+    private Boolean notifications;
+
     @JsonIgnore
     @ManyToMany
     @JoinTable(
@@ -230,6 +233,14 @@ public class User extends AbstractAuditingEntity implements Serializable {
 
     public void setPersistentTokens(Set<PersistentToken> persistentTokens) {
         this.persistentTokens = persistentTokens;
+    }
+
+    public Boolean getNotifications() {
+        return notifications;
+    }
+
+    public void setNotifications(Boolean notifications) {
+        this.notifications = notifications;
     }
 
     @Override

@@ -35,6 +35,8 @@ public class AdminUserDTO {
 
     private String phone;
 
+    private Boolean notifications;
+
     @Size(max = 256)
     private String imageUrl;
 
@@ -73,6 +75,7 @@ public class AdminUserDTO {
         this.authorities = user.getAuthorities().stream().map(Authority::getName).collect(Collectors.toSet());
         this.country = user.getCountry();
         this.phone = user.getPhone();
+        this.notifications = user.getNotifications();
     }
 
     public Long getId() {
@@ -193,6 +196,14 @@ public class AdminUserDTO {
 
     public void setAuthorities(Set<String> authorities) {
         this.authorities = authorities;
+    }
+
+    public Boolean getNotifications() {
+        return notifications;
+    }
+
+    public void setNotifications(Boolean notifications) {
+        this.notifications = notifications;
     }
 
     // prettier-ignore

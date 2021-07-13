@@ -1,3 +1,4 @@
+import { AccountService } from './../../../core/auth/account.service';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
@@ -18,18 +19,12 @@ export class UserManagementUpdateComponent implements OnInit {
 
   editForm = this.fb.group({
     id: [],
-    login: [
-      '',
-      [
-        Validators.required,
-        Validators.minLength(1),
-        Validators.maxLength(50),
-        Validators.pattern('^[a-zA-Z0-9!$&*+=?^_`{|}~.-]+@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*$|^[_.@A-Za-z0-9-]+$'),
-      ],
-    ],
     firstName: ['', [Validators.maxLength(50)]],
     lastName: ['', [Validators.maxLength(50)]],
+    phone: ['', [Validators.required]],
+    country: ['', [Validators.required]],
     email: ['', [Validators.minLength(5), Validators.maxLength(254), Validators.email]],
+    notifications: [],
     activated: [],
     langKey: [],
     authorities: [],
@@ -41,8 +36,17 @@ export class UserManagementUpdateComponent implements OnInit {
     this.route.data.subscribe(({ user }) => {
       if (user) {
         this.user = user;
+        this.user.login = this.user.email;
+
         if (this.user.id === undefined) {
           this.user.activated = true;
+        } else {
+          this.userService.findUserDetails(user.email).subscribe(userDetails => {
+            this.user.country = userDetails.country;
+            this.user.phone = userDetails.phone;
+            this.user.notifications = userDetails.notifications;
+            this.updateForm(user);
+          });
         }
         this.updateForm(user);
       }
@@ -80,17 +84,23 @@ export class UserManagementUpdateComponent implements OnInit {
       activated: user.activated,
       langKey: user.langKey,
       authorities: user.authorities,
+      phone: user.phone,
+      country: user.country,
+      notifications: user.notifications,
     });
   }
 
   private updateUser(user: User): void {
-    user.login = this.editForm.get(['login'])!.value;
+    user.login = this.editForm.get(['email'])!.value;
     user.firstName = this.editForm.get(['firstName'])!.value;
     user.lastName = this.editForm.get(['lastName'])!.value;
     user.email = this.editForm.get(['email'])!.value;
     user.activated = this.editForm.get(['activated'])!.value;
     user.langKey = this.editForm.get(['langKey'])!.value;
     user.authorities = this.editForm.get(['authorities'])!.value;
+    user.phone = this.editForm.get(['phone'])!.value;
+    user.country = this.editForm.get(['country'])!.value;
+    user.notifications = this.editForm.get(['notifications'])!.value;
   }
 
   private onSaveSuccess(): void {
