@@ -57,6 +57,10 @@ export class UserManagementComponent implements OnInit {
     });
   }
 
+  resetPassword(user: User): void {
+    this.userService.resetPassword(user).subscribe(() => this.loadAll());
+  }
+
   loadAll(): void {
     this.isLoading = true;
     this.userService

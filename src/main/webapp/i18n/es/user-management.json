@@ -9,6 +9,7 @@
     "created": "Se creó un nuevo usuario con identificador {{ param }}",
     "updated": "Se actualizó el usuario con identificador {{ param }}",
     "deleted": "Se borró el usuario con identificador {{ param }}",
+    "resetPassword": "Una solicitud para recuperar la contraseña, fue solicitada para el usuario con el identificador {{ param }}",
     "delete": {
       "question": "¿Seguro que quieres eliminar el usuario {{ login }}?"
     },

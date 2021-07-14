@@ -135,7 +135,8 @@
       "save": "Guardar",
       "view": "Vista",
       "activate": "Activar",
-      "deactivate": "Desactivar"
+      "deactivate": "Desactivar",
+      "resetPassword": "Recuperar contraseña"
     },
     "detail": {
       "field": "Campo",
