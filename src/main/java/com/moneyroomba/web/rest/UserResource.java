@@ -120,8 +120,7 @@ public class UserResource {
         } else {
             String password = java.util.UUID.randomUUID().toString().substring(0, 6);
             User newUser = userService.createUser(userDTO, password);
-            mailService.sendCreationEmail(newUser);
-            mailService.sendPasswordResetMail(newUser, password);
+            mailService.sendAdminCreationEmail(newUser, password);
             return ResponseEntity
                 .created(new URI("/api/admin/users/" + newUser.getLogin()))
                 .headers(HeaderUtil.createAlert(applicationName, "userManagement.created", newUser.getLogin()))

@@ -13,7 +13,7 @@ export interface IUser {
   lastModifiedDate?: Date;
   country?: string;
   phone?: string;
-  notifications?: boolean | true;
+  notifications?: boolean;
 }
 
 export class User implements IUser {
@@ -32,6 +32,6 @@ export class User implements IUser {
     public lastModifiedDate?: Date,
     public country?: string,
     public phone?: string,
-    public notifications?: boolean | true
+    public notifications?: boolean
   ) {}
 }

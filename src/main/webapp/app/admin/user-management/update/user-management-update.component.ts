@@ -101,6 +101,9 @@ export class UserManagementUpdateComponent implements OnInit {
     user.phone = this.editForm.get(['phone'])!.value;
     user.country = this.editForm.get(['country'])!.value;
     user.notifications = this.editForm.get(['notifications'])!.value;
+    if (!this.editForm.get(['notifications'])!.value) {
+      user.notifications = false;
+    }
   }
 
   private onSaveSuccess(): void {
