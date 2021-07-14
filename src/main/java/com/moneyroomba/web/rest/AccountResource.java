@@ -211,6 +211,14 @@ public class AccountResource {
         );
     }
 
+    @DeleteMapping("/account")
+    public void deleteAccount() {
+        log.debug("Current user login", SecurityUtils.getCurrentUserLogin());
+        userService.deleteUser(
+            SecurityUtils.getCurrentUserLogin().orElseThrow(() -> new AccountResourceException("Current user login not found"))
+        );
+    }
+
     /**
      * {@code DELETE  /account/sessions?series={series}} : invalidate an existing session.
      *
