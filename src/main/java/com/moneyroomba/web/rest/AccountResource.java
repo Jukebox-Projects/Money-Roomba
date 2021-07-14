@@ -151,7 +151,8 @@ public class AccountResource {
             userDTO.getLangKey(),
             userDTO.getImageUrl(),
             userDTO.getPhone(),
-            userDTO.getCountry()
+            userDTO.getCountry(),
+            userDTO.getNotifications()
         );
         mailService.sendProfileChange(user.get());
     }
