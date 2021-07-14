@@ -26,6 +26,9 @@
     "createdBy": "Created by",
     "createdDate": "Created date",
     "lastModifiedBy": "Modified by",
-    "lastModifiedDate": "Modified date"
+    "lastModifiedDate": "Modified date",
+    "phone": "Phone",
+    "country": "Country",
+    "notifications": "Notifications"
   }
 }

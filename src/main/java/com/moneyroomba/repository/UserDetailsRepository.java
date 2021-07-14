@@ -13,4 +13,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface UserDetailsRepository extends JpaRepository<UserDetails, Long> {
     Optional<UserDetails> findOneByInternalUserId(Long id);
+    Optional<UserDetails> findOneByInternalUser(User user);
 }

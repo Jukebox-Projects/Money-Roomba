@@ -9,6 +9,7 @@ export class Account {
     public login: string,
     public imageUrl: string | null,
     public phone: string,
-    public country: string
+    public country: string,
+    public notifications: boolean
   ) {}
 }

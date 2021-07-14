@@ -7,6 +7,7 @@ import java.time.Instant;
 import java.util.Set;
 import java.util.stream.Collectors;
 import javax.validation.constraints.*;
+import org.springframework.boot.context.properties.bind.DefaultValue;
 
 /**
  * A DTO representing a user, with his authorities.
@@ -34,6 +35,8 @@ public class AdminUserDTO {
     private String country;
 
     private String phone;
+
+    private Boolean notifications;
 
     @Size(max = 256)
     private String imageUrl;
@@ -73,6 +76,7 @@ public class AdminUserDTO {
         this.authorities = user.getAuthorities().stream().map(Authority::getName).collect(Collectors.toSet());
         this.country = user.getCountry();
         this.phone = user.getPhone();
+        this.notifications = user.getNotifications();
     }
 
     public Long getId() {
@@ -195,22 +199,61 @@ public class AdminUserDTO {
         this.authorities = authorities;
     }
 
-    // prettier-ignore
+    public Boolean getNotifications() {
+        return notifications;
+    }
+
+    public void setNotifications(Boolean notifications) {
+        this.notifications = notifications;
+    }
+
     @Override
     public String toString() {
-        return "AdminUserDTO{" +
-            "login='" + login + '\'' +
-            ", firstName='" + firstName + '\'' +
-            ", lastName='" + lastName + '\'' +
-            ", email='" + email + '\'' +
-            ", imageUrl='" + imageUrl + '\'' +
-            ", activated=" + activated +
-            ", langKey='" + langKey + '\'' +
-            ", createdBy=" + createdBy +
-            ", createdDate=" + createdDate +
-            ", lastModifiedBy='" + lastModifiedBy + '\'' +
-            ", lastModifiedDate=" + lastModifiedDate +
-            ", authorities=" + authorities +
-            "}";
+        return (
+            "AdminUserDTO{" +
+            "id=" +
+            id +
+            ", login='" +
+            login +
+            '\'' +
+            ", firstName='" +
+            firstName +
+            '\'' +
+            ", lastName='" +
+            lastName +
+            '\'' +
+            ", email='" +
+            email +
+            '\'' +
+            ", country='" +
+            country +
+            '\'' +
+            ", phone='" +
+            phone +
+            '\'' +
+            ", notifications=" +
+            notifications +
+            ", imageUrl='" +
+            imageUrl +
+            '\'' +
+            ", activated=" +
+            activated +
+            ", langKey='" +
+            langKey +
+            '\'' +
+            ", createdBy='" +
+            createdBy +
+            '\'' +
+            ", createdDate=" +
+            createdDate +
+            ", lastModifiedBy='" +
+            lastModifiedBy +
+            '\'' +
+            ", lastModifiedDate=" +
+            lastModifiedDate +
+            ", authorities=" +
+            authorities +
+            '}'
+        );
     }
 }

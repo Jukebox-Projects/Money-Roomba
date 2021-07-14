@@ -30,6 +30,10 @@ export class AccountService {
     return this.http.post(this.applicationConfigService.getEndpointFor('api/account'), account);
   }
 
+  delete(): Observable<{}> {
+    return this.http.delete(this.applicationConfigService.getEndpointFor('api/account'));
+  }
+
   authenticate(identity: Account | null): void {
     this.userIdentity = identity;
     this.authenticationState.next(this.userIdentity);
@@ -78,7 +82,7 @@ export class AccountService {
   }
 
   fetchUserData(): Observable<AccountDetail> {
-    return this.http.get<AccountDetail>(this.applicationConfigService.getEndpointFor('api/account/getTempPassword'));
+    return this.http.get<AccountDetail>(this.applicationConfigService.getEndpointFor('api/account/userDetails'));
   }
 
   private fetch(): Observable<Account> {

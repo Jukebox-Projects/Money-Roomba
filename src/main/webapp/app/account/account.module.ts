@@ -1,3 +1,4 @@
+import { AccountDeleteDialogComponent } from './settings/delete/delete-dialog.component';
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
@@ -23,6 +24,7 @@ import { accountState } from './account.route';
     PasswordResetFinishComponent,
     SessionsComponent,
     SettingsComponent,
+    AccountDeleteDialogComponent,
   ],
 })
 export class AccountModule {}

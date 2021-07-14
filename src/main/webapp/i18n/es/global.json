@@ -133,14 +133,23 @@
       "edit": "Editar",
       "open": "Abrir",
       "save": "Guardar",
-      "view": "Vista"
+      "view": "Vista",
+      "activate": "Activar",
+      "deactivate": "Desactivar"
     },
     "detail": {
       "field": "Campo",
       "value": "Valor"
     },
     "delete": {
-      "title": "Confirmar operación de borrado"
+      "title": "Confirmar operación de borrado",
+      "account": "¿Está seguro de que quiere eliminar su cuenta?"
+    },
+    "activate": {
+      "title": "Confirmar operación de activación"
+    },
+    "deactivate": {
+      "title": "Confirmar operación de desactivación"
     },
     "validation": {
       "required": "Este campo es obligatorio.",

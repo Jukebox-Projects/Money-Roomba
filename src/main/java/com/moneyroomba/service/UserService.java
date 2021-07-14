@@ -12,6 +12,7 @@ import com.moneyroomba.security.AuthoritiesConstants;
 import com.moneyroomba.security.SecurityUtils;
 import com.moneyroomba.service.dto.AdminUserDTO;
 import com.moneyroomba.service.dto.UserDTO;
+import com.moneyroomba.service.exception.NoSuchElementFoundException;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
@@ -246,7 +247,54 @@ public class UserService {
         userDetails.setInternalUser(user);
         userDetails.setIsActive(true);
         userDetails.setIsTemporaryPassword(false);
-        userDetails.setNotifications(true);
+        userDetails.setNotifications(userDTO.getNotifications());
+        userDetailsRepository.save(userDetails);
+        return user;
+    }
+
+    public User createUser(AdminUserDTO userDTO, String password) {
+        User user = new User();
+        UserDetails userDetails = new UserDetails();
+        user.setLogin(userDTO.getEmail().toLowerCase());
+        user.setFirstName(userDTO.getFirstName());
+        user.setLastName(userDTO.getLastName());
+
+        if (userDTO.getEmail() != null) {
+            user.setEmail(userDTO.getEmail().toLowerCase());
+        }
+        user.setImageUrl(userDTO.getImageUrl());
+        if (userDTO.getLangKey() == null) {
+            user.setLangKey(Constants.DEFAULT_LANGUAGE); // default language
+        } else {
+            user.setLangKey(userDTO.getLangKey());
+        }
+        String encryptedPassword = passwordEncoder.encode(RandomUtil.generatePassword());
+        user.setPassword(encryptedPassword);
+        user.setResetKey(RandomUtil.generateResetKey());
+        user.setResetDate(Instant.now());
+        user.setActivated(true);
+
+        if (userDTO.getAuthorities() != null) {
+            Set<Authority> authorities = userDTO
+                .getAuthorities()
+                .stream()
+                .map(authorityRepository::findById)
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .collect(Collectors.toSet());
+            user.setAuthorities(authorities);
+        }
+        userRepository.save(user);
+        this.clearUserCaches(user);
+        log.debug("Created Information for User: {}", user);
+
+        //User Details
+        userDetails.setPhone(userDTO.getPhone());
+        userDetails.setCountry(userDTO.getCountry().toUpperCase());
+        userDetails.setInternalUser(user);
+        userDetails.setIsActive(true);
+        userDetails.setIsTemporaryPassword(true);
+        userDetails.setNotifications(userDTO.getNotifications());
         userDetailsRepository.save(userDetails);
         return user;
     }
@@ -276,6 +324,18 @@ public class UserService {
                     user.setLangKey(userDTO.getLangKey());
                     Set<Authority> managedAuthorities = user.getAuthorities();
                     managedAuthorities.clear();
+
+                    userDetailsRepository
+                        .findOneByInternalUserId(user.getId())
+                        .ifPresent(
+                            userDetails -> {
+                                userDetails.setPhone(userDTO.getPhone());
+                                userDetails.setCountry(userDTO.getCountry());
+                                userDetails.setNotifications(userDTO.getNotifications());
+                                log.debug("Changed Information for UserDetails: {}", userDetails);
+                            }
+                        );
+
                     userDTO
                         .getAuthorities()
                         .stream()
@@ -292,11 +352,13 @@ public class UserService {
     }
 
     public void deleteUser(String login) {
+        log.debug("Llego acà", login);
         userRepository
             .findOneByLogin(login)
             .ifPresent(
                 user -> {
-                    userRepository.delete(user);
+                    user.setActivated(false);
+                    //userRepository.save(user);
                     this.clearUserCaches(user);
                     log.debug("Deleted User: {}", user);
                 }
@@ -312,7 +374,16 @@ public class UserService {
      * @param langKey   language key.
      * @param imageUrl  image URL of user.
      */
-    public void updateUser(String firstName, String lastName, String email, String langKey, String imageUrl, String phone, String country) {
+    public void updateUser(
+        String firstName,
+        String lastName,
+        String email,
+        String langKey,
+        String imageUrl,
+        String phone,
+        String country,
+        boolean notification
+    ) {
         SecurityUtils
             .getCurrentUserLogin()
             .flatMap(userRepository::findOneByLogin)
@@ -333,6 +404,7 @@ public class UserService {
                             userDetails -> {
                                 userDetails.setPhone(phone);
                                 userDetails.setCountry(country);
+                                userDetails.setNotifications(notification);
                                 log.debug("Changed Information for UserDetails: {}", userDetails);
                             }
                         );
@@ -445,5 +517,41 @@ public class UserService {
         if (user.getEmail() != null) {
             Objects.requireNonNull(cacheManager.getCache(UserRepository.USERS_BY_EMAIL_CACHE)).evict(user.getEmail());
         }
+    }
+
+    private Optional<String> getCurrentUserLogin() {
+        return SecurityUtils.getCurrentUserLogin();
+    }
+
+    @Transactional(readOnly = true)
+    public boolean currentUserIsAdmin() {
+        return SecurityUtils.hasCurrentUserThisAuthority(AuthoritiesConstants.ADMIN);
+    }
+
+    @Transactional(readOnly = true)
+    public boolean currentUserIsRegularUser() {
+        return SecurityUtils.hasCurrentUserThisAuthority(AuthoritiesConstants.USER);
+    }
+
+    /*
+    @Transactional(readOnly = true)
+    public boolean currentUserIsPremiumUser() {
+        return SecurityUtils.hasCurrentUserThisAuthority(AuthoritiesConstants.PREMIUM_USER);
+    }*/
+
+    @Transactional(readOnly = true)
+    public Optional<UserDetails> getUserDetailsByLogin() {
+        Optional<User> user = userRepository.findOneByLogin(
+            this.getCurrentUserLogin().orElseThrow(() -> new NoSuchElementFoundException("No Login found"))
+        );
+
+        return userDetailsRepository.findOneByInternalUser(user.orElseThrow(() -> new NoSuchElementFoundException("No User found")));
+    }
+
+    @Transactional(readOnly = true)
+    public Optional<UserDetails> getUserDetailsByLogin(String login) {
+        Optional<User> user = userRepository.findOneByLogin(login);
+
+        return userDetailsRepository.findOneByInternalUser(user.orElseThrow(() -> new NoSuchElementFoundException("No User found")));
     }
 }

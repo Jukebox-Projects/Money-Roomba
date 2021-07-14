@@ -1,3 +1,5 @@
+import { AccountDeleteDialogComponent } from './delete/delete-dialog.component';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { UserDetails } from './../../entities/user-details/user-details.model';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
@@ -22,10 +24,16 @@ export class SettingsComponent implements OnInit {
     email: [undefined, [Validators.required, Validators.minLength(5), Validators.maxLength(254), Validators.email]],
     phone: [undefined, [Validators.required]],
     country: [undefined, [Validators.required]],
+    notifications: [],
     langKey: [undefined],
   });
 
-  constructor(private accountService: AccountService, private fb: FormBuilder, private translateService: TranslateService) {}
+  constructor(
+    private accountService: AccountService,
+    private fb: FormBuilder,
+    private translateService: TranslateService,
+    protected modalService: NgbModal
+  ) {}
 
   ngOnInit(): void {
     this.accountService.identity().subscribe(account => {
@@ -45,9 +53,21 @@ export class SettingsComponent implements OnInit {
       this.settingsForm.patchValue({
         country: userDetails.country,
         phone: userDetails.phone,
+        notifications: userDetails.notifications,
       });
       this.userDetails.country = userDetails.country;
       this.userDetails.phone = userDetails.phone;
+      this.userDetails.notifications = userDetails.notifications;
+    });
+  }
+
+  delete(): void {
+    const modalRef = this.modalService.open(AccountDeleteDialogComponent, { size: 'lg', backdrop: 'static' });
+    // unsubscribe not needed because closed completes on modal close
+    modalRef.closed.subscribe(reason => {
+      if (reason === 'deleted') {
+        //cambiar con logout
+      }
     });
   }
 
@@ -60,7 +80,7 @@ export class SettingsComponent implements OnInit {
     this.account.langKey = this.settingsForm.get('langKey')!.value;
     this.account.phone = this.settingsForm.get('phone')!.value;
     this.account.country = this.settingsForm.get('country')!.value;
-
+    this.account.notifications = this.settingsForm.get('notifications')!.value;
     this.accountService.save(this.account).subscribe(() => {
       this.success = true;
 

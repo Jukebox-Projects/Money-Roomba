@@ -30,6 +30,12 @@ export class CategoryService {
     });
   }
 
+  statusUpdate(id: number): Observable<EntityResponseType> {
+    return this.http.patch<ICategory>(`${this.resourceUrl}/status/${id}`, id, {
+      observe: 'response',
+    });
+  }
+
   find(id: number): Observable<EntityResponseType> {
     return this.http.get<ICategory>(`${this.resourceUrl}/${id}`, { observe: 'response' });
   }
