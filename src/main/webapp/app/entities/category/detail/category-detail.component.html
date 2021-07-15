@@ -28,9 +28,7 @@
         </dd>
         <dt><span jhiTranslate="moneyRoombaApp.category.icon">Icon</span></dt>
         <dd>
-          <div *ngIf="category.icon">
-            <a [routerLink]="['/icon', category.icon?.id, 'view']">{{ category.icon?.name }}</a>
-          </div>
+          <span>{{ category.icon }}</span>
         </dd>
         <dt><span jhiTranslate="moneyRoombaApp.category.parent">Parent</span></dt>
         <dd>

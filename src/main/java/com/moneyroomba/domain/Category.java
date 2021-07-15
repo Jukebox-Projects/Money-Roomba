@@ -35,9 +35,13 @@ public class Category implements Serializable {
     @Column(name = "user_created", nullable = false)
     private Boolean userCreated;
 
+    @Min(value = 0)
+    @Column(name = "icon")
+    private Integer icon;
+
     @OneToMany(mappedBy = "parent")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @JsonIgnoreProperties(value = { "categories", "transactions", "icon", "parent", "user" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "categories", "transactions", "parent", "user" }, allowSetters = true)
     private Set<Category> categories = new HashSet<>();
 
     @OneToMany(mappedBy = "category")
@@ -46,16 +50,23 @@ public class Category implements Serializable {
     private Set<Transaction> transactions = new HashSet<>();
 
     @ManyToOne
-    @JsonIgnoreProperties(value = { "categories", "wallets" }, allowSetters = true)
-    private Icon icon;
-
-    @ManyToOne
-    @JsonIgnoreProperties(value = { "categories", "transactions", "icon", "parent", "user" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "categories", "transactions", "parent", "user" }, allowSetters = true)
     private Category parent;
 
     @ManyToOne
     @JsonIgnoreProperties(
-        value = { "internalUser", "license", "wallets", "categories", "events", "transactions", "userDetails", "contact" },
+        value = {
+            "internalUser",
+            "license",
+            "wallets",
+            "categories",
+            "events",
+            "transactions",
+            "userDetails",
+            "targetContacts",
+            "contact",
+            "sourceContacts",
+        },
         allowSetters = true
     )
     private UserDetails user;
@@ -111,6 +122,19 @@ public class Category implements Serializable {
 
     public void setUserCreated(Boolean userCreated) {
         this.userCreated = userCreated;
+    }
+
+    public Integer getIcon() {
+        return this.icon;
+    }
+
+    public Category icon(Integer icon) {
+        this.icon = icon;
+        return this;
+    }
+
+    public void setIcon(Integer icon) {
+        this.icon = icon;
     }
 
     public Set<Category> getCategories() {
@@ -175,19 +199,6 @@ public class Category implements Serializable {
         this.transactions = transactions;
     }
 
-    public Icon getIcon() {
-        return this.icon;
-    }
-
-    public Category icon(Icon icon) {
-        this.setIcon(icon);
-        return this;
-    }
-
-    public void setIcon(Icon icon) {
-        this.icon = icon;
-    }
-
     public Category getParent() {
         return this.parent;
     }
@@ -241,6 +252,7 @@ public class Category implements Serializable {
             ", name='" + getName() + "'" +
             ", isActive='" + getIsActive() + "'" +
             ", userCreated='" + getUserCreated() + "'" +
+            ", icon=" + getIcon() +
             "}";
     }
 }

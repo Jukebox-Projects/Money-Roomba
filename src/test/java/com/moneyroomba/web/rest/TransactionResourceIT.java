@@ -108,6 +108,16 @@ class TransactionResourceIT {
             .addToReports(DEFAULT_ADD_TO_REPORTS)
             .incomingTransaction(DEFAULT_INCOMING_TRANSACTION)
             .transactionType(DEFAULT_TRANSACTION_TYPE);
+        // Add required entity
+        Wallet wallet;
+        if (TestUtil.findAll(em, Wallet.class).isEmpty()) {
+            wallet = WalletResourceIT.createEntity(em);
+            em.persist(wallet);
+            em.flush();
+        } else {
+            wallet = TestUtil.findAll(em, Wallet.class).get(0);
+        }
+        transaction.setWallet(wallet);
         return transaction;
     }
 
@@ -129,6 +139,16 @@ class TransactionResourceIT {
             .addToReports(UPDATED_ADD_TO_REPORTS)
             .incomingTransaction(UPDATED_INCOMING_TRANSACTION)
             .transactionType(UPDATED_TRANSACTION_TYPE);
+        // Add required entity
+        Wallet wallet;
+        if (TestUtil.findAll(em, Wallet.class).isEmpty()) {
+            wallet = WalletResourceIT.createUpdatedEntity(em);
+            em.persist(wallet);
+            em.flush();
+        } else {
+            wallet = TestUtil.findAll(em, Wallet.class).get(0);
+        }
+        transaction.setWallet(wallet);
         return transaction;
     }
 

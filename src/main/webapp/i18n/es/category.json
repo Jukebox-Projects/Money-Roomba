@@ -21,9 +21,9 @@
       "name": "Name",
       "isActive": "Is Active",
       "userCreated": "User Created",
+      "icon": "Icon",
       "category": "Category",
       "transaction": "Transaction",
-      "icon": "Icon",
       "parent": "Parent",
       "user": "User"
     }

@@ -45,6 +45,9 @@ class CurrencyResourceIT {
     private static final Float UPDATED_CONVERSION_RATE = 2F;
     private static final Float SMALLER_CONVERSION_RATE = 1F - 1F;
 
+    private static final String DEFAULT_SYMBOL = "AAAAA";
+    private static final String UPDATED_SYMBOL = "BBBBB";
+
     private static final String ENTITY_API_URL = "/api/currencies";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
 
@@ -69,7 +72,11 @@ class CurrencyResourceIT {
      * if they test an entity which requires the current entity.
      */
     public static Currency createEntity(EntityManager em) {
-        Currency currency = new Currency().code(DEFAULT_CODE).name(DEFAULT_NAME).conversionRate(DEFAULT_CONVERSION_RATE);
+        Currency currency = new Currency()
+            .code(DEFAULT_CODE)
+            .name(DEFAULT_NAME)
+            .conversionRate(DEFAULT_CONVERSION_RATE)
+            .symbol(DEFAULT_SYMBOL);
         return currency;
     }
 
@@ -80,7 +87,11 @@ class CurrencyResourceIT {
      * if they test an entity which requires the current entity.
      */
     public static Currency createUpdatedEntity(EntityManager em) {
-        Currency currency = new Currency().code(UPDATED_CODE).name(UPDATED_NAME).conversionRate(UPDATED_CONVERSION_RATE);
+        Currency currency = new Currency()
+            .code(UPDATED_CODE)
+            .name(UPDATED_NAME)
+            .conversionRate(UPDATED_CONVERSION_RATE)
+            .symbol(UPDATED_SYMBOL);
         return currency;
     }
 
@@ -110,6 +121,7 @@ class CurrencyResourceIT {
         assertThat(testCurrency.getCode()).isEqualTo(DEFAULT_CODE);
         assertThat(testCurrency.getName()).isEqualTo(DEFAULT_NAME);
         assertThat(testCurrency.getConversionRate()).isEqualTo(DEFAULT_CONVERSION_RATE);
+        assertThat(testCurrency.getSymbol()).isEqualTo(DEFAULT_SYMBOL);
     }
 
     @Test
@@ -203,6 +215,28 @@ class CurrencyResourceIT {
 
     @Test
     @Transactional
+    void checkSymbolIsRequired() throws Exception {
+        int databaseSizeBeforeTest = currencyRepository.findAll().size();
+        // set the field null
+        currency.setSymbol(null);
+
+        // Create the Currency, which fails.
+
+        restCurrencyMockMvc
+            .perform(
+                post(ENTITY_API_URL)
+                    .with(csrf())
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(TestUtil.convertObjectToJsonBytes(currency))
+            )
+            .andExpect(status().isBadRequest());
+
+        List<Currency> currencyList = currencyRepository.findAll();
+        assertThat(currencyList).hasSize(databaseSizeBeforeTest);
+    }
+
+    @Test
+    @Transactional
     void getAllCurrencies() throws Exception {
         // Initialize the database
         currencyRepository.saveAndFlush(currency);
@@ -215,7 +249,8 @@ class CurrencyResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(currency.getId().intValue())))
             .andExpect(jsonPath("$.[*].code").value(hasItem(DEFAULT_CODE)))
             .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
-            .andExpect(jsonPath("$.[*].conversionRate").value(hasItem(DEFAULT_CONVERSION_RATE.doubleValue())));
+            .andExpect(jsonPath("$.[*].conversionRate").value(hasItem(DEFAULT_CONVERSION_RATE.doubleValue())))
+            .andExpect(jsonPath("$.[*].symbol").value(hasItem(DEFAULT_SYMBOL)));
     }
 
     @Test
@@ -232,7 +267,8 @@ class CurrencyResourceIT {
             .andExpect(jsonPath("$.id").value(currency.getId().intValue()))
             .andExpect(jsonPath("$.code").value(DEFAULT_CODE))
             .andExpect(jsonPath("$.name").value(DEFAULT_NAME))
-            .andExpect(jsonPath("$.conversionRate").value(DEFAULT_CONVERSION_RATE.doubleValue()));
+            .andExpect(jsonPath("$.conversionRate").value(DEFAULT_CONVERSION_RATE.doubleValue()))
+            .andExpect(jsonPath("$.symbol").value(DEFAULT_SYMBOL));
     }
 
     @Test
@@ -515,6 +551,84 @@ class CurrencyResourceIT {
 
     @Test
     @Transactional
+    void getAllCurrenciesBySymbolIsEqualToSomething() throws Exception {
+        // Initialize the database
+        currencyRepository.saveAndFlush(currency);
+
+        // Get all the currencyList where symbol equals to DEFAULT_SYMBOL
+        defaultCurrencyShouldBeFound("symbol.equals=" + DEFAULT_SYMBOL);
+
+        // Get all the currencyList where symbol equals to UPDATED_SYMBOL
+        defaultCurrencyShouldNotBeFound("symbol.equals=" + UPDATED_SYMBOL);
+    }
+
+    @Test
+    @Transactional
+    void getAllCurrenciesBySymbolIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        currencyRepository.saveAndFlush(currency);
+
+        // Get all the currencyList where symbol not equals to DEFAULT_SYMBOL
+        defaultCurrencyShouldNotBeFound("symbol.notEquals=" + DEFAULT_SYMBOL);
+
+        // Get all the currencyList where symbol not equals to UPDATED_SYMBOL
+        defaultCurrencyShouldBeFound("symbol.notEquals=" + UPDATED_SYMBOL);
+    }
+
+    @Test
+    @Transactional
+    void getAllCurrenciesBySymbolIsInShouldWork() throws Exception {
+        // Initialize the database
+        currencyRepository.saveAndFlush(currency);
+
+        // Get all the currencyList where symbol in DEFAULT_SYMBOL or UPDATED_SYMBOL
+        defaultCurrencyShouldBeFound("symbol.in=" + DEFAULT_SYMBOL + "," + UPDATED_SYMBOL);
+
+        // Get all the currencyList where symbol equals to UPDATED_SYMBOL
+        defaultCurrencyShouldNotBeFound("symbol.in=" + UPDATED_SYMBOL);
+    }
+
+    @Test
+    @Transactional
+    void getAllCurrenciesBySymbolIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        currencyRepository.saveAndFlush(currency);
+
+        // Get all the currencyList where symbol is not null
+        defaultCurrencyShouldBeFound("symbol.specified=true");
+
+        // Get all the currencyList where symbol is null
+        defaultCurrencyShouldNotBeFound("symbol.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllCurrenciesBySymbolContainsSomething() throws Exception {
+        // Initialize the database
+        currencyRepository.saveAndFlush(currency);
+
+        // Get all the currencyList where symbol contains DEFAULT_SYMBOL
+        defaultCurrencyShouldBeFound("symbol.contains=" + DEFAULT_SYMBOL);
+
+        // Get all the currencyList where symbol contains UPDATED_SYMBOL
+        defaultCurrencyShouldNotBeFound("symbol.contains=" + UPDATED_SYMBOL);
+    }
+
+    @Test
+    @Transactional
+    void getAllCurrenciesBySymbolNotContainsSomething() throws Exception {
+        // Initialize the database
+        currencyRepository.saveAndFlush(currency);
+
+        // Get all the currencyList where symbol does not contain DEFAULT_SYMBOL
+        defaultCurrencyShouldNotBeFound("symbol.doesNotContain=" + DEFAULT_SYMBOL);
+
+        // Get all the currencyList where symbol does not contain UPDATED_SYMBOL
+        defaultCurrencyShouldBeFound("symbol.doesNotContain=" + UPDATED_SYMBOL);
+    }
+
+    @Test
+    @Transactional
     void getAllCurrenciesByTransactionIsEqualToSomething() throws Exception {
         // Initialize the database
         currencyRepository.saveAndFlush(currency);
@@ -600,7 +714,8 @@ class CurrencyResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(currency.getId().intValue())))
             .andExpect(jsonPath("$.[*].code").value(hasItem(DEFAULT_CODE)))
             .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
-            .andExpect(jsonPath("$.[*].conversionRate").value(hasItem(DEFAULT_CONVERSION_RATE.doubleValue())));
+            .andExpect(jsonPath("$.[*].conversionRate").value(hasItem(DEFAULT_CONVERSION_RATE.doubleValue())))
+            .andExpect(jsonPath("$.[*].symbol").value(hasItem(DEFAULT_SYMBOL)));
 
         // Check, that the count call also returns 1
         restCurrencyMockMvc
@@ -648,7 +763,7 @@ class CurrencyResourceIT {
         Currency updatedCurrency = currencyRepository.findById(currency.getId()).get();
         // Disconnect from session so that the updates on updatedCurrency are not directly saved in db
         em.detach(updatedCurrency);
-        updatedCurrency.code(UPDATED_CODE).name(UPDATED_NAME).conversionRate(UPDATED_CONVERSION_RATE);
+        updatedCurrency.code(UPDATED_CODE).name(UPDATED_NAME).conversionRate(UPDATED_CONVERSION_RATE).symbol(UPDATED_SYMBOL);
 
         restCurrencyMockMvc
             .perform(
@@ -666,6 +781,7 @@ class CurrencyResourceIT {
         assertThat(testCurrency.getCode()).isEqualTo(UPDATED_CODE);
         assertThat(testCurrency.getName()).isEqualTo(UPDATED_NAME);
         assertThat(testCurrency.getConversionRate()).isEqualTo(UPDATED_CONVERSION_RATE);
+        assertThat(testCurrency.getSymbol()).isEqualTo(UPDATED_SYMBOL);
     }
 
     @Test
@@ -743,7 +859,7 @@ class CurrencyResourceIT {
         Currency partialUpdatedCurrency = new Currency();
         partialUpdatedCurrency.setId(currency.getId());
 
-        partialUpdatedCurrency.name(UPDATED_NAME);
+        partialUpdatedCurrency.name(UPDATED_NAME).symbol(UPDATED_SYMBOL);
 
         restCurrencyMockMvc
             .perform(
@@ -761,6 +877,7 @@ class CurrencyResourceIT {
         assertThat(testCurrency.getCode()).isEqualTo(DEFAULT_CODE);
         assertThat(testCurrency.getName()).isEqualTo(UPDATED_NAME);
         assertThat(testCurrency.getConversionRate()).isEqualTo(DEFAULT_CONVERSION_RATE);
+        assertThat(testCurrency.getSymbol()).isEqualTo(UPDATED_SYMBOL);
     }
 
     @Test
@@ -775,7 +892,7 @@ class CurrencyResourceIT {
         Currency partialUpdatedCurrency = new Currency();
         partialUpdatedCurrency.setId(currency.getId());
 
-        partialUpdatedCurrency.code(UPDATED_CODE).name(UPDATED_NAME).conversionRate(UPDATED_CONVERSION_RATE);
+        partialUpdatedCurrency.code(UPDATED_CODE).name(UPDATED_NAME).conversionRate(UPDATED_CONVERSION_RATE).symbol(UPDATED_SYMBOL);
 
         restCurrencyMockMvc
             .perform(
@@ -793,6 +910,7 @@ class CurrencyResourceIT {
         assertThat(testCurrency.getCode()).isEqualTo(UPDATED_CODE);
         assertThat(testCurrency.getName()).isEqualTo(UPDATED_NAME);
         assertThat(testCurrency.getConversionRate()).isEqualTo(UPDATED_CONVERSION_RATE);
+        assertThat(testCurrency.getSymbol()).isEqualTo(UPDATED_SYMBOL);
     }
 
     @Test

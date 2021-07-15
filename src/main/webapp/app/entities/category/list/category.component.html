@@ -50,11 +50,7 @@
           <td>{{ category.name }}</td>
           <td>{{ category.isActive }}</td>
           <td>{{ category.userCreated }}</td>
-          <td>
-            <div *ngIf="category.icon">
-              <a [routerLink]="['/icon', category.icon?.id, 'view']">{{ category.icon?.name }}</a>
-            </div>
-          </td>
+          <td>{{ category.icon }}</td>
           <td>
             <div *ngIf="category.parent">
               <a [routerLink]="['/category', category.parent?.id, 'view']">{{ category.parent?.name }}</a>

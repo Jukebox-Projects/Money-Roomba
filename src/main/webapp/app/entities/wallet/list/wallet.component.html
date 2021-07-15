@@ -38,8 +38,8 @@
           <th scope="col"><span jhiTranslate="moneyRoombaApp.wallet.inReports">In Reports</span></th>
           <th scope="col"><span jhiTranslate="moneyRoombaApp.wallet.isActive">Is Active</span></th>
           <th scope="col"><span jhiTranslate="moneyRoombaApp.wallet.balance">Balance</span></th>
-          <th scope="col"><span jhiTranslate="moneyRoombaApp.wallet.user">User</span></th>
           <th scope="col"><span jhiTranslate="moneyRoombaApp.wallet.icon">Icon</span></th>
+          <th scope="col"><span jhiTranslate="moneyRoombaApp.wallet.user">User</span></th>
           <th scope="col"><span jhiTranslate="moneyRoombaApp.wallet.currency">Currency</span></th>
           <th scope="col"></th>
         </tr>
@@ -54,14 +54,10 @@
           <td>{{ wallet.inReports }}</td>
           <td>{{ wallet.isActive }}</td>
           <td>{{ wallet.balance }}</td>
+          <td>{{ wallet.icon }}</td>
           <td>
             <div *ngIf="wallet.user">
               <a [routerLink]="['/user-details', wallet.user?.id, 'view']">{{ wallet.user?.id }}</a>
-            </div>
-          </td>
-          <td>
-            <div *ngIf="wallet.icon">
-              <a [routerLink]="['/icon', wallet.icon?.id, 'view']">{{ wallet.icon?.name }}</a>
             </div>
           </td>
           <td>

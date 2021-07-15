@@ -44,7 +44,7 @@ export class TransactionUpdateComponent implements OnInit {
     incomingTransaction: [null, [Validators.required]],
     transactionType: [null, [Validators.required]],
     attachment: [],
-    wallet: [],
+    wallet: [null, Validators.required],
     currency: [],
     category: [],
     sourceUser: [],

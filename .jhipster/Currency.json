@@ -15,6 +15,12 @@
       "fieldName": "conversionRate",
       "fieldType": "Float",
       "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "symbol",
+      "fieldType": "String",
+      "fieldValidateRules": ["maxlength", "required"],
+      "fieldValidateRulesMaxlength": "5"
     }
   ],
   "relationships": [
@@ -52,5 +58,5 @@
   "readOnly": false,
   "embedded": false,
   "applications": "*",
-  "changelogDate": "20210706023537"
+  "changelogDate": "20210715002825"
 }

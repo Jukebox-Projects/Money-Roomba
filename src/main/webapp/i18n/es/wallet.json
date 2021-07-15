@@ -23,9 +23,9 @@
       "inReports": "In Reports",
       "isActive": "Is Active",
       "balance": "Balance",
+      "icon": "Icon",
       "transaction": "Transaction",
       "user": "User",
-      "icon": "Icon",
       "currency": "Currency"
     }
   }

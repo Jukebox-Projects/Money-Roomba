@@ -48,6 +48,13 @@
             <a [routerLink]="['/license', userDetails.license?.id, 'view']">{{ userDetails.license?.id }}</a>
           </div>
         </dd>
+        <dt><span jhiTranslate="moneyRoombaApp.userDetails.targetContact">Target Contact</span></dt>
+        <dd>
+          <span *ngFor="let targetContact of userDetails.targetContacts; let last = last">
+            <a [routerLink]="['/user-details', targetContact?.id, 'view']">{{ targetContact.id }}</a
+            >{{ last ? '' : ', ' }}
+          </span>
+        </dd>
         <dt><span jhiTranslate="moneyRoombaApp.userDetails.contact">Contact</span></dt>
         <dd>
           <div *ngIf="userDetails.contact">

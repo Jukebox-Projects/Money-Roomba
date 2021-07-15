@@ -8,6 +8,7 @@ export interface ICurrency {
   code?: string;
   name?: string;
   conversionRate?: number;
+  symbol?: string;
   transactions?: ITransaction[] | null;
   scheduledTransactions?: IScheduledTransaction[] | null;
   wallets?: IWallet[] | null;
@@ -20,6 +21,7 @@ export class Currency implements ICurrency {
     public code?: string,
     public name?: string,
     public conversionRate?: number,
+    public symbol?: string,
     public transactions?: ITransaction[] | null,
     public scheduledTransactions?: IScheduledTransaction[] | null,
     public wallets?: IWallet[] | null,

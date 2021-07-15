@@ -8,7 +8,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.moneyroomba.IntegrationTest;
 import com.moneyroomba.domain.Currency;
-import com.moneyroomba.domain.Icon;
 import com.moneyroomba.domain.Transaction;
 import com.moneyroomba.domain.UserDetails;
 import com.moneyroomba.domain.Wallet;
@@ -51,6 +50,10 @@ class WalletResourceIT {
     private static final Double UPDATED_BALANCE = 2D;
     private static final Double SMALLER_BALANCE = 1D - 1D;
 
+    private static final Integer DEFAULT_ICON = 0;
+    private static final Integer UPDATED_ICON = 1;
+    private static final Integer SMALLER_ICON = 0 - 1;
+
     private static final String ENTITY_API_URL = "/api/wallets";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
 
@@ -80,7 +83,18 @@ class WalletResourceIT {
             .description(DEFAULT_DESCRIPTION)
             .inReports(DEFAULT_IN_REPORTS)
             .isActive(DEFAULT_IS_ACTIVE)
-            .balance(DEFAULT_BALANCE);
+            .balance(DEFAULT_BALANCE)
+            .icon(DEFAULT_ICON);
+        // Add required entity
+        UserDetails userDetails;
+        if (TestUtil.findAll(em, UserDetails.class).isEmpty()) {
+            userDetails = UserDetailsResourceIT.createEntity(em);
+            em.persist(userDetails);
+            em.flush();
+        } else {
+            userDetails = TestUtil.findAll(em, UserDetails.class).get(0);
+        }
+        wallet.setUser(userDetails);
         return wallet;
     }
 
@@ -96,7 +110,18 @@ class WalletResourceIT {
             .description(UPDATED_DESCRIPTION)
             .inReports(UPDATED_IN_REPORTS)
             .isActive(UPDATED_IS_ACTIVE)
-            .balance(UPDATED_BALANCE);
+            .balance(UPDATED_BALANCE)
+            .icon(UPDATED_ICON);
+        // Add required entity
+        UserDetails userDetails;
+        if (TestUtil.findAll(em, UserDetails.class).isEmpty()) {
+            userDetails = UserDetailsResourceIT.createUpdatedEntity(em);
+            em.persist(userDetails);
+            em.flush();
+        } else {
+            userDetails = TestUtil.findAll(em, UserDetails.class).get(0);
+        }
+        wallet.setUser(userDetails);
         return wallet;
     }
 
@@ -125,6 +150,7 @@ class WalletResourceIT {
         assertThat(testWallet.getInReports()).isEqualTo(DEFAULT_IN_REPORTS);
         assertThat(testWallet.getIsActive()).isEqualTo(DEFAULT_IS_ACTIVE);
         assertThat(testWallet.getBalance()).isEqualTo(DEFAULT_BALANCE);
+        assertThat(testWallet.getIcon()).isEqualTo(DEFAULT_ICON);
     }
 
     @Test
@@ -239,7 +265,8 @@ class WalletResourceIT {
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
             .andExpect(jsonPath("$.[*].inReports").value(hasItem(DEFAULT_IN_REPORTS.booleanValue())))
             .andExpect(jsonPath("$.[*].isActive").value(hasItem(DEFAULT_IS_ACTIVE.booleanValue())))
-            .andExpect(jsonPath("$.[*].balance").value(hasItem(DEFAULT_BALANCE.doubleValue())));
+            .andExpect(jsonPath("$.[*].balance").value(hasItem(DEFAULT_BALANCE.doubleValue())))
+            .andExpect(jsonPath("$.[*].icon").value(hasItem(DEFAULT_ICON)));
     }
 
     @Test
@@ -258,7 +285,8 @@ class WalletResourceIT {
             .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION))
             .andExpect(jsonPath("$.inReports").value(DEFAULT_IN_REPORTS.booleanValue()))
             .andExpect(jsonPath("$.isActive").value(DEFAULT_IS_ACTIVE.booleanValue()))
-            .andExpect(jsonPath("$.balance").value(DEFAULT_BALANCE.doubleValue()));
+            .andExpect(jsonPath("$.balance").value(DEFAULT_BALANCE.doubleValue()))
+            .andExpect(jsonPath("$.icon").value(DEFAULT_ICON));
     }
 
     @Test
@@ -645,6 +673,110 @@ class WalletResourceIT {
 
     @Test
     @Transactional
+    void getAllWalletsByIconIsEqualToSomething() throws Exception {
+        // Initialize the database
+        walletRepository.saveAndFlush(wallet);
+
+        // Get all the walletList where icon equals to DEFAULT_ICON
+        defaultWalletShouldBeFound("icon.equals=" + DEFAULT_ICON);
+
+        // Get all the walletList where icon equals to UPDATED_ICON
+        defaultWalletShouldNotBeFound("icon.equals=" + UPDATED_ICON);
+    }
+
+    @Test
+    @Transactional
+    void getAllWalletsByIconIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        walletRepository.saveAndFlush(wallet);
+
+        // Get all the walletList where icon not equals to DEFAULT_ICON
+        defaultWalletShouldNotBeFound("icon.notEquals=" + DEFAULT_ICON);
+
+        // Get all the walletList where icon not equals to UPDATED_ICON
+        defaultWalletShouldBeFound("icon.notEquals=" + UPDATED_ICON);
+    }
+
+    @Test
+    @Transactional
+    void getAllWalletsByIconIsInShouldWork() throws Exception {
+        // Initialize the database
+        walletRepository.saveAndFlush(wallet);
+
+        // Get all the walletList where icon in DEFAULT_ICON or UPDATED_ICON
+        defaultWalletShouldBeFound("icon.in=" + DEFAULT_ICON + "," + UPDATED_ICON);
+
+        // Get all the walletList where icon equals to UPDATED_ICON
+        defaultWalletShouldNotBeFound("icon.in=" + UPDATED_ICON);
+    }
+
+    @Test
+    @Transactional
+    void getAllWalletsByIconIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        walletRepository.saveAndFlush(wallet);
+
+        // Get all the walletList where icon is not null
+        defaultWalletShouldBeFound("icon.specified=true");
+
+        // Get all the walletList where icon is null
+        defaultWalletShouldNotBeFound("icon.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllWalletsByIconIsGreaterThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        walletRepository.saveAndFlush(wallet);
+
+        // Get all the walletList where icon is greater than or equal to DEFAULT_ICON
+        defaultWalletShouldBeFound("icon.greaterThanOrEqual=" + DEFAULT_ICON);
+
+        // Get all the walletList where icon is greater than or equal to UPDATED_ICON
+        defaultWalletShouldNotBeFound("icon.greaterThanOrEqual=" + UPDATED_ICON);
+    }
+
+    @Test
+    @Transactional
+    void getAllWalletsByIconIsLessThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        walletRepository.saveAndFlush(wallet);
+
+        // Get all the walletList where icon is less than or equal to DEFAULT_ICON
+        defaultWalletShouldBeFound("icon.lessThanOrEqual=" + DEFAULT_ICON);
+
+        // Get all the walletList where icon is less than or equal to SMALLER_ICON
+        defaultWalletShouldNotBeFound("icon.lessThanOrEqual=" + SMALLER_ICON);
+    }
+
+    @Test
+    @Transactional
+    void getAllWalletsByIconIsLessThanSomething() throws Exception {
+        // Initialize the database
+        walletRepository.saveAndFlush(wallet);
+
+        // Get all the walletList where icon is less than DEFAULT_ICON
+        defaultWalletShouldNotBeFound("icon.lessThan=" + DEFAULT_ICON);
+
+        // Get all the walletList where icon is less than UPDATED_ICON
+        defaultWalletShouldBeFound("icon.lessThan=" + UPDATED_ICON);
+    }
+
+    @Test
+    @Transactional
+    void getAllWalletsByIconIsGreaterThanSomething() throws Exception {
+        // Initialize the database
+        walletRepository.saveAndFlush(wallet);
+
+        // Get all the walletList where icon is greater than DEFAULT_ICON
+        defaultWalletShouldNotBeFound("icon.greaterThan=" + DEFAULT_ICON);
+
+        // Get all the walletList where icon is greater than SMALLER_ICON
+        defaultWalletShouldBeFound("icon.greaterThan=" + SMALLER_ICON);
+    }
+
+    @Test
+    @Transactional
     void getAllWalletsByTransactionIsEqualToSomething() throws Exception {
         // Initialize the database
         walletRepository.saveAndFlush(wallet);
@@ -683,25 +815,6 @@ class WalletResourceIT {
 
     @Test
     @Transactional
-    void getAllWalletsByIconIsEqualToSomething() throws Exception {
-        // Initialize the database
-        walletRepository.saveAndFlush(wallet);
-        Icon icon = IconResourceIT.createEntity(em);
-        em.persist(icon);
-        em.flush();
-        wallet.setIcon(icon);
-        walletRepository.saveAndFlush(wallet);
-        Long iconId = icon.getId();
-
-        // Get all the walletList where icon equals to iconId
-        defaultWalletShouldBeFound("iconId.equals=" + iconId);
-
-        // Get all the walletList where icon equals to (iconId + 1)
-        defaultWalletShouldNotBeFound("iconId.equals=" + (iconId + 1));
-    }
-
-    @Test
-    @Transactional
     void getAllWalletsByCurrencyIsEqualToSomething() throws Exception {
         // Initialize the database
         walletRepository.saveAndFlush(wallet);
@@ -732,7 +845,8 @@ class WalletResourceIT {
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
             .andExpect(jsonPath("$.[*].inReports").value(hasItem(DEFAULT_IN_REPORTS.booleanValue())))
             .andExpect(jsonPath("$.[*].isActive").value(hasItem(DEFAULT_IS_ACTIVE.booleanValue())))
-            .andExpect(jsonPath("$.[*].balance").value(hasItem(DEFAULT_BALANCE.doubleValue())));
+            .andExpect(jsonPath("$.[*].balance").value(hasItem(DEFAULT_BALANCE.doubleValue())))
+            .andExpect(jsonPath("$.[*].icon").value(hasItem(DEFAULT_ICON)));
 
         // Check, that the count call also returns 1
         restWalletMockMvc
@@ -785,7 +899,8 @@ class WalletResourceIT {
             .description(UPDATED_DESCRIPTION)
             .inReports(UPDATED_IN_REPORTS)
             .isActive(UPDATED_IS_ACTIVE)
-            .balance(UPDATED_BALANCE);
+            .balance(UPDATED_BALANCE)
+            .icon(UPDATED_ICON);
 
         restWalletMockMvc
             .perform(
@@ -805,6 +920,7 @@ class WalletResourceIT {
         assertThat(testWallet.getInReports()).isEqualTo(UPDATED_IN_REPORTS);
         assertThat(testWallet.getIsActive()).isEqualTo(UPDATED_IS_ACTIVE);
         assertThat(testWallet.getBalance()).isEqualTo(UPDATED_BALANCE);
+        assertThat(testWallet.getIcon()).isEqualTo(UPDATED_ICON);
     }
 
     @Test
@@ -879,7 +995,12 @@ class WalletResourceIT {
         Wallet partialUpdatedWallet = new Wallet();
         partialUpdatedWallet.setId(wallet.getId());
 
-        partialUpdatedWallet.name(UPDATED_NAME).description(UPDATED_DESCRIPTION).inReports(UPDATED_IN_REPORTS).balance(UPDATED_BALANCE);
+        partialUpdatedWallet
+            .name(UPDATED_NAME)
+            .description(UPDATED_DESCRIPTION)
+            .inReports(UPDATED_IN_REPORTS)
+            .balance(UPDATED_BALANCE)
+            .icon(UPDATED_ICON);
 
         restWalletMockMvc
             .perform(
@@ -899,6 +1020,7 @@ class WalletResourceIT {
         assertThat(testWallet.getInReports()).isEqualTo(UPDATED_IN_REPORTS);
         assertThat(testWallet.getIsActive()).isEqualTo(DEFAULT_IS_ACTIVE);
         assertThat(testWallet.getBalance()).isEqualTo(UPDATED_BALANCE);
+        assertThat(testWallet.getIcon()).isEqualTo(UPDATED_ICON);
     }
 
     @Test
@@ -918,7 +1040,8 @@ class WalletResourceIT {
             .description(UPDATED_DESCRIPTION)
             .inReports(UPDATED_IN_REPORTS)
             .isActive(UPDATED_IS_ACTIVE)
-            .balance(UPDATED_BALANCE);
+            .balance(UPDATED_BALANCE)
+            .icon(UPDATED_ICON);
 
         restWalletMockMvc
             .perform(
@@ -938,6 +1061,7 @@ class WalletResourceIT {
         assertThat(testWallet.getInReports()).isEqualTo(UPDATED_IN_REPORTS);
         assertThat(testWallet.getIsActive()).isEqualTo(UPDATED_IS_ACTIVE);
         assertThat(testWallet.getBalance()).isEqualTo(UPDATED_BALANCE);
+        assertThat(testWallet.getIcon()).isEqualTo(UPDATED_ICON);
     }
 
     @Test
