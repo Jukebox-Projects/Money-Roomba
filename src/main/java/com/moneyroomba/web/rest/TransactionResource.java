@@ -1,13 +1,23 @@
 package com.moneyroomba.web.rest;
 
+import com.moneyroomba.domain.Category;
 import com.moneyroomba.domain.Transaction;
+import com.moneyroomba.domain.User;
+import com.moneyroomba.domain.UserDetails;
 import com.moneyroomba.repository.TransactionRepository;
+import com.moneyroomba.repository.UserDetailsRepository;
+import com.moneyroomba.repository.UserRepository;
+import com.moneyroomba.security.AuthoritiesConstants;
+import com.moneyroomba.security.SecurityUtils;
 import com.moneyroomba.service.TransactionQueryService;
 import com.moneyroomba.service.TransactionService;
+import com.moneyroomba.service.UserService;
 import com.moneyroomba.service.criteria.TransactionCriteria;
+import com.moneyroomba.service.exception.NoSuchElementFoundException;
 import com.moneyroomba.web.rest.errors.BadRequestAlertException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -41,14 +51,26 @@ public class TransactionResource {
 
     private final TransactionQueryService transactionQueryService;
 
+    private final UserService userService;
+
+    private final UserRepository userRepository;
+
+    private final UserDetailsRepository userDetailsRepository;
+
     public TransactionResource(
         TransactionService transactionService,
         TransactionRepository transactionRepository,
-        TransactionQueryService transactionQueryService
+        TransactionQueryService transactionQueryService,
+        UserRepository userRepository,
+        UserDetailsRepository userDetailsRepository,
+        UserService userService
     ) {
         this.transactionService = transactionService;
         this.transactionRepository = transactionRepository;
         this.transactionQueryService = transactionQueryService;
+        this.userRepository = userRepository;
+        this.userDetailsRepository = userDetailsRepository;
+        this.userService = userService;
     }
 
     /**
@@ -149,9 +171,26 @@ public class TransactionResource {
      */
     @GetMapping("/transactions")
     public ResponseEntity<List<Transaction>> getAllTransactions(TransactionCriteria criteria) {
-        log.debug("REST request to get Transactions by criteria: {}", criteria);
-        List<Transaction> entityList = transactionQueryService.findByCriteria(criteria);
-        return ResponseEntity.ok().body(entityList);
+        Optional<User> user = userRepository.findOneByLogin(
+            SecurityUtils.getCurrentUserLogin().orElseThrow(() -> new NoSuchElementFoundException("No Login found"))
+        );
+        Optional<UserDetails> userDetails = userDetailsRepository.findOneByInternalUser(user.get());
+        List<Transaction> entityList = transactionRepository.findAll();
+        List<Transaction> res = new ArrayList<Transaction>();
+        if (SecurityUtils.hasCurrentUserThisAuthority(AuthoritiesConstants.ADMIN)) {
+            List<Transaction> resAll = transactionRepository.findAll();
+            log.debug("Request to get all transactions for Admin");
+            return ResponseEntity.ok().body(resAll);
+        } else {
+            if (userDetails.isPresent()) {
+                for (Transaction transaction : entityList) {
+                    if (transaction.getSourceUser() == null) {} else if (transaction.getSourceUser().equals(userDetails.get())) {
+                        res.add(transaction);
+                    }
+                }
+            }
+        }
+        return ResponseEntity.ok().body(res);
     }
 
     /**
