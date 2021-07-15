@@ -53,6 +53,12 @@ export class LoginComponent implements OnInit, AfterViewInit {
           this.authenticationError = false;
           if (!this.router.getCurrentNavigation()) {
             // There were no routing during login (eg from navigationToStoredUrl)
+            this.accountService.fetchUserData().subscribe(userDetails => {
+              if (userDetails.isTemporaryPassword) {
+                this.router.navigate(['account/password']);
+              }
+            });
+
             this.router.navigate(['']);
           }
         },

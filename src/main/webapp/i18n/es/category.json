@@ -2,30 +2,41 @@
   "moneyRoombaApp": {
     "category": {
       "home": {
-        "title": "Categories",
+        "title": "Categorías",
         "refreshListLabel": "Refrescar lista",
-        "createLabel": "Crear nuevo Category",
-        "createOrEditLabel": "Crear o editar Category",
-        "notFound": "Ningún Categories encontrado"
+        "createLabel": "Crear una nueva Categoría",
+        "createOrEditLabel": "Crear o editar una Categoría",
+        "searchbar": "Buscar",
+        "notFound": "Ninguna Categoría encontrada"
       },
-      "created": "Un nuevo Category ha sido creado con el identificador {{ param }}",
-      "updated": "Un Category ha sido actualizado con el identificador {{ param }}",
-      "deleted": "Un Category ha sido eliminado con el identificador {{ param }}",
+      "created": "Una nueva Categoría ha sido creada con el identificador {{ param }}",
+      "updated": "Una Categoría ha sido actualizada con el identificador {{ param }}",
+      "deleted": "Una Categoría ha sido eliminada con el identificador {{ param }}",
+      "activated": "Una Categoría ha sido activada con el identificador {{ param }}",
+      "deactivated": "Una Categoría ha sido desactivada con el identificador {{ param }}",
       "delete": {
-        "question": "¿Seguro que quiere eliminar Category {{ id }}?"
+        "question": "¿Seguro que quiere eliminar la Categoría {{ id }}?"
+      },
+      "activate": {
+        "question": "¿Seguro que quiere activar la Categoría {{ id }}?",
+        "questionBulk": "¿Seguro que quiere activar la Categoría {{ id }} y  todas sus categorías hijas?"
+      },
+      "deactivate": {
+        "question": "¿Seguro que quiere desactivar la Categoría {{ id }}?",
+        "questionBulk": "¿Seguro que quiere desactivar la Categoría {{ id }} y  todas sus categorías hijas?"
       },
       "detail": {
-        "title": "Category"
+        "title": "Categoría"
       },
       "id": "ID",
-      "name": "Name",
-      "isActive": "Is Active",
-      "userCreated": "User Created",
-      "icon": "Icon",
-      "category": "Category",
-      "transaction": "Transaction",
-      "parent": "Parent",
-      "user": "User"
+      "name": "Nombre",
+      "isActive": "Activa",
+      "userCreated": "Creada por usuario",
+      "category": "Categoría",
+      "transaction": "Transacción",
+      "icon": "Ícono",
+      "parent": "Categoría padre",
+      "user": "Dueño de la Categoría"
     }
   }
 }

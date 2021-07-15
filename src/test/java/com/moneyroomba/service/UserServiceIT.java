@@ -101,7 +101,7 @@ class UserServiceIT {
         Optional<User> maybeUser = userService.requestPasswordReset("invalid.login@localhost");
         assertThat(maybeUser).isNotPresent();
 
-        maybeUser = userService.requestPasswordReset(user.getEmail());
+        maybeUser = userService.requestPasswordReset(user.getEmail(), "12345");
         assertThat(maybeUser).isPresent();
         assertThat(maybeUser.orElse(null).getEmail()).isEqualTo(user.getEmail());
         assertThat(maybeUser.orElse(null).getResetDate()).isNotNull();

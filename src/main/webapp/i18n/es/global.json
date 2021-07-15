@@ -46,8 +46,8 @@
       "language": "Idioma"
     },
     "form": {
-      "username.label": "Usuario",
-      "username.placeholder": "Nombre de usuario",
+      "username.label": "Correo electrónico",
+      "username.placeholder": "Correo electrónico",
       "currentpassword.label": "Contraseña actual",
       "currentpassword.placeholder": "Contraseña actual",
       "newpassword.label": "Nueva contraseña",
@@ -55,7 +55,15 @@
       "confirmpassword.label": "Confirmación de la nueva contraseña",
       "confirmpassword.placeholder": "Confirmación de la nueva contraseña",
       "email.label": "Correo electrónico",
-      "email.placeholder": "Su correo electrónico"
+      "email.placeholder": "Su correo electrónico",
+      "firstName.label": "Nombre",
+      "firstName.placeholder": "Su nombre",
+      "lastName.label": "Apellido",
+      "lastName.placeholder": "Su apellido",
+      "country.label": "País",
+      "country.placeholder": "Su país",
+      "phone.label": "Teléfono",
+      "phone.placeholder": "Su teléfono"
     },
     "messages": {
       "info": {
@@ -74,21 +82,35 @@
       },
       "validate": {
         "newpassword": {
-          "required": "Se requiere que ingrese una contraseña.",
-          "minlength": "Se requiere que su contraseña tenga por lo menos 4 caracteres",
-          "maxlength": "Su contraseña no puede tener más de 50 caracteres",
+          "pattern": "La contraseña requiere un mínimo de 8 caracteres, al menos una mayúscula, una minúscula, un número y un carácter especial.",
+          "required": "La contraseña requiere un mínimo de 8 caracteres, mayúsculas, minúsculas, un número y un carácter especial.",
+          "minlength": "Se requiere que su contraseña tenga por lo menos 8 caracteres",
+          "maxlength": "Su contraseña no puede tener más de 25 caracteres",
           "strength": "Seguridad de la contraseña:"
         },
         "confirmpassword": {
+          "pattern": "La contraseña requiere un mínimo de 8 caracteres, al menos una mayúscula, una minúscula, un número y un carácter especial.",
           "required": "Se requiere que confirme la contraseña.",
-          "minlength": "Se requiere que su contraseña de confirmación tenga por lo menos 4 caracteres",
-          "maxlength": "Su contraseña de confirmación no puede tener más de 50 caracteres"
+          "minlength": "Se requiere que su contraseña de confirmación tenga por lo menos 8 caracteres",
+          "maxlength": "Su contraseña de confirmación no puede tener más de 25 caracteres"
         },
         "email": {
           "required": "Se requiere un correo electrónico.",
           "invalid": "Su correo electrónico no es válido.",
           "minlength": "Se requiere que su correo electrónico tenga por lo menos 5 caracteres",
           "maxlength": "Su correo electrónico no puede tener más de 50 caracteres"
+        },
+        "firstName": {
+          "required": "Se requiere su nombre."
+        },
+        "lastName": {
+          "required": "Se requiere su apellido."
+        },
+        "country": {
+          "required": "Se requiere su país."
+        },
+        "phone": {
+          "required": "Se requiere su teléfono."
         }
       }
     },
@@ -110,14 +132,23 @@
       "edit": "Editar",
       "open": "Abrir",
       "save": "Guardar",
-      "view": "Vista"
+      "view": "Vista",
+      "activate": "Activar",
+      "deactivate": "Desactivar"
     },
     "detail": {
       "field": "Campo",
       "value": "Valor"
     },
     "delete": {
-      "title": "Confirmar operación de borrado"
+      "title": "Confirmar operación de borrado",
+      "account": "¿Está seguro de que quiere eliminar su cuenta?"
+    },
+    "activate": {
+      "title": "Confirmar operación de activación"
+    },
+    "deactivate": {
+      "title": "Confirmar operación de desactivación"
     },
     "validation": {
       "required": "Este campo es obligatorio.",

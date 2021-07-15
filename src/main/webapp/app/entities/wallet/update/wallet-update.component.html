@@ -103,24 +103,6 @@
         </div>
 
         <div class="form-group">
-          <label class="form-control-label" jhiTranslate="moneyRoombaApp.wallet.user" for="field_user">User</label>
-          <select class="form-control" id="field_user" data-cy="user" name="user" formControlName="user">
-            <option *ngIf="!editForm.get('user')!.value" [ngValue]="null" selected></option>
-            <option
-              [ngValue]="userDetailsOption.id === editForm.get('user')!.value?.id ? editForm.get('user')!.value : userDetailsOption"
-              *ngFor="let userDetailsOption of userDetailsSharedCollection; trackBy: trackUserDetailsById"
-            >
-              {{ userDetailsOption.id }}
-            </option>
-          </select>
-        </div>
-        <div *ngIf="editForm.get(['user'])!.invalid && (editForm.get(['user'])!.dirty || editForm.get(['user'])!.touched)">
-          <small class="form-text text-danger" *ngIf="editForm.get(['user'])?.errors?.required" jhiTranslate="entity.validation.required">
-            This field is required.
-          </small>
-        </div>
-
-        <div class="form-group">
           <label class="form-control-label" jhiTranslate="moneyRoombaApp.wallet.currency" for="field_currency">Currency</label>
           <select class="form-control" id="field_currency" data-cy="currency" name="currency" formControlName="currency">
             <option [ngValue]="null"></option>

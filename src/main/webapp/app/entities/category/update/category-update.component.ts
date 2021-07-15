@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
 import { finalize, map } from 'rxjs/operators';
 
 import { ICategory, Category } from '../category.model';
-import { CategoryService } from '../service/category.service';
+import { CategoryService, EntityArrayResponseType } from '../service/category.service';
 import { IUserDetails } from 'app/entities/user-details/user-details.model';
 import { UserDetailsService } from 'app/entities/user-details/service/user-details.service';
 
@@ -23,11 +23,8 @@ export class CategoryUpdateComponent implements OnInit {
   editForm = this.fb.group({
     id: [],
     name: [null, [Validators.required]],
-    isActive: [null, [Validators.required]],
-    userCreated: [null, [Validators.required]],
-    icon: [null, [Validators.min(0)]],
+    icon: [],
     parent: [],
-    user: [],
   });
 
   constructor(
@@ -41,7 +38,7 @@ export class CategoryUpdateComponent implements OnInit {
     this.activatedRoute.data.subscribe(({ category }) => {
       this.updateForm(category);
 
-      this.loadRelationshipsOptions();
+      this.loadRelationshipsOptions(category);
     });
   }
 
@@ -107,9 +104,11 @@ export class CategoryUpdateComponent implements OnInit {
     );
   }
 
-  protected loadRelationshipsOptions(): void {
+  protected loadRelationshipsOptions(category?: ICategory): void {
+    // Category dropdown only shows parent categories (child categories cannot have childs) and does not show the same category
+
     this.categoryService
-      .query()
+      .query(category?.id ? { 'parentId.specified': false, 'id.notEquals': category.id } : { 'parentId.specified': false })
       .pipe(map((res: HttpResponse<ICategory[]>) => res.body ?? []))
       .pipe(
         map((categories: ICategory[]) =>
@@ -117,16 +116,6 @@ export class CategoryUpdateComponent implements OnInit {
         )
       )
       .subscribe((categories: ICategory[]) => (this.categoriesSharedCollection = categories));
-
-    this.userDetailsService
-      .query()
-      .pipe(map((res: HttpResponse<IUserDetails[]>) => res.body ?? []))
-      .pipe(
-        map((userDetails: IUserDetails[]) =>
-          this.userDetailsService.addUserDetailsToCollectionIfMissing(userDetails, this.editForm.get('user')!.value)
-        )
-      )
-      .subscribe((userDetails: IUserDetails[]) => (this.userDetailsSharedCollection = userDetails));
   }
 
   protected createFromForm(): ICategory {
@@ -134,11 +123,9 @@ export class CategoryUpdateComponent implements OnInit {
       ...new Category(),
       id: this.editForm.get(['id'])!.value,
       name: this.editForm.get(['name'])!.value,
-      isActive: this.editForm.get(['isActive'])!.value,
-      userCreated: this.editForm.get(['userCreated'])!.value,
+      isActive: true,
       icon: this.editForm.get(['icon'])!.value,
       parent: this.editForm.get(['parent'])!.value,
-      user: this.editForm.get(['user'])!.value,
     };
   }
 }

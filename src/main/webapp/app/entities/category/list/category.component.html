@@ -3,6 +3,8 @@
     <span jhiTranslate="moneyRoombaApp.category.home.title">Categories</span>
 
     <div class="d-flex justify-content-end">
+      <input jhiTranslate="moneyRoombaApp.category.home.searchbar" type="text" [(ngModel)]="inputText" (input)="filterCategory()" />
+
       <button class="btn btn-info mr-2" (click)="loadAll()" [disabled]="isLoading">
         <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
         <span jhiTranslate="moneyRoombaApp.category.home.refreshListLabel">Refresh List</span>
@@ -74,6 +76,7 @@
               </button>
 
               <button
+                *ngIf="(!category.userCreated && adminUser) || (category.userCreated && !adminUser)"
                 type="submit"
                 [routerLink]="['/category', category.id, 'edit']"
                 class="btn btn-primary btn-sm"
@@ -83,7 +86,28 @@
                 <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
               </button>
 
-              <button type="submit" (click)="delete(category)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
+              <button
+                *ngIf="!category.userCreated && adminUser"
+                type="submit"
+                (click)="status(category)"
+                class="btn btn-secondary btn-sm"
+                data-cy="entityStatusButton"
+              >
+                <fa-icon icon="times"></fa-icon>
+                <span
+                  class="d-none d-md-inline"
+                  jhiTranslate="{{ category.isActive ? 'entity.action.deactivate' : 'entity.action.activate' }}"
+                  >Activate</span
+                >
+              </button>
+
+              <button
+                *ngIf="(!category.userCreated && adminUser) || (category.userCreated && !adminUser)"
+                type="submit"
+                (click)="delete(category)"
+                class="btn btn-danger btn-sm"
+                data-cy="entityDeleteButton"
+              >
                 <fa-icon icon="times"></fa-icon>
                 <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
               </button>

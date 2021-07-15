@@ -1,3 +1,4 @@
+import { AccountDetail } from './accountDetail.model';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
@@ -27,6 +28,10 @@ export class AccountService {
 
   save(account: Account): Observable<{}> {
     return this.http.post(this.applicationConfigService.getEndpointFor('api/account'), account);
+  }
+
+  delete(): Observable<{}> {
+    return this.http.delete(this.applicationConfigService.getEndpointFor('api/account'));
   }
 
   authenticate(identity: Account | null): void {
@@ -74,6 +79,10 @@ export class AccountService {
 
   getAuthenticationState(): Observable<Account | null> {
     return this.authenticationState.asObservable();
+  }
+
+  fetchUserData(): Observable<AccountDetail> {
+    return this.http.get<AccountDetail>(this.applicationConfigService.getEndpointFor('api/account/getTempPassword'));
   }
 
   private fetch(): Observable<Account> {
