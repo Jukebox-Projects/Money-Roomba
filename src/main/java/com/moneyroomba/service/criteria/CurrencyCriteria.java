@@ -32,6 +32,8 @@ public class CurrencyCriteria implements Serializable, Criteria {
 
     private FloatFilter conversionRate;
 
+    private StringFilter symbol;
+
     private LongFilter transactionId;
 
     private LongFilter scheduledTransactionId;
@@ -47,6 +49,7 @@ public class CurrencyCriteria implements Serializable, Criteria {
         this.code = other.code == null ? null : other.code.copy();
         this.name = other.name == null ? null : other.name.copy();
         this.conversionRate = other.conversionRate == null ? null : other.conversionRate.copy();
+        this.symbol = other.symbol == null ? null : other.symbol.copy();
         this.transactionId = other.transactionId == null ? null : other.transactionId.copy();
         this.scheduledTransactionId = other.scheduledTransactionId == null ? null : other.scheduledTransactionId.copy();
         this.walletId = other.walletId == null ? null : other.walletId.copy();
@@ -116,6 +119,21 @@ public class CurrencyCriteria implements Serializable, Criteria {
 
     public void setConversionRate(FloatFilter conversionRate) {
         this.conversionRate = conversionRate;
+    }
+
+    public StringFilter getSymbol() {
+        return symbol;
+    }
+
+    public StringFilter symbol() {
+        if (symbol == null) {
+            symbol = new StringFilter();
+        }
+        return symbol;
+    }
+
+    public void setSymbol(StringFilter symbol) {
+        this.symbol = symbol;
     }
 
     public LongFilter getTransactionId() {
@@ -192,6 +210,7 @@ public class CurrencyCriteria implements Serializable, Criteria {
             Objects.equals(code, that.code) &&
             Objects.equals(name, that.name) &&
             Objects.equals(conversionRate, that.conversionRate) &&
+            Objects.equals(symbol, that.symbol) &&
             Objects.equals(transactionId, that.transactionId) &&
             Objects.equals(scheduledTransactionId, that.scheduledTransactionId) &&
             Objects.equals(walletId, that.walletId) &&
@@ -201,7 +220,7 @@ public class CurrencyCriteria implements Serializable, Criteria {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, code, name, conversionRate, transactionId, scheduledTransactionId, walletId, invoiceId);
+        return Objects.hash(id, code, name, conversionRate, symbol, transactionId, scheduledTransactionId, walletId, invoiceId);
     }
 
     // prettier-ignore
@@ -212,6 +231,7 @@ public class CurrencyCriteria implements Serializable, Criteria {
             (code != null ? "code=" + code + ", " : "") +
             (name != null ? "name=" + name + ", " : "") +
             (conversionRate != null ? "conversionRate=" + conversionRate + ", " : "") +
+            (symbol != null ? "symbol=" + symbol + ", " : "") +
             (transactionId != null ? "transactionId=" + transactionId + ", " : "") +
             (scheduledTransactionId != null ? "scheduledTransactionId=" + scheduledTransactionId + ", " : "") +
             (walletId != null ? "walletId=" + walletId + ", " : "") +

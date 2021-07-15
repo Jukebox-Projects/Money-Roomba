@@ -1,11 +1,11 @@
-id;name;description;date_added;amount;original_amount;movement_type;scheduled;add_to_reports;incoming_transaction;transaction_type
-1;Cantabria;Inteligente;2021-07-05;16431;99701;EXPENSE;true;true;true;SCHEDULED
-2;necesidades Optimización;Camiseta Rojo;2021-07-05;38347;39660;INCOME;false;true;false;API
-3;Ingeniero Hormigon modular;Ejecutivo Operaciones;2021-07-05;83747;52466;EXPENSE;true;false;true;MANUAL
-4;compressing e-tailers;withdrawal incentivize homogénea;2021-07-06;99687;82194;EXPENSE;false;false;true;SCHEDULED
-5;Juguetería;Genérico Bedfordshire JBOD;2021-07-05;39480;54845;EXPENSE;false;false;false;MANUAL
-6;port enable;Chad optical Verde;2021-07-05;21598;58305;INCOME;true;true;false;EMAIL
-7;Inversor generación maximize;Cambridgeshire JSON Cataluña;2021-07-05;57816;78909;EXPENSE;false;false;false;SCHEDULED
-8;parsing JBOD;holistic;2021-07-05;69647;51839;INCOME;true;false;true;SHARED
-9;Decoración Violeta deposit;Facilitador Berkshire;2021-07-05;68142;82326;EXPENSE;true;false;false;SCHEDULED
-10;Global;Andalucía;2021-07-05;53281;67464;EXPENSE;true;false;false;MANUAL
+id;name;description;date_added;amount;original_amount;movement_type;scheduled;add_to_reports;incoming_transaction;transaction_type;wallet_id
+1;Cantabria;Inteligente;2021-07-14;16431;99701;EXPENSE;true;true;true;SCHEDULED;1
+2;necesidades Optimización;Camiseta Rojo;2021-07-14;38347;39660;INCOME;false;true;false;API;2
+3;Ingeniero Hormigon modular;Ejecutivo Operaciones;2021-07-14;83747;52466;EXPENSE;true;false;true;MANUAL;3
+4;compressing e-tailers;withdrawal incentivize homogénea;2021-07-14;99687;82194;EXPENSE;false;false;true;SCHEDULED;4
+5;Juguetería;Genérico Bedfordshire JBOD;2021-07-14;39480;54845;EXPENSE;false;false;false;MANUAL;5
+6;port enable;Chad optical Verde;2021-07-14;21598;58305;INCOME;true;true;false;EMAIL;6
+7;Inversor generación maximize;Cambridgeshire JSON Cataluña;2021-07-14;57816;78909;EXPENSE;false;false;false;SCHEDULED;7
+8;parsing JBOD;holistic;2021-07-14;69647;51839;INCOME;true;false;true;SHARED;8
+9;Decoración Violeta deposit;Facilitador Berkshire;2021-07-14;68142;82326;EXPENSE;true;false;false;SCHEDULED;9
+10;Global;Andalucía;2021-07-14;53281;67464;EXPENSE;true;false;false;MANUAL;10

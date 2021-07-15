@@ -24,6 +24,12 @@
       "fieldName": "balance",
       "fieldType": "Double",
       "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "icon",
+      "fieldType": "Integer",
+      "fieldValidateRules": ["min"],
+      "fieldValidateRulesMin": "0"
     }
   ],
   "relationships": [
@@ -37,14 +43,8 @@
       "relationshipType": "many-to-one",
       "otherEntityName": "userDetails",
       "otherEntityRelationshipName": "wallet",
+      "relationshipValidateRules": "required",
       "relationshipName": "user"
-    },
-    {
-      "relationshipType": "many-to-one",
-      "otherEntityName": "icon",
-      "otherEntityRelationshipName": "wallet",
-      "relationshipName": "icon",
-      "otherEntityField": "name"
     },
     {
       "relationshipType": "many-to-one",
@@ -63,5 +63,5 @@
   "readOnly": false,
   "embedded": false,
   "applications": "*",
-  "changelogDate": "20210706023529"
+  "changelogDate": "20210715002817"
 }

@@ -1,11 +1,11 @@
-id;name;description;in_reports;is_active;balance
-1;deposit Gerente;Japón;true;true;98790
-2;Bricolaje Rojo;Versatil;true;true;55909
-3;Krone generate;Diseñador SMTP Kroon;false;false;66051
-4;Sopa;Metal Valenciana;true;false;65731
-5;Cantabria Moda;Juguetería invoice sensor;true;true;97521
-6;transmit interface Aragón;Datos;false;true;25860
-7;bypass Croatian;cohesiva Canarias;true;false;77477
-8;USB;multi-byte Azul blockchains;false;false;52012
-9;Camiseta;Trinidad open-source Pelota;false;true;88506
-10;Progresivo;Borders;true;false;13235
+id;name;description;in_reports;is_active;balance;icon;user_id
+1;deposit Gerente;Japón;true;true;98790;62868;1
+2;Kazajistan;Acero;true;true;71298;78362;2
+3;Holanda Rico;parsing Tala International;true;false;2425;66051;3
+4;Sopa;Metal Valenciana;true;false;65731;35116;4
+5;wireless Versatil;recontextualize;true;false;70957;46201;5
+6;Factores Lilangeni;interface;true;false;32859;242;6
+7;virtual port bypass;colaboración cohesiva Canarias;true;false;77477;22187;7
+8;transmitter multi-byte Azul;Funcionario intermedia;false;false;10723;92664;8
+9;back-end Versatil Orgánico;FTP Ouguiya;false;true;58902;88802;9
+10;Metal;Cine Bielorusia;false;false;51298;23472;10

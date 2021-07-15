@@ -34,16 +34,14 @@
         <dd>
           <span>{{ wallet.balance }}</span>
         </dd>
+        <dt><span jhiTranslate="moneyRoombaApp.wallet.icon">Icon</span></dt>
+        <dd>
+          <span>{{ wallet.icon }}</span>
+        </dd>
         <dt><span jhiTranslate="moneyRoombaApp.wallet.user">User</span></dt>
         <dd>
           <div *ngIf="wallet.user">
             <a [routerLink]="['/user-details', wallet.user?.id, 'view']">{{ wallet.user?.id }}</a>
-          </div>
-        </dd>
-        <dt><span jhiTranslate="moneyRoombaApp.wallet.icon">Icon</span></dt>
-        <dd>
-          <div *ngIf="wallet.icon">
-            <a [routerLink]="['/icon', wallet.icon?.id, 'view']">{{ wallet.icon?.name }}</a>
           </div>
         </dd>
         <dt><span jhiTranslate="moneyRoombaApp.wallet.currency">Currency</span></dt>

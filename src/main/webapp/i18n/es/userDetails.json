@@ -31,7 +31,9 @@
       "event": "Event",
       "transaction": "Transaction",
       "userDetails": "User Details",
-      "contact": "Contact"
+      "targetContact": "Target Contact",
+      "contact": "Contact",
+      "sourceContact": "Source Contact"
     }
   }
 }

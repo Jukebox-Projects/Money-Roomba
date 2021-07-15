@@ -20,6 +20,7 @@ export class CurrencyUpdateComponent implements OnInit {
     code: [null, [Validators.required]],
     name: [null, [Validators.required]],
     conversionRate: [null, [Validators.required]],
+    symbol: [null, [Validators.required, Validators.maxLength(5)]],
   });
 
   constructor(protected currencyService: CurrencyService, protected activatedRoute: ActivatedRoute, protected fb: FormBuilder) {}
@@ -69,6 +70,7 @@ export class CurrencyUpdateComponent implements OnInit {
       code: currency.code,
       name: currency.name,
       conversionRate: currency.conversionRate,
+      symbol: currency.symbol,
     });
   }
 
@@ -79,6 +81,7 @@ export class CurrencyUpdateComponent implements OnInit {
       code: this.editForm.get(['code'])!.value,
       name: this.editForm.get(['name'])!.value,
       conversionRate: this.editForm.get(['conversionRate'])!.value,
+      symbol: this.editForm.get(['symbol'])!.value,
     };
   }
 }

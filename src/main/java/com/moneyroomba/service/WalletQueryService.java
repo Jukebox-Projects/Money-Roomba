@@ -96,6 +96,9 @@ public class WalletQueryService extends QueryService<Wallet> {
             if (criteria.getBalance() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getBalance(), Wallet_.balance));
             }
+            if (criteria.getIcon() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getIcon(), Wallet_.icon));
+            }
             if (criteria.getTransactionId() != null) {
                 specification =
                     specification.and(
@@ -109,12 +112,6 @@ public class WalletQueryService extends QueryService<Wallet> {
                 specification =
                     specification.and(
                         buildSpecification(criteria.getUserId(), root -> root.join(Wallet_.user, JoinType.LEFT).get(UserDetails_.id))
-                    );
-            }
-            if (criteria.getIconId() != null) {
-                specification =
-                    specification.and(
-                        buildSpecification(criteria.getIconId(), root -> root.join(Wallet_.icon, JoinType.LEFT).get(Icon_.id))
                     );
             }
             if (criteria.getCurrencyId() != null) {

@@ -7,8 +7,6 @@ import { finalize, map } from 'rxjs/operators';
 
 import { ICategory, Category } from '../category.model';
 import { CategoryService, EntityArrayResponseType } from '../service/category.service';
-import { IIcon } from 'app/entities/icon/icon.model';
-import { IconService } from 'app/entities/icon/service/icon.service';
 import { IUserDetails } from 'app/entities/user-details/user-details.model';
 import { UserDetailsService } from 'app/entities/user-details/service/user-details.service';
 
@@ -20,7 +18,6 @@ export class CategoryUpdateComponent implements OnInit {
   isSaving = false;
 
   categoriesSharedCollection: ICategory[] = [];
-  iconsSharedCollection: IIcon[] = [];
   userDetailsSharedCollection: IUserDetails[] = [];
 
   editForm = this.fb.group({
@@ -32,7 +29,6 @@ export class CategoryUpdateComponent implements OnInit {
 
   constructor(
     protected categoryService: CategoryService,
-    protected iconService: IconService,
     protected userDetailsService: UserDetailsService,
     protected activatedRoute: ActivatedRoute,
     protected fb: FormBuilder
@@ -61,10 +57,6 @@ export class CategoryUpdateComponent implements OnInit {
   }
 
   trackCategoryById(index: number, item: ICategory): number {
-    return item.id!;
-  }
-
-  trackIconById(index: number, item: IIcon): number {
     return item.id!;
   }
 
@@ -106,7 +98,6 @@ export class CategoryUpdateComponent implements OnInit {
       this.categoriesSharedCollection,
       category.parent
     );
-    this.iconsSharedCollection = this.iconService.addIconToCollectionIfMissing(this.iconsSharedCollection, category.icon);
     this.userDetailsSharedCollection = this.userDetailsService.addUserDetailsToCollectionIfMissing(
       this.userDetailsSharedCollection,
       category.user
@@ -125,12 +116,6 @@ export class CategoryUpdateComponent implements OnInit {
         )
       )
       .subscribe((categories: ICategory[]) => (this.categoriesSharedCollection = categories));
-
-    this.iconService
-      .query()
-      .pipe(map((res: HttpResponse<IIcon[]>) => res.body ?? []))
-      .pipe(map((icons: IIcon[]) => this.iconService.addIconToCollectionIfMissing(icons, this.editForm.get('icon')!.value)))
-      .subscribe((icons: IIcon[]) => (this.iconsSharedCollection = icons));
   }
 
   protected createFromForm(): ICategory {

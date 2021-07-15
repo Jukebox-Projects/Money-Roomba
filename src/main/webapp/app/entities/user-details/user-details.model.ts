@@ -20,7 +20,9 @@ export interface IUserDetails {
   events?: IEvent[] | null;
   transactions?: ITransaction[] | null;
   userDetails?: IUserDetails[] | null;
+  targetContacts?: IUserDetails[] | null;
   contact?: IUserDetails | null;
+  sourceContacts?: IUserDetails[] | null;
 }
 
 export class UserDetails implements IUserDetails {
@@ -39,7 +41,9 @@ export class UserDetails implements IUserDetails {
     public events?: IEvent[] | null,
     public transactions?: ITransaction[] | null,
     public userDetails?: IUserDetails[] | null,
-    public contact?: IUserDetails | null
+    public targetContacts?: IUserDetails[] | null,
+    public contact?: IUserDetails | null,
+    public sourceContacts?: IUserDetails[] | null
   ) {
     this.notifications = this.notifications ?? false;
     this.isActive = this.isActive ?? false;

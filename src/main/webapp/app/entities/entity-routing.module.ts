@@ -55,11 +55,6 @@ import { RouterModule } from '@angular/router';
         loadChildren: () => import('./currency/currency.module').then(m => m.CurrencyModule),
       },
       {
-        path: 'icon',
-        data: { pageTitle: 'moneyRoombaApp.icon.home.title' },
-        loadChildren: () => import('./icon/icon.module').then(m => m.IconModule),
-      },
-      {
         path: 'notification',
         data: { pageTitle: 'moneyRoombaApp.notification.home.title' },
         loadChildren: () => import('./notification/notification.module').then(m => m.NotificationModule),
