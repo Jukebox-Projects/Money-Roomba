@@ -70,8 +70,9 @@ public class Transaction implements Serializable {
     @JoinColumn(unique = true)
     private Attachment attachment;
 
-    @ManyToOne
-    @JsonIgnoreProperties(value = { "transactions", "user", "icon", "currency" }, allowSetters = true)
+    @ManyToOne(optional = false)
+    @NotNull
+    @JsonIgnoreProperties(value = { "transactions", "user", "currency" }, allowSetters = true)
     private Wallet wallet;
 
     @ManyToOne
@@ -79,12 +80,23 @@ public class Transaction implements Serializable {
     private Currency currency;
 
     @ManyToOne
-    @JsonIgnoreProperties(value = { "categories", "transactions", "icon", "parent", "user" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "categories", "transactions", "parent", "user" }, allowSetters = true)
     private Category category;
 
     @ManyToOne
     @JsonIgnoreProperties(
-        value = { "internalUser", "license", "wallets", "categories", "events", "transactions", "userDetails", "contact" },
+        value = {
+            "internalUser",
+            "license",
+            "wallets",
+            "categories",
+            "events",
+            "transactions",
+            "userDetails",
+            "targetContacts",
+            "contact",
+            "sourceContacts",
+        },
         allowSetters = true
     )
     private UserDetails sourceUser;

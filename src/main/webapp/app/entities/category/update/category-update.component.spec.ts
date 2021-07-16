@@ -9,8 +9,6 @@ import { of, Subject } from 'rxjs';
 
 import { CategoryService } from '../service/category.service';
 import { ICategory, Category } from '../category.model';
-import { IIcon } from 'app/entities/icon/icon.model';
-import { IconService } from 'app/entities/icon/service/icon.service';
 import { IUserDetails } from 'app/entities/user-details/user-details.model';
 import { UserDetailsService } from 'app/entities/user-details/service/user-details.service';
 
@@ -22,7 +20,6 @@ describe('Component Tests', () => {
     let fixture: ComponentFixture<CategoryUpdateComponent>;
     let activatedRoute: ActivatedRoute;
     let categoryService: CategoryService;
-    let iconService: IconService;
     let userDetailsService: UserDetailsService;
 
     beforeEach(() => {
@@ -37,7 +34,6 @@ describe('Component Tests', () => {
       fixture = TestBed.createComponent(CategoryUpdateComponent);
       activatedRoute = TestBed.inject(ActivatedRoute);
       categoryService = TestBed.inject(CategoryService);
-      iconService = TestBed.inject(IconService);
       userDetailsService = TestBed.inject(UserDetailsService);
 
       comp = fixture.componentInstance;
@@ -61,25 +57,6 @@ describe('Component Tests', () => {
         expect(categoryService.query).toHaveBeenCalled();
         expect(categoryService.addCategoryToCollectionIfMissing).toHaveBeenCalledWith(categoryCollection, ...additionalCategories);
         expect(comp.categoriesSharedCollection).toEqual(expectedCollection);
-      });
-
-      it('Should call Icon query and add missing value', () => {
-        const category: ICategory = { id: 456 };
-        const icon: IIcon = { id: 26616 };
-        category.icon = icon;
-
-        const iconCollection: IIcon[] = [{ id: 34409 }];
-        jest.spyOn(iconService, 'query').mockReturnValue(of(new HttpResponse({ body: iconCollection })));
-        const additionalIcons = [icon];
-        const expectedCollection: IIcon[] = [...additionalIcons, ...iconCollection];
-        jest.spyOn(iconService, 'addIconToCollectionIfMissing').mockReturnValue(expectedCollection);
-
-        activatedRoute.data = of({ category });
-        comp.ngOnInit();
-
-        expect(iconService.query).toHaveBeenCalled();
-        expect(iconService.addIconToCollectionIfMissing).toHaveBeenCalledWith(iconCollection, ...additionalIcons);
-        expect(comp.iconsSharedCollection).toEqual(expectedCollection);
       });
 
       it('Should call UserDetails query and add missing value', () => {
@@ -108,8 +85,6 @@ describe('Component Tests', () => {
         const category: ICategory = { id: 456 };
         const parent: ICategory = { id: 75631 };
         category.parent = parent;
-        const icon: IIcon = { id: 34686 };
-        category.icon = icon;
         const user: IUserDetails = { id: 62978 };
         category.user = user;
 
@@ -118,7 +93,6 @@ describe('Component Tests', () => {
 
         expect(comp.editForm.value).toEqual(expect.objectContaining(category));
         expect(comp.categoriesSharedCollection).toContain(parent);
-        expect(comp.iconsSharedCollection).toContain(icon);
         expect(comp.userDetailsSharedCollection).toContain(user);
       });
     });
@@ -192,14 +166,6 @@ describe('Component Tests', () => {
         it('Should return tracked Category primary key', () => {
           const entity = { id: 123 };
           const trackResult = comp.trackCategoryById(0, entity);
-          expect(trackResult).toEqual(entity.id);
-        });
-      });
-
-      describe('trackIconById', () => {
-        it('Should return tracked Icon primary key', () => {
-          const entity = { id: 123 };
-          const trackResult = comp.trackIconById(0, entity);
           expect(trackResult).toEqual(entity.id);
         });
       });

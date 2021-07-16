@@ -1,11 +1,11 @@
 id;name;description;original_amount;movement_type;start_date;end_date;add_to_reports;incoming_transaction
-1;haptic Alemania;Sopa EXE;62944;INCOME;2021-07-05;2021-07-05;true;true
-2;Funcionalidad engage;Pollo;63441;EXPENSE;2021-07-05;2021-07-06;false;true
-3;solid Account Negro;IB transform;88257;EXPENSE;2021-07-05;2021-07-05;true;false
-4;Violeta Bacon Faro;redundant Madera Rústico;43744;INCOME;2021-07-05;2021-07-05;false;true
-5;Torrente Seguridada;recíproca explícita;37190;EXPENSE;2021-07-06;2021-07-06;true;true
-6;XML;sinergia;95879;INCOME;2021-07-06;2021-07-05;false;false
-7;redundant;Som Metal;56143;INCOME;2021-07-05;2021-07-05;false;false
-8;Plástico;Loan Open-source payment;97641;INCOME;2021-07-05;2021-07-05;false;false
-9;Loan Factores up;República;76419;EXPENSE;2021-07-05;2021-07-06;false;true
-10;back-end;syndicate mobile;73143;EXPENSE;2021-07-05;2021-07-05;true;false
+1;haptic Alemania;Sopa EXE;62944;INCOME;2021-07-14;2021-07-14;true;true
+2;Funcionalidad engage;Pollo;63441;EXPENSE;2021-07-14;2021-07-14;false;true
+3;solid Account Negro;IB transform;88257;EXPENSE;2021-07-14;2021-07-14;true;false
+4;Violeta Bacon Faro;redundant Madera Rústico;43744;INCOME;2021-07-14;2021-07-14;false;true
+5;Torrente Seguridada;recíproca explícita;37190;EXPENSE;2021-07-14;2021-07-14;true;true
+6;XML;sinergia;95879;INCOME;2021-07-14;2021-07-14;false;false
+7;redundant;Som Metal;56143;INCOME;2021-07-14;2021-07-14;false;false
+8;Plástico;Loan Open-source payment;97641;INCOME;2021-07-14;2021-07-14;false;false
+9;Loan Factores up;República;76419;EXPENSE;2021-07-14;2021-07-14;false;true
+10;back-end;syndicate mobile;73143;EXPENSE;2021-07-14;2021-07-14;true;false

@@ -15,6 +15,12 @@
       "fieldName": "userCreated",
       "fieldType": "Boolean",
       "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "icon",
+      "fieldType": "Integer",
+      "fieldValidateRules": ["min"],
+      "fieldValidateRulesMin": "0"
     }
   ],
   "relationships": [
@@ -29,13 +35,6 @@
       "otherEntityName": "transaction",
       "otherEntityRelationshipName": "category",
       "relationshipName": "transaction"
-    },
-    {
-      "relationshipType": "many-to-one",
-      "otherEntityName": "icon",
-      "otherEntityRelationshipName": "category",
-      "relationshipName": "icon",
-      "otherEntityField": "name"
     },
     {
       "relationshipType": "many-to-one",
@@ -60,5 +59,5 @@
   "readOnly": false,
   "embedded": false,
   "applications": "*",
-  "changelogDate": "20210706023534"
+  "changelogDate": "20210715002822"
 }

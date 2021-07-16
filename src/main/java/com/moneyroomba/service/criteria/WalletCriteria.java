@@ -36,11 +36,11 @@ public class WalletCriteria implements Serializable, Criteria {
 
     private DoubleFilter balance;
 
+    private IntegerFilter icon;
+
     private LongFilter transactionId;
 
     private LongFilter userId;
-
-    private LongFilter iconId;
 
     private LongFilter currencyId;
 
@@ -53,9 +53,9 @@ public class WalletCriteria implements Serializable, Criteria {
         this.inReports = other.inReports == null ? null : other.inReports.copy();
         this.isActive = other.isActive == null ? null : other.isActive.copy();
         this.balance = other.balance == null ? null : other.balance.copy();
+        this.icon = other.icon == null ? null : other.icon.copy();
         this.transactionId = other.transactionId == null ? null : other.transactionId.copy();
         this.userId = other.userId == null ? null : other.userId.copy();
-        this.iconId = other.iconId == null ? null : other.iconId.copy();
         this.currencyId = other.currencyId == null ? null : other.currencyId.copy();
     }
 
@@ -154,6 +154,21 @@ public class WalletCriteria implements Serializable, Criteria {
         this.balance = balance;
     }
 
+    public IntegerFilter getIcon() {
+        return icon;
+    }
+
+    public IntegerFilter icon() {
+        if (icon == null) {
+            icon = new IntegerFilter();
+        }
+        return icon;
+    }
+
+    public void setIcon(IntegerFilter icon) {
+        this.icon = icon;
+    }
+
     public LongFilter getTransactionId() {
         return transactionId;
     }
@@ -182,21 +197,6 @@ public class WalletCriteria implements Serializable, Criteria {
 
     public void setUserId(LongFilter userId) {
         this.userId = userId;
-    }
-
-    public LongFilter getIconId() {
-        return iconId;
-    }
-
-    public LongFilter iconId() {
-        if (iconId == null) {
-            iconId = new LongFilter();
-        }
-        return iconId;
-    }
-
-    public void setIconId(LongFilter iconId) {
-        this.iconId = iconId;
     }
 
     public LongFilter getCurrencyId() {
@@ -230,16 +230,16 @@ public class WalletCriteria implements Serializable, Criteria {
             Objects.equals(inReports, that.inReports) &&
             Objects.equals(isActive, that.isActive) &&
             Objects.equals(balance, that.balance) &&
+            Objects.equals(icon, that.icon) &&
             Objects.equals(transactionId, that.transactionId) &&
             Objects.equals(userId, that.userId) &&
-            Objects.equals(iconId, that.iconId) &&
             Objects.equals(currencyId, that.currencyId)
         );
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, description, inReports, isActive, balance, transactionId, userId, iconId, currencyId);
+        return Objects.hash(id, name, description, inReports, isActive, balance, icon, transactionId, userId, currencyId);
     }
 
     // prettier-ignore
@@ -252,9 +252,9 @@ public class WalletCriteria implements Serializable, Criteria {
             (inReports != null ? "inReports=" + inReports + ", " : "") +
             (isActive != null ? "isActive=" + isActive + ", " : "") +
             (balance != null ? "balance=" + balance + ", " : "") +
+            (icon != null ? "icon=" + icon + ", " : "") +
             (transactionId != null ? "transactionId=" + transactionId + ", " : "") +
             (userId != null ? "userId=" + userId + ", " : "") +
-            (iconId != null ? "iconId=" + iconId + ", " : "") +
             (currencyId != null ? "currencyId=" + currencyId + ", " : "") +
             "}";
     }

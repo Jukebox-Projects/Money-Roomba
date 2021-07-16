@@ -9,7 +9,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.moneyroomba.IntegrationTest;
 import com.moneyroomba.domain.Category;
 import com.moneyroomba.domain.Category;
-import com.moneyroomba.domain.Icon;
 import com.moneyroomba.domain.Transaction;
 import com.moneyroomba.domain.UserDetails;
 import com.moneyroomba.repository.CategoryRepository;
@@ -44,6 +43,10 @@ class CategoryResourceIT {
     private static final Boolean DEFAULT_USER_CREATED = false;
     private static final Boolean UPDATED_USER_CREATED = true;
 
+    private static final Integer DEFAULT_ICON = 0;
+    private static final Integer UPDATED_ICON = 1;
+    private static final Integer SMALLER_ICON = 0 - 1;
+
     private static final String ENTITY_API_URL = "/api/categories";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
 
@@ -68,7 +71,11 @@ class CategoryResourceIT {
      * if they test an entity which requires the current entity.
      */
     public static Category createEntity(EntityManager em) {
-        Category category = new Category().name(DEFAULT_NAME).isActive(DEFAULT_IS_ACTIVE).userCreated(DEFAULT_USER_CREATED);
+        Category category = new Category()
+            .name(DEFAULT_NAME)
+            .isActive(DEFAULT_IS_ACTIVE)
+            .userCreated(DEFAULT_USER_CREATED)
+            .icon(DEFAULT_ICON);
         return category;
     }
 
@@ -79,7 +86,11 @@ class CategoryResourceIT {
      * if they test an entity which requires the current entity.
      */
     public static Category createUpdatedEntity(EntityManager em) {
-        Category category = new Category().name(UPDATED_NAME).isActive(UPDATED_IS_ACTIVE).userCreated(UPDATED_USER_CREATED);
+        Category category = new Category()
+            .name(UPDATED_NAME)
+            .isActive(UPDATED_IS_ACTIVE)
+            .userCreated(UPDATED_USER_CREATED)
+            .icon(UPDATED_ICON);
         return category;
     }
 
@@ -109,6 +120,7 @@ class CategoryResourceIT {
         assertThat(testCategory.getName()).isEqualTo(DEFAULT_NAME);
         assertThat(testCategory.getIsActive()).isEqualTo(DEFAULT_IS_ACTIVE);
         assertThat(testCategory.getUserCreated()).isEqualTo(DEFAULT_USER_CREATED);
+        assertThat(testCategory.getIcon()).isEqualTo(DEFAULT_ICON);
     }
 
     @Test
@@ -214,7 +226,8 @@ class CategoryResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(category.getId().intValue())))
             .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
             .andExpect(jsonPath("$.[*].isActive").value(hasItem(DEFAULT_IS_ACTIVE.booleanValue())))
-            .andExpect(jsonPath("$.[*].userCreated").value(hasItem(DEFAULT_USER_CREATED.booleanValue())));
+            .andExpect(jsonPath("$.[*].userCreated").value(hasItem(DEFAULT_USER_CREATED.booleanValue())))
+            .andExpect(jsonPath("$.[*].icon").value(hasItem(DEFAULT_ICON)));
     }
 
     @Test
@@ -231,7 +244,8 @@ class CategoryResourceIT {
             .andExpect(jsonPath("$.id").value(category.getId().intValue()))
             .andExpect(jsonPath("$.name").value(DEFAULT_NAME))
             .andExpect(jsonPath("$.isActive").value(DEFAULT_IS_ACTIVE.booleanValue()))
-            .andExpect(jsonPath("$.userCreated").value(DEFAULT_USER_CREATED.booleanValue()));
+            .andExpect(jsonPath("$.userCreated").value(DEFAULT_USER_CREATED.booleanValue()))
+            .andExpect(jsonPath("$.icon").value(DEFAULT_ICON));
     }
 
     @Test
@@ -436,6 +450,110 @@ class CategoryResourceIT {
 
     @Test
     @Transactional
+    void getAllCategoriesByIconIsEqualToSomething() throws Exception {
+        // Initialize the database
+        categoryRepository.saveAndFlush(category);
+
+        // Get all the categoryList where icon equals to DEFAULT_ICON
+        defaultCategoryShouldBeFound("icon.equals=" + DEFAULT_ICON);
+
+        // Get all the categoryList where icon equals to UPDATED_ICON
+        defaultCategoryShouldNotBeFound("icon.equals=" + UPDATED_ICON);
+    }
+
+    @Test
+    @Transactional
+    void getAllCategoriesByIconIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        categoryRepository.saveAndFlush(category);
+
+        // Get all the categoryList where icon not equals to DEFAULT_ICON
+        defaultCategoryShouldNotBeFound("icon.notEquals=" + DEFAULT_ICON);
+
+        // Get all the categoryList where icon not equals to UPDATED_ICON
+        defaultCategoryShouldBeFound("icon.notEquals=" + UPDATED_ICON);
+    }
+
+    @Test
+    @Transactional
+    void getAllCategoriesByIconIsInShouldWork() throws Exception {
+        // Initialize the database
+        categoryRepository.saveAndFlush(category);
+
+        // Get all the categoryList where icon in DEFAULT_ICON or UPDATED_ICON
+        defaultCategoryShouldBeFound("icon.in=" + DEFAULT_ICON + "," + UPDATED_ICON);
+
+        // Get all the categoryList where icon equals to UPDATED_ICON
+        defaultCategoryShouldNotBeFound("icon.in=" + UPDATED_ICON);
+    }
+
+    @Test
+    @Transactional
+    void getAllCategoriesByIconIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        categoryRepository.saveAndFlush(category);
+
+        // Get all the categoryList where icon is not null
+        defaultCategoryShouldBeFound("icon.specified=true");
+
+        // Get all the categoryList where icon is null
+        defaultCategoryShouldNotBeFound("icon.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllCategoriesByIconIsGreaterThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        categoryRepository.saveAndFlush(category);
+
+        // Get all the categoryList where icon is greater than or equal to DEFAULT_ICON
+        defaultCategoryShouldBeFound("icon.greaterThanOrEqual=" + DEFAULT_ICON);
+
+        // Get all the categoryList where icon is greater than or equal to UPDATED_ICON
+        defaultCategoryShouldNotBeFound("icon.greaterThanOrEqual=" + UPDATED_ICON);
+    }
+
+    @Test
+    @Transactional
+    void getAllCategoriesByIconIsLessThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        categoryRepository.saveAndFlush(category);
+
+        // Get all the categoryList where icon is less than or equal to DEFAULT_ICON
+        defaultCategoryShouldBeFound("icon.lessThanOrEqual=" + DEFAULT_ICON);
+
+        // Get all the categoryList where icon is less than or equal to SMALLER_ICON
+        defaultCategoryShouldNotBeFound("icon.lessThanOrEqual=" + SMALLER_ICON);
+    }
+
+    @Test
+    @Transactional
+    void getAllCategoriesByIconIsLessThanSomething() throws Exception {
+        // Initialize the database
+        categoryRepository.saveAndFlush(category);
+
+        // Get all the categoryList where icon is less than DEFAULT_ICON
+        defaultCategoryShouldNotBeFound("icon.lessThan=" + DEFAULT_ICON);
+
+        // Get all the categoryList where icon is less than UPDATED_ICON
+        defaultCategoryShouldBeFound("icon.lessThan=" + UPDATED_ICON);
+    }
+
+    @Test
+    @Transactional
+    void getAllCategoriesByIconIsGreaterThanSomething() throws Exception {
+        // Initialize the database
+        categoryRepository.saveAndFlush(category);
+
+        // Get all the categoryList where icon is greater than DEFAULT_ICON
+        defaultCategoryShouldNotBeFound("icon.greaterThan=" + DEFAULT_ICON);
+
+        // Get all the categoryList where icon is greater than SMALLER_ICON
+        defaultCategoryShouldBeFound("icon.greaterThan=" + SMALLER_ICON);
+    }
+
+    @Test
+    @Transactional
     void getAllCategoriesByCategoryIsEqualToSomething() throws Exception {
         // Initialize the database
         categoryRepository.saveAndFlush(category);
@@ -470,25 +588,6 @@ class CategoryResourceIT {
 
         // Get all the categoryList where transaction equals to (transactionId + 1)
         defaultCategoryShouldNotBeFound("transactionId.equals=" + (transactionId + 1));
-    }
-
-    @Test
-    @Transactional
-    void getAllCategoriesByIconIsEqualToSomething() throws Exception {
-        // Initialize the database
-        categoryRepository.saveAndFlush(category);
-        Icon icon = IconResourceIT.createEntity(em);
-        em.persist(icon);
-        em.flush();
-        category.setIcon(icon);
-        categoryRepository.saveAndFlush(category);
-        Long iconId = icon.getId();
-
-        // Get all the categoryList where icon equals to iconId
-        defaultCategoryShouldBeFound("iconId.equals=" + iconId);
-
-        // Get all the categoryList where icon equals to (iconId + 1)
-        defaultCategoryShouldNotBeFound("iconId.equals=" + (iconId + 1));
     }
 
     @Test
@@ -540,7 +639,8 @@ class CategoryResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(category.getId().intValue())))
             .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
             .andExpect(jsonPath("$.[*].isActive").value(hasItem(DEFAULT_IS_ACTIVE.booleanValue())))
-            .andExpect(jsonPath("$.[*].userCreated").value(hasItem(DEFAULT_USER_CREATED.booleanValue())));
+            .andExpect(jsonPath("$.[*].userCreated").value(hasItem(DEFAULT_USER_CREATED.booleanValue())))
+            .andExpect(jsonPath("$.[*].icon").value(hasItem(DEFAULT_ICON)));
 
         // Check, that the count call also returns 1
         restCategoryMockMvc
@@ -588,7 +688,7 @@ class CategoryResourceIT {
         Category updatedCategory = categoryRepository.findById(category.getId()).get();
         // Disconnect from session so that the updates on updatedCategory are not directly saved in db
         em.detach(updatedCategory);
-        updatedCategory.name(UPDATED_NAME).isActive(UPDATED_IS_ACTIVE).userCreated(UPDATED_USER_CREATED);
+        updatedCategory.name(UPDATED_NAME).isActive(UPDATED_IS_ACTIVE).userCreated(UPDATED_USER_CREATED).icon(UPDATED_ICON);
 
         restCategoryMockMvc
             .perform(
@@ -606,6 +706,7 @@ class CategoryResourceIT {
         assertThat(testCategory.getName()).isEqualTo(UPDATED_NAME);
         assertThat(testCategory.getIsActive()).isEqualTo(UPDATED_IS_ACTIVE);
         assertThat(testCategory.getUserCreated()).isEqualTo(UPDATED_USER_CREATED);
+        assertThat(testCategory.getIcon()).isEqualTo(UPDATED_ICON);
     }
 
     @Test
@@ -683,7 +784,7 @@ class CategoryResourceIT {
         Category partialUpdatedCategory = new Category();
         partialUpdatedCategory.setId(category.getId());
 
-        partialUpdatedCategory.name(UPDATED_NAME);
+        partialUpdatedCategory.name(UPDATED_NAME).icon(UPDATED_ICON);
 
         restCategoryMockMvc
             .perform(
@@ -701,6 +802,7 @@ class CategoryResourceIT {
         assertThat(testCategory.getName()).isEqualTo(UPDATED_NAME);
         assertThat(testCategory.getIsActive()).isEqualTo(DEFAULT_IS_ACTIVE);
         assertThat(testCategory.getUserCreated()).isEqualTo(DEFAULT_USER_CREATED);
+        assertThat(testCategory.getIcon()).isEqualTo(UPDATED_ICON);
     }
 
     @Test
@@ -715,7 +817,7 @@ class CategoryResourceIT {
         Category partialUpdatedCategory = new Category();
         partialUpdatedCategory.setId(category.getId());
 
-        partialUpdatedCategory.name(UPDATED_NAME).isActive(UPDATED_IS_ACTIVE).userCreated(UPDATED_USER_CREATED);
+        partialUpdatedCategory.name(UPDATED_NAME).isActive(UPDATED_IS_ACTIVE).userCreated(UPDATED_USER_CREATED).icon(UPDATED_ICON);
 
         restCategoryMockMvc
             .perform(
@@ -733,6 +835,7 @@ class CategoryResourceIT {
         assertThat(testCategory.getName()).isEqualTo(UPDATED_NAME);
         assertThat(testCategory.getIsActive()).isEqualTo(UPDATED_IS_ACTIVE);
         assertThat(testCategory.getUserCreated()).isEqualTo(UPDATED_USER_CREATED);
+        assertThat(testCategory.getIcon()).isEqualTo(UPDATED_ICON);
     }
 
     @Test

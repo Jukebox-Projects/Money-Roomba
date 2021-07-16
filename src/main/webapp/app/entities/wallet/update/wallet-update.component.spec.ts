@@ -11,8 +11,6 @@ import { WalletService } from '../service/wallet.service';
 import { IWallet, Wallet } from '../wallet.model';
 import { IUserDetails } from 'app/entities/user-details/user-details.model';
 import { UserDetailsService } from 'app/entities/user-details/service/user-details.service';
-import { IIcon } from 'app/entities/icon/icon.model';
-import { IconService } from 'app/entities/icon/service/icon.service';
 import { ICurrency } from 'app/entities/currency/currency.model';
 import { CurrencyService } from 'app/entities/currency/service/currency.service';
 
@@ -25,7 +23,6 @@ describe('Component Tests', () => {
     let activatedRoute: ActivatedRoute;
     let walletService: WalletService;
     let userDetailsService: UserDetailsService;
-    let iconService: IconService;
     let currencyService: CurrencyService;
 
     beforeEach(() => {
@@ -41,7 +38,6 @@ describe('Component Tests', () => {
       activatedRoute = TestBed.inject(ActivatedRoute);
       walletService = TestBed.inject(WalletService);
       userDetailsService = TestBed.inject(UserDetailsService);
-      iconService = TestBed.inject(IconService);
       currencyService = TestBed.inject(CurrencyService);
 
       comp = fixture.componentInstance;
@@ -70,25 +66,6 @@ describe('Component Tests', () => {
         expect(comp.userDetailsSharedCollection).toEqual(expectedCollection);
       });
 
-      it('Should call Icon query and add missing value', () => {
-        const wallet: IWallet = { id: 456 };
-        const icon: IIcon = { id: 36036 };
-        wallet.icon = icon;
-
-        const iconCollection: IIcon[] = [{ id: 61859 }];
-        jest.spyOn(iconService, 'query').mockReturnValue(of(new HttpResponse({ body: iconCollection })));
-        const additionalIcons = [icon];
-        const expectedCollection: IIcon[] = [...additionalIcons, ...iconCollection];
-        jest.spyOn(iconService, 'addIconToCollectionIfMissing').mockReturnValue(expectedCollection);
-
-        activatedRoute.data = of({ wallet });
-        comp.ngOnInit();
-
-        expect(iconService.query).toHaveBeenCalled();
-        expect(iconService.addIconToCollectionIfMissing).toHaveBeenCalledWith(iconCollection, ...additionalIcons);
-        expect(comp.iconsSharedCollection).toEqual(expectedCollection);
-      });
-
       it('Should call Currency query and add missing value', () => {
         const wallet: IWallet = { id: 456 };
         const currency: ICurrency = { id: 24490 };
@@ -112,8 +89,6 @@ describe('Component Tests', () => {
         const wallet: IWallet = { id: 456 };
         const user: IUserDetails = { id: 30871 };
         wallet.user = user;
-        const icon: IIcon = { id: 64237 };
-        wallet.icon = icon;
         const currency: ICurrency = { id: 29149 };
         wallet.currency = currency;
 
@@ -122,7 +97,6 @@ describe('Component Tests', () => {
 
         expect(comp.editForm.value).toEqual(expect.objectContaining(wallet));
         expect(comp.userDetailsSharedCollection).toContain(user);
-        expect(comp.iconsSharedCollection).toContain(icon);
         expect(comp.currenciesSharedCollection).toContain(currency);
       });
     });
@@ -196,14 +170,6 @@ describe('Component Tests', () => {
         it('Should return tracked UserDetails primary key', () => {
           const entity = { id: 123 };
           const trackResult = comp.trackUserDetailsById(0, entity);
-          expect(trackResult).toEqual(entity.id);
-        });
-      });
-
-      describe('trackIconById', () => {
-        it('Should return tracked Icon primary key', () => {
-          const entity = { id: 123 };
-          const trackResult = comp.trackIconById(0, entity);
           expect(trackResult).toEqual(entity.id);
         });
       });

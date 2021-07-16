@@ -35,6 +35,11 @@ public class Currency implements Serializable {
     @Column(name = "conversion_rate", nullable = false)
     private Float conversionRate;
 
+    @NotNull
+    @Size(max = 5)
+    @Column(name = "symbol", length = 5, nullable = false)
+    private String symbol;
+
     @OneToMany(mappedBy = "currency")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(value = { "attachment", "wallet", "currency", "category", "sourceUser" }, allowSetters = true)
@@ -47,7 +52,7 @@ public class Currency implements Serializable {
 
     @OneToMany(mappedBy = "currency")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @JsonIgnoreProperties(value = { "transactions", "user", "icon", "currency" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "transactions", "user", "currency" }, allowSetters = true)
     private Set<Wallet> wallets = new HashSet<>();
 
     @OneToMany(mappedBy = "currency")
@@ -106,6 +111,19 @@ public class Currency implements Serializable {
 
     public void setConversionRate(Float conversionRate) {
         this.conversionRate = conversionRate;
+    }
+
+    public String getSymbol() {
+        return this.symbol;
+    }
+
+    public Currency symbol(String symbol) {
+        this.symbol = symbol;
+        return this;
+    }
+
+    public void setSymbol(String symbol) {
+        this.symbol = symbol;
     }
 
     public Set<Transaction> getTransactions() {
@@ -259,6 +277,7 @@ public class Currency implements Serializable {
             ", code='" + getCode() + "'" +
             ", name='" + getName() + "'" +
             ", conversionRate=" + getConversionRate() +
+            ", symbol='" + getSymbol() + "'" +
             "}";
     }
 }

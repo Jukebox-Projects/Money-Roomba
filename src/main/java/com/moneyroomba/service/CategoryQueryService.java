@@ -90,6 +90,9 @@ public class CategoryQueryService extends QueryService<Category> {
             if (criteria.getUserCreated() != null) {
                 specification = specification.and(buildSpecification(criteria.getUserCreated(), Category_.userCreated));
             }
+            if (criteria.getIcon() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getIcon(), Category_.icon));
+            }
             if (criteria.getCategoryId() != null) {
                 specification =
                     specification.and(
@@ -106,12 +109,6 @@ public class CategoryQueryService extends QueryService<Category> {
                             criteria.getTransactionId(),
                             root -> root.join(Category_.transactions, JoinType.LEFT).get(Transaction_.id)
                         )
-                    );
-            }
-            if (criteria.getIconId() != null) {
-                specification =
-                    specification.and(
-                        buildSpecification(criteria.getIconId(), root -> root.join(Category_.icon, JoinType.LEFT).get(Icon_.id))
                     );
             }
             if (criteria.getParentId() != null) {

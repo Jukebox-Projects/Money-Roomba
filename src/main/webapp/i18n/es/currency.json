@@ -21,6 +21,7 @@
       "code": "Code",
       "name": "Name",
       "conversionRate": "Conversion Rate",
+      "symbol": "Symbol",
       "transaction": "Transaction",
       "scheduledTransaction": "Scheduled Transaction",
       "wallet": "Wallet",

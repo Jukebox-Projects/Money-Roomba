@@ -41,6 +41,7 @@
           <th scope="col"><span jhiTranslate="moneyRoombaApp.userDetails.isTemporaryPassword">Is Temporary Password</span></th>
           <th scope="col"><span jhiTranslate="moneyRoombaApp.userDetails.internalUser">Internal User</span></th>
           <th scope="col"><span jhiTranslate="moneyRoombaApp.userDetails.license">License</span></th>
+          <th scope="col"><span jhiTranslate="moneyRoombaApp.userDetails.targetContact">Target Contact</span></th>
           <th scope="col"><span jhiTranslate="moneyRoombaApp.userDetails.contact">Contact</span></th>
           <th scope="col"></th>
         </tr>
@@ -63,6 +64,12 @@
             <div *ngIf="userDetails.license">
               <a [routerLink]="['/license', userDetails.license?.id, 'view']">{{ userDetails.license?.id }}</a>
             </div>
+          </td>
+          <td>
+            <span *ngFor="let targetContact of userDetails.targetContacts; let last = last">
+              <a class="form-control-static" [routerLink]="['/user-details', targetContact.id, 'view']">{{ targetContact.id }}</a
+              >{{ last ? '' : ', ' }}
+            </span>
           </td>
           <td>
             <div *ngIf="userDetails.contact">
