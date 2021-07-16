@@ -1,11 +1,11 @@
-id;name;is_active;user_created
-1;Mesa;false;true
-2;Normas;false;true
-3;Guapa metrics e-commerce;false;true
-4;transmitting Berkshire Planificador;false;true
-5;Acero transmitting Comunidad;true;false
-6;interfaces Electrónica;false;true
-7;Sabroso methodologies Public-key;true;false
-8;Blanco Loan Videojuegos;true;false
-9;visionary;false;true
-10;arquitectura;true;true
+id;name;is_active;user_created;icon
+1;Mesa;false;true;24103
+2;Violeta transmit SCSI;true;false;41701
+3;Videojuegos Interno;true;true;38427
+4;Planificador;false;true;69811
+5;Electrónica;true;false;59168
+6;Ensalada killer;false;false;17869
+7;Organizado Sabroso;false;true;54496
+8;array;false;true;19578
+9;Extremadura deposit;true;true;49187
+10;visionary;false;true;24965

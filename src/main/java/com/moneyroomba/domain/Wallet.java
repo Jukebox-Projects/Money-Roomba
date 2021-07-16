@@ -42,21 +42,33 @@ public class Wallet implements Serializable {
     @Column(name = "balance", nullable = false)
     private Double balance;
 
+    @Min(value = 0)
+    @Column(name = "icon")
+    private Integer icon;
+
     @OneToMany(mappedBy = "wallet")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(value = { "attachment", "wallet", "currency", "category", "sourceUser" }, allowSetters = true)
     private Set<Transaction> transactions = new HashSet<>();
 
-    @ManyToOne
+    @ManyToOne(optional = false)
+    @NotNull
     @JsonIgnoreProperties(
-        value = { "internalUser", "license", "wallets", "categories", "events", "transactions", "userDetails", "contact" },
+        value = {
+            "internalUser",
+            "license",
+            "wallets",
+            "categories",
+            "events",
+            "transactions",
+            "userDetails",
+            "targetContacts",
+            "contact",
+            "sourceContacts",
+        },
         allowSetters = true
     )
     private UserDetails user;
-
-    @ManyToOne
-    @JsonIgnoreProperties(value = { "categories", "wallets" }, allowSetters = true)
-    private Icon icon;
 
     @ManyToOne
     @JsonIgnoreProperties(value = { "transactions", "scheduledTransactions", "wallets", "invoices" }, allowSetters = true)
@@ -141,6 +153,19 @@ public class Wallet implements Serializable {
         this.balance = balance;
     }
 
+    public Integer getIcon() {
+        return this.icon;
+    }
+
+    public Wallet icon(Integer icon) {
+        this.icon = icon;
+        return this;
+    }
+
+    public void setIcon(Integer icon) {
+        this.icon = icon;
+    }
+
     public Set<Transaction> getTransactions() {
         return this.transactions;
     }
@@ -185,19 +210,6 @@ public class Wallet implements Serializable {
         this.user = userDetails;
     }
 
-    public Icon getIcon() {
-        return this.icon;
-    }
-
-    public Wallet icon(Icon icon) {
-        this.setIcon(icon);
-        return this;
-    }
-
-    public void setIcon(Icon icon) {
-        this.icon = icon;
-    }
-
     public Currency getCurrency() {
         return this.currency;
     }
@@ -240,6 +252,7 @@ public class Wallet implements Serializable {
             ", inReports='" + getInReports() + "'" +
             ", isActive='" + getIsActive() + "'" +
             ", balance=" + getBalance() +
+            ", icon=" + getIcon() +
             "}";
     }
 }

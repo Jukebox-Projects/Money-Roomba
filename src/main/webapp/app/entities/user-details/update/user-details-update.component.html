@@ -144,6 +144,25 @@
         </div>
 
         <div class="form-group">
+          <label jhiTranslate="moneyRoombaApp.userDetails.targetContact" for="field_targetContacts">Target Contact</label>
+          <select
+            class="form-control"
+            id="field_targetContacts"
+            data-cy="targetContact"
+            multiple
+            name="targetContacts"
+            formControlName="targetContacts"
+          >
+            <option
+              [ngValue]="getSelectedUserDetails(userDetailsOption, editForm.get('targetContacts')!.value)"
+              *ngFor="let userDetailsOption of userDetailsSharedCollection; trackBy: trackUserDetailsById"
+            >
+              {{ userDetailsOption.id }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
           <label class="form-control-label" jhiTranslate="moneyRoombaApp.userDetails.contact" for="field_contact">Contact</label>
           <select class="form-control" id="field_contact" data-cy="contact" name="contact" formControlName="contact">
             <option [ngValue]="null"></option>

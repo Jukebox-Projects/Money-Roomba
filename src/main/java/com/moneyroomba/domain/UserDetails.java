@@ -57,12 +57,12 @@ public class UserDetails implements Serializable {
 
     @OneToMany(mappedBy = "user")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @JsonIgnoreProperties(value = { "transactions", "user", "icon", "currency" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "transactions", "user", "currency" }, allowSetters = true)
     private Set<Wallet> wallets = new HashSet<>();
 
     @OneToMany(mappedBy = "user")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @JsonIgnoreProperties(value = { "categories", "transactions", "icon", "parent", "user" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "categories", "transactions", "parent", "user" }, allowSetters = true)
     private Set<Category> categories = new HashSet<>();
 
     @OneToMany(mappedBy = "user")
@@ -78,17 +78,82 @@ public class UserDetails implements Serializable {
     @OneToMany(mappedBy = "contact")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(
-        value = { "internalUser", "license", "wallets", "categories", "events", "transactions", "userDetails", "contact" },
+        value = {
+            "internalUser",
+            "license",
+            "wallets",
+            "categories",
+            "events",
+            "transactions",
+            "userDetails",
+            "targetContacts",
+            "contact",
+            "sourceContacts",
+        },
         allowSetters = true
     )
     private Set<UserDetails> userDetails = new HashSet<>();
 
+    @ManyToMany
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @JoinTable(
+        name = "rel_t_user__target_contact",
+        joinColumns = @JoinColumn(name = "t_user_id"),
+        inverseJoinColumns = @JoinColumn(name = "target_contact_id")
+    )
+    @JsonIgnoreProperties(
+        value = {
+            "internalUser",
+            "license",
+            "wallets",
+            "categories",
+            "events",
+            "transactions",
+            "userDetails",
+            "targetContacts",
+            "contact",
+            "sourceContacts",
+        },
+        allowSetters = true
+    )
+    private Set<UserDetails> targetContacts = new HashSet<>();
+
     @ManyToOne
     @JsonIgnoreProperties(
-        value = { "internalUser", "license", "wallets", "categories", "events", "transactions", "userDetails", "contact" },
+        value = {
+            "internalUser",
+            "license",
+            "wallets",
+            "categories",
+            "events",
+            "transactions",
+            "userDetails",
+            "targetContacts",
+            "contact",
+            "sourceContacts",
+        },
         allowSetters = true
     )
     private UserDetails contact;
+
+    @ManyToMany(mappedBy = "targetContacts")
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @JsonIgnoreProperties(
+        value = {
+            "internalUser",
+            "license",
+            "wallets",
+            "categories",
+            "events",
+            "transactions",
+            "userDetails",
+            "targetContacts",
+            "contact",
+            "sourceContacts",
+        },
+        allowSetters = true
+    )
+    private Set<UserDetails> sourceContacts = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
     public Long getId() {
@@ -363,6 +428,31 @@ public class UserDetails implements Serializable {
         this.userDetails = userDetails;
     }
 
+    public Set<UserDetails> getTargetContacts() {
+        return this.targetContacts;
+    }
+
+    public UserDetails targetContacts(Set<UserDetails> userDetails) {
+        this.setTargetContacts(userDetails);
+        return this;
+    }
+
+    public UserDetails addTargetContact(UserDetails userDetails) {
+        this.targetContacts.add(userDetails);
+        userDetails.getSourceContacts().add(this);
+        return this;
+    }
+
+    public UserDetails removeTargetContact(UserDetails userDetails) {
+        this.targetContacts.remove(userDetails);
+        userDetails.getSourceContacts().remove(this);
+        return this;
+    }
+
+    public void setTargetContacts(Set<UserDetails> userDetails) {
+        this.targetContacts = userDetails;
+    }
+
     public UserDetails getContact() {
         return this.contact;
     }
@@ -374,6 +464,37 @@ public class UserDetails implements Serializable {
 
     public void setContact(UserDetails userDetails) {
         this.contact = userDetails;
+    }
+
+    public Set<UserDetails> getSourceContacts() {
+        return this.sourceContacts;
+    }
+
+    public UserDetails sourceContacts(Set<UserDetails> userDetails) {
+        this.setSourceContacts(userDetails);
+        return this;
+    }
+
+    public UserDetails addSourceContact(UserDetails userDetails) {
+        this.sourceContacts.add(userDetails);
+        userDetails.getTargetContacts().add(this);
+        return this;
+    }
+
+    public UserDetails removeSourceContact(UserDetails userDetails) {
+        this.sourceContacts.remove(userDetails);
+        userDetails.getTargetContacts().remove(this);
+        return this;
+    }
+
+    public void setSourceContacts(Set<UserDetails> userDetails) {
+        if (this.sourceContacts != null) {
+            this.sourceContacts.forEach(i -> i.removeTargetContact(this));
+        }
+        if (userDetails != null) {
+            userDetails.forEach(i -> i.addTargetContact(this));
+        }
+        this.sourceContacts = userDetails;
     }
 
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here

@@ -67,6 +67,7 @@
       "relationshipType": "many-to-one",
       "otherEntityName": "wallet",
       "otherEntityRelationshipName": "transaction",
+      "relationshipValidateRules": "required",
       "relationshipName": "wallet",
       "otherEntityField": "name"
     },
@@ -100,5 +101,5 @@
   "readOnly": false,
   "embedded": false,
   "applications": "*",
-  "changelogDate": "20210706023530"
+  "changelogDate": "20210715002818"
 }

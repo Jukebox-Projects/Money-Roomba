@@ -57,6 +57,9 @@ public class CurrencyService {
                     if (currency.getConversionRate() != null) {
                         existingCurrency.setConversionRate(currency.getConversionRate());
                     }
+                    if (currency.getSymbol() != null) {
+                        existingCurrency.setSymbol(currency.getSymbol());
+                    }
 
                     return existingCurrency;
                 }
