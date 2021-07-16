@@ -324,6 +324,18 @@ public class UserService {
                     user.setLangKey(userDTO.getLangKey());
                     Set<Authority> managedAuthorities = user.getAuthorities();
                     managedAuthorities.clear();
+
+                    userDetailsRepository
+                        .findOneByInternalUserId(user.getId())
+                        .ifPresent(
+                            userDetails -> {
+                                userDetails.setPhone(userDTO.getPhone());
+                                userDetails.setCountry(userDTO.getCountry());
+                                userDetails.setNotifications(userDTO.getNotifications());
+                                log.debug("Changed Information for UserDetails: {}", userDetails);
+                            }
+                        );
+
                     userDTO
                         .getAuthorities()
                         .stream()
@@ -362,7 +374,16 @@ public class UserService {
      * @param langKey   language key.
      * @param imageUrl  image URL of user.
      */
-    public void updateUser(String firstName, String lastName, String email, String langKey, String imageUrl, String phone, String country) {
+    public void updateUser(
+        String firstName,
+        String lastName,
+        String email,
+        String langKey,
+        String imageUrl,
+        String phone,
+        String country,
+        boolean notification
+    ) {
         SecurityUtils
             .getCurrentUserLogin()
             .flatMap(userRepository::findOneByLogin)
@@ -383,6 +404,7 @@ public class UserService {
                             userDetails -> {
                                 userDetails.setPhone(phone);
                                 userDetails.setCountry(country);
+                                userDetails.setNotifications(notification);
                                 log.debug("Changed Information for UserDetails: {}", userDetails);
                             }
                         );
