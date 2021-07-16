@@ -413,6 +413,13 @@
           />
         </div>
 
+        <div class="form-check">
+          <label class="form-check-label" for="notifications">
+            <input class="form-check-input" type="checkbox" id="notifications" name="notifications" formControlName="notifications" />
+            <span jhiTranslate="userManagement.notifications">Notifications</span>
+          </label>
+        </div>
+
         <div class="form-group" *ngIf="languages && languages.length > 0">
           <label for="langKey" jhiTranslate="settings.form.language">Language</label>
           <select class="form-control" id="langKey" name="langKey" formControlName="langKey" data-cy="langKey">
@@ -429,10 +436,13 @@
         >
           Save
         </button>
-        <button type="submit" (click)="delete()" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
-          <fa-icon icon="times"></fa-icon>
-          <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
-        </button>
+
+        <div class="btn-group">
+          <button type="button" (click)="delete()" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
+            <fa-icon icon="times"></fa-icon>
+            <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
+          </button>
+        </div>
       </form>
     </div>
   </div>
