@@ -71,16 +71,6 @@ export class SettingsComponent implements OnInit {
     });
   }
 
-  delete(): void {
-    const modalRef = this.modalService.open(AccountDeleteDialogComponent, { size: 'lg', backdrop: 'static' });
-    // unsubscribe not needed because closed completes on modal close
-    modalRef.closed.subscribe(reason => {
-      if (reason === 'deleted') {
-        //cambiar con logout
-      }
-    });
-  }
-
   save(): void {
     this.success = false;
 
