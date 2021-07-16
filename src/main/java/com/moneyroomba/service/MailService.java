@@ -127,6 +127,12 @@ public class MailService {
     }
 
     @Async
+    public void sendAdminCreationEmail(User user, String password) {
+        log.debug("Sending admin creation email to '{}'", user.getEmail());
+        sendEmailFromTemplate(user, password, "mail/userCreationAdmin", "email.activation.title");
+    }
+
+    @Async
     public void sendPasswordResetMail(User user) {
         log.debug("Sending password reset email to '{}'", user.getEmail());
         sendEmailFromTemplate(user, "mail/passwordResetEmail", "email.reset.title");
