@@ -5,6 +5,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ITransaction } from '../transaction.model';
 import { TransactionService } from '../service/transaction.service';
 import { TransactionDeleteDialogComponent } from '../delete/transaction-delete-dialog.component';
+import { IWallet } from '../../wallet/wallet.model';
 
 @Component({
   selector: 'jhi-transaction',
@@ -12,7 +13,9 @@ import { TransactionDeleteDialogComponent } from '../delete/transaction-delete-d
 })
 export class TransactionComponent implements OnInit {
   transactions?: ITransaction[];
+  allTransactions?: IWallet[];
   isLoading = false;
+  inputText = '';
 
   constructor(protected transactionService: TransactionService, protected modalService: NgbModal) {}
 
@@ -36,6 +39,22 @@ export class TransactionComponent implements OnInit {
 
   trackId(index: number, item: ITransaction): number {
     return item.id!;
+  }
+
+  filterTransactions(): void {
+    /* eslint-disable no-console */
+    if (this.transactions !== undefined) {
+      this.transactions = this.transactions.filter(transaction => {
+        if (transaction.name !== undefined) {
+          return transaction.name.toLowerCase().includes(this.inputText.toLowerCase());
+        } else {
+          return false;
+        }
+      });
+    }
+    if (this.inputText === '') {
+      this.transactions = this.allTransactions;
+    }
   }
 
   delete(transaction: ITransaction): void {
