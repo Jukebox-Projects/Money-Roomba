@@ -23,7 +23,10 @@
             <column name="conversion_rate" type="${floatType}">
                 <constraints nullable="false" />
             </column>
-            <column name="symbol" type="varchar(5)">
+            <column name="admin_created" type="boolean">
+                <constraints nullable="false" />
+            </column>
+            <column name="is_active" type="boolean">
                 <constraints nullable="false" />
             </column>
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here -->
@@ -49,7 +52,8 @@
             <column name="code" type="string"/>
             <column name="name" type="string"/>
             <column name="conversion_rate" type="numeric"/>
-            <column name="symbol" type="string"/>
+            <column name="admin_created" type="boolean"/>
+            <column name="is_active" type="boolean"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here -->
         </loadData>
     </changeSet>
