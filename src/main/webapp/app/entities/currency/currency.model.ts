@@ -8,7 +8,8 @@ export interface ICurrency {
   code?: string;
   name?: string;
   conversionRate?: number;
-  symbol?: string;
+  adminCreated?: boolean;
+  isActive?: boolean;
   transactions?: ITransaction[] | null;
   scheduledTransactions?: IScheduledTransaction[] | null;
   wallets?: IWallet[] | null;
@@ -21,12 +22,16 @@ export class Currency implements ICurrency {
     public code?: string,
     public name?: string,
     public conversionRate?: number,
-    public symbol?: string,
+    public adminCreated?: boolean,
+    public isActive?: boolean,
     public transactions?: ITransaction[] | null,
     public scheduledTransactions?: IScheduledTransaction[] | null,
     public wallets?: IWallet[] | null,
     public invoices?: IInvoice[] | null
-  ) {}
+  ) {
+    this.adminCreated = this.adminCreated ?? false;
+    this.isActive = this.isActive ?? false;
+  }
 }
 
 export function getCurrencyIdentifier(currency: ICurrency): number | undefined {

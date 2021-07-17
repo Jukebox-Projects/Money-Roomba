@@ -1,11 +1,11 @@
-id;code;name;conversion_rate;symbol
-1;architectures Infraestructura Manat;transmit;95413;neura
-2;Lanka;IB real Sabroso;12694;vorta
-3;Comunidad Granito;Dollar Ingeniero Bebes;40511;clien
-4;navigating neural;Account Avon Raton;88285;onlin
-5;metodologías Ladrillo deposit;synthesizing;34370;Total
-6;Borders;haptic Representante optical;95858;Cine
-7;Identidad;Guapa;87534;prima
-8;Patatas Oficial Juguetería;Gris invoice;95472;Clona
-9;override;grupo HDD;88329;feed 
-10;incubate;modular calculate web;4106;Artes
+id;code;name;conversion_rate;admin_created;is_active
+1;architectures Infraestructura Manat;transmit;95413;true;true
+2;invoice withdrawal Metal;IB real Sabroso;12694;true;false
+3;Borders Amarillo;Loan;39271;false;true
+4;móbil Dollar;transicional Borders Money;48144;false;true
+5;next-generation Queso terciaria;Home;27268;false;false
+6;Ensalada Adelante Blanco;Asimilado;90547;false;true
+7;Ladrillo deposit protocolo;revolutionary;89928;false;false
+8;Account haptic;Aplicaciones AGP Rojo;6456;false;true
+9;backing quantifying;primary;85123;false;true
+10;Oficial Juguetería;Gris invoice;95472;false;false

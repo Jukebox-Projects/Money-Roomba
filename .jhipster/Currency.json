@@ -17,10 +17,14 @@
       "fieldValidateRules": ["required"]
     },
     {
-      "fieldName": "symbol",
-      "fieldType": "String",
-      "fieldValidateRules": ["maxlength", "required"],
-      "fieldValidateRulesMaxlength": "5"
+      "fieldName": "adminCreated",
+      "fieldType": "Boolean",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "isActive",
+      "fieldType": "Boolean",
+      "fieldValidateRules": ["required"]
     }
   ],
   "relationships": [

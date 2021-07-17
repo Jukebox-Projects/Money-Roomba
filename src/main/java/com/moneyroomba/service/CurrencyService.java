@@ -57,8 +57,11 @@ public class CurrencyService {
                     if (currency.getConversionRate() != null) {
                         existingCurrency.setConversionRate(currency.getConversionRate());
                     }
-                    if (currency.getSymbol() != null) {
-                        existingCurrency.setSymbol(currency.getSymbol());
+                    if (currency.getAdminCreated() != null) {
+                        existingCurrency.setAdminCreated(currency.getAdminCreated());
+                    }
+                    if (currency.getIsActive() != null) {
+                        existingCurrency.setIsActive(currency.getIsActive());
                     }
 
                     return existingCurrency;
