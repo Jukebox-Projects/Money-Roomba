@@ -7,10 +7,8 @@ import { finalize, map } from 'rxjs/operators';
 
 import { IWallet, Wallet } from '../wallet.model';
 import { WalletService } from '../service/wallet.service';
-import { IUserDetails } from 'app/entities/user-details/user-details.model';
+import { IUserDetails, UserDetails } from 'app/entities/user-details/user-details.model';
 import { UserDetailsService } from 'app/entities/user-details/service/user-details.service';
-import { IIcon } from 'app/entities/icon/icon.model';
-import { IconService } from 'app/entities/icon/service/icon.service';
 import { ICurrency } from 'app/entities/currency/currency.model';
 import { CurrencyService } from 'app/entities/currency/service/currency.service';
 
@@ -22,7 +20,6 @@ export class WalletUpdateComponent implements OnInit {
   isSaving = false;
 
   userDetailsSharedCollection: IUserDetails[] = [];
-  iconsSharedCollection: IIcon[] = [];
   currenciesSharedCollection: ICurrency[] = [];
 
   editForm = this.fb.group({
@@ -32,15 +29,14 @@ export class WalletUpdateComponent implements OnInit {
     inReports: [null, [Validators.required]],
     isActive: [null, [Validators.required]],
     balance: [null, [Validators.required]],
+    icon: [null, [Validators.min(0)]],
     user: [],
-    icon: [],
     currency: [],
   });
 
   constructor(
     protected walletService: WalletService,
     protected userDetailsService: UserDetailsService,
-    protected iconService: IconService,
     protected currencyService: CurrencyService,
     protected activatedRoute: ActivatedRoute,
     protected fb: FormBuilder
@@ -69,10 +65,6 @@ export class WalletUpdateComponent implements OnInit {
   }
 
   trackUserDetailsById(index: number, item: IUserDetails): number {
-    return item.id!;
-  }
-
-  trackIconById(index: number, item: IIcon): number {
     return item.id!;
   }
 
@@ -107,8 +99,8 @@ export class WalletUpdateComponent implements OnInit {
       inReports: wallet.inReports,
       isActive: wallet.isActive,
       balance: wallet.balance,
-      user: wallet.user,
       icon: wallet.icon,
+      user: wallet.user,
       currency: wallet.currency,
     });
 
@@ -116,7 +108,6 @@ export class WalletUpdateComponent implements OnInit {
       this.userDetailsSharedCollection,
       wallet.user
     );
-    this.iconsSharedCollection = this.iconService.addIconToCollectionIfMissing(this.iconsSharedCollection, wallet.icon);
     this.currenciesSharedCollection = this.currencyService.addCurrencyToCollectionIfMissing(
       this.currenciesSharedCollection,
       wallet.currency
@@ -133,12 +124,6 @@ export class WalletUpdateComponent implements OnInit {
         )
       )
       .subscribe((userDetails: IUserDetails[]) => (this.userDetailsSharedCollection = userDetails));
-
-    this.iconService
-      .query()
-      .pipe(map((res: HttpResponse<IIcon[]>) => res.body ?? []))
-      .pipe(map((icons: IIcon[]) => this.iconService.addIconToCollectionIfMissing(icons, this.editForm.get('icon')!.value)))
-      .subscribe((icons: IIcon[]) => (this.iconsSharedCollection = icons));
 
     this.currencyService
       .query()
@@ -160,8 +145,8 @@ export class WalletUpdateComponent implements OnInit {
       inReports: this.editForm.get(['inReports'])!.value,
       isActive: this.editForm.get(['isActive'])!.value,
       balance: this.editForm.get(['balance'])!.value,
-      user: this.editForm.get(['user'])!.value,
       icon: this.editForm.get(['icon'])!.value,
+      user: new UserDetails(),
       currency: this.editForm.get(['currency'])!.value,
     };
   }

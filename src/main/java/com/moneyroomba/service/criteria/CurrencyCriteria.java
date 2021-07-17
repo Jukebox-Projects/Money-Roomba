@@ -32,6 +32,10 @@ public class CurrencyCriteria implements Serializable, Criteria {
 
     private FloatFilter conversionRate;
 
+    private BooleanFilter adminCreated;
+
+    private BooleanFilter isActive;
+
     private LongFilter transactionId;
 
     private LongFilter scheduledTransactionId;
@@ -47,6 +51,8 @@ public class CurrencyCriteria implements Serializable, Criteria {
         this.code = other.code == null ? null : other.code.copy();
         this.name = other.name == null ? null : other.name.copy();
         this.conversionRate = other.conversionRate == null ? null : other.conversionRate.copy();
+        this.adminCreated = other.adminCreated == null ? null : other.adminCreated.copy();
+        this.isActive = other.isActive == null ? null : other.isActive.copy();
         this.transactionId = other.transactionId == null ? null : other.transactionId.copy();
         this.scheduledTransactionId = other.scheduledTransactionId == null ? null : other.scheduledTransactionId.copy();
         this.walletId = other.walletId == null ? null : other.walletId.copy();
@@ -116,6 +122,36 @@ public class CurrencyCriteria implements Serializable, Criteria {
 
     public void setConversionRate(FloatFilter conversionRate) {
         this.conversionRate = conversionRate;
+    }
+
+    public BooleanFilter getAdminCreated() {
+        return adminCreated;
+    }
+
+    public BooleanFilter adminCreated() {
+        if (adminCreated == null) {
+            adminCreated = new BooleanFilter();
+        }
+        return adminCreated;
+    }
+
+    public void setAdminCreated(BooleanFilter adminCreated) {
+        this.adminCreated = adminCreated;
+    }
+
+    public BooleanFilter getIsActive() {
+        return isActive;
+    }
+
+    public BooleanFilter isActive() {
+        if (isActive == null) {
+            isActive = new BooleanFilter();
+        }
+        return isActive;
+    }
+
+    public void setIsActive(BooleanFilter isActive) {
+        this.isActive = isActive;
     }
 
     public LongFilter getTransactionId() {
@@ -192,6 +228,8 @@ public class CurrencyCriteria implements Serializable, Criteria {
             Objects.equals(code, that.code) &&
             Objects.equals(name, that.name) &&
             Objects.equals(conversionRate, that.conversionRate) &&
+            Objects.equals(adminCreated, that.adminCreated) &&
+            Objects.equals(isActive, that.isActive) &&
             Objects.equals(transactionId, that.transactionId) &&
             Objects.equals(scheduledTransactionId, that.scheduledTransactionId) &&
             Objects.equals(walletId, that.walletId) &&
@@ -201,7 +239,18 @@ public class CurrencyCriteria implements Serializable, Criteria {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, code, name, conversionRate, transactionId, scheduledTransactionId, walletId, invoiceId);
+        return Objects.hash(
+            id,
+            code,
+            name,
+            conversionRate,
+            adminCreated,
+            isActive,
+            transactionId,
+            scheduledTransactionId,
+            walletId,
+            invoiceId
+        );
     }
 
     // prettier-ignore
@@ -212,6 +261,8 @@ public class CurrencyCriteria implements Serializable, Criteria {
             (code != null ? "code=" + code + ", " : "") +
             (name != null ? "name=" + name + ", " : "") +
             (conversionRate != null ? "conversionRate=" + conversionRate + ", " : "") +
+            (adminCreated != null ? "adminCreated=" + adminCreated + ", " : "") +
+            (isActive != null ? "isActive=" + isActive + ", " : "") +
             (transactionId != null ? "transactionId=" + transactionId + ", " : "") +
             (scheduledTransactionId != null ? "scheduledTransactionId=" + scheduledTransactionId + ", " : "") +
             (walletId != null ? "walletId=" + walletId + ", " : "") +

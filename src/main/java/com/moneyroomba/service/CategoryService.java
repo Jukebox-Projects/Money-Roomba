@@ -71,6 +71,9 @@ public class CategoryService {
                     if (category.getUserCreated() != null) {
                         existingCategory.setUserCreated(category.getUserCreated());
                     }
+                    if (category.getIcon() != null) {
+                        existingCategory.setIcon(category.getIcon());
+                    }
 
                     return existingCategory;
                 }

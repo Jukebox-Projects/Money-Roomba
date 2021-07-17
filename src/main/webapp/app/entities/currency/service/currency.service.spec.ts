@@ -25,6 +25,8 @@ describe('Service Tests', () => {
         code: 'AAAAAAA',
         name: 'AAAAAAA',
         conversionRate: 0,
+        adminCreated: false,
+        isActive: false,
       };
     });
 
@@ -63,6 +65,8 @@ describe('Service Tests', () => {
             code: 'BBBBBB',
             name: 'BBBBBB',
             conversionRate: 1,
+            adminCreated: true,
+            isActive: true,
           },
           elemDefault
         );
@@ -81,6 +85,7 @@ describe('Service Tests', () => {
           {
             name: 'BBBBBB',
             conversionRate: 1,
+            adminCreated: true,
           },
           new Currency()
         );
@@ -103,6 +108,8 @@ describe('Service Tests', () => {
             code: 'BBBBBB',
             name: 'BBBBBB',
             conversionRate: 1,
+            adminCreated: true,
+            isActive: true,
           },
           elemDefault
         );
@@ -154,7 +161,7 @@ describe('Service Tests', () => {
         });
 
         it('should add only unique Currency to an array', () => {
-          const currencyArray: ICurrency[] = [{ id: 123 }, { id: 456 }, { id: 53337 }];
+          const currencyArray: ICurrency[] = [{ id: 123 }, { id: 456 }, { id: 33306 }];
           const currencyCollection: ICurrency[] = [{ id: 123 }];
           expectedResult = service.addCurrencyToCollectionIfMissing(currencyCollection, ...currencyArray);
           expect(expectedResult).toHaveLength(3);

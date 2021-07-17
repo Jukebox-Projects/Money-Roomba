@@ -151,7 +151,8 @@ public class AccountResource {
             userDTO.getLangKey(),
             userDTO.getImageUrl(),
             userDTO.getPhone(),
-            userDTO.getCountry()
+            userDTO.getCountry(),
+            userDTO.getNotifications()
         );
         mailService.sendProfileChange(user.get());
     }
@@ -192,15 +193,14 @@ public class AccountResource {
         );
     }
 
-    @GetMapping("/account/getTempPassword")
+    @GetMapping("/account/userDetails")
     public UserDetails getUserDetails() {
-        Optional<User> user = userRepository.findOneByLogin(
-            SecurityUtils.getCurrentUserLogin().orElseThrow(() -> new AccountResourceException("Current user login not found"))
-        );
+        return userService.getUserDetailsByLogin().get();
+    }
 
-        Optional<UserDetails> userDetails = userDetailsRepository.findOneByInternalUserId(user.get().getId());
-
-        return userDetails.get();
+    @GetMapping("/account/userDetails/{login}")
+    public UserDetails getUserDetails(@PathVariable String login) throws UnsupportedEncodingException {
+        return userService.getUserDetailsByLogin(login).get();
     }
 
     @DeleteMapping("/account")
@@ -283,7 +283,7 @@ public class AccountResource {
 
     private static boolean isPasswordInvalid(String password) {
         return (
-            StringUtils.isEmpty(password) || !password.matches("(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[$@$!%*?&])[A-Za-z\\d$@$!%*?&]{8,25}")
+            StringUtils.isEmpty(password) || !password.matches("(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[$@$.!%*?&])[A-Za-z\\d$@$!%*?&]{8,25}")
         );
     }
 }

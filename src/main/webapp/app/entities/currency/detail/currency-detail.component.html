@@ -26,6 +26,14 @@
         <dd>
           <span>{{ currency.conversionRate }}</span>
         </dd>
+        <dt><span jhiTranslate="moneyRoombaApp.currency.adminCreated">Admin Created</span></dt>
+        <dd>
+          <span>{{ currency.adminCreated }}</span>
+        </dd>
+        <dt><span jhiTranslate="moneyRoombaApp.currency.isActive">Is Active</span></dt>
+        <dd>
+          <span>{{ currency.isActive }}</span>
+        </dd>
       </dl>
 
       <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">

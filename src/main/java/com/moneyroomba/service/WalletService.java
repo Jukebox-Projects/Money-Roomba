@@ -102,6 +102,9 @@ public class WalletService {
                     if (wallet.getBalance() != null) {
                         existingWallet.setBalance(wallet.getBalance());
                     }
+                    if (wallet.getIcon() != null) {
+                        existingWallet.setIcon(wallet.getIcon());
+                    }
 
                     return existingWallet;
                 }
