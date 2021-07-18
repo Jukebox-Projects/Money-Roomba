@@ -53,6 +53,15 @@
         _page-user-lock
 
 */
+
+html,
+body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  font-family: Roboto, 'Helvetica Neue', sans-serif;
+}
 /*$primary  : #7356f1 !default;*/
 @import url('./../icons/simple-line-icons/css/simple-line-icons.css');
 @import url('./../icons/font-awesome-old/css/font-awesome.min.css');
