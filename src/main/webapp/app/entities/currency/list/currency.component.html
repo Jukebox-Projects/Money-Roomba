@@ -3,6 +3,8 @@
     <span jhiTranslate="moneyRoombaApp.currency.home.title">Currencies</span>
 
     <div class="d-flex justify-content-end">
+      <input jhiTranslate="moneyRoombaApp.category.home.searchbar" type="text" [(ngModel)]="inputText" (input)="filterCurrency()" />
+
       <button class="btn btn-info mr-2" (click)="loadAll()" [disabled]="isLoading">
         <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
         <span jhiTranslate="moneyRoombaApp.currency.home.refreshListLabel">Refresh List</span>

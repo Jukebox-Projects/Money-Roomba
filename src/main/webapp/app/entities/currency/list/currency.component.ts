@@ -8,6 +8,7 @@ import { CurrencyDeleteDialogComponent } from '../delete/currency-delete-dialog.
 import { Authority } from '../../../config/authority.constants';
 import { AccountService } from '../../../core/auth/account.service';
 import { CurrencyStatusDialogComponent } from '../status/currency-status-dialog.component';
+import { ICategory } from '../../category/category.model';
 
 @Component({
   selector: 'jhi-currency',
@@ -15,6 +16,7 @@ import { CurrencyStatusDialogComponent } from '../status/currency-status-dialog.
 })
 export class CurrencyComponent implements OnInit {
   currencies?: ICurrency[];
+  allCurrencies?: ICategory[];
   isLoading = false;
   inputText = '';
   adminUser = false;
@@ -28,6 +30,7 @@ export class CurrencyComponent implements OnInit {
       (res: HttpResponse<ICurrency[]>) => {
         this.isLoading = false;
         this.currencies = res.body ?? [];
+        this.allCurrencies = res.body ?? [];
       },
       () => {
         this.isLoading = false;
@@ -42,6 +45,21 @@ export class CurrencyComponent implements OnInit {
 
   trackId(index: number, item: ICurrency): number {
     return item.id!;
+  }
+
+  filterCurrency(): void {
+    if (this.currencies !== undefined) {
+      this.currencies = this.currencies.filter(currency => {
+        if (currency.name !== undefined) {
+          return currency.name.toLowerCase().includes(this.inputText.toLowerCase());
+        } else {
+          return false;
+        }
+      });
+      if (this.inputText === '') {
+        this.currencies = this.allCurrencies;
+      }
+    }
   }
 
   delete(currency: ICurrency): void {
