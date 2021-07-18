@@ -1,3 +1,4 @@
+import { SharedService } from './../../shared.service';
 import { Component, OnInit, RendererFactory2, Renderer2 } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { Router, ActivatedRouteSnapshot, NavigationEnd } from '@angular/router';
@@ -12,12 +13,16 @@ import { AccountService } from 'app/core/auth/account.service';
 })
 export class MainComponent implements OnInit {
   private renderer: Renderer2;
+  title = 'Money Roomba';
+  navSidebarClass: boolean = true;
+  hamburgerClass: boolean = false;
 
   constructor(
     private accountService: AccountService,
     private titleService: Title,
     private router: Router,
     private translateService: TranslateService,
+    public sharedService: SharedService,
     rootRenderer: RendererFactory2
   ) {
     this.renderer = rootRenderer.createRenderer(document.querySelector('html'), null);

@@ -1,0 +1,38 @@
+<div class="card">
+  <div class="card-header d-sm-flex d-block border-0 pb-0">
+    <div class="pr-3 mb-sm-0 mb-3 mr-auto">
+      <h4 class="fs-20 text-black mb-1">Quick Transfer</h4>
+      <span class="fs-12">Lorem ipsum dolor sit amet, consectetur</span>
+    </div>
+    <span class="fs-24 text-black font-w600">$56,772.38</span>
+  </div>
+  <div class="card-body">
+    <!-- <div class="owl-carousel testimonial-one mb-5"> -->
+    <owl-carousel-o [options]="customOptions" class="owl-carousel-1 testimonial-one">
+      <ng-template carouselSlide *ngFor="let items of data">
+        <div class="item">
+          <div class="image-bx mb-3">
+            <img src="{{ items.image }}" alt="" />
+            <i class="las la-check-circle"></i>
+          </div>
+          <h6 class="fs-16 mb-0">
+            <a routerLink="/{{ items.url }}" class="text-black">{{ items.name }}</a>
+          </h6>
+          <span class="fs-12">{{ items.username }}</span>
+        </div>
+      </ng-template>
+    </owl-carousel-o>
+    <!-- </div> -->
+    <form class="mt-5">
+      <div class="form-group row style-1 align-items-center">
+        <label class="fs-18 col-sm-3 text-black font-w500">Amount</label>
+        <div class="input-group col-sm-9">
+          <input type="number" class="form-control" />
+          <div class="input-group-append">
+            <button class="btn btn-primary rounded" type="button">TRANSFER NOW</button>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

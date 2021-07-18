@@ -24,6 +24,7 @@
       },
       "account": {
         "main": "Account",
+        "greetings": "Hello, {{param}}",
         "settings": "Settings",
         "password": "Password",
         "sessions": "Sessions",
