@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.3.xsd">
+    <!--
+        Added the constraints for entity ScheduledTransaction.
+    -->
+    <changeSet id="20210715002819-2" author="jhipster">
+
+        <addForeignKeyConstraint baseColumnNames="currency_id"
+                                 baseTableName="t_scheduled_transaction"
+                                 constraintName="fk_t_scheduled_transaction__currency_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="t_currency"/>
+    </changeSet>
+</databaseChangeLog>

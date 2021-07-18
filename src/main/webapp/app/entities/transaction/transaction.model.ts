@@ -20,7 +20,7 @@ export interface ITransaction {
   incomingTransaction?: boolean;
   transactionType?: TransactionType;
   attachment?: IAttachment | null;
-  wallet?: IWallet | null;
+  wallet?: IWallet;
   currency?: ICurrency | null;
   category?: ICategory | null;
   sourceUser?: IUserDetails | null;
@@ -40,7 +40,7 @@ export class Transaction implements ITransaction {
     public incomingTransaction?: boolean,
     public transactionType?: TransactionType,
     public attachment?: IAttachment | null,
-    public wallet?: IWallet | null,
+    public wallet?: IWallet,
     public currency?: ICurrency | null,
     public category?: ICategory | null,
     public sourceUser?: IUserDetails | null

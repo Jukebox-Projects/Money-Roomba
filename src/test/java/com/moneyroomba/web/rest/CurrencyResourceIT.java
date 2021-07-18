@@ -45,6 +45,12 @@ class CurrencyResourceIT {
     private static final Float UPDATED_CONVERSION_RATE = 2F;
     private static final Float SMALLER_CONVERSION_RATE = 1F - 1F;
 
+    private static final Boolean DEFAULT_ADMIN_CREATED = false;
+    private static final Boolean UPDATED_ADMIN_CREATED = true;
+
+    private static final Boolean DEFAULT_IS_ACTIVE = false;
+    private static final Boolean UPDATED_IS_ACTIVE = true;
+
     private static final String ENTITY_API_URL = "/api/currencies";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
 
@@ -69,7 +75,12 @@ class CurrencyResourceIT {
      * if they test an entity which requires the current entity.
      */
     public static Currency createEntity(EntityManager em) {
-        Currency currency = new Currency().code(DEFAULT_CODE).name(DEFAULT_NAME).conversionRate(DEFAULT_CONVERSION_RATE);
+        Currency currency = new Currency()
+            .code(DEFAULT_CODE)
+            .name(DEFAULT_NAME)
+            .conversionRate(DEFAULT_CONVERSION_RATE)
+            .adminCreated(DEFAULT_ADMIN_CREATED)
+            .isActive(DEFAULT_IS_ACTIVE);
         return currency;
     }
 
@@ -80,7 +91,12 @@ class CurrencyResourceIT {
      * if they test an entity which requires the current entity.
      */
     public static Currency createUpdatedEntity(EntityManager em) {
-        Currency currency = new Currency().code(UPDATED_CODE).name(UPDATED_NAME).conversionRate(UPDATED_CONVERSION_RATE);
+        Currency currency = new Currency()
+            .code(UPDATED_CODE)
+            .name(UPDATED_NAME)
+            .conversionRate(UPDATED_CONVERSION_RATE)
+            .adminCreated(UPDATED_ADMIN_CREATED)
+            .isActive(UPDATED_IS_ACTIVE);
         return currency;
     }
 
@@ -110,6 +126,8 @@ class CurrencyResourceIT {
         assertThat(testCurrency.getCode()).isEqualTo(DEFAULT_CODE);
         assertThat(testCurrency.getName()).isEqualTo(DEFAULT_NAME);
         assertThat(testCurrency.getConversionRate()).isEqualTo(DEFAULT_CONVERSION_RATE);
+        assertThat(testCurrency.getAdminCreated()).isEqualTo(DEFAULT_ADMIN_CREATED);
+        assertThat(testCurrency.getIsActive()).isEqualTo(DEFAULT_IS_ACTIVE);
     }
 
     @Test
@@ -203,6 +221,50 @@ class CurrencyResourceIT {
 
     @Test
     @Transactional
+    void checkAdminCreatedIsRequired() throws Exception {
+        int databaseSizeBeforeTest = currencyRepository.findAll().size();
+        // set the field null
+        currency.setAdminCreated(null);
+
+        // Create the Currency, which fails.
+
+        restCurrencyMockMvc
+            .perform(
+                post(ENTITY_API_URL)
+                    .with(csrf())
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(TestUtil.convertObjectToJsonBytes(currency))
+            )
+            .andExpect(status().isBadRequest());
+
+        List<Currency> currencyList = currencyRepository.findAll();
+        assertThat(currencyList).hasSize(databaseSizeBeforeTest);
+    }
+
+    @Test
+    @Transactional
+    void checkIsActiveIsRequired() throws Exception {
+        int databaseSizeBeforeTest = currencyRepository.findAll().size();
+        // set the field null
+        currency.setIsActive(null);
+
+        // Create the Currency, which fails.
+
+        restCurrencyMockMvc
+            .perform(
+                post(ENTITY_API_URL)
+                    .with(csrf())
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(TestUtil.convertObjectToJsonBytes(currency))
+            )
+            .andExpect(status().isBadRequest());
+
+        List<Currency> currencyList = currencyRepository.findAll();
+        assertThat(currencyList).hasSize(databaseSizeBeforeTest);
+    }
+
+    @Test
+    @Transactional
     void getAllCurrencies() throws Exception {
         // Initialize the database
         currencyRepository.saveAndFlush(currency);
@@ -215,7 +277,9 @@ class CurrencyResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(currency.getId().intValue())))
             .andExpect(jsonPath("$.[*].code").value(hasItem(DEFAULT_CODE)))
             .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
-            .andExpect(jsonPath("$.[*].conversionRate").value(hasItem(DEFAULT_CONVERSION_RATE.doubleValue())));
+            .andExpect(jsonPath("$.[*].conversionRate").value(hasItem(DEFAULT_CONVERSION_RATE.doubleValue())))
+            .andExpect(jsonPath("$.[*].adminCreated").value(hasItem(DEFAULT_ADMIN_CREATED.booleanValue())))
+            .andExpect(jsonPath("$.[*].isActive").value(hasItem(DEFAULT_IS_ACTIVE.booleanValue())));
     }
 
     @Test
@@ -232,7 +296,9 @@ class CurrencyResourceIT {
             .andExpect(jsonPath("$.id").value(currency.getId().intValue()))
             .andExpect(jsonPath("$.code").value(DEFAULT_CODE))
             .andExpect(jsonPath("$.name").value(DEFAULT_NAME))
-            .andExpect(jsonPath("$.conversionRate").value(DEFAULT_CONVERSION_RATE.doubleValue()));
+            .andExpect(jsonPath("$.conversionRate").value(DEFAULT_CONVERSION_RATE.doubleValue()))
+            .andExpect(jsonPath("$.adminCreated").value(DEFAULT_ADMIN_CREATED.booleanValue()))
+            .andExpect(jsonPath("$.isActive").value(DEFAULT_IS_ACTIVE.booleanValue()));
     }
 
     @Test
@@ -515,6 +581,110 @@ class CurrencyResourceIT {
 
     @Test
     @Transactional
+    void getAllCurrenciesByAdminCreatedIsEqualToSomething() throws Exception {
+        // Initialize the database
+        currencyRepository.saveAndFlush(currency);
+
+        // Get all the currencyList where adminCreated equals to DEFAULT_ADMIN_CREATED
+        defaultCurrencyShouldBeFound("adminCreated.equals=" + DEFAULT_ADMIN_CREATED);
+
+        // Get all the currencyList where adminCreated equals to UPDATED_ADMIN_CREATED
+        defaultCurrencyShouldNotBeFound("adminCreated.equals=" + UPDATED_ADMIN_CREATED);
+    }
+
+    @Test
+    @Transactional
+    void getAllCurrenciesByAdminCreatedIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        currencyRepository.saveAndFlush(currency);
+
+        // Get all the currencyList where adminCreated not equals to DEFAULT_ADMIN_CREATED
+        defaultCurrencyShouldNotBeFound("adminCreated.notEquals=" + DEFAULT_ADMIN_CREATED);
+
+        // Get all the currencyList where adminCreated not equals to UPDATED_ADMIN_CREATED
+        defaultCurrencyShouldBeFound("adminCreated.notEquals=" + UPDATED_ADMIN_CREATED);
+    }
+
+    @Test
+    @Transactional
+    void getAllCurrenciesByAdminCreatedIsInShouldWork() throws Exception {
+        // Initialize the database
+        currencyRepository.saveAndFlush(currency);
+
+        // Get all the currencyList where adminCreated in DEFAULT_ADMIN_CREATED or UPDATED_ADMIN_CREATED
+        defaultCurrencyShouldBeFound("adminCreated.in=" + DEFAULT_ADMIN_CREATED + "," + UPDATED_ADMIN_CREATED);
+
+        // Get all the currencyList where adminCreated equals to UPDATED_ADMIN_CREATED
+        defaultCurrencyShouldNotBeFound("adminCreated.in=" + UPDATED_ADMIN_CREATED);
+    }
+
+    @Test
+    @Transactional
+    void getAllCurrenciesByAdminCreatedIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        currencyRepository.saveAndFlush(currency);
+
+        // Get all the currencyList where adminCreated is not null
+        defaultCurrencyShouldBeFound("adminCreated.specified=true");
+
+        // Get all the currencyList where adminCreated is null
+        defaultCurrencyShouldNotBeFound("adminCreated.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllCurrenciesByIsActiveIsEqualToSomething() throws Exception {
+        // Initialize the database
+        currencyRepository.saveAndFlush(currency);
+
+        // Get all the currencyList where isActive equals to DEFAULT_IS_ACTIVE
+        defaultCurrencyShouldBeFound("isActive.equals=" + DEFAULT_IS_ACTIVE);
+
+        // Get all the currencyList where isActive equals to UPDATED_IS_ACTIVE
+        defaultCurrencyShouldNotBeFound("isActive.equals=" + UPDATED_IS_ACTIVE);
+    }
+
+    @Test
+    @Transactional
+    void getAllCurrenciesByIsActiveIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        currencyRepository.saveAndFlush(currency);
+
+        // Get all the currencyList where isActive not equals to DEFAULT_IS_ACTIVE
+        defaultCurrencyShouldNotBeFound("isActive.notEquals=" + DEFAULT_IS_ACTIVE);
+
+        // Get all the currencyList where isActive not equals to UPDATED_IS_ACTIVE
+        defaultCurrencyShouldBeFound("isActive.notEquals=" + UPDATED_IS_ACTIVE);
+    }
+
+    @Test
+    @Transactional
+    void getAllCurrenciesByIsActiveIsInShouldWork() throws Exception {
+        // Initialize the database
+        currencyRepository.saveAndFlush(currency);
+
+        // Get all the currencyList where isActive in DEFAULT_IS_ACTIVE or UPDATED_IS_ACTIVE
+        defaultCurrencyShouldBeFound("isActive.in=" + DEFAULT_IS_ACTIVE + "," + UPDATED_IS_ACTIVE);
+
+        // Get all the currencyList where isActive equals to UPDATED_IS_ACTIVE
+        defaultCurrencyShouldNotBeFound("isActive.in=" + UPDATED_IS_ACTIVE);
+    }
+
+    @Test
+    @Transactional
+    void getAllCurrenciesByIsActiveIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        currencyRepository.saveAndFlush(currency);
+
+        // Get all the currencyList where isActive is not null
+        defaultCurrencyShouldBeFound("isActive.specified=true");
+
+        // Get all the currencyList where isActive is null
+        defaultCurrencyShouldNotBeFound("isActive.specified=false");
+    }
+
+    @Test
+    @Transactional
     void getAllCurrenciesByTransactionIsEqualToSomething() throws Exception {
         // Initialize the database
         currencyRepository.saveAndFlush(currency);
@@ -600,7 +770,9 @@ class CurrencyResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(currency.getId().intValue())))
             .andExpect(jsonPath("$.[*].code").value(hasItem(DEFAULT_CODE)))
             .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
-            .andExpect(jsonPath("$.[*].conversionRate").value(hasItem(DEFAULT_CONVERSION_RATE.doubleValue())));
+            .andExpect(jsonPath("$.[*].conversionRate").value(hasItem(DEFAULT_CONVERSION_RATE.doubleValue())))
+            .andExpect(jsonPath("$.[*].adminCreated").value(hasItem(DEFAULT_ADMIN_CREATED.booleanValue())))
+            .andExpect(jsonPath("$.[*].isActive").value(hasItem(DEFAULT_IS_ACTIVE.booleanValue())));
 
         // Check, that the count call also returns 1
         restCurrencyMockMvc
@@ -648,7 +820,12 @@ class CurrencyResourceIT {
         Currency updatedCurrency = currencyRepository.findById(currency.getId()).get();
         // Disconnect from session so that the updates on updatedCurrency are not directly saved in db
         em.detach(updatedCurrency);
-        updatedCurrency.code(UPDATED_CODE).name(UPDATED_NAME).conversionRate(UPDATED_CONVERSION_RATE);
+        updatedCurrency
+            .code(UPDATED_CODE)
+            .name(UPDATED_NAME)
+            .conversionRate(UPDATED_CONVERSION_RATE)
+            .adminCreated(UPDATED_ADMIN_CREATED)
+            .isActive(UPDATED_IS_ACTIVE);
 
         restCurrencyMockMvc
             .perform(
@@ -666,6 +843,8 @@ class CurrencyResourceIT {
         assertThat(testCurrency.getCode()).isEqualTo(UPDATED_CODE);
         assertThat(testCurrency.getName()).isEqualTo(UPDATED_NAME);
         assertThat(testCurrency.getConversionRate()).isEqualTo(UPDATED_CONVERSION_RATE);
+        assertThat(testCurrency.getAdminCreated()).isEqualTo(UPDATED_ADMIN_CREATED);
+        assertThat(testCurrency.getIsActive()).isEqualTo(UPDATED_IS_ACTIVE);
     }
 
     @Test
@@ -743,7 +922,7 @@ class CurrencyResourceIT {
         Currency partialUpdatedCurrency = new Currency();
         partialUpdatedCurrency.setId(currency.getId());
 
-        partialUpdatedCurrency.name(UPDATED_NAME);
+        partialUpdatedCurrency.name(UPDATED_NAME).adminCreated(UPDATED_ADMIN_CREATED).isActive(UPDATED_IS_ACTIVE);
 
         restCurrencyMockMvc
             .perform(
@@ -761,6 +940,8 @@ class CurrencyResourceIT {
         assertThat(testCurrency.getCode()).isEqualTo(DEFAULT_CODE);
         assertThat(testCurrency.getName()).isEqualTo(UPDATED_NAME);
         assertThat(testCurrency.getConversionRate()).isEqualTo(DEFAULT_CONVERSION_RATE);
+        assertThat(testCurrency.getAdminCreated()).isEqualTo(UPDATED_ADMIN_CREATED);
+        assertThat(testCurrency.getIsActive()).isEqualTo(UPDATED_IS_ACTIVE);
     }
 
     @Test
@@ -775,7 +956,12 @@ class CurrencyResourceIT {
         Currency partialUpdatedCurrency = new Currency();
         partialUpdatedCurrency.setId(currency.getId());
 
-        partialUpdatedCurrency.code(UPDATED_CODE).name(UPDATED_NAME).conversionRate(UPDATED_CONVERSION_RATE);
+        partialUpdatedCurrency
+            .code(UPDATED_CODE)
+            .name(UPDATED_NAME)
+            .conversionRate(UPDATED_CONVERSION_RATE)
+            .adminCreated(UPDATED_ADMIN_CREATED)
+            .isActive(UPDATED_IS_ACTIVE);
 
         restCurrencyMockMvc
             .perform(
@@ -793,6 +979,8 @@ class CurrencyResourceIT {
         assertThat(testCurrency.getCode()).isEqualTo(UPDATED_CODE);
         assertThat(testCurrency.getName()).isEqualTo(UPDATED_NAME);
         assertThat(testCurrency.getConversionRate()).isEqualTo(UPDATED_CONVERSION_RATE);
+        assertThat(testCurrency.getAdminCreated()).isEqualTo(UPDATED_ADMIN_CREATED);
+        assertThat(testCurrency.getIsActive()).isEqualTo(UPDATED_IS_ACTIVE);
     }
 
     @Test

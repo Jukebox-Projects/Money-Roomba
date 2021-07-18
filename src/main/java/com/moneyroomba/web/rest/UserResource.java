@@ -118,8 +118,9 @@ public class UserResource {
         } else if (userRepository.findOneByEmailIgnoreCase(userDTO.getEmail()).isPresent()) {
             throw new EmailAlreadyUsedException();
         } else {
-            User newUser = userService.createUser(userDTO);
-            mailService.sendCreationEmail(newUser);
+            String password = java.util.UUID.randomUUID().toString().substring(0, 6);
+            User newUser = userService.createUser(userDTO, password);
+            mailService.sendAdminCreationEmail(newUser, password);
             return ResponseEntity
                 .created(new URI("/api/admin/users/" + newUser.getLogin()))
                 .headers(HeaderUtil.createAlert(applicationName, "userManagement.created", newUser.getLogin()))

@@ -25,6 +25,7 @@ describe('Service Tests', () => {
         name: 'AAAAAAA',
         isActive: false,
         userCreated: false,
+        icon: 0,
       };
     });
 
@@ -63,6 +64,7 @@ describe('Service Tests', () => {
             name: 'BBBBBB',
             isActive: true,
             userCreated: true,
+            icon: 1,
           },
           elemDefault
         );
@@ -80,6 +82,7 @@ describe('Service Tests', () => {
         const patchObject = Object.assign(
           {
             isActive: true,
+            icon: 1,
           },
           new Category()
         );
@@ -102,6 +105,7 @@ describe('Service Tests', () => {
             name: 'BBBBBB',
             isActive: true,
             userCreated: true,
+            icon: 1,
           },
           elemDefault
         );
@@ -153,7 +157,7 @@ describe('Service Tests', () => {
         });
 
         it('should add only unique Category to an array', () => {
-          const categoryArray: ICategory[] = [{ id: 123 }, { id: 456 }, { id: 90126 }];
+          const categoryArray: ICategory[] = [{ id: 123 }, { id: 456 }, { id: 37881 }];
           const categoryCollection: ICategory[] = [{ id: 123 }];
           expectedResult = service.addCategoryToCollectionIfMissing(categoryCollection, ...categoryArray);
           expect(expectedResult).toHaveLength(3);

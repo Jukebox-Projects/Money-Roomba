@@ -57,7 +57,18 @@ public class Event implements Serializable {
 
     @ManyToOne
     @JsonIgnoreProperties(
-        value = { "internalUser", "license", "wallets", "categories", "events", "transactions", "userDetails", "contact" },
+        value = {
+            "internalUser",
+            "license",
+            "wallets",
+            "categories",
+            "events",
+            "transactions",
+            "userDetails",
+            "targetContacts",
+            "contact",
+            "sourceContacts",
+        },
         allowSetters = true
     )
     private UserDetails user;

@@ -159,12 +159,13 @@ public class UserDetailsResource {
     /**
      * {@code GET  /user-details} : get all the userDetails.
      *
+     * @param eagerload flag to eager load entities from relationships (This is applicable for many-to-many).
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of userDetails in body.
      */
     @GetMapping("/user-details")
-    public List<UserDetails> getAllUserDetails() {
+    public List<UserDetails> getAllUserDetails(@RequestParam(required = false, defaultValue = "false") boolean eagerload) {
         log.debug("REST request to get all UserDetails");
-        return userDetailsRepository.findAll();
+        return userDetailsRepository.findAllWithEagerRelationships();
     }
 
     /**
@@ -176,7 +177,7 @@ public class UserDetailsResource {
     @GetMapping("/user-details/{id}")
     public ResponseEntity<UserDetails> getUserDetails(@PathVariable Long id) {
         log.debug("REST request to get UserDetails : {}", id);
-        Optional<UserDetails> userDetails = userDetailsRepository.findById(id);
+        Optional<UserDetails> userDetails = userDetailsRepository.findOneWithEagerRelationships(id);
         return ResponseUtil.wrapOrNotFound(userDetails);
     }
 

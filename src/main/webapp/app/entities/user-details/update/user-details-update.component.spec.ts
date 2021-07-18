@@ -84,12 +84,14 @@ describe('Component Tests', () => {
 
       it('Should call UserDetails query and add missing value', () => {
         const userDetails: IUserDetails = { id: 456 };
-        const contact: IUserDetails = { id: 14159 };
+        const targetContacts: IUserDetails[] = [{ id: 14159 }];
+        userDetails.targetContacts = targetContacts;
+        const contact: IUserDetails = { id: 32723 };
         userDetails.contact = contact;
 
-        const userDetailsCollection: IUserDetails[] = [{ id: 32723 }];
+        const userDetailsCollection: IUserDetails[] = [{ id: 18271 }];
         jest.spyOn(userDetailsService, 'query').mockReturnValue(of(new HttpResponse({ body: userDetailsCollection })));
-        const additionalUserDetails = [contact];
+        const additionalUserDetails = [...targetContacts, contact];
         const expectedCollection: IUserDetails[] = [...additionalUserDetails, ...userDetailsCollection];
         jest.spyOn(userDetailsService, 'addUserDetailsToCollectionIfMissing').mockReturnValue(expectedCollection);
 
@@ -110,7 +112,9 @@ describe('Component Tests', () => {
         userDetails.internalUser = internalUser;
         const license: ILicense = { id: 79450 };
         userDetails.license = license;
-        const contact: IUserDetails = { id: 18271 };
+        const targetContacts: IUserDetails = { id: 43077 };
+        userDetails.targetContacts = [targetContacts];
+        const contact: IUserDetails = { id: 32695 };
         userDetails.contact = contact;
 
         activatedRoute.data = of({ userDetails });
@@ -119,6 +123,7 @@ describe('Component Tests', () => {
         expect(comp.editForm.value).toEqual(expect.objectContaining(userDetails));
         expect(comp.usersSharedCollection).toContain(internalUser);
         expect(comp.licensesCollection).toContain(license);
+        expect(comp.userDetailsSharedCollection).toContain(targetContacts);
         expect(comp.userDetailsSharedCollection).toContain(contact);
       });
     });
@@ -209,6 +214,34 @@ describe('Component Tests', () => {
           const entity = { id: 123 };
           const trackResult = comp.trackUserDetailsById(0, entity);
           expect(trackResult).toEqual(entity.id);
+        });
+      });
+    });
+
+    describe('Getting selected relationships', () => {
+      describe('getSelectedUserDetails', () => {
+        it('Should return option if no UserDetails is selected', () => {
+          const option = { id: 123 };
+          const result = comp.getSelectedUserDetails(option);
+          expect(result === option).toEqual(true);
+        });
+
+        it('Should return selected UserDetails for according option', () => {
+          const option = { id: 123 };
+          const selected = { id: 123 };
+          const selected2 = { id: 456 };
+          const result = comp.getSelectedUserDetails(option, [selected2, selected]);
+          expect(result === selected).toEqual(true);
+          expect(result === selected2).toEqual(false);
+          expect(result === option).toEqual(false);
+        });
+
+        it('Should return option if this UserDetails is not selected', () => {
+          const option = { id: 123 };
+          const selected = { id: 456 };
+          const result = comp.getSelectedUserDetails(option, [selected]);
+          expect(result === option).toEqual(true);
+          expect(result === selected).toEqual(false);
         });
       });
     });
