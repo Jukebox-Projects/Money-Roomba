@@ -22,11 +22,8 @@ public class CategoryService {
 
     private final CategoryRepository categoryRepository;
 
-    private final UserService userService;
-
-    public CategoryService(CategoryRepository categoryRepository, UserService userService) {
+    public CategoryService(CategoryRepository categoryRepository) {
         this.categoryRepository = categoryRepository;
-        this.userService = userService;
     }
 
     /**
@@ -93,7 +90,6 @@ public class CategoryService {
         return categoryRepository
             .findById(id)
             .map(
-                //(!category.userCreated && adminUser) || (category.userCreated && !adminUser)
                 existingCategory -> {
                     final boolean expectedStatus = !existingCategory.getIsActive();
                     if ((long) existingCategory.getCategories().size() > 0) {

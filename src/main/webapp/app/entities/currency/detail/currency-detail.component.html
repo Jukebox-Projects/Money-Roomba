@@ -40,7 +40,12 @@
         <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
       </button>
 
-      <button type="button" [routerLink]="['/currency', currency.id, 'edit']" class="btn btn-primary">
+      <button
+        *ngIf="currency.adminCreated && adminUser"
+        type="button"
+        [routerLink]="['/admin/currency', currency.id, 'edit']"
+        class="btn btn-primary"
+      >
         <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
       </button>
     </div>

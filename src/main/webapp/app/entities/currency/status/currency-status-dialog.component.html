@@ -1,0 +1,38 @@
+<form *ngIf="currency" name="statusForm" (ngSubmit)="confirmChange(currency.id!)">
+  <div class="modal-header">
+    <h4
+      class="modal-title"
+      data-cy="currencyStatusDialogHeading"
+      jhiTranslate="{{ currency.isActive ? 'entity.deactivate.title' : 'entity.activate.title' }}"
+    >
+      Confirm status operation
+    </h4>
+
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true" (click)="cancel()">&times;</button>
+  </div>
+
+  <div class="modal-body">
+    <jhi-alert-error></jhi-alert-error>
+
+    <p
+      id="jhi-delete-currency-heading"
+      jhiTranslate="{{ currency.isActive ? 'moneyRoombaApp.currency.deactivate.question' : 'moneyRoombaApp.currency.activate.question' }}"
+      [translateValues]="{ id: currency.id }"
+    >
+      Are you sure you want to change the status of this Currency?
+    </p>
+  </div>
+
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="cancel()">
+      <fa-icon icon="ban"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
+    </button>
+
+    <button id="jhi-confirm-status-currency" data-cy="entityConfirmStatusButton" type="submit" class="btn btn-primary">
+      <fa-icon icon="eye"></fa-icon>&nbsp;<span
+        jhiTranslate="{{ currency.isActive ? 'entity.action.deactivate' : 'entity.action.activate' }}"
+        >Status</span
+      >
+    </button>
+  </div>
+</form>

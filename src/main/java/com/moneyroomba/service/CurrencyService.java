@@ -20,8 +20,11 @@ public class CurrencyService {
 
     private final CurrencyRepository currencyRepository;
 
-    public CurrencyService(CurrencyRepository currencyRepository) {
+    private final UserService userService;
+
+    public CurrencyService(CurrencyRepository currencyRepository, UserService userService) {
         this.currencyRepository = currencyRepository;
+        this.userService = userService;
     }
 
     /**
@@ -30,9 +33,15 @@ public class CurrencyService {
      * @param currency the entity to save.
      * @return the persisted entity.
      */
-    public Currency save(Currency currency) {
+    public Currency save(Currency currency, boolean postRequest) {
         log.debug("Request to save Currency : {}", currency);
-        return currencyRepository.save(currency);
+        if (postRequest) {
+            currency.setAdminCreated(true);
+            currency.setIsActive(true);
+            return currencyRepository.save(currency);
+        } else {
+            return partialUpdate(currency).get();
+        }
     }
 
     /**
@@ -57,14 +66,28 @@ public class CurrencyService {
                     if (currency.getConversionRate() != null) {
                         existingCurrency.setConversionRate(currency.getConversionRate());
                     }
-                    if (currency.getAdminCreated() != null) {
-                        existingCurrency.setAdminCreated(currency.getAdminCreated());
-                    }
-                    if (currency.getIsActive() != null) {
-                        existingCurrency.setIsActive(currency.getIsActive());
-                    }
 
                     return existingCurrency;
+                }
+            )
+            .map(currencyRepository::save);
+    }
+
+    /**
+     * Partially update a category.
+     *
+     * @param id the entity to update partially.
+     * @return the persisted entity.
+     */
+    public Optional<Currency> statusCategoryUpdate(Long id) {
+        log.debug("Request to update Currency status : {}", id);
+
+        return currencyRepository
+            .findById(id)
+            .map(
+                existingCategory -> {
+                    existingCategory.setIsActive(!existingCategory.getIsActive());
+                    return existingCategory;
                 }
             )
             .map(currencyRepository::save);

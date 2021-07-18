@@ -33,6 +33,11 @@ import { RouterModule } from '@angular/router';
         path: 'metrics',
         loadChildren: () => import('./metrics/metrics.module').then(m => m.MetricsModule),
       },
+      {
+        path: 'currency',
+        data: { pageTitle: 'moneyRoombaApp.currency.home.title' },
+        loadChildren: () => import('../entities/currency/currency.module').then(m => m.CurrencyModule),
+      },
       /* jhipster-needle-add-admin-route - JHipster will add admin routes here */
     ]),
   ],

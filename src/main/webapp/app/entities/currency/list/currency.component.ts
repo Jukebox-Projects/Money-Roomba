@@ -5,6 +5,9 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ICurrency } from '../currency.model';
 import { CurrencyService } from '../service/currency.service';
 import { CurrencyDeleteDialogComponent } from '../delete/currency-delete-dialog.component';
+import { Authority } from '../../../config/authority.constants';
+import { AccountService } from '../../../core/auth/account.service';
+import { CurrencyStatusDialogComponent } from '../status/currency-status-dialog.component';
 
 @Component({
   selector: 'jhi-currency',
@@ -13,8 +16,10 @@ import { CurrencyDeleteDialogComponent } from '../delete/currency-delete-dialog.
 export class CurrencyComponent implements OnInit {
   currencies?: ICurrency[];
   isLoading = false;
+  inputText = '';
+  adminUser = false;
 
-  constructor(protected currencyService: CurrencyService, protected modalService: NgbModal) {}
+  constructor(protected currencyService: CurrencyService, protected modalService: NgbModal, protected accountService: AccountService) {}
 
   loadAll(): void {
     this.isLoading = true;
@@ -31,6 +36,7 @@ export class CurrencyComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.isAdmin();
     this.loadAll();
   }
 
@@ -47,5 +53,20 @@ export class CurrencyComponent implements OnInit {
         this.loadAll();
       }
     });
+  }
+
+  status(currency: ICurrency): void {
+    const modalRef = this.modalService.open(CurrencyStatusDialogComponent, { size: 'lg', backdrop: 'static' });
+    modalRef.componentInstance.currency = currency;
+    // unsubscribe not needed because closed completes on modal close
+    modalRef.closed.subscribe(reason => {
+      if (reason === 'status changed') {
+        this.loadAll();
+      }
+    });
+  }
+
+  isAdmin(): void {
+    this.adminUser = this.accountService.hasAnyAuthority(Authority.ADMIN);
   }
 }

@@ -30,6 +30,12 @@ export class CurrencyService {
     });
   }
 
+  statusUpdate(id: number): Observable<EntityResponseType> {
+    return this.http.patch<ICurrency>(`${this.resourceUrl}/status/${id}`, id, {
+      observe: 'response',
+    });
+  }
+
   find(id: number): Observable<EntityResponseType> {
     return this.http.get<ICurrency>(`${this.resourceUrl}/${id}`, { observe: 'response' });
   }

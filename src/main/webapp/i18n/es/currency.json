@@ -2,31 +2,40 @@
   "moneyRoombaApp": {
     "currency": {
       "home": {
-        "title": "Currencies",
+        "title": "Monedas",
         "refreshListLabel": "Refrescar lista",
-        "createLabel": "Crear nuevo Currency",
-        "createOrEditLabel": "Crear o editar Currency",
-        "notFound": "Ningún Currencies encontrado"
+        "createLabel": "Crear nueva Moneda",
+        "createOrEditLabel": "Crear o editar Moneda",
+        "searchbar": "Buscar",
+        "notFound": "Ninguna moneda encontrada"
       },
-      "created": "Un nuevo Currency ha sido creado con el identificador {{ param }}",
-      "updated": "Un Currency ha sido actualizado con el identificador {{ param }}",
-      "deleted": "Un Currency ha sido eliminado con el identificador {{ param }}",
+      "created": "Una nueva Moneda ha sido creada con el identificador {{ param }}",
+      "updated": "Una Moneda ha sido actualizada con el identificador {{ param }}",
+      "deleted": "Una Moneda ha sido eliminada con el identificador {{ param }}",
+      "activated": "Una Moneda ha sido activada con el identificador {{ param }}",
+      "deactivated": "Una Moneda ha sido desactivada con el identificador {{ param }}",
       "delete": {
-        "question": "¿Seguro que quiere eliminar Currency {{ id }}?"
+        "question": "¿Seguro que quiere eliminar la Moneda {{ id }}?"
+      },
+      "activate": {
+        "question": "¿Seguro que quiere activar la Moneda {{ id }}?"
+      },
+      "deactivate": {
+        "question": "¿Seguro que quiere desactivar la Moneda {{ id }}?"
       },
       "detail": {
-        "title": "Currency"
+        "title": "Moneda"
       },
       "id": "ID",
-      "code": "Code",
-      "name": "Name",
-      "conversionRate": "Conversion Rate",
-      "adminCreated": "Admin Created",
-      "isActive": "Is Active",
-      "transaction": "Transaction",
-      "scheduledTransaction": "Scheduled Transaction",
-      "wallet": "Wallet",
-      "invoice": "Invoice"
+      "code": "Código",
+      "name": "Nombre",
+      "conversionRate": "Tipo de cambio",
+      "adminCreated": "Creada por admininistrador",
+      "isActive": "Activa",
+      "transaction": "Tansacción",
+      "scheduledTransaction": "Transacción programada",
+      "wallet": "Monedero",
+      "invoice": "Factura"
     }
   }
 }

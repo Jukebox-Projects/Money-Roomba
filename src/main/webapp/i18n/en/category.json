@@ -17,6 +17,9 @@
       "delete": {
         "question": "Are you sure you want to delete Category {{ id }}?"
       },
+      "detail": {
+        "title": "Currency"
+      },
       "activate": {
         "question": "Are you sure you want to activate Category {{ id }}?",
         "questionBulk": "Are you sure you want to activate Category {{ id }} and all its childs?"
@@ -24,9 +27,6 @@
       "deactivate": {
         "question": "Are you sure you want to deactivate Category {{ id }}?",
         "questionBulk": "Are you sure you want to deactivate Category {{ id }} and all its childs?"
-      },
-      "detail": {
-        "title": "Category"
       },
       "id": "ID",
       "name": "Name",

@@ -6,16 +6,25 @@
         "refreshListLabel": "Refresh list",
         "createLabel": "Create a new Currency",
         "createOrEditLabel": "Create or edit a Currency",
+        "searchbar": "Search",
         "notFound": "No Currencies found"
       },
       "created": "A new Currency is created with identifier {{ param }}",
       "updated": "A Currency is updated with identifier {{ param }}",
       "deleted": "A Currency is deleted with identifier {{ param }}",
+      "activated": "A Currency is activated with identifier {{ param }}",
+      "deactivated": "A Currency is deactivated with identifier {{ param }}",
       "delete": {
         "question": "Are you sure you want to delete Currency {{ id }}?"
       },
       "detail": {
         "title": "Currency"
+      },
+      "activate": {
+        "question": "Are you sure you want to activate Currency {{ id }}?"
+      },
+      "deactivate": {
+        "question": "Are you sure you want to deactivate Currency {{ id }}?"
       },
       "id": "ID",
       "code": "Code",

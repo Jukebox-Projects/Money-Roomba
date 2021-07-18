@@ -2,6 +2,7 @@ package com.moneyroomba.web.rest;
 
 import com.moneyroomba.domain.Currency;
 import com.moneyroomba.repository.CurrencyRepository;
+import com.moneyroomba.security.AuthoritiesConstants;
 import com.moneyroomba.service.CurrencyQueryService;
 import com.moneyroomba.service.CurrencyService;
 import com.moneyroomba.service.criteria.CurrencyCriteria;
@@ -17,6 +18,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import tech.jhipster.web.util.HeaderUtil;
 import tech.jhipster.web.util.ResponseUtil;
@@ -59,12 +61,13 @@ public class CurrencyResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/currencies")
+    @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\")")
     public ResponseEntity<Currency> createCurrency(@Valid @RequestBody Currency currency) throws URISyntaxException {
         log.debug("REST request to save Currency : {}", currency);
         if (currency.getId() != null) {
             throw new BadRequestAlertException("A new currency cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        Currency result = currencyService.save(currency);
+        Currency result = currencyService.save(currency, true);
         return ResponseEntity
             .created(new URI("/api/currencies/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
@@ -82,6 +85,7 @@ public class CurrencyResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/currencies/{id}")
+    @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\")")
     public ResponseEntity<Currency> updateCurrency(
         @PathVariable(value = "id", required = false) final Long id,
         @Valid @RequestBody Currency currency
@@ -98,7 +102,7 @@ public class CurrencyResource {
             throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
         }
 
-        Currency result = currencyService.save(currency);
+        Currency result = currencyService.save(currency, false);
         return ResponseEntity
             .ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, currency.getId().toString()))
@@ -117,6 +121,7 @@ public class CurrencyResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PatchMapping(value = "/currencies/{id}", consumes = "application/merge-patch+json")
+    @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\")")
     public ResponseEntity<Currency> partialUpdateCurrency(
         @PathVariable(value = "id", required = false) final Long id,
         @NotNull @RequestBody Currency currency
@@ -139,6 +144,29 @@ public class CurrencyResource {
             result,
             HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, currency.getId().toString())
         );
+    }
+
+    /**
+     * {@code PATCH  /currencies/status/id} : Partial updates given fields of an existing currency, field will ignore if it is null
+     *
+     * @param id the id of the currency to save.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated category,
+     * or with status {@code 400 (Bad Request)} if the category is not valid,
+     * or with status {@code 404 (Not Found)} if the category is not found,
+     * or with status {@code 500 (Internal Server Error)} if the category couldn't be updated.
+     * @throws URISyntaxException if the Location URI syntax is incorrect.
+     */
+    @PatchMapping(value = "/currencies/status/{id}")
+    public ResponseEntity<Currency> partialStatusUpdate(@PathVariable Long id) throws URISyntaxException {
+        log.debug("REST request to partial status update Currency : {}", id);
+
+        if (!currencyRepository.existsById(id)) {
+            throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
+        }
+
+        Optional<Currency> result = currencyService.statusCategoryUpdate(id);
+
+        return ResponseUtil.wrapOrNotFound(result, HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, id.toString()));
     }
 
     /**

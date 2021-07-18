@@ -150,10 +150,10 @@
               <span jhiTranslate="global.menu.entities.license">License</span>
             </a>
           </li>
-          <li>
+          <li *jhiHasAnyAuthority="'ROLE_ADMIN'">
             <a
               class="dropdown-item"
-              routerLink="currency"
+              routerLink="admin/currency"
               routerLinkActive="active"
               [routerLinkActiveOptions]="{ exact: true }"
               (click)="collapseNavbar()"

@@ -50,11 +50,6 @@ import { RouterModule } from '@angular/router';
         loadChildren: () => import('./license/license.module').then(m => m.LicenseModule),
       },
       {
-        path: 'currency',
-        data: { pageTitle: 'moneyRoombaApp.currency.home.title' },
-        loadChildren: () => import('./currency/currency.module').then(m => m.CurrencyModule),
-      },
-      {
         path: 'notification',
         data: { pageTitle: 'moneyRoombaApp.notification.home.title' },
         loadChildren: () => import('./notification/notification.module').then(m => m.NotificationModule),
