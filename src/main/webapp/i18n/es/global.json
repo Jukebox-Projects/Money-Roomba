@@ -24,6 +24,7 @@
       },
       "account": {
         "main": "Cuenta",
+        "greetings": "Hola, {{param}}",
         "settings": "Ajustes",
         "password": "Contraseña",
         "sessions": "Sesiones",
