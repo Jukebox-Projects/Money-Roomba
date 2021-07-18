@@ -7,7 +7,7 @@ import { finalize, map } from 'rxjs/operators';
 
 import { IWallet, Wallet } from '../wallet.model';
 import { WalletService } from '../service/wallet.service';
-import { IUserDetails } from 'app/entities/user-details/user-details.model';
+import { IUserDetails, UserDetails } from 'app/entities/user-details/user-details.model';
 import { UserDetailsService } from 'app/entities/user-details/service/user-details.service';
 import { ICurrency } from 'app/entities/currency/currency.model';
 import { CurrencyService } from 'app/entities/currency/service/currency.service';
@@ -30,7 +30,7 @@ export class WalletUpdateComponent implements OnInit {
     isActive: [null, [Validators.required]],
     balance: [null, [Validators.required]],
     icon: [null, [Validators.min(0)]],
-    user: [null, Validators.required],
+    user: [],
     currency: [],
   });
 
@@ -146,7 +146,7 @@ export class WalletUpdateComponent implements OnInit {
       isActive: this.editForm.get(['isActive'])!.value,
       balance: this.editForm.get(['balance'])!.value,
       icon: this.editForm.get(['icon'])!.value,
-      user: this.editForm.get(['user'])!.value,
+      user: new UserDetails(),
       currency: this.editForm.get(['currency'])!.value,
     };
   }
