@@ -3,8 +3,10 @@
     "baseUrl": "src/main/webapp/",
     "outDir": "./target/classes/static/",
     "forceConsistentCasingInFileNames": true,
-    "strict": true,
-    "noImplicitReturns": true,
+    "strict": false,
+    "noImplicitAny": false,
+    "noImplicitReturns": false,
+    "strictPropertyInitialization": false,
     "noFallthroughCasesInSwitch": true,
     "sourceMap": true,
     "declaration": false,
@@ -17,8 +19,8 @@
     "lib": ["es2018", "dom"]
   },
   "angularCompilerOptions": {
-    "strictInjectionParameters": true,
-    "strictInputAccessModifiers": true,
+    "strictInjectionParameters": false,
+    "strictInputAccessModifiers": false,
     "strictTemplates": true,
     "preserveWhitespaces": true
   }

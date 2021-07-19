@@ -1,0 +1,110 @@
+<div class="deznav">
+  <div class="deznav-scroll" [perfectScrollbar]>
+    <ul class="metismenu" id="menu" metis-menu>
+      <li [ngClass]="{ 'mm-active': dashboardArray.indexOf(currentHref) > -1 }">
+        <a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="false">
+          <i class="flaticon-381-networking"></i>
+          <span class="nav-text">Dashboard</span>
+        </a>
+        <ul aria-expanded="false" [ngClass]="{ 'mm-show': dashboardArray.indexOf(currentHref) > -1 }">
+          <li>
+            <a
+              class="{{ currentHref == '/' || currentHref == '/' ? 'mm-active' : '' }}"
+              [routerLink]="['/']"
+              jhiTranslate="global.menu.home"
+              >Home</a
+            >
+          </li>
+          <li>
+            <a
+              class="{{ currentHref == '/wallet' ? 'mm-active' : '' }}"
+              [routerLink]="['/wallet']"
+              jhiTranslate="global.menu.entities.wallet"
+              >Wallet</a
+            >
+          </li>
+          <li>
+            <a
+              class="{{ currentHref == '/scheduled-transaction' ? 'mm-active' : '' }}"
+              [routerLink]="['/scheduled-transaction']"
+              jhiTranslate="global.menu.entities.scheduledTransaction"
+              >Scheduled Transaction</a
+            >
+          </li>
+          <li>
+            <a
+              class="{{ currentHref == '/category' ? 'mm-active' : '' }}"
+              [routerLink]="['/category']"
+              jhiTranslate="global.menu.entities.category"
+              >Category</a
+            >
+          </li>
+        </ul>
+      </li>
+      <li [ngClass]="{ 'mm-active': adminArray.indexOf(currentHref) > -1 }" *jhiHasAnyAuthority="'ROLE_ADMIN'">
+        <a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="false">
+          <i class="flaticon-381-television"></i>
+          <span class="nav-text" jhiTranslate="global.menu.admin.main">Administration</span>
+        </a>
+        <ul aria-expanded="false" [ngClass]="{ 'mm-show': adminArray.indexOf(currentHref) > -1 }">
+          <li>
+            <a
+              [routerLink]="['/admin/user-management']"
+              class="{{ currentHref == '/admin/user-management' ? 'mm-active' : '' }}"
+              jhiTranslate="global.menu.admin.userManagement"
+              >User management</a
+            >
+          </li>
+          <li>
+            <a
+              [routerLink]="['/admin/metrics']"
+              class="{{ currentHref == '/admin/metrics' ? 'mm-active' : '' }}"
+              jhiTranslate="global.menu.admin.metrics"
+              >Metrics</a
+            >
+          </li>
+          <li>
+            <a
+              [routerLink]="['/admin/health']"
+              class="{{ currentHref == '/admin/health' ? 'mm-active' : '' }}"
+              jhiTranslate="global.menu.admin.health"
+              >Health</a
+            >
+          </li>
+          <li>
+            <a
+              [routerLink]="['/admin/logs']"
+              class="{{ currentHref == '/admin/logs' ? 'mm-active' : '' }}"
+              jhiTranslate="global.menu.admin.logs"
+              >Logs</a
+            >
+          </li>
+          <li *ngIf="openAPIEnabled">
+            <a
+              [routerLink]="['/admin/docs']"
+              class="{{ currentHref == '/admin/docs' ? 'mm-active' : '' }}"
+              jhiTranslate="global.menu.admin.apidocs"
+              >API</a
+            >
+          </li>
+          <li>
+            <a
+              [routerLink]="['/admin/configuration']"
+              class="{{ currentHref == '/admin/configuration' ? 'mm-active' : '' }}"
+              jhiTranslate="global.menu.admin.configuration"
+              >Configuration</a
+            >
+          </li>
+          <li>
+            <a
+              [routerLink]="['/system-setting']"
+              class="{{ currentHref == '/system-setting' ? 'mm-active' : '' }}"
+              jhiTranslate="global.menu.entities.systemSetting"
+              >System Setting</a
+            >
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+</div>

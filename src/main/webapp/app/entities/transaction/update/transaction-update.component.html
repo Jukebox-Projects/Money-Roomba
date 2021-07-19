@@ -71,7 +71,7 @@
           </div>
         </div>
 
-        <div class="form-group">
+        <!-- <div class="form-group">
           <label class="form-control-label" jhiTranslate="moneyRoombaApp.transaction.amount" for="field_amount">Amount</label>
           <input type="number" class="form-control" name="amount" id="field_amount" data-cy="amount" formControlName="amount" />
           <div *ngIf="editForm.get('amount')!.invalid && (editForm.get('amount')!.dirty || editForm.get('amount')!.touched)">
@@ -87,11 +87,11 @@
               This field should be a number.
             </small>
           </div>
-        </div>
+        </div> -->
 
         <div class="form-group">
           <label class="form-control-label" jhiTranslate="moneyRoombaApp.transaction.originalAmount" for="field_originalAmount"
-            >Original Amount</label
+            >Amount</label
           >
           <input
             type="number"
@@ -153,7 +153,7 @@
           </div>
         </div>
 
-        <div class="form-group">
+        <!-- <div class="form-group">
           <label class="form-control-label" jhiTranslate="moneyRoombaApp.transaction.scheduled" for="field_scheduled">Scheduled</label>
           <input type="checkbox" class="form-check" name="scheduled" id="field_scheduled" data-cy="scheduled" formControlName="scheduled" />
           <div *ngIf="editForm.get('scheduled')!.invalid && (editForm.get('scheduled')!.dirty || editForm.get('scheduled')!.touched)">
@@ -165,7 +165,7 @@
               This field is required.
             </small>
           </div>
-        </div>
+        </div> -->
 
         <div class="form-group">
           <label class="form-control-label" jhiTranslate="moneyRoombaApp.transaction.addToReports" for="field_addToReports"
@@ -192,7 +192,7 @@
           </div>
         </div>
 
-        <div class="form-group">
+        <!-- <div class="form-group">
           <label class="form-control-label" jhiTranslate="moneyRoombaApp.transaction.incomingTransaction" for="field_incomingTransaction"
             >Incoming Transaction</label
           >
@@ -218,7 +218,7 @@
               This field is required.
             </small>
           </div>
-        </div>
+        </div> -->
 
         <div class="form-group">
           <label class="form-control-label" jhiTranslate="moneyRoombaApp.transaction.transactionType" for="field_transactionType"
@@ -254,7 +254,7 @@
           </div>
         </div>
 
-        <div class="form-group">
+        <!-- <div class="form-group">
           <label class="form-control-label" jhiTranslate="moneyRoombaApp.transaction.attachment" for="field_attachment">Attachment</label>
           <select class="form-control" id="field_attachment" data-cy="attachment" name="attachment" formControlName="attachment">
             <option [ngValue]="null"></option>
@@ -267,7 +267,7 @@
               {{ attachmentOption.id }}
             </option>
           </select>
-        </div>
+        </div> -->
 
         <div class="form-group">
           <label class="form-control-label" jhiTranslate="moneyRoombaApp.transaction.wallet" for="field_wallet">Wallet</label>
@@ -309,21 +309,6 @@
               *ngFor="let categoryOption of categoriesSharedCollection; trackBy: trackCategoryById"
             >
               {{ categoryOption.name }}
-            </option>
-          </select>
-        </div>
-
-        <div class="form-group">
-          <label class="form-control-label" jhiTranslate="moneyRoombaApp.transaction.sourceUser" for="field_sourceUser">Source User</label>
-          <select class="form-control" id="field_sourceUser" data-cy="sourceUser" name="sourceUser" formControlName="sourceUser">
-            <option [ngValue]="null"></option>
-            <option
-              [ngValue]="
-                userDetailsOption.id === editForm.get('sourceUser')!.value?.id ? editForm.get('sourceUser')!.value : userDetailsOption
-              "
-              *ngFor="let userDetailsOption of userDetailsSharedCollection; trackBy: trackUserDetailsById"
-            >
-              {{ userDetailsOption.id }}
             </option>
           </select>
         </div>

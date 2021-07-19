@@ -113,7 +113,8 @@ entity Currency (T_CURRENCY) {
 	code String required,
 	name String required,
 	conversionRate Float required,
-	symbol String maxlength(5) required
+	adminCreated Boolean required,
+    isActive Boolean required
 }
 
 entity Notification (T_NOTIFICATION) {

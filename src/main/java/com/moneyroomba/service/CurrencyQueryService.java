@@ -90,8 +90,11 @@ public class CurrencyQueryService extends QueryService<Currency> {
             if (criteria.getConversionRate() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getConversionRate(), Currency_.conversionRate));
             }
-            if (criteria.getSymbol() != null) {
-                specification = specification.and(buildStringSpecification(criteria.getSymbol(), Currency_.symbol));
+            if (criteria.getAdminCreated() != null) {
+                specification = specification.and(buildSpecification(criteria.getAdminCreated(), Currency_.adminCreated));
+            }
+            if (criteria.getIsActive() != null) {
+                specification = specification.and(buildSpecification(criteria.getIsActive(), Currency_.isActive));
             }
             if (criteria.getTransactionId() != null) {
                 specification =

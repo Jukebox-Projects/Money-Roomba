@@ -36,9 +36,12 @@ public class Currency implements Serializable {
     private Float conversionRate;
 
     @NotNull
-    @Size(max = 5)
-    @Column(name = "symbol", length = 5, nullable = false)
-    private String symbol;
+    @Column(name = "admin_created", nullable = false)
+    private Boolean adminCreated;
+
+    @NotNull
+    @Column(name = "is_active", nullable = false)
+    private Boolean isActive;
 
     @OneToMany(mappedBy = "currency")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
@@ -59,6 +62,16 @@ public class Currency implements Serializable {
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(value = { "currency" }, allowSetters = true)
     private Set<Invoice> invoices = new HashSet<>();
+
+    public Currency(String code, String name, Float conversionRate, Boolean adminCreated, Boolean isActive) {
+        this.code = code;
+        this.name = name;
+        this.conversionRate = conversionRate;
+        this.adminCreated = adminCreated;
+        this.isActive = isActive;
+    }
+
+    public Currency() {}
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
     public Long getId() {
@@ -113,17 +126,30 @@ public class Currency implements Serializable {
         this.conversionRate = conversionRate;
     }
 
-    public String getSymbol() {
-        return this.symbol;
+    public Boolean getAdminCreated() {
+        return this.adminCreated;
     }
 
-    public Currency symbol(String symbol) {
-        this.symbol = symbol;
+    public Currency adminCreated(Boolean adminCreated) {
+        this.adminCreated = adminCreated;
         return this;
     }
 
-    public void setSymbol(String symbol) {
-        this.symbol = symbol;
+    public void setAdminCreated(Boolean adminCreated) {
+        this.adminCreated = adminCreated;
+    }
+
+    public Boolean getIsActive() {
+        return this.isActive;
+    }
+
+    public Currency isActive(Boolean isActive) {
+        this.isActive = isActive;
+        return this;
+    }
+
+    public void setIsActive(Boolean isActive) {
+        this.isActive = isActive;
     }
 
     public Set<Transaction> getTransactions() {
@@ -277,7 +303,8 @@ public class Currency implements Serializable {
             ", code='" + getCode() + "'" +
             ", name='" + getName() + "'" +
             ", conversionRate=" + getConversionRate() +
-            ", symbol='" + getSymbol() + "'" +
+            ", adminCreated='" + getAdminCreated() + "'" +
+            ", isActive='" + getIsActive() + "'" +
             "}";
     }
 }
