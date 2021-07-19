@@ -4,7 +4,8 @@
       "title": "Usuarios",
       "refreshListLabel": "Refrescar lista",
       "createLabel": "Crear un nuevo usuario",
-      "createOrEditLabel": "Crear o editar un usuario"
+      "createOrEditLabel": "Crear o editar un usuario",
+      "searchbar": "Buscar"
     },
     "created": "Se creó un nuevo usuario con identificador {{ param }}",
     "updated": "Se actualizó el usuario con identificador {{ param }}",
@@ -18,7 +19,7 @@
     "login": "Login",
     "firstName": "Nombre",
     "lastName": "Apellidos",
-    "email": "Email",
+    "email": "Correo",
     "activated": "Activado",
     "deactivated": "Desactivado",
     "profiles": "Perfiles",
