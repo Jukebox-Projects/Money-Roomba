@@ -63,6 +63,16 @@ public class Currency implements Serializable {
     @JsonIgnoreProperties(value = { "currency" }, allowSetters = true)
     private Set<Invoice> invoices = new HashSet<>();
 
+    public Currency(String code, String name, Float conversionRate, Boolean adminCreated, Boolean isActive) {
+        this.code = code;
+        this.name = name;
+        this.conversionRate = conversionRate;
+        this.adminCreated = adminCreated;
+        this.isActive = isActive;
+    }
+
+    public Currency() {}
+
     // jhipster-needle-entity-add-field - JHipster will add fields here
     public Long getId() {
         return id;
