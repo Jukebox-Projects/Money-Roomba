@@ -8,8 +8,8 @@
       "entities": {
         "main": "Entities",
         "userDetails": "User Details",
-        "wallet": "Wallet",
-        "transaction": "Transaction",
+        "wallet": "Wallets",
+        "transaction": "Transactions",
         "scheduledTransaction": "Scheduled Transaction",
         "schedulePattern": "Schedule Pattern",
         "attachment": "Attachment",
@@ -24,6 +24,7 @@
       },
       "account": {
         "main": "Account",
+        "greetings": "Hello, {{param}}",
         "settings": "Settings",
         "password": "Password",
         "sessions": "Sessions",
