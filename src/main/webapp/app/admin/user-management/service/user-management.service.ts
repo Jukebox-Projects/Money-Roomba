@@ -1,4 +1,4 @@
-import { AccountDetail } from './../../../core/auth/accountDetail.model';
+import { UserDetails } from 'app/entities/user-details/user-details.model';
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
@@ -26,8 +26,8 @@ export class UserManagementService {
     return this.http.get<IUser>(`${this.resourceUrl}/${login}`);
   }
 
-  findUserDetails(login: string): Observable<AccountDetail> {
-    return this.http.get<AccountDetail>(`api/account/userDetails/${login}`);
+  findUserDetails(login: string): Observable<UserDetails> {
+    return this.http.get<UserDetails>(`api/account/userDetails/${login}`);
   }
 
   query(req?: Pagination): Observable<HttpResponse<IUser[]>> {

@@ -63,7 +63,9 @@
       "country.label": "Country",
       "country.placeholder": "Your country",
       "phone.label": "Phone",
-      "phone.placeholder": "Your phone"
+      "phone.placeholder": "Your phone",
+      "apiKey.label": "API key",
+      "apiKey.placeholder": "API key"
     },
     "messages": {
       "info": {
@@ -134,7 +136,8 @@
       "save": "Save",
       "view": "View",
       "activate": "Activate",
-      "deactivate": "Deactivate"
+      "deactivate": "Deactivate",
+      "generateApiKey": "Generate API key"
     },
     "detail": {
       "field": "Field",

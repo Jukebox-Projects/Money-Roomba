@@ -63,7 +63,9 @@
       "country.label": "País",
       "country.placeholder": "Su país",
       "phone.label": "Teléfono",
-      "phone.placeholder": "Su teléfono"
+      "phone.placeholder": "Su teléfono",
+      "apiKey.label": "Llave API",
+      "apiKey.placeholder": "Llave API"
     },
     "messages": {
       "info": {
@@ -134,7 +136,8 @@
       "save": "Guardar",
       "view": "Vista",
       "activate": "Activar",
-      "deactivate": "Desactivar"
+      "deactivate": "Desactivar",
+      "generateApiKey": "Generar llave de API"
     },
     "detail": {
       "field": "Campo",

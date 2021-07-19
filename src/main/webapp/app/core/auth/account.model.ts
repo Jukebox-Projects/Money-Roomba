@@ -10,6 +10,7 @@ export class Account {
     public imageUrl: string | null,
     public phone: string,
     public country: string,
-    public notifications: boolean
+    public notifications: boolean,
+    public apiKey: string
   ) {}
 }
