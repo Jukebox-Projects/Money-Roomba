@@ -1,6 +1,17 @@
 <div>
   <h2 id="page-heading" data-cy="TransactionHeading">
     <span jhiTranslate="moneyRoombaApp.transaction.home.title">Transactions</span>
+    <form>
+      <field appearance="fill">
+        <label>Select an option</label>
+        <mat-select [(value)]="selected">
+          <option>None</option>
+          <option value="name1">Nombre</option>
+          <option value="description2">Description</option>
+          <option value="fecha3">Fecha</option>
+        </mat-select>
+      </field>
+    </form>
 
     <div class="d-flex justify-content-end">
       <input jhiTranslate="moneyRoombaApp.transaction.home.searchbar" type="text" [(ngModel)]="inputText" (input)="filterTransactions()" />

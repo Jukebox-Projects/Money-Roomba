@@ -16,6 +16,7 @@ export class TransactionComponent implements OnInit {
   allTransactions?: IWallet[];
   isLoading = false;
   inputText = '';
+  selected = '';
 
   constructor(protected transactionService: TransactionService, protected modalService: NgbModal) {}
 
@@ -45,8 +46,10 @@ export class TransactionComponent implements OnInit {
     /* eslint-disable no-console */
     if (this.transactions !== undefined) {
       this.transactions = this.transactions.filter(transaction => {
-        if (transaction.name !== undefined) {
+        if (transaction.name !== undefined && this.selected === 'name1') {
           return transaction.name.toLowerCase().includes(this.inputText.toLowerCase());
+        } else if (transaction.description !== undefined && this.selected === 'description1') {
+          return transaction.description.toLowerCase().includes(this.inputText.toLowerCase());
         } else {
           return false;
         }
