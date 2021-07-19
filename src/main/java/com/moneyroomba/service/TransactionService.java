@@ -84,7 +84,7 @@ public class TransactionService {
             transaction.setAmount(transaction.getOriginalAmount());
             currentBalance = transaction.getWallet().getBalance();
             if (transaction.getMovementType().equals(MovementType.EXPENSE)) {
-                if (wallet.getBalance() > 0 && wallet.getBalance() > transaction.getAmount()) {
+                if (wallet.getBalance() > 0 && wallet.getBalance() >= transaction.getAmount()) {
                     currentBalance = wallet.getBalance();
                     currentBalance = currentBalance - transaction.getAmount();
                     wallet.setBalance(currentBalance);
