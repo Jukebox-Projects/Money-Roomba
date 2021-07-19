@@ -33,6 +33,7 @@ export class UserDetailsUpdateComponent implements OnInit {
     isTemporaryPassword: [null, [Validators.required]],
     internalUser: [],
     license: [],
+    targetContacts: [],
     contact: [],
   });
 
@@ -78,6 +79,17 @@ export class UserDetailsUpdateComponent implements OnInit {
     return item.id!;
   }
 
+  getSelectedUserDetails(option: IUserDetails, selectedVals?: IUserDetails[]): IUserDetails {
+    if (selectedVals) {
+      for (const selectedVal of selectedVals) {
+        if (option.id === selectedVal.id) {
+          return selectedVal;
+        }
+      }
+    }
+    return option;
+  }
+
   protected subscribeToSaveResponse(result: Observable<HttpResponse<IUserDetails>>): void {
     result.pipe(finalize(() => this.onSaveFinalize())).subscribe(
       () => this.onSaveSuccess(),
@@ -108,6 +120,7 @@ export class UserDetailsUpdateComponent implements OnInit {
       isTemporaryPassword: userDetails.isTemporaryPassword,
       internalUser: userDetails.internalUser,
       license: userDetails.license,
+      targetContacts: userDetails.targetContacts,
       contact: userDetails.contact,
     });
 
@@ -115,6 +128,7 @@ export class UserDetailsUpdateComponent implements OnInit {
     this.licensesCollection = this.licenseService.addLicenseToCollectionIfMissing(this.licensesCollection, userDetails.license);
     this.userDetailsSharedCollection = this.userDetailsService.addUserDetailsToCollectionIfMissing(
       this.userDetailsSharedCollection,
+      ...(userDetails.targetContacts ?? []),
       userDetails.contact
     );
   }
@@ -139,7 +153,11 @@ export class UserDetailsUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<IUserDetails[]>) => res.body ?? []))
       .pipe(
         map((userDetails: IUserDetails[]) =>
-          this.userDetailsService.addUserDetailsToCollectionIfMissing(userDetails, this.editForm.get('contact')!.value)
+          this.userDetailsService.addUserDetailsToCollectionIfMissing(
+            userDetails,
+            ...(this.editForm.get('targetContacts')!.value ?? []),
+            this.editForm.get('contact')!.value
+          )
         )
       )
       .subscribe((userDetails: IUserDetails[]) => (this.userDetailsSharedCollection = userDetails));
@@ -157,6 +175,7 @@ export class UserDetailsUpdateComponent implements OnInit {
       isTemporaryPassword: this.editForm.get(['isTemporaryPassword'])!.value,
       internalUser: this.editForm.get(['internalUser'])!.value,
       license: this.editForm.get(['license'])!.value,
+      targetContacts: this.editForm.get(['targetContacts'])!.value,
       contact: this.editForm.get(['contact'])!.value,
     };
   }

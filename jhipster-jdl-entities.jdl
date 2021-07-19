@@ -12,7 +12,8 @@ entity Wallet(T_WALLET) {
     description String,
     inReports Boolean required,
     isActive Boolean required,
-    balance Double required
+    balance Double required,
+    icon Integer min(0)
 }
 
 entity Transaction(T_TRANSACTION) {
@@ -78,7 +79,8 @@ entity Attachment(T_ATTACHMENT) {
 entity Category(T_CATEGORY) {
    name String required,
    isActive Boolean required,
-   userCreated Boolean required
+   userCreated Boolean required,
+   icon Integer min(0)
 }
 
 entity Invoice(T_INVOICE) {
@@ -110,12 +112,9 @@ enum LicenseCreateMethod {
 entity Currency (T_CURRENCY) {
 	code String required,
 	name String required,
-	conversionRate Float required
-}
-
-entity Icon (T_ICON) {
-    url String required,
-    name String required
+	conversionRate Float required,
+	adminCreated Boolean required,
+    isActive Boolean required
 }
 
 entity Notification (T_NOTIFICATION) {
@@ -160,12 +159,10 @@ enum EventType {
 
 
 relationship OneToMany {
-  UserDetails to Wallet{user},
-  Wallet to Transaction{wallet(name)},
+  UserDetails to Wallet{user required},
+  Wallet to Transaction{wallet(name) required},
   Currency to Transaction{currency(code)},
   Currency to ScheduledTransaction{currency},
-  Icon to Category{icon(name)},
-  Icon to Wallet{icon(name)},
   Category to Category{parent(name)},
   Category to Transaction{category(name)},
   Currency to Transaction{currency(code)},
@@ -186,4 +183,8 @@ relationship OneToOne {
   Event {notification} to Notification {event}
 }
 
-filter SystemSetting, Currency, Icon, Wallet, Transaction, Category, ScheduledTransaction, Invoice, Event, License
+relationship ManyToMany {
+  UserDetails{targetContact} to UserDetails{sourceContact}
+}
+
+filter SystemSetting, Currency, Wallet, Transaction, Category, ScheduledTransaction, Invoice, Event, License

@@ -1,0 +1,20 @@
+<div class="card">
+  <div class="card-header pb-0 border-0">
+    <div>
+      <h4 class="fs-20 text-black mb-0">Invoices Sent</h4>
+      <span class="fs-12">Lorem ipsum dolor sit amet, consectetur</span>
+    </div>
+  </div>
+  <div class="card-body">
+    <div class="d-flex pb-3 border-bottom mb-3 align-items-center" *ngFor="let item of data">
+      <img src="{{ item.image }}" alt="" class="rounded-circle mr-3" width="50" />
+      <div class="mr-auto">
+        <h6 class="fs-16 font-w600 mb-0">
+          <a routerLink="/{{ item.url }}" class="text-black">{{ item.name }}</a>
+        </h6>
+        <span class="fs-12">{{ item.timeago }}</span>
+      </div>
+      <span class="fs-16 text-black font-w600">{{ item.price }}</span>
+    </div>
+  </div>
+</div>

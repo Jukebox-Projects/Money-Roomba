@@ -27,6 +27,7 @@ describe('Service Tests', () => {
         inReports: false,
         isActive: false,
         balance: 0,
+        icon: 0,
       };
     });
 
@@ -67,6 +68,7 @@ describe('Service Tests', () => {
             inReports: true,
             isActive: true,
             balance: 1,
+            icon: 1,
           },
           elemDefault
         );
@@ -110,6 +112,7 @@ describe('Service Tests', () => {
             inReports: true,
             isActive: true,
             balance: 1,
+            icon: 1,
           },
           elemDefault
         );
@@ -161,7 +164,7 @@ describe('Service Tests', () => {
         });
 
         it('should add only unique Wallet to an array', () => {
-          const walletArray: IWallet[] = [{ id: 123 }, { id: 456 }, { id: 37041 }];
+          const walletArray: IWallet[] = [{ id: 123 }, { id: 456 }, { id: 81202 }];
           const walletCollection: IWallet[] = [{ id: 123 }];
           expectedResult = service.addWalletToCollectionIfMissing(walletCollection, ...walletArray);
           expect(expectedResult).toHaveLength(3);

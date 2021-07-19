@@ -1,7 +1,15 @@
 package com.moneyroomba.service;
 
 import com.moneyroomba.domain.Transaction;
+import com.moneyroomba.domain.User;
+import com.moneyroomba.domain.UserDetails;
+import com.moneyroomba.domain.enumeration.TransactionType;
 import com.moneyroomba.repository.TransactionRepository;
+import com.moneyroomba.repository.UserDetailsRepository;
+import com.moneyroomba.repository.UserRepository;
+import com.moneyroomba.security.AuthoritiesConstants;
+import com.moneyroomba.security.SecurityUtils;
+import com.moneyroomba.web.rest.errors.BadRequestAlertException;
 import java.util.List;
 import java.util.Optional;
 import org.slf4j.Logger;
@@ -16,12 +24,31 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class TransactionService {
 
+    private static class TransactionServiceException extends RuntimeException {
+
+        private TransactionServiceException(String message) {
+            super(message);
+        }
+    }
+
+    private static final String ENTITY_NAME = "transaction";
+
     private final Logger log = LoggerFactory.getLogger(TransactionService.class);
 
     private final TransactionRepository transactionRepository;
 
-    public TransactionService(TransactionRepository transactionRepository) {
+    private final UserRepository userRepository;
+
+    private final UserDetailsRepository userDetailsRepository;
+
+    public TransactionService(
+        TransactionRepository transactionRepository,
+        UserRepository userRepository,
+        UserDetailsRepository userDetailsRepository
+    ) {
         this.transactionRepository = transactionRepository;
+        this.userRepository = userRepository;
+        this.userDetailsRepository = userDetailsRepository;
     }
 
     /**
@@ -32,7 +59,22 @@ public class TransactionService {
      */
     public Transaction save(Transaction transaction) {
         log.debug("Request to save Transaction : {}", transaction);
-        return transactionRepository.save(transaction);
+        if (!SecurityUtils.hasCurrentUserThisAuthority(AuthoritiesConstants.ADMIN)) {
+            Optional<User> user = userRepository.findOneByLogin(
+                SecurityUtils.getCurrentUserLogin().orElseThrow(() -> new TransactionServiceException("Current user login not found"))
+            );
+            Optional<UserDetails> userDetails = userDetailsRepository.findOneByInternalUser(user.get());
+            transaction.setSourceUser(userDetails.get());
+            transaction.setTransactionType(TransactionType.MANUAL);
+            transaction.setIncomingTransaction(false);
+            transaction.setScheduled(false);
+            //logica de parseo de monedas....
+            transaction.setAmount(transaction.getOriginalAmount());
+
+            return transactionRepository.save(transaction);
+        } else {
+            throw new BadRequestAlertException("Los administradores no pueden crear transacciones", ENTITY_NAME, "nopermission");
+        }
     }
 
     /**

@@ -9,6 +9,7 @@ import com.moneyroomba.repository.WalletRepository;
 import com.moneyroomba.security.AuthoritiesConstants;
 import com.moneyroomba.security.SecurityUtils;
 import com.moneyroomba.web.rest.errors.BadRequestAlertException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import org.hibernate.procedure.internal.Util.ResultClassesResolutionContext;
@@ -23,6 +24,15 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @Transactional
 public class WalletService {
+
+    private static class WalletServiceException extends RuntimeException {
+
+        private WalletServiceException(String message) {
+            super(message);
+        }
+    }
+
+    private static final String ENTITY_NAME = "wallet";
 
     private final Logger log = LoggerFactory.getLogger(WalletService.class);
 
@@ -46,18 +56,22 @@ public class WalletService {
      */
     public Wallet save(Wallet wallet) {
         log.debug("Request to save Wallet : {}", wallet);
-        // if (!SecurityUtils.hasCurrentUserThisAuthority(AuthoritiesConstants.ADMIN)) {
-        //     Optional<User> user = userRepository.findOneByLogin(
-        //         SecurityUtils.getCurrentUserLogin().get()//.orElseThrow(() -> new Exception("Current user login not found"))
-        //     );
-        //     Optional<UserDetails> userDetails = userDetailsRepository.findOneByInternalUser(user.get());
-        //     wallet.setUser(userDetails.get());
-        //     Wallet result = walletRepository.save(wallet);
-        //     return result;
-        // } else {
-        //     throw new Exception("Admins cannot register wallets");
-        // }
-        return walletRepository.save(wallet);
+        int walletCount = 0;
+        Optional<User> user = userRepository.findOneByLogin(
+            SecurityUtils.getCurrentUserLogin().orElseThrow(() -> new WalletServiceException("Current user login not found"))
+        );
+        Optional<UserDetails> userDetails = userDetailsRepository.findOneByInternalUser(user.get());
+        wallet.setUser(userDetails.get());
+        List<Wallet> userWallets = walletRepository.findAllByUser(userDetails.get());
+        if (!SecurityUtils.hasCurrentUserThisAuthority(AuthoritiesConstants.PREMIUM_USER)) {
+            if (userWallets.size() >= 3) {
+                throw new WalletServiceException("User cannot register more wallets.");
+            } else {
+                return walletRepository.save(wallet);
+            }
+        } else {
+            return walletRepository.save(wallet);
+        }
     }
 
     /**
@@ -88,6 +102,9 @@ public class WalletService {
                     if (wallet.getBalance() != null) {
                         existingWallet.setBalance(wallet.getBalance());
                     }
+                    if (wallet.getIcon() != null) {
+                        existingWallet.setIcon(wallet.getIcon());
+                    }
 
                     return existingWallet;
                 }
@@ -103,7 +120,43 @@ public class WalletService {
     @Transactional(readOnly = true)
     public List<Wallet> findAll() {
         log.debug("Request to get all Wallets");
-        return walletRepository.findAll();
+        Optional<User> user = userRepository.findOneByLogin(
+            SecurityUtils
+                .getCurrentUserLogin()
+                .orElseThrow(() -> new BadRequestAlertException("A new wallet cannot already have an ID", ENTITY_NAME, "idexists"))
+        );
+        Optional<UserDetails> userDetails = userDetailsRepository.findOneByInternalUser(user.get());
+        List<Wallet> entityList = walletRepository.findAll();
+        List<Wallet> res = new ArrayList<Wallet>();
+        if (
+            (!SecurityUtils.hasCurrentUserThisAuthority(AuthoritiesConstants.ADMIN)) &&
+            (
+                SecurityUtils.hasCurrentUserThisAuthority(AuthoritiesConstants.USER) ||
+                SecurityUtils.hasCurrentUserThisAuthority(AuthoritiesConstants.PREMIUM_USER)
+            )
+        ) {
+            if (userDetails.isPresent()) {
+                for (Wallet wallet : entityList) {
+                    if (wallet.getUser() == null) {} else {
+                        if (wallet.getUser().equals(userDetails.get())) {
+                            res.add(wallet);
+                            System.out.println(res.size());
+                        }
+                    }
+                }
+            }
+        } else {
+            if (SecurityUtils.hasCurrentUserThisAuthority(AuthoritiesConstants.ADMIN)) {
+                res = entityList;
+            }
+        }
+        return res;
+    }
+
+    @Transactional(readOnly = true)
+    public List<Wallet> findAllByUserId(UserDetails user) {
+        log.debug("Request to get all Wallets for one user");
+        return walletRepository.findAllByUser(user);
     }
 
     /**
@@ -114,6 +167,12 @@ public class WalletService {
      */
     @Transactional(readOnly = true)
     public Optional<Wallet> findOne(Long id) {
+        log.debug("Request to get Wallet : {}", id);
+        return walletRepository.findById(id);
+    }
+
+    @Transactional(readOnly = true)
+    public Optional<Wallet> findOneById(Long id) {
         log.debug("Request to get Wallet : {}", id);
         return walletRepository.findById(id);
     }

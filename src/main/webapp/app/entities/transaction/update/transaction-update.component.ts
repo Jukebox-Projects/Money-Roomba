@@ -17,6 +17,7 @@ import { ICategory } from 'app/entities/category/category.model';
 import { CategoryService } from 'app/entities/category/service/category.service';
 import { IUserDetails } from 'app/entities/user-details/user-details.model';
 import { UserDetailsService } from 'app/entities/user-details/service/user-details.service';
+import { TransactionType } from 'app/entities/enumerations/transaction-type.model';
 
 @Component({
   selector: 'jhi-transaction-update',
@@ -36,16 +37,16 @@ export class TransactionUpdateComponent implements OnInit {
     name: [null, [Validators.required]],
     description: [],
     dateAdded: [null, [Validators.required]],
-    amount: [null, [Validators.min(0)]],
+    amount: [],
     originalAmount: [null, [Validators.required, Validators.min(0)]],
     movementType: [null, [Validators.required]],
-    scheduled: [null, [Validators.required]],
+    scheduled: [],
     addToReports: [null, [Validators.required]],
-    incomingTransaction: [null, [Validators.required]],
-    transactionType: [null, [Validators.required]],
+    incomingTransaction: [],
+    transactionType: [],
     attachment: [],
-    wallet: [],
-    currency: [],
+    wallet: [null, [Validators.required]],
+    currency: [null, [Validators.required]],
     category: [],
     sourceUser: [],
   });
@@ -216,12 +217,12 @@ export class TransactionUpdateComponent implements OnInit {
       name: this.editForm.get(['name'])!.value,
       description: this.editForm.get(['description'])!.value,
       dateAdded: this.editForm.get(['dateAdded'])!.value,
-      amount: this.editForm.get(['amount'])!.value,
+      amount: 0,
       originalAmount: this.editForm.get(['originalAmount'])!.value,
       movementType: this.editForm.get(['movementType'])!.value,
-      scheduled: this.editForm.get(['scheduled'])!.value,
+      scheduled: false,
       addToReports: this.editForm.get(['addToReports'])!.value,
-      incomingTransaction: this.editForm.get(['incomingTransaction'])!.value,
+      incomingTransaction: false,
       transactionType: this.editForm.get(['transactionType'])!.value,
       attachment: this.editForm.get(['attachment'])!.value,
       wallet: this.editForm.get(['wallet'])!.value,

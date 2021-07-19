@@ -66,6 +66,45 @@
             </small>
           </div>
         </div>
+
+        <div class="form-group">
+          <label class="form-control-label" jhiTranslate="moneyRoombaApp.currency.adminCreated" for="field_adminCreated"
+            >Admin Created</label
+          >
+          <input
+            type="checkbox"
+            class="form-check"
+            name="adminCreated"
+            id="field_adminCreated"
+            data-cy="adminCreated"
+            formControlName="adminCreated"
+          />
+          <div
+            *ngIf="editForm.get('adminCreated')!.invalid && (editForm.get('adminCreated')!.dirty || editForm.get('adminCreated')!.touched)"
+          >
+            <small
+              class="form-text text-danger"
+              *ngIf="editForm.get('adminCreated')?.errors?.required"
+              jhiTranslate="entity.validation.required"
+            >
+              This field is required.
+            </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" jhiTranslate="moneyRoombaApp.currency.isActive" for="field_isActive">Is Active</label>
+          <input type="checkbox" class="form-check" name="isActive" id="field_isActive" data-cy="isActive" formControlName="isActive" />
+          <div *ngIf="editForm.get('isActive')!.invalid && (editForm.get('isActive')!.dirty || editForm.get('isActive')!.touched)">
+            <small
+              class="form-text text-danger"
+              *ngIf="editForm.get('isActive')?.errors?.required"
+              jhiTranslate="entity.validation.required"
+            >
+              This field is required.
+            </small>
+          </div>
+        </div>
       </div>
 
       <div>

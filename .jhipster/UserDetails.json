@@ -77,10 +77,24 @@
       "relationshipName": "userDetails"
     },
     {
+      "relationshipType": "many-to-many",
+      "otherEntityName": "userDetails",
+      "otherEntityRelationshipName": "sourceContact",
+      "relationshipName": "targetContact",
+      "ownerSide": true
+    },
+    {
       "relationshipType": "many-to-one",
       "otherEntityName": "userDetails",
       "otherEntityRelationshipName": "userDetails",
       "relationshipName": "contact"
+    },
+    {
+      "relationshipType": "many-to-many",
+      "otherEntityName": "userDetails",
+      "otherEntityRelationshipName": "targetContact",
+      "relationshipName": "sourceContact",
+      "ownerSide": false
     }
   ],
   "entityTableName": "t_user",
@@ -92,5 +106,5 @@
   "readOnly": false,
   "embedded": false,
   "applications": "*",
-  "changelogDate": "20210706023528"
+  "changelogDate": "20210715002816"
 }

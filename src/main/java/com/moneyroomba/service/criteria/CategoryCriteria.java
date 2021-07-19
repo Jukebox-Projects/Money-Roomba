@@ -32,11 +32,11 @@ public class CategoryCriteria implements Serializable, Criteria {
 
     private BooleanFilter userCreated;
 
+    private IntegerFilter icon;
+
     private LongFilter categoryId;
 
     private LongFilter transactionId;
-
-    private LongFilter iconId;
 
     private LongFilter parentId;
 
@@ -49,9 +49,9 @@ public class CategoryCriteria implements Serializable, Criteria {
         this.name = other.name == null ? null : other.name.copy();
         this.isActive = other.isActive == null ? null : other.isActive.copy();
         this.userCreated = other.userCreated == null ? null : other.userCreated.copy();
+        this.icon = other.icon == null ? null : other.icon.copy();
         this.categoryId = other.categoryId == null ? null : other.categoryId.copy();
         this.transactionId = other.transactionId == null ? null : other.transactionId.copy();
-        this.iconId = other.iconId == null ? null : other.iconId.copy();
         this.parentId = other.parentId == null ? null : other.parentId.copy();
         this.userId = other.userId == null ? null : other.userId.copy();
     }
@@ -121,6 +121,21 @@ public class CategoryCriteria implements Serializable, Criteria {
         this.userCreated = userCreated;
     }
 
+    public IntegerFilter getIcon() {
+        return icon;
+    }
+
+    public IntegerFilter icon() {
+        if (icon == null) {
+            icon = new IntegerFilter();
+        }
+        return icon;
+    }
+
+    public void setIcon(IntegerFilter icon) {
+        this.icon = icon;
+    }
+
     public LongFilter getCategoryId() {
         return categoryId;
     }
@@ -149,21 +164,6 @@ public class CategoryCriteria implements Serializable, Criteria {
 
     public void setTransactionId(LongFilter transactionId) {
         this.transactionId = transactionId;
-    }
-
-    public LongFilter getIconId() {
-        return iconId;
-    }
-
-    public LongFilter iconId() {
-        if (iconId == null) {
-            iconId = new LongFilter();
-        }
-        return iconId;
-    }
-
-    public void setIconId(LongFilter iconId) {
-        this.iconId = iconId;
     }
 
     public LongFilter getParentId() {
@@ -210,9 +210,9 @@ public class CategoryCriteria implements Serializable, Criteria {
             Objects.equals(name, that.name) &&
             Objects.equals(isActive, that.isActive) &&
             Objects.equals(userCreated, that.userCreated) &&
+            Objects.equals(icon, that.icon) &&
             Objects.equals(categoryId, that.categoryId) &&
             Objects.equals(transactionId, that.transactionId) &&
-            Objects.equals(iconId, that.iconId) &&
             Objects.equals(parentId, that.parentId) &&
             Objects.equals(userId, that.userId)
         );
@@ -220,7 +220,7 @@ public class CategoryCriteria implements Serializable, Criteria {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, isActive, userCreated, categoryId, transactionId, iconId, parentId, userId);
+        return Objects.hash(id, name, isActive, userCreated, icon, categoryId, transactionId, parentId, userId);
     }
 
     // prettier-ignore
@@ -231,9 +231,9 @@ public class CategoryCriteria implements Serializable, Criteria {
             (name != null ? "name=" + name + ", " : "") +
             (isActive != null ? "isActive=" + isActive + ", " : "") +
             (userCreated != null ? "userCreated=" + userCreated + ", " : "") +
+            (icon != null ? "icon=" + icon + ", " : "") +
             (categoryId != null ? "categoryId=" + categoryId + ", " : "") +
             (transactionId != null ? "transactionId=" + transactionId + ", " : "") +
-            (iconId != null ? "iconId=" + iconId + ", " : "") +
             (parentId != null ? "parentId=" + parentId + ", " : "") +
             (userId != null ? "userId=" + userId + ", " : "") +
             "}";

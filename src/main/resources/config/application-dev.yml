@@ -32,9 +32,9 @@ spring:
       indent-output: true
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
-    url: jdbc:mysql://ikn7cp12d0maxh48:gzb1lur4t4vtcf11@pk1l4ihepirw9fob.cbetxkdyhwsb.us-east-1.rds.amazonaws.com:3306/bzavahbosdx1rt1p?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
-    username: ikn7cp12d0maxh48
-    password: zyht3ah3clt7zouy
+    url: jdbc:mysql://localhost:3306/MoneyRoomba?allowPublicKeyRetrieval=true&useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
+    username: root
+    password: root
     hikari:
       poolName: Hikari
       auto-commit: false
@@ -83,7 +83,7 @@ jhipster:
   security:
     remember-me:
       # security key (this key should be unique for your application, and kept secret)
-      key: a63996ecd0ff2c3b6edd5260b9bc1034480ab134d76669465508fb8452b7f550a12942effb5056a3dae8f82cef64b6b76186
+      key: a3c7f3ae3c9ca55dc637068efed7ccee2acee7d88d7a4a4763a14d81574b511e87a7f8b9f7c6ba21461288d985d20d6d11f2
   mail: # specific JHipster mail property, for standard properties see MailProperties
     base-url: http://127.0.0.1:8080
   logging:
