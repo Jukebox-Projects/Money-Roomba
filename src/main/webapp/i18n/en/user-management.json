@@ -9,6 +9,7 @@
     "created": "A new user is created with identifier {{ param }}",
     "updated": "A user is updated with identifier {{ param }}",
     "deleted": "A user is deleted with identifier {{ param }}",
+    "resetPassword": "A password reset was requested for a user with the identifier {{ param }}",
     "delete": {
       "question": "Are you sure you want to delete user {{ login }}?"
     },

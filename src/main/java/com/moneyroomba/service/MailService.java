@@ -1,6 +1,7 @@
 package com.moneyroomba.service;
 
 import com.moneyroomba.domain.User;
+import com.moneyroomba.service.dto.AdminUserDTO;
 import java.nio.charset.StandardCharsets;
 import java.util.Locale;
 import javax.mail.MessagingException;
