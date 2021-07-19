@@ -1,0 +1,129 @@
+<div class="row justify-content-center">
+  <div class="col-8">
+    <form name="editForm" role="form" novalidate (ngSubmit)="convert()" [formGroup]="editForm">
+      <h2 id="jhi-currency-heading" data-cy="CurrencyCreateUpdateHeading" jhiTranslate="moneyRoombaApp.currencyConverter.home.title">
+        Currency converter
+      </h2>
+
+      <div>
+        <jhi-alert-error></jhi-alert-error>
+
+        <div class="form-row">
+          <div class="form-group col-md-6">
+            <label class="form-control-label" jhiTranslate="moneyRoombaApp.currencyConverter.sourceCurrency" for="field_source_currency"
+              >Source Currency</label
+            >
+            <select
+              class="form-control"
+              id="field_source_currency"
+              data-cy="sourceCurrency"
+              name="sourceCurrency"
+              formControlName="sourceCurrency"
+            >
+              <option
+                [ngValue]="
+                  currencyOption.code === editForm.get('sourceCurrency')!.value?.code
+                    ? editForm.get('sourceCurrency')!.value
+                    : currencyOption
+                "
+                *ngFor="let currencyOption of currencies; trackBy: trackCurrencyById"
+              >
+                {{ currencyOption.code }} - {{ currencyOption.name }}
+              </option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group col-md-6">
+            <label class="form-control-label" jhiTranslate="moneyRoombaApp.currencyConverter.targetCurrency" for="field_source_currency"
+              >Target Currency</label
+            >
+            <select
+              class="form-control"
+              (change)="changeTargetCurrency()"
+              id="field_target_currency"
+              data-cy="targetCurrency"
+              name="targetCurrency"
+              formControlName="targetCurrency"
+            >
+              <option
+                [ngValue]="
+                  currencyOption.code === editForm.get('targetCurrency')!.value?.code
+                    ? editForm.get('targetCurrency')!.value
+                    : currencyOption
+                "
+                *ngFor="let currencyOption of currencies; trackBy: trackCurrencyById"
+              >
+                {{ currencyOption.code }} - {{ currencyOption.name }}
+              </option>
+            </select>
+          </div>
+
+          <div class="form-group col-md-6">
+            <label class="form-control-label" jhiTranslate="moneyRoombaApp.currencyConverter.valueRespectDollar" for="field_conversion_rate"
+              >Value on respect to Dollar</label
+            >
+            <input
+              type="text"
+              class="form-control"
+              name="conversionRate"
+              id="field_conversion_rate"
+              data-cy="name"
+              formControlName="conversionRate"
+              value="{{ targetCurrencyValue }}"
+            />
+            <div
+              *ngIf="
+                editForm.get('conversionRate')!.invalid &&
+                (editForm.get('conversionRate')!.dirty || editForm.get('conversionRate')!.touched)
+              "
+            >
+              <small class="form-text text-danger" *ngIf="editForm.get('name')?.errors?.required" jhiTranslate="entity.validation.required">
+                This field is required.
+              </small>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" jhiTranslate="moneyRoombaApp.currencyConverter.amount" for="field_amount"
+            >Conversion Rate</label
+          >
+          <input type="number" class="form-control" name="amount" id="field_amount" data-cy="amount" formControlName="amount" />
+          <div *ngIf="editForm.get('amount')!.invalid && (editForm.get('amount')!.dirty || editForm.get('amount')!.touched)">
+            <small class="form-text text-danger" *ngIf="editForm.get('amount')?.errors?.required" jhiTranslate="entity.validation.required">
+              This field is required.
+            </small>
+            <small class="form-text text-danger" [hidden]="!editForm.get('amount')?.errors?.number" jhiTranslate="entity.validation.number">
+              This field should be a number.
+            </small>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="resetForm()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span jhiTranslate="moneyRoombaApp.currencyConverter.restore">Restore</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="cogs"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
+        </button>
+      </div>
+    </form>
+    <div *ngIf="conversionData" class="p-5 text-center">
+      <h2 jhiTranslate="moneyRoombaApp.currencyConverter.result" class="text-secondary">Result:</h2>
+      <h1>
+        {{ conversionData.amount | currency: conversionData.sourceCurrency.code:'symbol' }} =
+        <span class="badge badge-secondary">{{ conversionData.result | currency: conversionData.targetCurrency.code:'symbol' }}</span>
+      </h1>
+    </div>
+  </div>
+</div>
