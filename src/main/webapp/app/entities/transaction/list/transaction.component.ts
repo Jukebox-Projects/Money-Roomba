@@ -6,6 +6,7 @@ import { ITransaction } from '../transaction.model';
 import { TransactionService } from '../service/transaction.service';
 import { TransactionDeleteDialogComponent } from '../delete/transaction-delete-dialog.component';
 import { IWallet } from '../../wallet/wallet.model';
+import { FormGroup, FormControl } from '@angular/forms';
 
 @Component({
   selector: 'jhi-transaction',
@@ -16,7 +17,10 @@ export class TransactionComponent implements OnInit {
   allTransactions?: IWallet[];
   isLoading = false;
   inputText = '';
-  selected = '';
+  range = new FormGroup({
+    start: new FormControl(),
+    end: new FormControl(),
+  });
 
   constructor(protected transactionService: TransactionService, protected modalService: NgbModal) {}
 
@@ -43,23 +47,36 @@ export class TransactionComponent implements OnInit {
   }
 
   filterTransactions(): void {
-    /* eslint-disable no-console */
     if (this.transactions !== undefined) {
       this.transactions = this.transactions.filter(transaction => {
-        if (transaction.name !== undefined && this.selected === 'name1') {
-          return transaction.name.toLowerCase().includes(this.inputText.toLowerCase());
-        } else if (transaction.description !== undefined && this.selected === 'description1') {
-          return transaction.description.toLowerCase().includes(this.inputText.toLowerCase());
+        if (transaction.name !== undefined || transaction.description !== undefined) {
+          return (
+            transaction.name.toLowerCase().includes(this.inputText.toLowerCase()) ||
+            transaction.description.toLowerCase().includes(this.inputText.toLowerCase())
+          );
         } else {
           return false;
         }
       });
-    }
-    if (this.inputText === '') {
-      this.transactions = this.allTransactions;
+      if (this.inputText === '') {
+        this.transactions = this.allTransactions;
+      }
     }
   }
 
+  filterDateRange(): void {
+    /* eslint-disable no-console */
+    if (this.transactions !== undefined) {
+      this.transactions = this.transactions.filter(transaction => {
+        if (transaction.dateAdded !== undefined) {
+          return (
+            transaction.dateAdded.toDate().valueOf() >= this.range.value.start.valueOf() &&
+            transaction.dateAdded.toDate().valueOf() <= this.range.value.end.valueOf()
+          );
+        }
+      });
+    }
+  }
   delete(transaction: ITransaction): void {
     const modalRef = this.modalService.open(TransactionDeleteDialogComponent, { size: 'lg', backdrop: 'static' });
     modalRef.componentInstance.transaction = transaction;

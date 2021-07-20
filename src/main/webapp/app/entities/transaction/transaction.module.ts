@@ -6,10 +6,9 @@ import { TransactionUpdateComponent } from './update/transaction-update.componen
 import { TransactionDeleteDialogComponent } from './delete/transaction-delete-dialog.component';
 import { TransactionRoutingModule } from './route/transaction-routing.module';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatSelectModule } from '@angular/material/select';
-
+import { MatDatepickerModule } from '@angular/material/datepicker';
 @NgModule({
-  imports: [SharedModule, TransactionRoutingModule, MatFormFieldModule, MatSelectModule],
+  imports: [SharedModule, TransactionRoutingModule, MatFormFieldModule, MatDatepickerModule],
   declarations: [TransactionComponent, TransactionDetailComponent, TransactionUpdateComponent, TransactionDeleteDialogComponent],
   entryComponents: [TransactionDeleteDialogComponent],
 })
