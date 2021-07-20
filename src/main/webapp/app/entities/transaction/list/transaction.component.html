@@ -3,22 +3,39 @@
     <span jhiTranslate="moneyRoombaApp.transaction.home.title">Transactions</span>
 
     <div class="d-flex justify-content-end">
-      <input jhiTranslate="moneyRoombaApp.transaction.home.searchbar" type="text" [(ngModel)]="inputText" (input)="filterTransactions()" />
-      <!-- <input jhiTranslate="moneyRoombaApp.transaction.home.searchbar" type="text" [(ngModel)]="inputText" (input)="filterTransactionsDate()" />-->
+      <select [(ngModel)]="slctDataType" name="slctDataType">
+        <option value="name1">Name</option>
+        <option value="description2">Description</option>
+        <option value="date3">Date</option>
+        <!-- <mat-error *ngIf="selectFormControl.hasError('required')"></mat-error>-->
+      </select>
 
-      <mat-form-field appearance="fill" (submit)="filterDateRange()">
-        <mat-label>Enter a date range</mat-label>
-        <mat-date-range-input [formGroup]="range" [rangePicker]="picker">
-          <input matStartDate formControlName="start" placeholder="Start date" />
-          <input matEndDate formControlName="end" placeholder="End date" />
-        </mat-date-range-input>
-        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-        <mat-date-range-picker #picker></mat-date-range-picker>
+      <!-- Input nombre y descripcion -->
+      <input
+        *ngIf="slctDataType == 'name1' || slctDataType == 'description2'"
+        jhiTranslate="moneyRoombaApp.transaction.home.searchbar"
+        type="text"
+        [(ngModel)]="inputText"
+        (input)="filterTransactions()"
+      />
 
-        <mat-error *ngIf="range.controls.start.hasError('matStartDateInvalid')">Invalid start date</mat-error>
-        <mat-error *ngIf="range.controls.end.hasError('matEndDateInvalid')">Invalid end date</mat-error>
-        <button (click)="filterDateRange()">Submit</button>
-      </mat-form-field>
+      <!-- Input date Range -->
+      <form *ngIf="slctDataType == 'date3'">
+        <mat-form-field appearance="fill" (submit)="filterDateRange()">
+          <mat-label>Enter a date range</mat-label>
+          <mat-date-range-input [formGroup]="range" [rangePicker]="picker">
+            <input matStartDate formControlName="start" placeholder="Start date" />
+            <input matEndDate formControlName="end" placeholder="End date" />
+          </mat-date-range-input>
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-date-range-picker #picker></mat-date-range-picker>
+
+          <mat-error *ngIf="range.controls.start.hasError('matStartDateInvalid')">Invalid start date</mat-error>
+          <mat-error *ngIf="range.controls.end.hasError('matEndDateInvalid')">Invalid end date</mat-error>
+        </mat-form-field>
+        <button class="btn btn-info mr-2" (click)="filterDateRange()">Submit</button>
+      </form>
+
       <button class="btn btn-info mr-2" (click)="loadAll()" [disabled]="isLoading">
         <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
         <span jhiTranslate="moneyRoombaApp.transaction.home.refreshListLabel">Refresh List</span>

@@ -17,6 +17,8 @@ export class TransactionComponent implements OnInit {
   allTransactions?: IWallet[];
   isLoading = false;
   inputText = '';
+  slctDataType: string;
+
   range = new FormGroup({
     start: new FormControl(),
     end: new FormControl(),
