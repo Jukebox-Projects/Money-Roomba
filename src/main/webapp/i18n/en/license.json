@@ -8,6 +8,27 @@
         "createOrEditLabel": "Create or edit a License",
         "notFound": "No Licenses found"
       },
+      "view": {
+        "title": "What benefits will I get as a premium user?",
+        "paragraph": "As a premium user you will get many benefits. Within these, you will have greater freedom within the application. The benefits are listed below.",
+        "regular": {
+          "title": "Regular",
+          "wallets": "Limit of 3 wallets",
+          "scheduledTransactions": "Limit of 3 scheduled transactions",
+          "importedTransactions": "Limit of 10 imported transactions",
+          "reports": "Limited time period for reports"
+        },
+        "premium": {
+          "title": "Premium",
+          "wallets": "Unlimited wallets",
+          "scheduledTransactions": "Unlimited scheduled transactions",
+          "importedTransactions": "Unlimited imported transactions",
+          "reports": "Extended time frame for reports"
+        },
+        "buyNow": "Buy now"
+      },
+      "activated": "Activated",
+      "deactivated": "Deactivated",
       "created": "A new License is created with identifier {{ param }}",
       "createdBulk": "{{ param }} licenses have been generated",
       "updated": "A License is updated with identifier {{ param }}",
@@ -24,7 +45,7 @@
       },
       "id": "ID",
       "code": "Code",
-      "isAssigned": "Is Assigned",
+      "isAssigned": "Redeemed",
       "isActive": "Is Active",
       "createMethod": "Create Method",
       "invoice": "Invoice"

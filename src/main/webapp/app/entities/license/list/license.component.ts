@@ -58,4 +58,13 @@ export class LicenseComponent implements OnInit {
       }
     });
   }
+
+  setActive(license: ILicense, isActivated: boolean): void {
+    this.licenseService.update({ ...license, isActive: isActivated }).subscribe(() => this.loadAll());
+  }
+
+  //Disabled cambia completamente el estilo del checkbox. Por eso esta funcion está encargada de deshabilitar el click a un checkbox.
+  checkbox(event) {
+    event.preventDefault();
+  }
 }

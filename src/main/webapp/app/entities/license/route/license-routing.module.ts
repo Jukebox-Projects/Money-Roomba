@@ -1,3 +1,4 @@
+import { LicenseViewComponent } from './../license-view/license-view.component';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
@@ -11,6 +12,11 @@ const licenseRoute: Routes = [
   {
     path: '',
     component: LicenseComponent,
+    canActivate: [UserRouteAccessService],
+  },
+  {
+    path: 'view',
+    component: LicenseViewComponent,
     canActivate: [UserRouteAccessService],
   },
   {
