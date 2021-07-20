@@ -95,6 +95,7 @@ import { MatStepperModule } from '@angular/material/stepper';
 import { MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatTreeModule } from '@angular/material/tree';
+import { IconPickerComponent } from './shared/icon-picker/icon-picker.component';
 
 @NgModule({
   imports: [
@@ -184,6 +185,7 @@ import { MatTreeModule } from '@angular/material/tree';
     NavHeaderComponent,
     HeaderComponent,
     NavigationComponent,
+    IconPickerComponent,
   ],
   bootstrap: [MainComponent],
 })
