@@ -1,3 +1,4 @@
+import { LicenseCreateDialogComponent } from './create/license-create-dialog.component';
 import { NgModule } from '@angular/core';
 import { SharedModule } from 'app/shared/shared.module';
 import { LicenseComponent } from './list/license.component';
@@ -8,7 +9,13 @@ import { LicenseRoutingModule } from './route/license-routing.module';
 
 @NgModule({
   imports: [SharedModule, LicenseRoutingModule],
-  declarations: [LicenseComponent, LicenseDetailComponent, LicenseUpdateComponent, LicenseDeleteDialogComponent],
+  declarations: [
+    LicenseComponent,
+    LicenseDetailComponent,
+    LicenseUpdateComponent,
+    LicenseDeleteDialogComponent,
+    LicenseCreateDialogComponent,
+  ],
   entryComponents: [LicenseDeleteDialogComponent],
 })
 export class LicenseModule {}

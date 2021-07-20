@@ -69,5 +69,6 @@ export class NavigationComponent implements OnInit {
     '/admin/docs',
     '/admin/configuration',
     '/system-setting',
+    '/license',
   ];
 }
