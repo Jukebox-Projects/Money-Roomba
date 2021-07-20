@@ -1,0 +1,16 @@
+{
+  "moneyRoombaApp": {
+    "currencyConverter": {
+      "home": {
+        "title": "Currency converter"
+      },
+      "result": "Result",
+      "sourceCurrency": "Source currency",
+      "targetCurrency": "Target currency",
+      "valueRespectDollar": "\nValue with respect to Dollar",
+      "amount": "Amount",
+      "calculate": "Calculate",
+      "restore": "Restore"
+    }
+  }
+}
