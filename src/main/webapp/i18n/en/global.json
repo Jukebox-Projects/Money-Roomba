@@ -24,7 +24,8 @@
       },
       "account": {
         "main": "Account",
-        "greetings": "Hello, {{param}}",
+        "greetings": "Hello, <strong>{{param}}</strong>",
+        "becomePremium": "Upgrade to premium",
         "settings": "Settings",
         "password": "Password",
         "sessions": "Sessions",
