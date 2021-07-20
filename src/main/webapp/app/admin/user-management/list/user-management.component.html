@@ -3,6 +3,7 @@
     <span id="user-management-page-heading" jhiTranslate="userManagement.home.title" data-cy="userManagementPageHeading">Users</span>
 
     <div class="d-flex justify-content-end">
+      <input jhiTranslate="userManagement.home.searchbar" type="text" [(ngModel)]="inputText" (input)="filter()" />
       <button class="btn btn-info mr-2" (click)="loadAll()" [disabled]="isLoading">
         <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
         <span jhiTranslate="userManagement.home.refreshListLabel">Refresh List</span>
@@ -22,21 +23,17 @@
       <thead>
         <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" [callback]="transition.bind(this)">
           <th scope="col" jhiSortBy="id"><span jhiTranslate="global.field.id">ID</span> <fa-icon icon="sort"></fa-icon></th>
-          <th scope="col" jhiSortBy="login"><span jhiTranslate="userManagement.login">Login</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="firstName">
+            <span jhiTranslate="userManagement.firstName">First Name</span> <fa-icon icon="sort"></fa-icon>
+          </th>
+          <th scope="col" jhiSortBy="lastName">
+            <span jhiTranslate="userManagement.lastName">Last Name</span> <fa-icon icon="sort"></fa-icon>
+          </th>
           <th scope="col" jhiSortBy="email"><span jhiTranslate="userManagement.email">Email</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col"></th>
-          <th scope="col" jhiSortBy="langKey">
-            <span jhiTranslate="userManagement.langKey">Lang Key</span> <fa-icon icon="sort"></fa-icon>
-          </th>
           <th scope="col"><span jhiTranslate="userManagement.profiles">Profiles</span></th>
           <th scope="col" jhiSortBy="createdDate">
             <span jhiTranslate="userManagement.createdDate">Created Date</span> <fa-icon icon="sort"></fa-icon>
-          </th>
-          <th scope="col" jhiSortBy="lastModifiedBy">
-            <span jhiTranslate="userManagement.lastModifiedBy">Last Modified By</span> <fa-icon icon="sort"></fa-icon>
-          </th>
-          <th scope="col" jhiSortBy="lastModifiedDate">
-            <span jhiTranslate="userManagement.lastModifiedDate">Last Modified Date</span> <fa-icon icon="sort"></fa-icon>
           </th>
           <th scope="col"></th>
         </tr>
@@ -46,7 +43,8 @@
           <td>
             <a [routerLink]="['./', user.login, 'view']">{{ user.id }}</a>
           </td>
-          <td>{{ user.login }}</td>
+          <td>{{ user.firstName }}</td>
+          <td>{{ user.lastName }}</td>
           <td>{{ user.email }}</td>
           <td>
             <button
@@ -67,15 +65,12 @@
               Activated
             </button>
           </td>
-          <td>{{ user.langKey }}</td>
           <td>
             <div *ngFor="let authority of user.authorities">
               <span class="badge badge-info">{{ authority }}</span>
             </div>
           </td>
           <td>{{ user.createdDate | date: 'dd/MM/yy HH:mm' }}</td>
-          <td>{{ user.lastModifiedBy }}</td>
-          <td>{{ user.lastModifiedDate | date: 'dd/MM/yy HH:mm' }}</td>
           <td class="text-right">
             <div class="btn-group">
               <button type="submit" [routerLink]="['./', user.login, 'view']" class="btn btn-info btn-sm">
