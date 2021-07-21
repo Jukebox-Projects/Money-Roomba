@@ -5,8 +5,6 @@ import com.moneyroomba.domain.Transaction;
 import com.moneyroomba.domain.User;
 import com.moneyroomba.domain.UserDetails;
 import com.moneyroomba.repository.TransactionRepository;
-import com.moneyroomba.repository.UserDetailsRepository;
-import com.moneyroomba.repository.UserRepository;
 import com.moneyroomba.security.AuthoritiesConstants;
 import com.moneyroomba.security.SecurityUtils;
 import com.moneyroomba.service.TransactionQueryService;
@@ -86,11 +84,15 @@ public class TransactionResource {
         if (transaction.getId() != null) {
             throw new BadRequestAlertException("A new transaction cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        Transaction result = transactionService.save(transaction);
-        return ResponseEntity
-            .created(new URI("/api/transactions/" + result.getId()))
-            .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
-            .body(result);
+        if (!SecurityUtils.hasCurrentUserThisAuthority(AuthoritiesConstants.ADMIN)) {
+            Transaction result = transactionService.save(transaction);
+            return ResponseEntity
+                .created(new URI("/api/transactions/" + result.getId()))
+                .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
+                .body(result);
+        } else {
+            throw new BadRequestAlertException("Admins cannot register transactions.", ENTITY_NAME, "admincantregister");
+        }
     }
 
     /**

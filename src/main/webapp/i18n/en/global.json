@@ -8,8 +8,8 @@
       "entities": {
         "main": "Entities",
         "userDetails": "User Details",
-        "wallet": "Wallet",
-        "transaction": "Transaction",
+        "wallet": "Wallets",
+        "transaction": "Transactions",
         "scheduledTransaction": "Scheduled Transaction",
         "schedulePattern": "Schedule Pattern",
         "attachment": "Attachment",
@@ -20,11 +20,13 @@
         "notification": "Notification",
         "event": "Event",
         "systemSetting": "System Setting",
+        "currency-converter": "Currency converter",
         "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)"
       },
       "account": {
         "main": "Account",
-        "greetings": "Hello, {{param}}",
+        "greetings": "Hello, <strong>{{param}}</strong>",
+        "becomePremium": "Upgrade to premium",
         "settings": "Settings",
         "password": "Password",
         "sessions": "Sessions",
@@ -135,7 +137,8 @@
       "save": "Save",
       "view": "View",
       "activate": "Activate",
-      "deactivate": "Deactivate"
+      "deactivate": "Deactivate",
+      "resetPassword": "Reset password"
     },
     "detail": {
       "field": "Field",
@@ -177,6 +180,13 @@
     "idnull": "Invalid ID",
     "idinvalid": "Invalid ID",
     "idnotfound": "ID cannot be found",
+    "licenseAssigned": "License is assigned",
+    "insufficientfunds": "You cannot register this transaction because of insufficient balance.",
+    "nopermission": "Could not complete action due to lack of permission according to your user roles.",
+    "admincantregister": "Admin cannot register {{ entityName }}.",
+    "nouserfound": "Current user has no details on its account, could not complete action",
+    "nomorewallets": "User has reached the max amount of wallets that his accounts can handle.",
+    "negativeincome": "You cannot register a transaction with an income lower than 0.",
     "file": {
       "could.not.extract": "Could not extract file",
       "not.image": "File was expected to be an image but was found to be \"{{ fileType }}\""

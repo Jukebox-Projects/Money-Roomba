@@ -5,9 +5,10 @@
         "title": "System Settings",
         "refreshListLabel": "Refrescar lista",
         "createLabel": "Crear nuevo System Setting",
-        "createOrEditLabel": "Crear o editar System Setting",
+        "createOrEditLabel": "Editar System Setting",
         "notFound": "Ningún System Settings encontrado"
       },
+      "keys": { "price": "Precio de licencia", "tax": "Impuesto de ventas" },
       "created": "Un nuevo System Setting ha sido creado con el identificador {{ param }}",
       "updated": "Un System Setting ha sido actualizado con el identificador {{ param }}",
       "deleted": "Un System Setting ha sido eliminado con el identificador {{ param }}",
@@ -18,8 +19,8 @@
         "title": "System Setting"
       },
       "id": "ID",
-      "key": "Key",
-      "value": "Value"
+      "key": "Llave",
+      "value": "Valor"
     }
   }
 }

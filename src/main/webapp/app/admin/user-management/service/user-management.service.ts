@@ -26,6 +26,10 @@ export class UserManagementService {
     return this.http.get<IUser>(`${this.resourceUrl}/${login}`);
   }
 
+  resetPassword(user: IUser): Observable<IUser> {
+    return this.http.post<IUser>(`${this.resourceUrl}/change-password`, user);
+  }
+
   findUserDetails(login: string): Observable<AccountDetail> {
     return this.http.get<AccountDetail>(`api/account/userDetails/${login}`);
   }
