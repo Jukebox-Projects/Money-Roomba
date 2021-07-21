@@ -4,7 +4,7 @@
       "home": {
         "title": "Licenses",
         "refreshListLabel": "Refresh list",
-        "createLabel": "Create a new License",
+        "createLabel": "Create licenses",
         "createOrEditLabel": "Create or edit a License",
         "notFound": "No Licenses found"
       },
@@ -28,6 +28,7 @@
         "buyNow": "Buy now"
       },
       "created": "A new License is created with identifier {{ param }}",
+      "createdBulk": "{{ param }} licenses have been generated",
       "updated": "A License is updated with identifier {{ param }}",
       "deleted": "A License is deleted with identifier {{ param }}",
       "delete": {
@@ -35,6 +36,10 @@
       },
       "detail": {
         "title": "License"
+      },
+      "createBulk": {
+        "title": "Create licenses in bulk",
+        "quantity": "Quantity"
       },
       "id": "ID",
       "code": "Code",

@@ -1,3 +1,4 @@
+import { LicenseCreateDialogComponent } from './../create/license-create-dialog.component';
 import { Component, OnInit } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -44,6 +45,15 @@ export class LicenseComponent implements OnInit {
     // unsubscribe not needed because closed completes on modal close
     modalRef.closed.subscribe(reason => {
       if (reason === 'deleted') {
+        this.loadAll();
+      }
+    });
+  }
+
+  create(): void {
+    const modalRef = this.modalService.open(LicenseCreateDialogComponent, { size: 'lg', backdrop: 'static' });
+    modalRef.closed.subscribe(reason => {
+      if (reason === 'created') {
         this.loadAll();
       }
     });
