@@ -25,7 +25,8 @@
       },
       "account": {
         "main": "Cuenta",
-        "greetings": "Hola, {{param}}",
+        "greetings": "Hola, <strong>{{param}}</strong>",
+        "becomePremium": "Cambiar a premium",
         "settings": "Ajustes",
         "password": "Contraseña",
         "sessions": "Sesiones",
