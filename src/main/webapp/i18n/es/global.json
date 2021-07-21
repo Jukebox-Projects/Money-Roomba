@@ -179,7 +179,10 @@
     "idnull": "ID inválido",
     "idinvalid": "ID inválido",
     "idnotfound": "ID no encontrado",
+    "licenseNotFound": "La licencia no se encontró",
     "licenseAssigned": "La licencia está asignada",
+    "licenseInvalid": "El formato de la licencia es inválido",
+    "licenseNotActive": "La licencia está desactivada",
     "file": {
       "could.not.extract": "No se pudo extraer el fichero",
       "not.image": "Se esperaba que el fichero fuera una imagen pero se encontro \"{{ fileType }}\""

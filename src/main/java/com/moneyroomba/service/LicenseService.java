@@ -2,8 +2,10 @@ package com.moneyroomba.service;
 
 import com.moneyroomba.domain.License;
 import com.moneyroomba.repository.LicenseRepository;
+import com.moneyroomba.repository.UserRepository;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -20,8 +22,11 @@ public class LicenseService {
 
     private final LicenseRepository licenseRepository;
 
-    public LicenseService(LicenseRepository licenseRepository) {
+    private final UserService userService;
+
+    public LicenseService(LicenseRepository licenseRepository, UserService userService) {
         this.licenseRepository = licenseRepository;
+        this.userService = userService;
     }
 
     /**
@@ -88,6 +93,20 @@ public class LicenseService {
     public Optional<License> findOne(Long id) {
         log.debug("Request to get License : {}", id);
         return licenseRepository.findById(id);
+    }
+
+    public Optional<License> findOne(UUID code) {
+        log.debug("Request to get License : {}", code.toString());
+        return licenseRepository.findOneByCode(code);
+    }
+
+    public License activate(License license) {
+        log.debug("Request to activate License : {}", license);
+        license.setIsAssigned(true);
+
+        userService.updateUser(license.getCode().toString());
+
+        return licenseRepository.save(license);
     }
 
     /**
