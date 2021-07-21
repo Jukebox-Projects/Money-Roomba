@@ -25,6 +25,14 @@
           </li>
           <li>
             <a
+              class="{{ currentHref == '/transaction' ? 'mm-active' : '' }}"
+              [routerLink]="['/transaction']"
+              jhiTranslate="global.menu.entities.transaction"
+              >Transaction</a
+            >
+          </li>
+          <li>
+            <a
               class="{{ currentHref == '/scheduled-transaction' ? 'mm-active' : '' }}"
               [routerLink]="['/scheduled-transaction']"
               jhiTranslate="global.menu.entities.scheduledTransaction"
@@ -37,6 +45,14 @@
               [routerLink]="['/category']"
               jhiTranslate="global.menu.entities.category"
               >Category</a
+            >
+          </li>
+          <li>
+            <a
+              class="{{ currentHref == '/currency-converter' ? 'mm-active' : '' }}"
+              [routerLink]="['/currency-converter']"
+              jhiTranslate="global.menu.entities.currency-converter"
+              >Wallet</a
             >
           </li>
         </ul>
@@ -101,6 +117,14 @@
               class="{{ currentHref == '/system-setting' ? 'mm-active' : '' }}"
               jhiTranslate="global.menu.entities.systemSetting"
               >System Setting</a
+            >
+          </li>
+          <li>
+            <a
+              [routerLink]="['/license']"
+              class="{{ currentHref == '/license' ? 'mm-active' : '' }}"
+              jhiTranslate="global.menu.entities.license"
+              >Licenses</a
             >
           </li>
         </ul>

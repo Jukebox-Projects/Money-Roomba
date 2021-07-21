@@ -38,7 +38,7 @@ export class SystemSettingComponent implements OnInit {
     return item.id!;
   }
 
-  delete(systemSetting: ISystemSetting): void {
+  /*delete(systemSetting: ISystemSetting): void {
     const modalRef = this.modalService.open(SystemSettingDeleteDialogComponent, { size: 'lg', backdrop: 'static' });
     modalRef.componentInstance.systemSetting = systemSetting;
     // unsubscribe not needed because closed completes on modal close
@@ -47,5 +47,5 @@ export class SystemSettingComponent implements OnInit {
         this.loadAll();
       }
     });
-  }
+  }*/
 }

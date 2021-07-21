@@ -1,3 +1,4 @@
+import { Authority } from './../../../config/authority.constants';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
@@ -44,6 +45,10 @@ export class HeaderComponent implements OnInit {
       this.openAPIEnabled = profileInfo.openAPIEnabled;
     });
     this.accountService.getAuthenticationState().subscribe(account => (this.account = account));
+  }
+
+  isPremium(): boolean {
+    return this.accountService.hasAnyAuthority(Authority.PREMIUM_USER);
   }
 
   changeLanguage(languageKey: string): void {

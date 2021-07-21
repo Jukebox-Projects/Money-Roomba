@@ -205,4 +205,20 @@ public class UserResource {
         userService.deleteUser(login);
         return ResponseEntity.noContent().headers(HeaderUtil.createAlert(applicationName, "userManagement.deleted", login)).build();
     }
+
+    @PostMapping(path = "/users/change-password")
+    @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\")")
+    public ResponseEntity<User> resetPassword(@Valid @RequestBody AdminUserDTO userDTO) throws URISyntaxException {
+        String password = java.util.UUID.randomUUID().toString().substring(0, 6);
+        Optional<User> user = userService.requestPasswordReset(userDTO.getLogin(), password);
+        if (user.isPresent()) {
+            mailService.sendPasswordResetMail(user.get(), password);
+        } else {
+            log.warn("Password reset requested for non existing mail");
+        }
+        return ResponseUtil.wrapOrNotFound(
+            userService.getUserFromAdminUserDTO(userDTO),
+            HeaderUtil.createAlert(applicationName, "userManagement.resetPassword", userDTO.getLogin())
+        );
+    }
 }

@@ -16,7 +16,7 @@ export class LicenseService {
 
   constructor(protected http: HttpClient, protected applicationConfigService: ApplicationConfigService) {}
 
-  create(license: ILicense): Observable<EntityResponseType> {
+  create(license: any): Observable<EntityResponseType> {
     return this.http.post<ILicense>(this.resourceUrl, license, { observe: 'response' });
   }
 

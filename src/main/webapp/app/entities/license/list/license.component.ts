@@ -1,3 +1,4 @@
+import { LicenseCreateDialogComponent } from './../create/license-create-dialog.component';
 import { Component, OnInit } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -47,5 +48,23 @@ export class LicenseComponent implements OnInit {
         this.loadAll();
       }
     });
+  }
+
+  create(): void {
+    const modalRef = this.modalService.open(LicenseCreateDialogComponent, { size: 'lg', backdrop: 'static' });
+    modalRef.closed.subscribe(reason => {
+      if (reason === 'created') {
+        this.loadAll();
+      }
+    });
+  }
+
+  setActive(license: ILicense, isActivated: boolean): void {
+    this.licenseService.update({ ...license, isActive: isActivated }).subscribe(() => this.loadAll());
+  }
+
+  //Disabled cambia completamente el estilo del checkbox. Por eso esta funcion está encargada de deshabilitar el click a un checkbox.
+  checkbox(event) {
+    event.preventDefault();
   }
 }

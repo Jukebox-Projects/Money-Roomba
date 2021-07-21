@@ -3,10 +3,13 @@ package com.moneyroomba.service;
 import com.moneyroomba.domain.Transaction;
 import com.moneyroomba.domain.User;
 import com.moneyroomba.domain.UserDetails;
+import com.moneyroomba.domain.Wallet;
+import com.moneyroomba.domain.enumeration.MovementType;
 import com.moneyroomba.domain.enumeration.TransactionType;
 import com.moneyroomba.repository.TransactionRepository;
 import com.moneyroomba.repository.UserDetailsRepository;
 import com.moneyroomba.repository.UserRepository;
+import com.moneyroomba.repository.WalletRepository;
 import com.moneyroomba.security.AuthoritiesConstants;
 import com.moneyroomba.security.SecurityUtils;
 import com.moneyroomba.web.rest.errors.BadRequestAlertException;
@@ -41,14 +44,18 @@ public class TransactionService {
 
     private final UserDetailsRepository userDetailsRepository;
 
+    private final WalletRepository walletRepository;
+
     public TransactionService(
         TransactionRepository transactionRepository,
         UserRepository userRepository,
-        UserDetailsRepository userDetailsRepository
+        UserDetailsRepository userDetailsRepository,
+        WalletRepository walletRepository
     ) {
         this.transactionRepository = transactionRepository;
         this.userRepository = userRepository;
         this.userDetailsRepository = userDetailsRepository;
+        this.walletRepository = walletRepository;
     }
 
     /**
@@ -57,11 +64,16 @@ public class TransactionService {
      * @param transaction the entity to save.
      * @return the persisted entity.
      */
+    @Transactional
     public Transaction save(Transaction transaction) {
+        double currentBalance;
+        Wallet wallet = transaction.getWallet();
         log.debug("Request to save Transaction : {}", transaction);
         if (!SecurityUtils.hasCurrentUserThisAuthority(AuthoritiesConstants.ADMIN)) {
             Optional<User> user = userRepository.findOneByLogin(
-                SecurityUtils.getCurrentUserLogin().orElseThrow(() -> new TransactionServiceException("Current user login not found"))
+                SecurityUtils
+                    .getCurrentUserLogin()
+                    .orElseThrow(() -> new BadRequestAlertException("Current user login not found", ENTITY_NAME, ""))
             );
             Optional<UserDetails> userDetails = userDetailsRepository.findOneByInternalUser(user.get());
             transaction.setSourceUser(userDetails.get());
@@ -70,7 +82,36 @@ public class TransactionService {
             transaction.setScheduled(false);
             //logica de parseo de monedas....
             transaction.setAmount(transaction.getOriginalAmount());
-
+            currentBalance = transaction.getWallet().getBalance();
+            if (transaction.getMovementType().equals(MovementType.EXPENSE)) {
+                if (wallet.getBalance() > 0 && wallet.getBalance() >= transaction.getAmount()) {
+                    currentBalance = wallet.getBalance();
+                    currentBalance = currentBalance - transaction.getAmount();
+                    wallet.setBalance(currentBalance);
+                    walletRepository.save(wallet);
+                } else {
+                    //throw insufficient funds exception
+                    throw new BadRequestAlertException(
+                        "You cannot register this transaction because of insufficient balance.",
+                        ENTITY_NAME,
+                        "insufficientfunds"
+                    );
+                }
+            } else {
+                if (transaction.getAmount() > 0) {
+                    currentBalance = wallet.getBalance();
+                    currentBalance = currentBalance + transaction.getAmount();
+                    wallet.setBalance(currentBalance);
+                    walletRepository.save(wallet);
+                } else {
+                    //throw cannot register negative transaction exception.
+                    throw new BadRequestAlertException(
+                        "You cannot register a transaction with an income lower than 0.",
+                        ENTITY_NAME,
+                        "negativeincome"
+                    );
+                }
+            }
             return transactionRepository.save(transaction);
         } else {
             throw new BadRequestAlertException("Los administradores no pueden crear transacciones", ENTITY_NAME, "nopermission");

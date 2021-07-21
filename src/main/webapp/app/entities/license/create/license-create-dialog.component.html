@@ -1,0 +1,46 @@
+<form name="creationForm" (ngSubmit)="confirmCreation()" role="form" novalidate [formGroup]="creationForm">
+  <div class="modal-header">
+    <h4 class="modal-title" data-cy="licenseCreateDialogHeading" jhiTranslate="moneyRoombaApp.license.createBulk.title">
+      Create licenses in bulk
+    </h4>
+
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true" (click)="cancel()">&times;</button>
+  </div>
+
+  <div class="modal-body">
+    <jhi-alert-error></jhi-alert-error>
+
+    <div class="form-group">
+      <label class="form-control-label" jhiTranslate="moneyRoombaApp.license.createBulk.quantity" for="field_quantity">Quantity</label>
+      <input
+        type="number"
+        min="1"
+        max="50"
+        class="form-check"
+        name="quantity"
+        id="field_quantity"
+        data-cy="quantity"
+        formControlName="quantity"
+      />
+      <div *ngIf="creationForm.get('quantity')!.invalid && (creationForm.get('quantity')!.dirty || creationForm.get('quantity')!.touched)">
+        <small
+          class="form-text text-danger"
+          *ngIf="creationForm.get('quantity')?.errors?.required"
+          jhiTranslate="entity.validation.required"
+        >
+          This field is required.
+        </small>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="cancel()">
+      <fa-icon icon="ban"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
+    </button>
+
+    <button id="jhi-confirm-create-license" data-cy="licenseCreateDialogHeading" type="submit" class="btn btn-primary">
+      <fa-icon icon="save"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
+    </button>
+  </div>
+</form>
