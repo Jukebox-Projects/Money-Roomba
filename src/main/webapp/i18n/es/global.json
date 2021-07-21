@@ -179,6 +179,7 @@
     "idnull": "ID inválido",
     "idinvalid": "ID inválido",
     "idnotfound": "ID no encontrado",
+    "licenseAssigned": "La licencia está asignada",
     "insufficientfunds": "No es posible registrar esta transacción debido a balance insuficiente.",
     "nopermission": "No es posible realizar esta acción ya que no está incluida dentro de los permisos de su rol.",
     "admincantregister": "El administrador no puede registrar {{ entityName }}.",

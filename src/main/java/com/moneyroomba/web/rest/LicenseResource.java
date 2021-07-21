@@ -220,10 +220,20 @@ public class LicenseResource {
     @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\")")
     public ResponseEntity<Void> deleteLicense(@PathVariable Long id) {
         log.debug("REST request to delete License : {}", id);
-        licenseService.delete(id);
-        return ResponseEntity
-            .noContent()
-            .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()))
-            .build();
+        Optional<License> license = licenseService.findOne(id);
+
+        if (license.get() != null) {
+            if (license.get().getIsAssigned()) {
+                throw new BadRequestAlertException("License is assigned", ENTITY_NAME, "licenseAssigned");
+            } else {
+                licenseService.delete(id);
+                return ResponseEntity
+                    .noContent()
+                    .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()))
+                    .build();
+            }
+        } else {
+            throw new BadRequestAlertException("License does not exist", ENTITY_NAME, "idnotfound");
+        }
     }
 }
