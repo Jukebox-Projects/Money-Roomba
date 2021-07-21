@@ -32,6 +32,9 @@ public class SystemSettingService {
      */
     public SystemSetting save(SystemSetting systemSetting) {
         log.debug("Request to save SystemSetting : {}", systemSetting);
+        if (systemSetting.getValue() < 0) {
+            systemSetting.setValue(0.0);
+        }
         return systemSettingRepository.save(systemSetting);
     }
 
@@ -49,10 +52,14 @@ public class SystemSettingService {
             .map(
                 existingSystemSetting -> {
                     if (systemSetting.getKey() != null) {
-                        existingSystemSetting.setKey(systemSetting.getKey());
+                        //existingSystemSetting.setKey(systemSetting.getKey());
                     }
                     if (systemSetting.getValue() != null) {
-                        existingSystemSetting.setValue(systemSetting.getValue());
+                        if (systemSetting.getValue() > 0) {
+                            existingSystemSetting.setValue(systemSetting.getValue());
+                        } else {
+                            existingSystemSetting.setValue(0.0);
+                        }
                     }
 
                     return existingSystemSetting;
@@ -91,6 +98,6 @@ public class SystemSettingService {
      */
     public void delete(Long id) {
         log.debug("Request to delete SystemSetting : {}", id);
-        systemSettingRepository.deleteById(id);
+        //systemSettingRepository.deleteById(id);
     }
 }
