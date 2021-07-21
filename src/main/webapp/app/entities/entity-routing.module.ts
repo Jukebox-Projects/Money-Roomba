@@ -69,6 +69,11 @@ import { RouterModule } from '@angular/router';
         data: { pageTitle: 'moneyRoombaApp.systemSetting.home.title' },
         loadChildren: () => import('./system-setting/system-setting.module').then(m => m.SystemSettingModule),
       },
+      {
+        path: 'currency-converter',
+        data: { pageTitle: 'moneyRoombaApp.currencyConverter.home.title' },
+        loadChildren: () => import('./currency-converter/currency-converter.module').then(m => m.CurrencyConverterModule),
+      },
       /* jhipster-needle-add-entity-route - JHipster will add entity modules routes here */
     ]),
   ],

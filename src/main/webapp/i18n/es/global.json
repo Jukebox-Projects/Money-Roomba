@@ -7,19 +7,20 @@
       "jhipster-needle-menu-add-element": "JHipster will add additional menu entries here (do not translate!)",
       "entities": {
         "main": "Entidades",
-        "userDetails": "User Details",
+        "userDetails": "Detalles de usuarios",
         "wallet": "Carteras",
         "transaction": "Transacciones",
-        "scheduledTransaction": "Scheduled Transaction",
-        "schedulePattern": "Schedule Pattern",
-        "attachment": "Attachment",
-        "category": "Category",
-        "invoice": "Invoice",
-        "license": "License",
-        "currency": "Currency",
-        "notification": "Notification",
-        "event": "Event",
-        "systemSetting": "System Setting",
+        "scheduledTransaction": "Transacciones programadas",
+        "schedulePattern": "Patrón de programación",
+        "attachment": "Adjunto",
+        "category": "Categoría",
+        "invoice": "Factura",
+        "license": "Licencia",
+        "currency": "Moneda",
+        "notification": "Notificación",
+        "event": "Evento",
+        "systemSetting": "Configuración de sistema",
+        "currency-converter": "Conversor de monedas",
         "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)"
       },
       "account": {
@@ -135,7 +136,8 @@
       "save": "Guardar",
       "view": "Vista",
       "activate": "Activar",
-      "deactivate": "Desactivar"
+      "deactivate": "Desactivar",
+      "resetPassword": "Recuperar contraseña"
     },
     "detail": {
       "field": "Campo",
