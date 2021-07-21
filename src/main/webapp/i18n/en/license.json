@@ -27,6 +27,9 @@
         },
         "buyNow": "Buy now"
       },
+
+      "activated": "Activated",
+      "deactivated": "Deactivated",
       "created": "A new License is created with identifier {{ param }}",
       "createdBulk": "{{ param }} licenses have been generated",
       "updated": "A License is updated with identifier {{ param }}",
@@ -43,7 +46,7 @@
       },
       "id": "ID",
       "code": "Code",
-      "isAssigned": "Is Assigned",
+      "isAssigned": "Redeemed",
       "isActive": "Is Active",
       "createMethod": "Create Method",
       "invoice": "Invoice"

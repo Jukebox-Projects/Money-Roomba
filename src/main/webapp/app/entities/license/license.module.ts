@@ -15,6 +15,7 @@ import { LicenseViewComponent } from './license-view/license-view.component';
     LicenseDetailComponent,
     LicenseUpdateComponent,
     LicenseDeleteDialogComponent,
+    LicenseViewComponent,
     LicenseCreateDialogComponent,
   ],
   entryComponents: [LicenseDeleteDialogComponent],
