@@ -180,6 +180,12 @@
     "idinvalid": "ID inválido",
     "idnotfound": "ID no encontrado",
     "licenseAssigned": "La licencia está asignada",
+    "insufficientfunds": "No es posible registrar esta transacción debido a balance insuficiente.",
+    "nopermission": "No es posible realizar esta acción ya que no está incluida dentro de los permisos de su rol.",
+    "admincantregister": "El administrador no puede registrar {{ entityName }}.",
+    "nouserfound": "No se ha podido completar la acción debido a que el usuario en sesión no tiene detalles asociados.",
+    "nomorewallets": "Ha registrado el máximo de carteras permitidas para su cuenta.",
+    "negativeincome": "No es posible registrar una transacción con un ingreso menor a 0.",
     "file": {
       "could.not.extract": "No se pudo extraer el fichero",
       "not.image": "Se esperaba que el fichero fuera una imagen pero se encontro \"{{ fileType }}\""

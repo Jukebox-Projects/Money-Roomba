@@ -2,7 +2,7 @@
   "moneyRoombaApp": {
     "wallet": {
       "home": {
-        "title": "Wallets",
+        "title": "Carteras",
         "refreshListLabel": "Refrescar lista",
         "createLabel": "Crear nuevo Wallet",
         "createOrEditLabel": "Crear o editar Wallet",
@@ -19,15 +19,15 @@
         "title": "Wallet"
       },
       "id": "ID",
-      "name": "Name",
-      "description": "Description",
-      "inReports": "In Reports",
-      "isActive": "Is Active",
+      "name": "Nombre",
+      "description": "Descripción",
+      "inReports": "En Reportes",
+      "isActive": "Estado Activo",
       "balance": "Balance",
-      "icon": "Icon",
+      "icon": "Icono",
       "transaction": "Transaction",
-      "user": "User",
-      "currency": "Currency"
+      "user": "Usuario",
+      "currency": "Tipo de Moneda"
     }
   }
 }

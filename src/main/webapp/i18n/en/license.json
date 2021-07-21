@@ -27,6 +27,7 @@
         },
         "buyNow": "Buy now"
       },
+
       "activated": "Activated",
       "deactivated": "Deactivated",
       "created": "A new License is created with identifier {{ param }}",
