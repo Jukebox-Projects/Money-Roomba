@@ -8,6 +8,25 @@
         "createOrEditLabel": "Crear o editar License",
         "notFound": "Ningún Licenses encontrado"
       },
+      "view": {
+        "title": "¿Qué beneficios obtendré como usuario premium?",
+        "paragraph": "Como usuario premium, obtendrá muchos beneficios. Dentro de estos, tendrás mayor libertad dentro de la aplicación. Los beneficios se enumeran a continuación.",
+        "regular": {
+          "title": "Regular",
+          "wallets": "Límite de 3 carteras",
+          "scheduledTransactions": "Limite de 3 transacciones programadas",
+          "importedTransactions": "Limite de 10 transacciones importadas",
+          "reports": "Plazo de tiempo limitado para reportes"
+        },
+        "premium": {
+          "title": "Premium",
+          "wallets": "Carteras ilimitadas",
+          "scheduledTransactions": "Transacciones programadas ilimitadas",
+          "importedTransactions": "Transacciones importadas ilimitadas",
+          "reports": "Plazo de tiempo extendido para reportes"
+        },
+        "buyNow": "Comprar ahora"
+      },
       "created": "Un nuevo License ha sido creado con el identificador {{ param }}",
       "createdBulk": "Se han generado {{ param }} licencias",
       "updated": "Un License ha sido actualizado con el identificador {{ param }}",

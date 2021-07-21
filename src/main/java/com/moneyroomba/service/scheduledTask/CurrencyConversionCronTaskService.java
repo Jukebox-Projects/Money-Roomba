@@ -36,7 +36,8 @@ public class CurrencyConversionCronTaskService {
 
     // sendLiveRequest() function is created to request and retrieve the data
     private JSONObject sendAPIRequest() throws Exception {
-        // The following line initializes the HttpGet Object with the URL in order to send a request
+        // The following line initializes the HttpGet Object with the URL in order to
+        // send a request
         String url = BASE_URL + ENDPOINT + "?access_key=" + ACCESS_KEY;
         String result = this.restTemplate.getForObject(url, String.class);
         return new JSONObject(result);
