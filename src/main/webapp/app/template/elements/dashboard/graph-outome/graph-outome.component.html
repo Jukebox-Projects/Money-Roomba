@@ -1,0 +1,33 @@
+<div class="card">
+  <div class="card-header flex-wrap border-0 pb-0">
+    <div class="mr-3 mb-2">
+      <p class="fs-14 mb-1">Outome</p>
+      <span class="fs-24 text-black font-w600">$24,551</span>
+    </div>
+    <span class="fs-12 mb-2">
+      <svg width="21" height="15" viewBox="0 0 21 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M14.3514 7.5C15.9974 9.37169 19.0572 12.8253 20 14H1V1L8.18919 10.75L14.3514 7.5Z" fill="url(#paint0_linear1)" />
+        <path d="M19.5 13.5C18.582 12.4157 15.6027 9.22772 14 7.5L8 10.5L1 1.5" stroke="#FF2E2E" stroke-width="2" stroke-linecap="round" />
+        <defs>
+          <linearGradient id="paint0_linear1" x1="10.5" y1="2.625" x2="9.64345" y2="13.9935" gradientUnits="userSpaceOnUse">
+            <stop offset="0" stop-color="#FF2E2E" />
+            <stop offset="1" stop-color="#FF2E2E" stop-opacity="0.03" />
+          </linearGradient>
+        </defs>
+      </svg>
+      4% (30 days)</span
+    >
+  </div>
+  <div class="card-body p-0">
+    <apx-chart
+      [series]="chartOptions.series"
+      [chart]="chartOptions.chart"
+      [xaxis]="chartOptions.xaxis"
+      [yaxis]="chartOptions.yaxis"
+      [dataLabels]="chartOptions.dataLabels"
+      [grid]="chartOptions.grid"
+      [stroke]="chartOptions.stroke"
+      [fill]="chartOptions.fill"
+    ></apx-chart>
+  </div>
+</div>

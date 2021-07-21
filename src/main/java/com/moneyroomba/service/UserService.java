@@ -605,5 +605,13 @@ public class UserService {
                     return user;
                 }
             );
+    @Transactional(readOnly = true)
+    public Optional<User> getUserFromAdminUserDTO(AdminUserDTO userDTO) {
+        return userRepository.findOneByLogin(userDTO.getLogin());
+    }
+
+    @Transactional(readOnly = true)
+    public Optional<AdminUserDTO> getAdminUserDTOFromUser(User user) {
+        return userRepository.findOneByLogin(user.getLogin()).map(AdminUserDTO::new);
     }
 }

@@ -1,0 +1,217 @@
+<div class="content-body">
+  <!-- row -->
+  <div class="container-fluid">
+    <div class="page-titles form-head d-flex flex-wrap justify-content-between align-items-center mb-4">
+      <h2 class="text-black font-w600 mb-0 mr-auto mb-2 pr-3">Transactions History</h2>
+      <div class="dropdown custom-dropdown mr-3 mb-2 dropdown-no-icon" ngbDropdown>
+        <div class="btn bg-white btn-rounded" role="button" data-toggle="dropdown" aria-expanded="false" ngbDropdownToggle>
+          <svg class="mr-2" width="53" height="35" viewBox="0 0 53 35" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="0.757812" y="0.120972" width="52.2424" height="34.7581" rx="16" fill="#FF7426" />
+            <mask id="mask0" maskUnits="userSpaceOnUse" x="0" y="0" width="54" height="35">
+              <rect x="0.757812" y="0.120972" width="52.2424" height="34.7581" rx="16" fill="#6418C3" />
+            </mask>
+            <g mask="url(#mask0)">
+              <path
+                d="M15.3428 -0.19458C18.6035 0.533213 25.5793 4.70863 27.3962 15.5879C29.6674 29.1871 49.8711 32.353 59.8841 31.0428"
+                stroke="#FF9900"
+              />
+              <path
+                d="M16.624 -0.537781C19.8848 0.190012 26.8605 4.36543 28.6775 15.2447C30.9486 28.8439 51.1523 32.0098 61.1653 30.6996"
+                stroke="#FF9900"
+              />
+              <path
+                d="M17.9043 -0.880981C21.1651 -0.153188 28.1408 4.02223 29.9577 14.9015C32.2289 28.5007 52.4326 31.6666 62.4456 30.3564"
+                stroke="#FF9900"
+              />
+              <path
+                d="M19.1855 -1.22412C22.4463 -0.496328 29.4221 3.67909 31.239 14.5584C33.5101 28.1575 53.7139 31.3235 63.7269 30.0132"
+                stroke="#FF9900"
+              />
+              <path
+                d="M20.4658 -1.56732C23.7266 -0.839529 30.7023 3.33589 32.5193 14.2152C34.7904 27.8143 54.9941 30.9803 65.0071 29.67"
+                stroke="#FF9900"
+              />
+              <circle cx="-6.99918" cy="33.8755" r="11.9998" fill="#FF8F50" />
+              <circle cx="51.0804" cy="9.08316" r="9.345" fill="#FB6A19" />
+              <circle cx="51.0804" cy="9.08319" r="7.0697" fill="#FF823C" />
+              <circle cx="51.0805" cy="9.08315" r="4.79439" fill="#FF9E67" />
+            </g>
+          </svg>
+          Orange Card
+          <i class="fa fa-caret-down text-primary ml-3" aria-hidden="true"></i>
+        </div>
+        <div class="dropdown-menu dropdown-menu-right" ngbDropdownMenu>
+          <a class="dropdown-item" href="javascript:void(0);">Details</a>
+          <a class="dropdown-item text-danger" href="javascript:void(0);">Cancel</a>
+        </div>
+      </div>
+      <a
+        href="javascript:void(0)"
+        class="btn btn-primary btn-rounded mr-3 mb-2"
+        data-toggle="modal"
+        data-target="#exampledownload"
+        (click)="open(exampledownload)"
+      >
+        <i class="las la-download scale5 mr-3"></i>
+        Download Report</a
+      >
+      <div class="dropdown custom-dropdown mb-2 dropdown-no-icon" ngbDropdown>
+        <div class="btn btn-light btn-rounded" role="button" data-toggle="dropdown" aria-expanded="false" ngbDropdownToggle>
+          <i class="las la-calendar-alt scale5 mr-3"></i>
+          Filter Date
+          <i class="fa fa-caret-down text-primary ml-3" aria-hidden="true"></i>
+        </div>
+        <div class="dropdown-menu dropdown-menu-right" ngbDropdownMenu>
+          <a class="dropdown-item" href="javascript:void(0);">Details</a>
+          <a class="dropdown-item text-danger" href="javascript:void(0);">Cancel</a>
+        </div>
+      </div>
+      <!-- Modal -->
+      <ng-template #exampledownload let-modal>
+        <div class="modal-header">
+          <h5 class="modal-title">Modal title</h5>
+          <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p>
+            Cras mattis consectetur purus sit amet fermentum. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Morbi leo risus,
+            porta ac consectetur ac, vestibulum at eros.
+          </p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger light" data-dismiss="modal" (click)="modal.dismiss('Cross click')">Close</button>
+          <button type="button" class="btn btn-primary" (click)="modal.dismiss('Cross click')">Save changes</button>
+        </div>
+      </ng-template>
+    </div>
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="table-responsive table-hover fs-14 card-table">
+          <table class="table display mb-4 dataTablesCard dataTable card-table" id="example5">
+            <thead>
+              <tr>
+                <th>
+                  <div class="checkbox mr-0 align-self-center">
+                    <div class="custom-control custom-checkbox">
+                      <input
+                        type="checkbox"
+                        class="custom-control-input"
+                        id="checkAll"
+                        required=""
+                        [(ngModel)]="isMasterSel"
+                        name="list_name"
+                        value="h1"
+                        (change)="checkUncheckAll()"
+                      />
+                      <label class="custom-control-label" for="checkAll"></label>
+                    </div>
+                  </div>
+                </th>
+                <th>ID Invoice</th>
+                <th>Date</th>
+                <th>Recipient</th>
+                <th>Amount</th>
+                <th>Type</th>
+                <th>Location</th>
+                <th>Status</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let transaction of transactions; let i = index">
+                <td>
+                  <div class="checkbox mr-0 align-self-center">
+                    <div class="custom-control custom-checkbox">
+                      <input
+                        type="checkbox"
+                        class="custom-control-input"
+                        id="customCheckBox_{{ i }}"
+                        [(ngModel)]="transaction.isSelected"
+                      />
+                      <label class="custom-control-label" for="customCheckBox_{{ i }}"></label>
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  <span class="text-black font-w500">{{ transaction.id }}</span>
+                </td>
+                <td>
+                  <span class="text-black text-nowrap">{{ transaction.date }}</span>
+                </td>
+                <td>
+                  <div class="d-flex align-items-center">
+                    <img src="{{ transaction.recipient_image }}" alt="" class="rounded-circle mr-3" width="50" />
+                    <div>
+                      <h6 class="fs-16 font-w600 mb-0 text-nowrap">
+                        <a routerLink="/{{ transaction.url }}" class="text-black">{{ transaction.recipient }}</a>
+                      </h6>
+                      <span class="fs-14" *ngIf="transaction.recipient_post != ''">{{ transaction.recipient_post }}</span>
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  <span class="text-black fs-20 font-w600">{{ transaction.amount }}</span>
+                </td>
+                <td>
+                  <div class="text-black">
+                    <span class="mr-2 oi-icon {{ transaction.type_class }}">
+                      <img src="{{ transaction.type_image }}" />
+                    </span>
+                    {{ transaction.type }}
+                  </div>
+                </td>
+                <td><span class="text-black" [innerHTML]="transaction.location"></span></td>
+                <td>
+                  <a href="javascript:void(0)" class="btn btn-rounded {{ transaction.status_class }}">{{ transaction.status }}</a>
+                </td>
+                <td>
+                  <div class="dropdown mb-auto dropdown-no-icon" ngbDropdown>
+                    <div class="btn-link" role="button" data-toggle="dropdown" aria-expanded="false" ngbDropdownToggle>
+                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path
+                          d="M10 11.9999C10 13.1045 10.8954 13.9999 12 13.9999C13.1046 13.9999 14 13.1045 14 11.9999C14 10.8954 13.1046 9.99994 12 9.99994C10.8954 9.99994 10 10.8954 10 11.9999Z"
+                          fill="black"
+                        ></path>
+                        <path
+                          d="M10 4.00006C10 5.10463 10.8954 6.00006 12 6.00006C13.1046 6.00006 14 5.10463 14 4.00006C14 2.89549 13.1046 2.00006 12 2.00006C10.8954 2.00006 10 2.89549 10 4.00006Z"
+                          fill="black"
+                        ></path>
+                        <path
+                          d="M10 20C10 21.1046 10.8954 22 12 22C13.1046 22 14 21.1046 14 20C14 18.8954 13.1046 18 12 18C10.8954 18 10 18.8954 10 20Z"
+                          fill="black"
+                        ></path>
+                      </svg>
+                    </div>
+                    <div class="dropdown-menu dropdown-menu-right" ngbDropdownMenu>
+                      <a class="dropdown-item" href="javascript:void(0)">Delete</a>
+                      <a class="dropdown-item" href="javascript:void(0)">Edit</a>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div class="d-flex justify-content-between p-2">
+            <ngb-pagination
+              class="mr-3"
+              [collectionSize]="collectionSize"
+              [(page)]="page"
+              [pageSize]="pageSize"
+              (pageChange)="updateTransactionListing()"
+            >
+            </ngb-pagination>
+
+            <select class="custom-select" style="width: auto" [(ngModel)]="pageSize" (ngModelChange)="updateTransactionListing()">
+              <option [ngValue]="5">5 items per page</option>
+              <option [ngValue]="10">10 items per page</option>
+              <option [ngValue]="20">20 items per page</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

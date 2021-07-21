@@ -8,12 +8,7 @@
         <span jhiTranslate="moneyRoombaApp.license.home.refreshListLabel">Refresh List</span>
       </button>
 
-      <button
-        id="jh-create-entity"
-        data-cy="entityCreateButton"
-        class="btn btn-primary jh-create-entity create-license"
-        [routerLink]="['/license/new']"
-      >
+      <button id="jh-create-entity" data-cy="entityCreateButton" class="btn btn-primary jh-create-entity create-license" (click)="create()">
         <fa-icon icon="plus"></fa-icon>
         <span jhiTranslate="moneyRoombaApp.license.home.createLabel"> Create a new License </span>
       </button>
@@ -35,9 +30,8 @@
           <th scope="col"><span jhiTranslate="global.field.id">ID</span></th>
           <th scope="col"><span jhiTranslate="moneyRoombaApp.license.code">Code</span></th>
           <th scope="col"><span jhiTranslate="moneyRoombaApp.license.isAssigned">Is Assigned</span></th>
-          <th scope="col"><span jhiTranslate="moneyRoombaApp.license.isActive">Is Active</span></th>
+          <th scope="col"></th>
           <th scope="col"><span jhiTranslate="moneyRoombaApp.license.createMethod">Create Method</span></th>
-          <th scope="col"><span jhiTranslate="moneyRoombaApp.license.invoice">Invoice</span></th>
           <th scope="col"></th>
         </tr>
       </thead>
@@ -47,14 +41,37 @@
             <a [routerLink]="['/license', license.id, 'view']">{{ license.id }}</a>
           </td>
           <td>{{ license.code }}</td>
-          <td>{{ license.isAssigned }}</td>
-          <td>{{ license.isActive }}</td>
-          <td jhiTranslate="{{ 'moneyRoombaApp.LicenseCreateMethod.' + license.createMethod }}">{{ license.createMethod }}</td>
           <td>
-            <div *ngIf="license.invoice">
-              <a [routerLink]="['/invoice', license.invoice?.id, 'view']">{{ license.invoice?.id }}</a>
+            <div class="custom-control custom-checkbox mb-3 checkbox-info check-xl">
+              <input
+                type="checkbox"
+                class="custom-control-input"
+                (click)="checkbox($event)"
+                [checked]="license.isAssigned == true"
+                id="customCheckBox9"
+              />
+              <label class="custom-control-label" for="customCheckBox9"></label>
             </div>
           </td>
+          <td>
+            <button
+              class="btn btn-danger btn-sm"
+              (click)="setActive(license, true)"
+              *ngIf="!license.isActive"
+              jhiTranslate="moneyRoombaApp.license.deactivated"
+            >
+              Deactivated
+            </button>
+            <button
+              class="btn btn-success btn-sm"
+              (click)="setActive(license, false)"
+              *ngIf="license.isActive"
+              jhiTranslate="moneyRoombaApp.license.activated"
+            >
+              Activated
+            </button>
+          </td>
+          <td jhiTranslate="{{ 'moneyRoombaApp.LicenseCreateMethod.' + license.createMethod }}">{{ license.createMethod }}</td>
           <td class="text-right">
             <div class="btn-group">
               <button
@@ -77,7 +94,13 @@
                 <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
               </button>
 
-              <button type="submit" (click)="delete(license)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
+              <button
+                type="submit"
+                [disabled]="license.isAssigned == true"
+                (click)="delete(license)"
+                class="btn btn-danger btn-sm"
+                data-cy="entityDeleteButton"
+              >
                 <fa-icon icon="times"></fa-icon>
                 <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
               </button>

@@ -28,6 +28,11 @@ export class UserManagementService {
 
   findUserDetails(login: string): Observable<UserDetails> {
     return this.http.get<UserDetails>(`api/account/userDetails/${login}`);
+
+  resetPassword(user: IUser): Observable<IUser> {
+    return this.http.post<IUser>(`${this.resourceUrl}/change-password`, user);
+  }
+
   }
 
   query(req?: Pagination): Observable<HttpResponse<IUser[]>> {

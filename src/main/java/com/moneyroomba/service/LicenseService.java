@@ -96,7 +96,12 @@ public class LicenseService {
      * @param id the id of the entity.
      */
     public void delete(Long id) {
-        log.debug("Request to delete License : {}", id);
-        licenseRepository.deleteById(id);
+        Optional<License> license = findOne(id);
+        if (license.get() != null) {
+            if (!license.get().getIsAssigned()) {
+                log.debug("Request to delete License : {}", id);
+                licenseRepository.deleteById(id);
+            }
+        }
     }
 }

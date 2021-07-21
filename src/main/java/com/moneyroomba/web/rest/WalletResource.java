@@ -95,7 +95,7 @@ public class WalletResource {
                 .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
                 .body(result);
         } else {
-            throw new BadRequestAlertException("Los administradores no pueden crear carteras", ENTITY_NAME, "idexists");
+            throw new BadRequestAlertException("Admins cannot register wallets.", ENTITY_NAME, "admincantregister");
         }
     }
 
