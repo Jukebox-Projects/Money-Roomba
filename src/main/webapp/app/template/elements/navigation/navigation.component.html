@@ -25,6 +25,14 @@
           </li>
           <li>
             <a
+              class="{{ currentHref == '/transaction' ? 'mm-active' : '' }}"
+              [routerLink]="['/transaction']"
+              jhiTranslate="global.menu.entities.transaction"
+              >Transaction</a
+            >
+          </li>
+          <li>
+            <a
               class="{{ currentHref == '/scheduled-transaction' ? 'mm-active' : '' }}"
               [routerLink]="['/scheduled-transaction']"
               jhiTranslate="global.menu.entities.scheduledTransaction"
