@@ -5,6 +5,8 @@ import com.moneyroomba.domain.Transaction;
 import com.moneyroomba.domain.User;
 import com.moneyroomba.domain.UserDetails;
 import com.moneyroomba.repository.TransactionRepository;
+import com.moneyroomba.repository.UserDetailsRepository;
+import com.moneyroomba.repository.UserRepository;
 import com.moneyroomba.security.AuthoritiesConstants;
 import com.moneyroomba.security.SecurityUtils;
 import com.moneyroomba.service.TransactionQueryService;
@@ -49,8 +51,6 @@ public class TransactionResource {
 
     private final TransactionQueryService transactionQueryService;
 
-    private final UserService userService;
-
     private final UserRepository userRepository;
 
     private final UserDetailsRepository userDetailsRepository;
@@ -60,15 +60,13 @@ public class TransactionResource {
         TransactionRepository transactionRepository,
         TransactionQueryService transactionQueryService,
         UserRepository userRepository,
-        UserDetailsRepository userDetailsRepository,
-        UserService userService
+        UserDetailsRepository userDetailsRepository
     ) {
         this.transactionService = transactionService;
         this.transactionRepository = transactionRepository;
         this.transactionQueryService = transactionQueryService;
         this.userRepository = userRepository;
         this.userDetailsRepository = userDetailsRepository;
-        this.userService = userService;
     }
 
     /**
