@@ -59,8 +59,6 @@ export class LicenseComponent implements OnInit {
           if ('manual'.includes(this.inputText.toLowerCase())) {
             return license.createMethod.toString() == 'MANUAL';
           }
-          // eslint-disable-next-line no-console
-          console.log(license.isAssigned, 'asignada'.includes(this.inputText.toLowerCase()));
           if ('asignada'.includes(this.inputText.toLowerCase())) {
             return license.isAssigned;
           }
