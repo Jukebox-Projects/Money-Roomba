@@ -1,3 +1,4 @@
+import { Authority } from './../../../config/authority.constants';
 import { Component, OnInit } from '@angular/core';
 import { HttpResponse, HttpHeaders } from '@angular/common/http';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -50,10 +51,21 @@ export class UserManagementComponent implements OnInit {
 
   filter(): void {
     /* eslint-disable no-console */
+    this.users = this.allUsers;
     if (this.users !== undefined) {
       this.users = this.users.filter(user => {
-        if (user.authorities !== undefined && this.inputText.toLowerCase().includes('premium')) {
-          if (user.authorities.includes('ROLE_PREMIUM_USER')) {
+        if (user.authorities !== undefined && 'premium'.includes(this.inputText.toLowerCase())) {
+          if (user.authorities.includes(Authority.PREMIUM_USER)) {
+            return true;
+          }
+        }
+        if (user.authorities !== undefined && 'admin'.includes(this.inputText.toLowerCase())) {
+          if (user.authorities.includes(Authority.ADMIN)) {
+            return true;
+          }
+        }
+        if (user.authorities !== undefined && 'regular'.includes(this.inputText.toLowerCase())) {
+          if (user.authorities.includes(Authority.USER)) {
             return true;
           }
         }
