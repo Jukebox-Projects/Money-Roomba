@@ -36,6 +36,8 @@ public class AdminUserDTO {
 
     private String phone;
 
+    private String apiKey;
+
     private Boolean notifications;
 
     @Size(max = 256)
@@ -77,6 +79,7 @@ public class AdminUserDTO {
         this.country = user.getCountry();
         this.phone = user.getPhone();
         this.notifications = user.getNotifications();
+        this.apiKey = user.getApiKey();
     }
 
     public Long getId() {
@@ -207,6 +210,14 @@ public class AdminUserDTO {
         this.notifications = notifications;
     }
 
+    public String getApiKey() {
+        return apiKey;
+    }
+
+    public void setApiKey(String apiKey) {
+        this.apiKey = apiKey;
+    }
+
     @Override
     public String toString() {
         return (
@@ -233,6 +244,8 @@ public class AdminUserDTO {
             '\'' +
             ", notifications=" +
             notifications +
+            ", apiKey=" +
+            apiKey +
             ", imageUrl='" +
             imageUrl +
             '\'' +

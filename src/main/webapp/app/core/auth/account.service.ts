@@ -1,4 +1,4 @@
-import { AccountDetail } from './accountDetail.model';
+import { UserDetails } from 'app/entities/user-details/user-details.model';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
@@ -81,8 +81,16 @@ export class AccountService {
     return this.authenticationState.asObservable();
   }
 
-  fetchUserData(): Observable<AccountDetail> {
-    return this.http.get<AccountDetail>(this.applicationConfigService.getEndpointFor('api/account/userDetails'));
+  fetchUserData(): Observable<UserDetails> {
+    return this.http.get<UserDetails>(this.applicationConfigService.getEndpointFor('api/account/userDetails'));
+  }
+
+  generateApiKey(): Observable<UserDetails> {
+    return this.http.get<UserDetails>(this.applicationConfigService.getEndpointFor('api/account/generateApiKey'));
+  }
+
+  deleteApiKey(): Observable<{}> {
+    return this.http.delete(this.applicationConfigService.getEndpointFor('api/account/apiKey'));
   }
 
   private fetch(): Observable<Account> {

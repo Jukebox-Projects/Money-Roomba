@@ -88,6 +88,9 @@ public class User extends AbstractAuditingEntity implements Serializable {
     private String phone;
 
     @Transient
+    private String apiKey;
+
+    @Transient
     private Boolean notifications;
 
     @JsonIgnore
@@ -243,6 +246,14 @@ public class User extends AbstractAuditingEntity implements Serializable {
         this.notifications = notifications;
     }
 
+    public String getApiKey() {
+        return apiKey;
+    }
+
+    public void setApiKey(String apiKey) {
+        this.apiKey = apiKey;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -277,6 +288,7 @@ public class User extends AbstractAuditingEntity implements Serializable {
             ", country='" + country + '\'' +
             ", phone='" + phone + '\'' +
             ", notifications=" + notifications +
+            ", apiKey=" + apiKey +
             '}';
     }
 }

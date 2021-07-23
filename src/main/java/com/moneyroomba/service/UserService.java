@@ -13,6 +13,7 @@ import com.moneyroomba.security.SecurityUtils;
 import com.moneyroomba.service.dto.AdminUserDTO;
 import com.moneyroomba.service.dto.UserDTO;
 import com.moneyroomba.service.exception.NoSuchElementFoundException;
+import java.security.SecureRandom;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
@@ -555,6 +556,55 @@ public class UserService {
         return userDetailsRepository.findOneByInternalUser(user.orElseThrow(() -> new NoSuchElementFoundException("No User found")));
     }
 
+    public void generateApiKey() {
+        Optional
+            .of(
+                userRepository.findOneByLogin(
+                    this.getCurrentUserLogin().orElseThrow(() -> new NoSuchElementFoundException("No Login found"))
+                )
+            )
+            .filter(Optional::isPresent)
+            .map(Optional::get)
+            .map(
+                user -> {
+                    userDetailsRepository
+                        .findOneByInternalUserId(user.getId())
+                        .map(
+                            userDetails -> {
+                                String apiKey = UUID.randomUUID().toString().replace("-", "").substring(0, 15);
+                                userDetails.setApiKey(apiKey);
+                                log.debug("Changed Information for UserDetails: {}", userDetails);
+                                return userDetails;
+                            }
+                        );
+                    return user;
+                }
+            );
+    }
+
+    public void deleteApiKey() {
+        Optional
+            .of(
+                userRepository.findOneByLogin(
+                    this.getCurrentUserLogin().orElseThrow(() -> new NoSuchElementFoundException("No Login found"))
+                )
+            )
+            .filter(Optional::isPresent)
+            .map(Optional::get)
+            .map(
+                user -> {
+                    userDetailsRepository
+                        .findOneByInternalUserId(user.getId())
+                        .map(
+                            userDetails -> {
+                                userDetails.setApiKey("");
+                                log.debug("Changed Information for UserDetails: {}", userDetails);
+                                return userDetails;
+                            }
+                        );
+                    return user;
+                }
+            );
     @Transactional(readOnly = true)
     public Optional<User> getUserFromAdminUserDTO(AdminUserDTO userDTO) {
         return userRepository.findOneByLogin(userDTO.getLogin());
