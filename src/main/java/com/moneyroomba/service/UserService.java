@@ -416,6 +416,23 @@ public class UserService {
             );
     }
 
+    public void updateUser(String code) {
+        SecurityUtils
+            .getCurrentUserLogin()
+            .flatMap(userRepository::findOneByLogin)
+            .ifPresent(
+                user -> {
+                    user.setActivationKey(code.replace("-", "").substring(0, 19));
+                    Set<Authority> authorities = new HashSet<>();
+                    authorityRepository.findById(AuthoritiesConstants.PREMIUM_USER).ifPresent(authorities::add);
+                    authorityRepository.findById(AuthoritiesConstants.USER).ifPresent(authorities::add);
+                    user.setAuthorities(authorities);
+                    this.clearUserCaches(user);
+                    log.debug("Changed Information for User: {}", user);
+                }
+            );
+    }
+
     @Transactional
     public void changePassword(String currentClearTextPassword, String newPassword) {
         SecurityUtils

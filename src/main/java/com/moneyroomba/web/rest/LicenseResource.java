@@ -75,7 +75,7 @@ public class LicenseResource {
 
     @PostMapping("/licenses")
     @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\")")
-    public ResponseEntity<Void> createLicenseBulk(@Valid @RequestBody LicenseDTO licenseDTO) throws URISyntaxException {
+    public ResponseEntity<Void> createLicenseBulk(@Valid @RequestBody LicenseDTO licenseDTO) {
         if (licenseDTO.getQuantity() < 0 || licenseDTO.getQuantity() > 50) {
             licenseDTO.setQuantity(1);
         }
@@ -95,6 +95,39 @@ public class LicenseResource {
                 HeaderUtil.createAlert(applicationName, applicationName + "." + ENTITY_NAME + ".createdBulk", licenseDTO.getQuantity() + "")
             )
             .build();
+    }
+
+    @PostMapping("/licenses/activate")
+    public ResponseEntity<Void> activateLicense(@Valid @RequestBody LicenseDTO licenseDTO) {
+        if (licenseDTO.getCode() == null) throw new BadRequestAlertException("License not found", ENTITY_NAME, "licenseNotFound");
+        log.debug("REST request to activate License : {}", licenseDTO.getCode());
+        UUID uuid;
+        try {
+            uuid = UUID.fromString(licenseDTO.getCode());
+        } catch (Exception e) {
+            throw new BadRequestAlertException("License not found", ENTITY_NAME, "licenseInvalid");
+        }
+        Optional<License> license = licenseService.findOne(uuid);
+
+        if (license != null && license.isPresent()) {
+            if (license.get().getIsAssigned()) {
+                throw new BadRequestAlertException("License is assigned", ENTITY_NAME, "licenseAssigned");
+            }
+            if (!license.get().getIsActive()) {
+                throw new BadRequestAlertException("License is not active", ENTITY_NAME, "licenseNotActive");
+            } else {
+                licenseService.activate(license.get());
+
+                return ResponseEntity
+                    .ok()
+                    .headers(
+                        HeaderUtil.createAlert(applicationName, applicationName + "." + ENTITY_NAME + ".activate", licenseDTO.getCode())
+                    )
+                    .build();
+            }
+        } else {
+            throw new BadRequestAlertException("License does not exist", ENTITY_NAME, "licenseNotFound");
+        }
     }
 
     /**
