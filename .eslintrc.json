@@ -14,7 +14,7 @@
   },
   "rules": {
     "arrow-body-style": "error",
-    "curly": "error",
+    "curly": [2, "all"],
     "no-bitwise": "error",
     "no-caller": "error",
     "no-console": ["error", { "allow": ["warn", "error"] }],
