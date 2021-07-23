@@ -18,6 +18,8 @@ export class TransactionComponent implements OnInit {
   isLoading = false;
   inputText = '';
   slctDataType: string;
+  collectionSize: any;
+  selcetedValue: string;
 
   range = new FormGroup({
     start: new FormControl(),
@@ -26,13 +28,47 @@ export class TransactionComponent implements OnInit {
 
   constructor(protected transactionService: TransactionService, protected modalService: NgbModal) {}
 
-  loadAll(): void {
+  //loadAll(): void {
+  /* eslint-disable no-console */
+  /*
     this.isLoading = true;
 
     this.transactionService.query().subscribe(
       (res: HttpResponse<ITransaction[]>) => {
         this.isLoading = false;
         this.transactions = res.body ?? [];
+
+          this.transactions = this.transactions.filter(transaction => {
+            //for (let i = 0; i < this.transactions.length; i++) {
+              if (transaction.movementType.toLowerCase().includes("expense")) {
+                this.type_image = "assets/images/ic_out.svg";
+                this.type_class = "bgl-danger";
+              } else {
+                this.type_image = "assets/images/ic_in.svg";
+                this.type_class = "bgl-success";
+              }
+            console.log(this.type_image);
+            return (
+             this.transactions
+          );
+          });
+
+      },
+      () => {
+        this.isLoading = false;
+      }
+    );
+  }
+  */
+
+  loadAll(): void {
+    /* eslint-disable no-console */
+    this.isLoading = true;
+    this.transactionService.query().subscribe(
+      (res: HttpResponse<ITransaction[]>) => {
+        this.isLoading = false;
+        this.transactions = res.body ?? [];
+        this.collectionSize = this.transactions.length;
       },
       () => {
         this.isLoading = false;
@@ -42,6 +78,14 @@ export class TransactionComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadAll();
+  }
+  page = 1;
+  pageSize = 5;
+
+  updateTransactionListing() {
+    this.transactions
+      .map((customer, i) => ({ id: i + 1, ...customer }))
+      .slice((this.page - 1) * this.pageSize, (this.page - 1) * this.pageSize + this.pageSize);
   }
 
   trackId(index: number, item: ITransaction): number {
@@ -60,9 +104,9 @@ export class TransactionComponent implements OnInit {
           return false;
         }
       });
-      if (this.inputText === '') {
-        this.transactions = this.allTransactions;
-      }
+    }
+    if (this.inputText === '') {
+      this.transactions = this.allTransactions;
     }
   }
 
