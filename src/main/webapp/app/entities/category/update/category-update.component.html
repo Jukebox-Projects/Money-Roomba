@@ -55,6 +55,11 @@
         </div>
       </div>
 
+      <button type="button" (click)="openIconPickerModal()" class="btn btn-outline-primary btn-sm">
+        <fa-icon icon="times"></fa-icon>
+        <span class="d-none d-md-inline" jhiTranslate="moneyRoombaApp.iconPicker.modal.title">Select an icon</span>
+      </button>
+
       <div>
         <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
           <fa-icon icon="ban"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>

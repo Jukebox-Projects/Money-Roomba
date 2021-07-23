@@ -4,11 +4,14 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { finalize, map } from 'rxjs/operators';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { ICategory, Category } from '../category.model';
+import { IICon } from '../../../shared/icon-picker/icon.model';
 import { CategoryService, EntityArrayResponseType } from '../service/category.service';
 import { IUserDetails } from 'app/entities/user-details/user-details.model';
 import { UserDetailsService } from 'app/entities/user-details/service/user-details.service';
+import { IconPickerComponent } from '../../../shared/icon-picker/icon-picker.component';
 
 @Component({
   selector: 'jhi-category-update',
@@ -19,6 +22,7 @@ export class CategoryUpdateComponent implements OnInit {
 
   categoriesSharedCollection: ICategory[] = [];
   userDetailsSharedCollection: IUserDetails[] = [];
+  selectedIcon: IICon;
 
   editForm = this.fb.group({
     id: [],
@@ -31,7 +35,8 @@ export class CategoryUpdateComponent implements OnInit {
     protected categoryService: CategoryService,
     protected userDetailsService: UserDetailsService,
     protected activatedRoute: ActivatedRoute,
-    protected fb: FormBuilder
+    protected fb: FormBuilder,
+    protected modalService: NgbModal
   ) {}
 
   ngOnInit(): void {
@@ -62,6 +67,15 @@ export class CategoryUpdateComponent implements OnInit {
 
   trackUserDetailsById(index: number, item: IUserDetails): number {
     return item.id!;
+  }
+
+  openIconPickerModal(): void {
+    const modalRef = this.modalService.open(IconPickerComponent, { size: 'lg', backdrop: 'static' });
+    modalRef.componentInstance.icon = this.selectedIcon;
+    // unsubscribe not needed because closed completes on modal close
+    modalRef.closed.subscribe(iconId => {
+      this.selectedIcon = iconId;
+    });
   }
 
   protected subscribeToSaveResponse(result: Observable<HttpResponse<ICategory>>): void {

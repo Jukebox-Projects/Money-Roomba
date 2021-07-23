@@ -6,6 +6,7 @@ import { CategoryUpdateComponent } from './update/category-update.component';
 import { CategoryDeleteDialogComponent } from './delete/category-delete-dialog.component';
 import { CategoryRoutingModule } from './route/category-routing.module';
 import { CategoryStatusDialogComponent } from './status/category-status-dialog.component';
+import { IconService } from '../../shared/icon-picker/service/icon.service';
 
 @NgModule({
   imports: [SharedModule, CategoryRoutingModule],
@@ -17,5 +18,6 @@ import { CategoryStatusDialogComponent } from './status/category-status-dialog.c
     CategoryStatusDialogComponent,
   ],
   entryComponents: [CategoryDeleteDialogComponent, CategoryStatusDialogComponent],
+  providers: [IconService],
 })
 export class CategoryModule {}
