@@ -1,3 +1,4 @@
+import { LicenseBuyOrActivateDialogComponent } from './buy-or-activate/license-buy-or-activate-dialog.component';
 import { LicenseCreateDialogComponent } from './create/license-create-dialog.component';
 import { NgModule } from '@angular/core';
 import { SharedModule } from 'app/shared/shared.module';
@@ -17,6 +18,7 @@ import { LicenseViewComponent } from './license-view/license-view.component';
     LicenseDeleteDialogComponent,
     LicenseViewComponent,
     LicenseCreateDialogComponent,
+    LicenseBuyOrActivateDialogComponent,
   ],
   entryComponents: [LicenseDeleteDialogComponent],
 })

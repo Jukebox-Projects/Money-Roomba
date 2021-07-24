@@ -198,6 +198,17 @@ public class AccountResource {
         return userService.getUserDetailsByLogin().get();
     }
 
+    @GetMapping("/account/generateApiKey")
+    public UserDetails generateApiKey() {
+        userService.generateApiKey();
+        return userService.getUserDetailsByLogin().get();
+    }
+
+    @DeleteMapping("/account/apiKey")
+    public void deleteApiKey() {
+        userService.deleteApiKey();
+    }
+
     @GetMapping("/account/userDetails/{login}")
     public UserDetails getUserDetails(@PathVariable String login) throws UnsupportedEncodingException {
         return userService.getUserDetailsByLogin(login).get();

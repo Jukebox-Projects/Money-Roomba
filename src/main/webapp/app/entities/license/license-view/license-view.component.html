@@ -1,4 +1,5 @@
 <div class="col-xl-12 col-lg-12 col-xxl-12 col-sm-12">
+  <jhi-alert></jhi-alert>
   <div class="background">
     <div class="container">
       <div class="panel pricing-table">
@@ -36,7 +37,11 @@
             </li>
           </ul>
           <span class="pricing-price">${{ getPrice() }}</span>
-          <a href="#/" class="pricing-button is-featured" jhiTranslate="moneyRoombaApp.license.view.buyNow">Buy now</a>
+          <button type="button" class="btn btn-primary pricing-button is-featured">
+            <fa-icon icon="shopping-cart"></fa-icon>&nbsp;<span jhiTranslate="moneyRoombaApp.license.view.buyNow" (click)="open()"
+              >Buy now</span
+            >
+          </button>
         </div>
       </div>
     </div>

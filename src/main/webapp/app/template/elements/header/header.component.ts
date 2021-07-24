@@ -48,7 +48,7 @@ export class HeaderComponent implements OnInit {
   }
 
   isPremium(): boolean {
-    return this.accountService.hasAnyAuthority(Authority.PREMIUM_USER);
+    return this.accountService.hasAnyAuthority(Authority.PREMIUM_USER) || this.accountService.hasAnyAuthority(Authority.ADMIN);
   }
 
   changeLanguage(languageKey: string): void {

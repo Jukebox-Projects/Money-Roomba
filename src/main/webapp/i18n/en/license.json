@@ -27,11 +27,12 @@
         },
         "buyNow": "Buy now"
       },
-
+      "activateText": "Activate",
       "activated": "Activated",
       "deactivated": "Deactivated",
       "created": "A new License is created with identifier {{ param }}",
       "createdBulk": "{{ param }} licenses have been generated",
+      "activate": "License has been activated",
       "updated": "A License is updated with identifier {{ param }}",
       "deleted": "A License is deleted with identifier {{ param }}",
       "delete": {
@@ -43,6 +44,10 @@
       "createBulk": {
         "title": "Create licenses in bulk",
         "quantity": "Quantity"
+      },
+      "buyOrActivate": {
+        "title": "Buy or activate a licence",
+        "activateLicenseText": "Please enter your licence code"
       },
       "id": "ID",
       "code": "Code",
