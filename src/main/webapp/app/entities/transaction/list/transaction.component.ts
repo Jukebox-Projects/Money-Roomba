@@ -28,39 +28,6 @@ export class TransactionComponent implements OnInit {
 
   constructor(protected transactionService: TransactionService, protected modalService: NgbModal) {}
 
-  //loadAll(): void {
-  /* eslint-disable no-console */
-  /*
-    this.isLoading = true;
-
-    this.transactionService.query().subscribe(
-      (res: HttpResponse<ITransaction[]>) => {
-        this.isLoading = false;
-        this.transactions = res.body ?? [];
-
-          this.transactions = this.transactions.filter(transaction => {
-            //for (let i = 0; i < this.transactions.length; i++) {
-              if (transaction.movementType.toLowerCase().includes("expense")) {
-                this.type_image = "assets/images/ic_out.svg";
-                this.type_class = "bgl-danger";
-              } else {
-                this.type_image = "assets/images/ic_in.svg";
-                this.type_class = "bgl-success";
-              }
-            console.log(this.type_image);
-            return (
-             this.transactions
-          );
-          });
-
-      },
-      () => {
-        this.isLoading = false;
-      }
-    );
-  }
-  */
-
   loadAll(): void {
     /* eslint-disable no-console */
     this.isLoading = true;
@@ -79,34 +46,24 @@ export class TransactionComponent implements OnInit {
   ngOnInit(): void {
     this.loadAll();
   }
-  page = 1;
-  pageSize = 5;
-
-  updateTransactionListing() {
-    this.transactions
-      .map((customer, i) => ({ id: i + 1, ...customer }))
-      .slice((this.page - 1) * this.pageSize, (this.page - 1) * this.pageSize + this.pageSize);
-  }
-
-  trackId(index: number, item: ITransaction): number {
-    return item.id!;
-  }
 
   filterTransactions(): void {
     if (this.transactions !== undefined) {
       this.transactions = this.transactions.filter(transaction => {
-        if (transaction.name !== undefined || transaction.description !== undefined) {
+        if (transaction.name !== undefined || transaction.category !== undefined) {
           return (
             transaction.name.toLowerCase().includes(this.inputText.toLowerCase()) ||
-            transaction.description.toLowerCase().includes(this.inputText.toLowerCase())
+            transaction.category.name.toLowerCase().includes(this.inputText.toLowerCase())
           );
         } else {
           return false;
         }
       });
-    }
-    if (this.inputText === '') {
-      this.transactions = this.allTransactions;
+      if (this.inputText === '') {
+        this.transactions = this.allTransactions;
+      }
+    } else {
+      this.loadAll();
     }
   }
 
@@ -132,5 +89,17 @@ export class TransactionComponent implements OnInit {
         this.loadAll();
       }
     });
+  }
+  page = 1;
+  pageSize = 5;
+
+  updateTransactionListing() {
+    this.transactions
+      .map((customer, i) => ({ id: i + 1, ...customer }))
+      .slice((this.page - 1) * this.pageSize, (this.page - 1) * this.pageSize + this.pageSize);
+  }
+
+  trackId(index: number, item: ITransaction): number {
+    return item.id!;
   }
 }

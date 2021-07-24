@@ -3,52 +3,43 @@
     <span jhiTranslate="moneyRoombaApp.transaction.home.title">Transactions</span>
 
     <div class="d-flex justify-content-end">
-      <select [(ngModel)]="slctDataType" name="slctDataType">
-        <option class="dropdown-item" value="">Ninguna</option>
-        <option class="dropdown-item" value="Name">Nombre</option>
-        <option class="dropdown-item" value="Description">Descripción</option>
-        <option class="dropdown-item" value="Date">Fecha</option>
-      </select>
+      <div class="pt-3" style="font-size: 24px">
+        <select [(ngModel)]="slctDataType" name="slctDataType">
+          <option class="dropdown-item" value="">Ninguna</option>
+          <option class="dropdown-item" value="Name">Nombre</option>
+          <option class="dropdown-item" value="Category">Categoria</option>
+          <option class="dropdown-item" value="Date">Fecha</option>
+        </select>
+      </div>
       <!-- Input date Range -->
-      <form *ngIf="slctDataType == 'Date'">
-        <mat-form-field appearance="fill" (submit)="filterDateRange()">
-          <mat-label>Enter a date range</mat-label>
-          <mat-date-range-input [formGroup]="range" [rangePicker]="picker">
-            <input matStartDate formControlName="start" placeholder="Start date" />
-            <input matEndDate formControlName="end" placeholder="End date" />
-          </mat-date-range-input>
-          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-          <mat-date-range-picker #picker></mat-date-range-picker>
+      <div class="pt-3 p-1" style="font-size: 14px">
+        <form *ngIf="slctDataType == 'Date'">
+          <mat-form-field appearance="fill" (submit)="filterDateRange()">
+            <mat-label>Enter a date range</mat-label>
+            <mat-date-range-input [formGroup]="range" [rangePicker]="picker">
+              <input matStartDate formControlName="start" placeholder="Start date" />
+              <input matEndDate formControlName="end" placeholder="End date" />
+            </mat-date-range-input>
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-date-range-picker #picker></mat-date-range-picker>
 
-          <mat-error *ngIf="range.controls.start.hasError('matStartDateInvalid')">Invalid start date</mat-error>
-          <mat-error *ngIf="range.controls.end.hasError('matEndDateInvalid')">Invalid end date</mat-error>
-        </mat-form-field>
-        <button class="btn btn-info mr-2" (click)="filterDateRange()">Submit</button>
-      </form>
+            <mat-error *ngIf="range.controls.start.hasError('matStartDateInvalid')">Invalid start date</mat-error>
+            <mat-error *ngIf="range.controls.end.hasError('matEndDateInvalid')">Invalid end date</mat-error>
+          </mat-form-field>
+          <button class="btn btn-info mr-2" (click)="filterDateRange()">Submit</button>
+        </form>
+      </div>
 
-      <!--
-<div class="dropdown custom-dropdown mb-2 dropdown-no-icon" ngbDropdown>
-  <div class="btn btn-light btn-rounded" role="button" data-toggle="dropdown" aria-expanded="false" ngbDropdownToggle>
-    <label>Filtrar: {{slctDataType}}</label>
-
-      <select class="dropdown-menu dropdown-menu-right"[(ngModel)]="slctDataType" name="slctDataType" ngbDropdownMenu>
-        <option class="dropdown-item" value="">Ninguna</option>
-        <option class="dropdown-item" value="Name">Nombre</option>
-        <option class="dropdown-item" value="Description">Descripción</option>
-        <option class="dropdown-item" value="Date">Fecha</option>
-      </select>
-
-  </div>
-    </div>
-      -->
       <!-- Input nombre y descripcion -->
-      <input
-        *ngIf="slctDataType == 'Name' || slctDataType == 'Description'"
-        jhiTranslate="moneyRoombaApp.transaction.home.searchbar"
-        type="text"
-        [(ngModel)]="inputText"
-        (input)="filterTransactions()"
-      />
+      <div class="pt-3 p-1" style="font-size: 24px">
+        <input
+          *ngIf="slctDataType == 'Name' || slctDataType == 'Category'"
+          jhiTranslate="moneyRoombaApp.transaction.home.searchbar"
+          type="text"
+          [(ngModel)]="inputText"
+          (input)="filterTransactions()"
+        />
+      </div>
 
       <button class="btn btn-info mr-2" (click)="loadAll()" [disabled]="isLoading">
         <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
@@ -85,33 +76,20 @@
         <table class="table display mb-4 dataTablesCard dataTable card-table" aria-describedby="page-heading">
           <thead>
             <tr>
-              <!-- <th scope="col"><span jhiTranslate="global.field.id">ID</span></th>-->
               <th scope="col"><span jhiTranslate="moneyRoombaApp.transaction.name">Name</span></th>
-              <!--<th scope="col"><span jhiTranslate="moneyRoombaApp.transaction.description">Description</span></th>-->
               <th scope="col"><span jhiTranslate="moneyRoombaApp.transaction.dateAdded">Date Added</span></th>
               <th scope="col"><span jhiTranslate="moneyRoombaApp.transaction.wallet">Wallet</span></th>
               <th scope="col"><span jhiTranslate="moneyRoombaApp.transaction.amount">Amount</span></th>
-              <!--<th scope="col"><span jhiTranslate="moneyRoombaApp.transaction.originalAmount">Original Amount</span></th>-->
               <th scope="col"><span jhiTranslate="moneyRoombaApp.transaction.movementType">Movement Type</span></th>
-              <!--<th scope="col"><span jhiTranslate="moneyRoombaApp.transaction.scheduled">Scheduled</span></th>-->
-              <!--<th scope="col"><span jhiTranslate="moneyRoombaApp.transaction.addToReports">Add To Reports</span></th>-->
-              <!--<th scope="col"><span jhiTranslate="moneyRoombaApp.transaction.incomingTransaction">Incoming Transaction</span></th>-->
               <th scope="col"><span jhiTranslate="moneyRoombaApp.transaction.transactionType">Transaction Type</span></th>
-              <!--<th scope="col"><span jhiTranslate="moneyRoombaApp.transaction.attachment">Attachment</span></th>-->
-
-              <!-- <th scope="col"><span jhiTranslate="moneyRoombaApp.transaction.currency">Currency</span></th>-->
               <th scope="col"><span jhiTranslate="moneyRoombaApp.transaction.category">Category</span></th>
-              <!-- <th scope="col"><span jhiTranslate="moneyRoombaApp.transaction.sourceUser">Source User</span></th>-->
+
               <th scope="col"></th>
             </tr>
           </thead>
           <tbody>
             <tr *ngFor="let transaction of transactions; trackBy: trackId" data-cy="entityTable">
-              <!-- <td>
-            <a [routerLink]="['/transaction', transaction.id, 'view']">{{ transaction.id }}</a>
-          </td>-->
               <td>{{ transaction.name }}</td>
-              <!--<td>{{ transaction.description }}</td>-->
               <td class="text-black text-nowrap">{{ transaction.dateAdded | formatMediumDate }}</td>
               <td>
                 <div *ngIf="transaction.wallet">
@@ -126,8 +104,7 @@
                   >+${{ transaction.amount }}
                 </span>
               </td>
-              <!--<td>{{ transaction.originalAmount }}</td>-->
-              <!--<td jhiTranslate="{{ 'moneyRoombaApp.MovementType.' + transaction.movementType }}">-->
+
               <td>
                 <div class="text-black">
                   <span *ngIf="transaction.movementType.toLowerCase().includes('expense')" class="mr-2 oi-icon {{ 'bgl-danger' }}">
@@ -140,40 +117,17 @@
                   <span jhiTranslate="{{ 'moneyRoombaApp.MovementType.' + transaction.movementType }}"> </span>
                 </div>
               </td>
-              <!-- <td>{{ transaction.scheduled }}</td>-->
-              <!--<td>{{ transaction.addToReports }}</td>-->
-              <!--<td>{{ transaction.incomingTransaction }}</td>-->
+
               <td jhiTranslate="{{ 'moneyRoombaApp.TransactionType.' + transaction.transactionType }}">
                 {{ transaction.transactionType }}
               </td>
-              <!-- <td>
-            <a href="javascript:void(0)" class="btn btn-rounded btn-outline-success">
-              <span jhiTranslate="{{ 'moneyRoombaApp.TransactionType.' + transaction.transactionType }}">
 
-              </span>
-            </a>
-
-          </td>-->
-              <!-- <td>
-            <div *ngIf="transaction.attachment">
-              <a [routerLink]="['/attachment', transaction.attachment?.id, 'view']">{{ transaction.attachment?.id }}</a>
-            </div>
-          </td>-->
-              <!-- <td>
-            <div *ngIf="transaction.currency">
-              <a [routerLink]="['/currency', transaction.currency?.id, 'view']">{{ transaction.currency?.code }}</a>
-            </div>
-          </td>-->
               <td>
                 <div *ngIf="transaction.category">
                   <a [routerLink]="['/category', transaction.category?.id, 'view']">{{ transaction.category?.name }}</a>
                 </div>
               </td>
-              <!-- <td>
-            <div *ngIf="transaction.sourceUser">
-              <a [routerLink]="['/user-details', transaction.sourceUser?.id, 'view']">{{ transaction.sourceUser?.id }}</a>
-            </div>
-          </td>-->
+
               <td class="text-right">
                 <div class="btn-group">
                   <button
