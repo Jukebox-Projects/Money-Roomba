@@ -269,7 +269,7 @@ public class UserService {
         } else {
             user.setLangKey(userDTO.getLangKey());
         }
-        String encryptedPassword = passwordEncoder.encode(RandomUtil.generatePassword());
+        String encryptedPassword = passwordEncoder.encode(password);
         user.setPassword(encryptedPassword);
         user.setResetKey(RandomUtil.generateResetKey());
         user.setResetDate(Instant.now());
@@ -344,6 +344,23 @@ public class UserService {
                         .filter(Optional::isPresent)
                         .map(Optional::get)
                         .forEach(managedAuthorities::add);
+                    this.clearUserCaches(user);
+                    log.debug("Changed Information for User: {}", user);
+                    return user;
+                }
+            )
+            .map(AdminUserDTO::new);
+    }
+
+    public Optional<AdminUserDTO> updateActivation(AdminUserDTO userDTO) {
+        return Optional
+            .of(userRepository.findById(userDTO.getId()))
+            .filter(Optional::isPresent)
+            .map(Optional::get)
+            .map(
+                user -> {
+                    this.clearUserCaches(user);
+                    user.setActivated(userDTO.isActivated());
                     this.clearUserCaches(user);
                     log.debug("Changed Information for User: {}", user);
                     return user;
