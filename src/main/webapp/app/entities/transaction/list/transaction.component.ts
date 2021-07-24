@@ -35,6 +35,7 @@ export class TransactionComponent implements OnInit {
       (res: HttpResponse<ITransaction[]>) => {
         this.isLoading = false;
         this.transactions = res.body ?? [];
+        this.allTransactions = res.body ?? [];
         this.collectionSize = this.transactions.length;
       },
       () => {
@@ -50,11 +51,8 @@ export class TransactionComponent implements OnInit {
   filterTransactions(): void {
     if (this.transactions !== undefined) {
       this.transactions = this.transactions.filter(transaction => {
-        if (transaction.name !== undefined || transaction.category !== undefined) {
-          return (
-            transaction.name.toLowerCase().includes(this.inputText.toLowerCase()) ||
-            transaction.category.name.toLowerCase().includes(this.inputText.toLowerCase())
-          );
+        if (transaction.name !== undefined) {
+          return transaction.name.toLowerCase().includes(this.inputText.toLowerCase());
         } else {
           return false;
         }

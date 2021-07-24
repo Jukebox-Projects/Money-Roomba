@@ -16,7 +16,8 @@
         "question": "¿Seguro que quiere eliminar Transaction {{ id }}?"
       },
       "detail": {
-        "title": "Transaction"
+        "title": "Transaction",
+        "none": "Ninguna"
       },
       "id": "ID",
       "name": "Nombre",

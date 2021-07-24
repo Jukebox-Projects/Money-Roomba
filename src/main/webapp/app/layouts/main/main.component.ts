@@ -45,6 +45,10 @@ export class MainComponent implements OnInit {
     });
   }
 
+  public isAuthenticated() {
+    return this.accountService.isAuthenticated();
+  }
+
   private getPageTitle(routeSnapshot: ActivatedRouteSnapshot): string {
     let title: string = routeSnapshot.data['pageTitle'] ?? '';
     if (routeSnapshot.firstChild) {
