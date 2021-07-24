@@ -59,7 +59,9 @@ export class LoginComponent implements OnInit, AfterViewInit {
               }
             });
 
-            this.router.navigate(['']);
+            this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
+              this.router.navigate(['']);
+            });
           }
         },
         () => (this.authenticationError = true)

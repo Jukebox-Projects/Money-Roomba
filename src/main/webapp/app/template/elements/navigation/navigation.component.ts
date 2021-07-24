@@ -53,6 +53,10 @@ export class NavigationComponent implements OnInit {
     this.accountService.getAuthenticationState().subscribe(account => (this.account = account));
   }
 
+  isAuthenticated(): boolean {
+    return this.accountService.isAuthenticated();
+  }
+
   toggleIcon: boolean = true;
 
   toggleLoveIcon() {
