@@ -7,16 +7,6 @@
         <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
         <span jhiTranslate="moneyRoombaApp.systemSetting.home.refreshListLabel">Refresh List</span>
       </button>
-
-      <button
-        id="jh-create-entity"
-        data-cy="entityCreateButton"
-        class="btn btn-primary jh-create-entity create-system-setting"
-        [routerLink]="['/system-setting/new']"
-      >
-        <fa-icon icon="plus"></fa-icon>
-        <span jhiTranslate="moneyRoombaApp.systemSetting.home.createLabel"> Create a new System Setting </span>
-      </button>
     </div>
   </h2>
 
@@ -32,7 +22,6 @@
     <table class="table table-striped" aria-describedby="page-heading">
       <thead>
         <tr>
-          <th scope="col"><span jhiTranslate="global.field.id">ID</span></th>
           <th scope="col"><span jhiTranslate="moneyRoombaApp.systemSetting.key">Key</span></th>
           <th scope="col"><span jhiTranslate="moneyRoombaApp.systemSetting.value">Value</span></th>
           <th scope="col"></th>
@@ -40,10 +29,7 @@
       </thead>
       <tbody>
         <tr *ngFor="let systemSetting of systemSettings; trackBy: trackId" data-cy="entityTable">
-          <td>
-            <a [routerLink]="['/system-setting', systemSetting.id, 'view']">{{ systemSetting.id }}</a>
-          </td>
-          <td>{{ systemSetting.key }}</td>
+          <td [jhiTranslate]="'moneyRoombaApp.systemSetting.keys.' + systemSetting.key"></td>
           <td>{{ systemSetting.value }}</td>
           <td class="text-right">
             <div class="btn-group">
@@ -65,11 +51,6 @@
               >
                 <fa-icon icon="pencil-alt"></fa-icon>
                 <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
-              </button>
-
-              <button type="submit" (click)="delete(systemSetting)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
-                <fa-icon icon="times"></fa-icon>
-                <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
               </button>
             </div>
           </td>

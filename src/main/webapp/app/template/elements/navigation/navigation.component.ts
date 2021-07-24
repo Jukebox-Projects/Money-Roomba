@@ -53,13 +53,17 @@ export class NavigationComponent implements OnInit {
     this.accountService.getAuthenticationState().subscribe(account => (this.account = account));
   }
 
+  isAuthenticated(): boolean {
+    return this.accountService.isAuthenticated();
+  }
+
   toggleIcon: boolean = true;
 
   toggleLoveIcon() {
     this.toggleIcon = !this.toggleIcon;
   }
 
-  dashboardArray = ['/', '/wallet', '/scheduled-transaction', '/category'];
+  dashboardArray = ['/', '/wallet', '/scheduled-transaction', '/category', '/transaction'];
 
   adminArray = [
     '/admin/user-management',
@@ -69,5 +73,6 @@ export class NavigationComponent implements OnInit {
     '/admin/docs',
     '/admin/configuration',
     '/system-setting',
+    '/license',
   ];
 }

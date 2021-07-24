@@ -3,6 +3,42 @@
     <span jhiTranslate="moneyRoombaApp.transaction.home.title">Transactions</span>
 
     <div class="d-flex justify-content-end">
+      <div class="pt-3" style="font-size: 24px">
+        <select [(ngModel)]="slctDataType" name="slctDataType">
+          <option class="dropdown-item" value="">-</option>
+          <option class="dropdown-item" value="Name" jhiTranslate="moneyRoombaApp.transaction.name">Name</option>
+          <option class="dropdown-item" value="Date" jhiTranslate="moneyRoombaApp.transaction.dateAdded">Date</option>
+        </select>
+      </div>
+      <!-- Input date Range -->
+      <div class="pt-3 p-1" style="font-size: 14px">
+        <form *ngIf="slctDataType == 'Date'">
+          <mat-form-field appearance="fill" (submit)="filterDateRange()">
+            <mat-label>Enter a date range</mat-label>
+            <mat-date-range-input [formGroup]="range" [rangePicker]="picker">
+              <input matStartDate formControlName="start" placeholder="Start date" />
+              <input matEndDate formControlName="end" placeholder="End date" />
+            </mat-date-range-input>
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-date-range-picker #picker></mat-date-range-picker>
+
+            <mat-error *ngIf="range.controls.start.hasError('matStartDateInvalid')">Invalid start date</mat-error>
+            <mat-error *ngIf="range.controls.end.hasError('matEndDateInvalid')">Invalid end date</mat-error>
+          </mat-form-field>
+          <button class="btn btn-info mr-2" (click)="filterDateRange()">Submit</button>
+        </form>
+      </div>
+      <!-- Input nombre y descripcion -->
+      <div class="pt-3 p-1" style="font-size: 24px">
+        <input
+          *ngIf="slctDataType == 'Name'"
+          jhiTranslate="moneyRoombaApp.transaction.home.searchbar"
+          type="text"
+          [(ngModel)]="inputText"
+          (input)="filterTransactions()"
+        />
+      </div>
+
       <button class="btn btn-info mr-2" (click)="loadAll()" [disabled]="isLoading">
         <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
         <span jhiTranslate="moneyRoombaApp.transaction.home.refreshListLabel">Refresh List</span>
@@ -28,99 +64,116 @@
     <span jhiTranslate="moneyRoombaApp.transaction.home.notFound">No transactions found</span>
   </div>
 
-  <div class="table-responsive" id="entities" *ngIf="transactions && transactions.length > 0">
-    <table class="table table-striped" aria-describedby="page-heading">
-      <thead>
-        <tr>
-          <th scope="col"><span jhiTranslate="global.field.id">ID</span></th>
-          <th scope="col"><span jhiTranslate="moneyRoombaApp.transaction.name">Name</span></th>
-          <th scope="col"><span jhiTranslate="moneyRoombaApp.transaction.description">Description</span></th>
-          <th scope="col"><span jhiTranslate="moneyRoombaApp.transaction.dateAdded">Date Added</span></th>
-          <th scope="col"><span jhiTranslate="moneyRoombaApp.transaction.amount">Amount</span></th>
-          <th scope="col"><span jhiTranslate="moneyRoombaApp.transaction.originalAmount">Original Amount</span></th>
-          <th scope="col"><span jhiTranslate="moneyRoombaApp.transaction.movementType">Movement Type</span></th>
-          <th scope="col"><span jhiTranslate="moneyRoombaApp.transaction.scheduled">Scheduled</span></th>
-          <th scope="col"><span jhiTranslate="moneyRoombaApp.transaction.addToReports">Add To Reports</span></th>
-          <th scope="col"><span jhiTranslate="moneyRoombaApp.transaction.incomingTransaction">Incoming Transaction</span></th>
-          <th scope="col"><span jhiTranslate="moneyRoombaApp.transaction.transactionType">Transaction Type</span></th>
-          <th scope="col"><span jhiTranslate="moneyRoombaApp.transaction.attachment">Attachment</span></th>
-          <th scope="col"><span jhiTranslate="moneyRoombaApp.transaction.wallet">Wallet</span></th>
-          <th scope="col"><span jhiTranslate="moneyRoombaApp.transaction.currency">Currency</span></th>
-          <th scope="col"><span jhiTranslate="moneyRoombaApp.transaction.category">Category</span></th>
-          <th scope="col"><span jhiTranslate="moneyRoombaApp.transaction.sourceUser">Source User</span></th>
-          <th scope="col"></th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let transaction of transactions; trackBy: trackId" data-cy="entityTable">
-          <td>
-            <a [routerLink]="['/transaction', transaction.id, 'view']">{{ transaction.id }}</a>
-          </td>
-          <td>{{ transaction.name }}</td>
-          <td>{{ transaction.description }}</td>
-          <td>{{ transaction.dateAdded | formatMediumDate }}</td>
-          <td>{{ transaction.amount }}</td>
-          <td>{{ transaction.originalAmount }}</td>
-          <td jhiTranslate="{{ 'moneyRoombaApp.MovementType.' + transaction.movementType }}">{{ transaction.movementType }}</td>
-          <td>{{ transaction.scheduled }}</td>
-          <td>{{ transaction.addToReports }}</td>
-          <td>{{ transaction.incomingTransaction }}</td>
-          <td jhiTranslate="{{ 'moneyRoombaApp.TransactionType.' + transaction.transactionType }}">{{ transaction.transactionType }}</td>
-          <td>
-            <div *ngIf="transaction.attachment">
-              <a [routerLink]="['/attachment', transaction.attachment?.id, 'view']">{{ transaction.attachment?.id }}</a>
-            </div>
-          </td>
-          <td>
-            <div *ngIf="transaction.wallet">
-              <a [routerLink]="['/wallet', transaction.wallet?.id, 'view']">{{ transaction.wallet?.name }}</a>
-            </div>
-          </td>
-          <td>
-            <div *ngIf="transaction.currency">
-              <a [routerLink]="['/currency', transaction.currency?.id, 'view']">{{ transaction.currency?.code }}</a>
-            </div>
-          </td>
-          <td>
-            <div *ngIf="transaction.category">
-              <a [routerLink]="['/category', transaction.category?.id, 'view']">{{ transaction.category?.name }}</a>
-            </div>
-          </td>
-          <td>
-            <div *ngIf="transaction.sourceUser">
-              <a [routerLink]="['/user-details', transaction.sourceUser?.id, 'view']">{{ transaction.sourceUser?.id }}</a>
-            </div>
-          </td>
-          <td class="text-right">
-            <div class="btn-group">
-              <button
-                type="submit"
-                [routerLink]="['/transaction', transaction.id, 'view']"
-                class="btn btn-info btn-sm"
-                data-cy="entityDetailsButton"
-              >
-                <fa-icon icon="eye"></fa-icon>
-                <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
-              </button>
+  <div class="row">
+    <div class="col-lg-12">
+      <div
+        class="etabl-responsive table-hover fs-14 card-tableetabl-responsive table-hover fs-14 card-table"
+        id="entities"
+        *ngIf="transactions && transactions.length > 0"
+      >
+        <table class="table display mb-4 dataTablesCard dataTable card-table" aria-describedby="page-heading">
+          <thead>
+            <tr>
+              <th scope="col"><span jhiTranslate="moneyRoombaApp.transaction.name">Name</span></th>
+              <th scope="col"><span jhiTranslate="moneyRoombaApp.transaction.dateAdded">Date Added</span></th>
+              <th scope="col"><span jhiTranslate="moneyRoombaApp.transaction.wallet">Wallet</span></th>
+              <th scope="col"><span jhiTranslate="moneyRoombaApp.transaction.amount">Amount</span></th>
+              <th scope="col"><span jhiTranslate="moneyRoombaApp.transaction.movementType">Movement Type</span></th>
+              <th scope="col"><span jhiTranslate="moneyRoombaApp.transaction.transactionType">Transaction Type</span></th>
+              <th scope="col"><span jhiTranslate="moneyRoombaApp.transaction.category">Category</span></th>
 
-              <button
-                type="submit"
-                [routerLink]="['/transaction', transaction.id, 'edit']"
-                class="btn btn-primary btn-sm"
-                data-cy="entityEditButton"
-              >
-                <fa-icon icon="pencil-alt"></fa-icon>
-                <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
-              </button>
+              <th scope="col"></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let transaction of transactions; trackBy: trackId" data-cy="entityTable">
+              <td>{{ transaction.name }}</td>
+              <td class="text-black text-nowrap">{{ transaction.dateAdded | formatMediumDate }}</td>
+              <td>
+                <div *ngIf="transaction.wallet">
+                  <a [routerLink]="['/wallet', transaction.wallet?.id, 'view']">{{ transaction.wallet?.name }}</a>
+                </div>
+              </td>
+              <td>
+                <span *ngIf="transaction.movementType.toLowerCase().includes('expense')" class="text-black fs-20 font-w600"
+                  >-{{ transaction.currency?.code }}{{ ' ' }}{{ transaction.amount }}
+                </span>
+                <span *ngIf="transaction.movementType.toLowerCase().includes('income')" class="text-black fs-20 font-w600"
+                  >+{{ transaction.currency?.code }}{{ ' ' }}{{ transaction.amount }}
+                </span>
+              </td>
 
-              <button type="submit" (click)="delete(transaction)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
-                <fa-icon icon="times"></fa-icon>
-                <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
-              </button>
-            </div>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+              <td>
+                <div class="text-black">
+                  <span *ngIf="transaction.movementType.toLowerCase().includes('expense')" class="mr-2 oi-icon {{ 'bgl-danger' }}">
+                    <img src="{{ 'assets/images/ic_out.svg' }}" />
+                  </span>
+
+                  <span *ngIf="transaction.movementType.toLowerCase().includes('income')" class="mr-2 oi-icon {{ 'bgl-success' }}">
+                    <img src="{{ 'assets/images/ic_in.svg' }}" />
+                  </span>
+                  <span jhiTranslate="{{ 'moneyRoombaApp.MovementType.' + transaction.movementType }}"> </span>
+                </div>
+              </td>
+
+              <td jhiTranslate="{{ 'moneyRoombaApp.TransactionType.' + transaction.transactionType }}">
+                {{ transaction.transactionType }}
+              </td>
+
+              <td>
+                <div *ngIf="transaction.category">
+                  <a [routerLink]="['/category', transaction.category?.id, 'view']">{{ transaction.category?.name }}</a>
+                </div>
+              </td>
+
+              <td class="text-right">
+                <div class="btn-group">
+                  <button
+                    type="submit"
+                    [routerLink]="['/transaction', transaction.id, 'view']"
+                    class="btn btn-info btn-sm"
+                    data-cy="entityDetailsButton"
+                  >
+                    <fa-icon icon="eye"></fa-icon>
+                    <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
+                  </button>
+
+                  <button
+                    type="submit"
+                    [routerLink]="['/transaction', transaction.id, 'edit']"
+                    class="btn btn-primary btn-sm"
+                    data-cy="entityEditButton"
+                  >
+                    <fa-icon icon="pencil-alt"></fa-icon>
+                    <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
+                  </button>
+
+                  <button type="submit" (click)="delete(transaction)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
+                    <fa-icon icon="times"></fa-icon>
+                    <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <div class="d-flex justify-content-between p-2">
+    <ngb-pagination
+      class="mr-3"
+      [collectionSize]="collectionSize"
+      [(page)]="page"
+      [pageSize]="pageSize"
+      (pageChange)="updateTransactionListing()"
+    >
+    </ngb-pagination>
+
+    <select class="custom-select" style="width: auto" [(ngModel)]="pageSize" (ngModelChange)="updateTransactionListing()">
+      <option [ngValue]="5">5 items per page</option>
+      <option [ngValue]="10">10 items per page</option>
+      <option [ngValue]="20">20 items per page</option>
+    </select>
   </div>
 </div>

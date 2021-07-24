@@ -2,27 +2,59 @@
   "moneyRoombaApp": {
     "license": {
       "home": {
-        "title": "Licenses",
+        "title": "Licencias",
         "refreshListLabel": "Refrescar lista",
-        "createLabel": "Crear nuevo License",
-        "createOrEditLabel": "Crear o editar License",
-        "notFound": "Ningún Licenses encontrado"
+        "createLabel": "Crear licencias",
+        "createOrEditLabel": "Crear o editar licencia",
+        "notFound": "Ningúna licencia encontrada"
       },
-      "created": "Un nuevo License ha sido creado con el identificador {{ param }}",
-      "updated": "Un License ha sido actualizado con el identificador {{ param }}",
-      "deleted": "Un License ha sido eliminado con el identificador {{ param }}",
+      "view": {
+        "title": "¿Qué beneficios obtendré como usuario premium?",
+        "paragraph": "Como usuario premium, obtendrá muchos beneficios. Dentro de estos, tendrás mayor libertad dentro de la aplicación. Los beneficios se enumeran a continuación.",
+        "regular": {
+          "title": "Regular",
+          "wallets": "Límite de 3 carteras",
+          "scheduledTransactions": "Limite de 3 transacciones programadas",
+          "importedTransactions": "Limite de 10 transacciones importadas",
+          "reports": "Plazo de tiempo limitado para reportes"
+        },
+        "premium": {
+          "title": "Premium",
+          "wallets": "Carteras ilimitadas",
+          "scheduledTransactions": "Transacciones programadas ilimitadas",
+          "importedTransactions": "Transacciones importadas ilimitadas",
+          "reports": "Plazo de tiempo extendido para reportes"
+        },
+        "buyNow": "Comprar ahora"
+      },
+      "activated": "Activada",
+      "deactivated": "Desactivada",
+      "created": "Una nueva licencia ha sido creada con el identificador {{ param }}",
+      "createdBulk": "Se han generado {{ param }} licencias",
+      "activate": "La licencia ha sido activada",
+      "updated": "Una licencia ha sido actualizada con el identificador {{ param }}",
+      "deleted": "Una licencia ha sido eliminado con el identificador {{ param }}",
       "delete": {
-        "question": "¿Seguro que quiere eliminar License {{ id }}?"
+        "question": "¿Seguro que quiere eliminar la licencia {{ id }}?"
       },
       "detail": {
-        "title": "License"
+        "title": "Licence"
+      },
+      "createBulk": {
+        "title": "Crear licencias en bloque",
+        "quantity": "Cantidad"
+      },
+      "buyOrActivate": {
+        "title": "Compra o activa una licencia",
+        "activateLicenseText": "Por favor ingresa el código de la licencia",
+        "activateText": "Activar"
       },
       "id": "ID",
-      "code": "Code",
-      "isAssigned": "Is Assigned",
-      "isActive": "Is Active",
-      "createMethod": "Create Method",
-      "invoice": "Invoice"
+      "code": "Código",
+      "isAssigned": "Redimida",
+      "isActive": "Está activa",
+      "createMethod": "Método de creación",
+      "invoice": "Factura"
     }
   }
 }

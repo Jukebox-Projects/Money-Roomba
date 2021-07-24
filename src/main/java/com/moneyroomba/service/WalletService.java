@@ -58,14 +58,27 @@ public class WalletService {
         log.debug("Request to save Wallet : {}", wallet);
         int walletCount = 0;
         Optional<User> user = userRepository.findOneByLogin(
-            SecurityUtils.getCurrentUserLogin().orElseThrow(() -> new WalletServiceException("Current user login not found"))
+            SecurityUtils
+                .getCurrentUserLogin()
+                .orElseThrow(
+                    () ->
+                        new BadRequestAlertException(
+                            "Current user has no details on its account, could not complete action",
+                            ENTITY_NAME,
+                            "nonuserfound"
+                        )
+                )
         );
         Optional<UserDetails> userDetails = userDetailsRepository.findOneByInternalUser(user.get());
         wallet.setUser(userDetails.get());
         List<Wallet> userWallets = walletRepository.findAllByUser(userDetails.get());
         if (!SecurityUtils.hasCurrentUserThisAuthority(AuthoritiesConstants.PREMIUM_USER)) {
             if (userWallets.size() >= 3) {
-                throw new WalletServiceException("User cannot register more wallets.");
+                throw new BadRequestAlertException(
+                    "User has reached the max amount of wallets that his accounts can handle.",
+                    ENTITY_NAME,
+                    "nomorewallets"
+                );
             } else {
                 return walletRepository.save(wallet);
             }

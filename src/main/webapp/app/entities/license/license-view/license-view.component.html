@@ -1,0 +1,49 @@
+<div class="col-xl-12 col-lg-12 col-xxl-12 col-sm-12">
+  <jhi-alert></jhi-alert>
+  <div class="background">
+    <div class="container">
+      <div class="panel pricing-table">
+        <div class="pricing-plan">
+          <img src="https://s22.postimg.cc/8mv5gn7w1/paper-plane.png" alt="" class="pricing-img" />
+          <h2 class="pricing-header" jhiTranslate="moneyRoombaApp.license.view.regular.title">Regular</h2>
+          <ul class="pricing-features">
+            <li class="pricing-features-item" jhiTranslate="moneyRoombaApp.license.view.regular.wallets">Limit of 3 wallets</li>
+            <li class="pricing-features-item" jhiTranslate="moneyRoombaApp.license.view.regular.scheduledTransactions">
+              Limit of 3 scheduled transactions
+            </li>
+            <li class="pricing-features-item" jhiTranslate="moneyRoombaApp.license.view.regular.importedTransactions">
+              Limit of 10 imported transactions
+            </li>
+            <li class="pricing-features-item" jhiTranslate="moneyRoombaApp.license.view.regular.reports">
+              Limited time period for reports
+            </li>
+          </ul>
+          <span class="pricing-price">Free</span>
+        </div>
+
+        <div class="pricing-plan">
+          <img src="https://s28.postimg.cc/ju5bnc3x9/plane.png" alt="" class="pricing-img" />
+          <h2 class="pricing-header" jhiTranslate="moneyRoombaApp.license.view.premium.title">Premium</h2>
+          <ul class="pricing-features">
+            <li class="pricing-features-item" jhiTranslate="moneyRoombaApp.license.view.premium.wallets">Unlimited wallets</li>
+            <li class="pricing-features-item" jhiTranslate="moneyRoombaApp.license.view.premium.scheduledTransactions">
+              Unlimited scheduled transactions
+            </li>
+            <li class="pricing-features-item" jhiTranslate="moneyRoombaApp.license.view.premium.importedTransactions">
+              Unlimited imported transactions
+            </li>
+            <li class="pricing-features-item" jhiTranslate="moneyRoombaApp.license.view.premium.reports">
+              Extended time frame for reports
+            </li>
+          </ul>
+          <span class="pricing-price">${{ getPrice() }}</span>
+          <button type="button" class="btn btn-primary pricing-button is-featured">
+            <fa-icon icon="shopping-cart"></fa-icon>&nbsp;<span jhiTranslate="moneyRoombaApp.license.view.buyNow" (click)="open()"
+              >Buy now</span
+            >
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

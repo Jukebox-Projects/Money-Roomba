@@ -5,9 +5,10 @@
         "title": "System Settings",
         "refreshListLabel": "Refresh list",
         "createLabel": "Create a new System Setting",
-        "createOrEditLabel": "Create or edit a System Setting",
+        "createOrEditLabel": "Edit a System Setting",
         "notFound": "No System Settings found"
       },
+      "keys": { "price": "Licence price", "tax": "Sales tax" },
       "created": "A new System Setting is created with identifier {{ param }}",
       "updated": "A System Setting is updated with identifier {{ param }}",
       "deleted": "A System Setting is deleted with identifier {{ param }}",
