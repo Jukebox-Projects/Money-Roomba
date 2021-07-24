@@ -16,7 +16,8 @@
         "question": "Are you sure you want to delete Transaction {{ id }}?"
       },
       "detail": {
-        "title": "Transaction"
+        "title": "Transaction",
+        "none": "None"
       },
       "id": "ID",
       "name": "Name",

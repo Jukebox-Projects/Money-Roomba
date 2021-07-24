@@ -5,10 +5,9 @@
     <div class="d-flex justify-content-end">
       <div class="pt-3" style="font-size: 24px">
         <select [(ngModel)]="slctDataType" name="slctDataType">
-          <option class="dropdown-item" value="">Ninguna</option>
-          <option class="dropdown-item" value="Name">Nombre</option>
-          <option class="dropdown-item" value="Category">Categoria</option>
-          <option class="dropdown-item" value="Date">Fecha</option>
+          <option class="dropdown-item" value="">-</option>
+          <option class="dropdown-item" value="Name" jhiTranslate="moneyRoombaApp.transaction.name">Name</option>
+          <option class="dropdown-item" value="Date" jhiTranslate="moneyRoombaApp.transaction.dateAdded">Date</option>
         </select>
       </div>
       <!-- Input date Range -->
@@ -29,11 +28,10 @@
           <button class="btn btn-info mr-2" (click)="filterDateRange()">Submit</button>
         </form>
       </div>
-
       <!-- Input nombre y descripcion -->
       <div class="pt-3 p-1" style="font-size: 24px">
         <input
-          *ngIf="slctDataType == 'Name' || slctDataType == 'Category'"
+          *ngIf="slctDataType == 'Name'"
           jhiTranslate="moneyRoombaApp.transaction.home.searchbar"
           type="text"
           [(ngModel)]="inputText"
