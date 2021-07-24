@@ -32,9 +32,9 @@ spring:
       indent-output: true
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
-    url: jdbc:mysql://localhost:3306/MoneyRoomba?allowPublicKeyRetrieval=true&useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
-    username: root
-    password: root
+    url: jdbc:mysql://vi1okbj3flwn2j2s:n4yivtikiq1ai8kl@s465z7sj4pwhp7fn.cbetxkdyhwsb.us-east-1.rds.amazonaws.com:3306/eumr9a28ca9e5257
+    username: vi1okbj3flwn2j2s
+    password: n4yivtikiq1ai8kl
     hikari:
       poolName: Hikari
       auto-commit: false
