@@ -6,6 +6,7 @@
         "refreshListLabel": "Refrescar lista",
         "createLabel": "Crear nuevo Transaction",
         "createOrEditLabel": "Crear o editar Transaction",
+        "searchbar": "Buscar",
         "notFound": "Ningún Transactions encontrado"
       },
       "created": "Un nuevo Transaction ha sido creado con el identificador {{ param }}",
