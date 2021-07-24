@@ -3,6 +3,9 @@
     <span jhiTranslate="moneyRoombaApp.event.home.title">Events</span>
 
     <div class="d-flex justify-content-end">
+      <div class="pt-3 p-1" style="font-size: 24px">
+        <input jhiTranslate="moneyRoombaApp.transaction.home.searchbar" type="text" [(ngModel)]="inputText" (input)="filterEvents()" />
+      </div>
       <button class="btn btn-info mr-2" (click)="loadAll()" [disabled]="isLoading">
         <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
         <span jhiTranslate="moneyRoombaApp.event.home.refreshListLabel">Refresh List</span>
@@ -28,8 +31,12 @@
     <span jhiTranslate="moneyRoombaApp.event.home.notFound">No events found</span>
   </div>
 
-  <div class="table-responsive" id="entities" *ngIf="events && events.length > 0">
-    <table class="table table-striped" aria-describedby="page-heading">
+  <div
+    class="etabl-responsive table-hover fs-14 card-tableetabl-responsive table-hover fs-14 card-table"
+    id="entities"
+    *ngIf="events && events.length > 0"
+  >
+    <table class="table display mb-4 dataTablesCard dataTable card-table" aria-describedby="page-heading">
       <thead>
         <tr>
           <th scope="col"><span jhiTranslate="global.field.id">ID</span></th>
@@ -39,7 +46,7 @@
           <th scope="col"><span jhiTranslate="moneyRoombaApp.event.sourceEntity">Source Entity</span></th>
           <th scope="col"><span jhiTranslate="moneyRoombaApp.event.userName">User Name</span></th>
           <th scope="col"><span jhiTranslate="moneyRoombaApp.event.userLastName">User Last Name</span></th>
-          <th scope="col"><span jhiTranslate="moneyRoombaApp.event.notification">Notification</span></th>
+          <!-- <th scope="col"><span jhiTranslate="moneyRoombaApp.event.notification">Notification</span></th>-->
           <th scope="col"><span jhiTranslate="moneyRoombaApp.event.user">User</span></th>
           <th scope="col"></th>
         </tr>
@@ -56,9 +63,10 @@
           <td>{{ event.userName }}</td>
           <td>{{ event.userLastName }}</td>
           <td>
+            <!--
             <div *ngIf="event.notification">
               <a [routerLink]="['/notification', event.notification?.id, 'view']">{{ event.notification?.id }}</a>
-            </div>
+            </div>-->
           </td>
           <td>
             <div *ngIf="event.user">
