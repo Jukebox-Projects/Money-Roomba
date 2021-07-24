@@ -1,3 +1,4 @@
+import { Router } from '@angular/router';
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
@@ -8,7 +9,7 @@ import { Login } from 'app/login/login.model';
 
 @Injectable({ providedIn: 'root' })
 export class AuthServerProvider {
-  constructor(private http: HttpClient, private applicationConfigService: ApplicationConfigService) {}
+  constructor(private http: HttpClient, private applicationConfigService: ApplicationConfigService, private router: Router) {}
 
   login(credentials: Login): Observable<{}> {
     const data =
@@ -28,6 +29,9 @@ export class AuthServerProvider {
       map(() => {
         // to get a new csrf token call the api
         this.http.get(this.applicationConfigService.getEndpointFor('api/account')).subscribe();
+        this.router.navigateByUrl('/landing', { skipLocationChange: true }).then(() => {
+          this.router.navigate(['landing']);
+        });
       })
     );
   }

@@ -51,6 +51,10 @@ export class HeaderComponent implements OnInit {
     return this.accountService.hasAnyAuthority(Authority.PREMIUM_USER);
   }
 
+  isAuthenticated(): boolean {
+    return this.accountService.isAuthenticated();
+  }
+
   changeLanguage(languageKey: string): void {
     this.sessionStorageService.store('locale', languageKey);
     this.translateService.use(languageKey);
@@ -62,6 +66,8 @@ export class HeaderComponent implements OnInit {
 
   logout(): void {
     this.loginService.logout();
-    this.router.navigate(['']);
+    this.router.navigateByUrl('/landing', { skipLocationChange: true }).then(() => {
+      this.router.navigate(['landing']);
+    });
   }
 }
