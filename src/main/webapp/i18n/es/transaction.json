@@ -2,11 +2,10 @@
   "moneyRoombaApp": {
     "transaction": {
       "home": {
-        "title": "Transacciones",
+        "title": "Transactions",
         "refreshListLabel": "Refrescar lista",
         "createLabel": "Crear nuevo Transaction",
         "createOrEditLabel": "Crear o editar Transaction",
-        "searchbar": "Buscar",
         "notFound": "Ningún Transactions encontrado"
       },
       "created": "Un nuevo Transaction ha sido creado con el identificador {{ param }}",
@@ -16,25 +15,26 @@
         "question": "¿Seguro que quiere eliminar Transaction {{ id }}?"
       },
       "detail": {
-        "title": "Transaction",
-        "none": "Ninguna"
+        "title": "Transaction"
       },
       "id": "ID",
-      "name": "Nombre",
-      "description": "Descripción",
-      "dateAdded": "Fecha",
-      "amount": "Monto",
-      "originalAmount": "Monto Original",
-      "movementType": "Tipo de Movimiento",
-      "scheduled": "Programada",
-      "addToReports": "En Reportes",
-      "incomingTransaction": "Transacción Entrante",
-      "transactionType": "Tipo",
-      "attachment": "Adjuntos",
-      "wallet": "Cartera",
-      "currency": "Tipo de Moneda",
-      "category": "Categoría",
-      "sourceUser": "Usuario"
+      "name": "Name",
+      "description": "Description",
+      "dateAdded": "Date Added",
+      "amount": "Amount",
+      "originalAmount": "Original Amount",
+      "movementType": "Movement Type",
+      "scheduled": "Scheduled",
+      "addToReports": "Add To Reports",
+      "incomingTransaction": "Incoming Transaction",
+      "transactionType": "Transaction Type",
+      "state": "State",
+      "attachment": "Attachment",
+      "wallet": "Wallet",
+      "currency": "Currency",
+      "category": "Category",
+      "sourceUser": "Source User",
+      "recievingUser": "Recieving User"
     }
   }
 }

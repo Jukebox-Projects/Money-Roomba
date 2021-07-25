@@ -111,6 +111,9 @@ public class TransactionQueryService extends QueryService<Transaction> {
             if (criteria.getTransactionType() != null) {
                 specification = specification.and(buildSpecification(criteria.getTransactionType(), Transaction_.transactionType));
             }
+            if (criteria.getState() != null) {
+                specification = specification.and(buildSpecification(criteria.getState(), Transaction_.state));
+            }
             if (criteria.getAttachmentId() != null) {
                 specification =
                     specification.and(
@@ -150,6 +153,15 @@ public class TransactionQueryService extends QueryService<Transaction> {
                         buildSpecification(
                             criteria.getSourceUserId(),
                             root -> root.join(Transaction_.sourceUser, JoinType.LEFT).get(UserDetails_.id)
+                        )
+                    );
+            }
+            if (criteria.getRecievingUserId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(
+                            criteria.getRecievingUserId(),
+                            root -> root.join(Transaction_.recievingUser, JoinType.LEFT).get(UserDetails_.id)
                         )
                     );
             }

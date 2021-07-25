@@ -77,6 +77,12 @@
       "relationshipName": "userDetails"
     },
     {
+      "relationshipType": "one-to-many",
+      "otherEntityName": "transaction",
+      "otherEntityRelationshipName": "recievingUser",
+      "relationshipName": "recievedTransactions"
+    },
+    {
       "relationshipType": "many-to-many",
       "otherEntityName": "userDetails",
       "otherEntityRelationshipName": "sourceContact",
