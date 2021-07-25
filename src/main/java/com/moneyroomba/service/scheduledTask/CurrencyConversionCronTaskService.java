@@ -43,7 +43,7 @@ public class CurrencyConversionCronTaskService {
         return new JSONObject(result);
     }
 
-    @Scheduled(cron = "0 0 12 * * *")
+    @Scheduled(cron = "0 0 1 * * *")
     public void populateCurrencyData() throws Exception {
         JSONObject currencys = this.sendAPIRequest();
         Iterator keys = currencys.getJSONObject("quotes").keys();
