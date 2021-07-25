@@ -48,10 +48,9 @@
               "./node_modules/ngx-lightbox/lightbox.css",
               "./node_modules/metismenujs/dist/metismenujs.css",
               "./node_modules/owl.carousel/dist/assets/owl.carousel.min.css",
-              "src/main/webapp/assets/css/style.css",
               "src/main/webapp/assets/css/dashboard.css"
             ],
-            "scripts": []
+            "scripts": ["src/main/webapp/assets/js/main.js"]
           },
           "configurations": {
             "production": {

@@ -11,13 +11,14 @@ import '../../../assets/js/bootstrap-datepicker.js';
 import '../../../assets/js/jquery.timepicker.min.js';
 import '../../../assets/js/main.js';*/
 
+//declare function  window(): void;
+declare function onload(): void;
 @Component({
   selector: 'jhi-landing-page',
   templateUrl: './landing-page.component.html',
   styleUrls: [
     '../../../assets/css/landing/animate.css',
     '../../../assets/css/landing/aos.css',
-    '../../../assets/css/landing/bootstrap.min.css',
     '../../../assets/css/landing/bootstrap-datepicker.css',
     '../../../assets/css/landing/flaticon.css',
     '../../../assets/css/landing/icomoon.css',
@@ -42,6 +43,8 @@ export class LandingPageComponent implements OnInit {
   myScriptElement8: HTMLScriptElement;
   myScriptElement9: HTMLScriptElement;
   constructor() {
+    //  window();
+
     this.myScriptElement = document.createElement('script');
     this.myScriptElement1 = document.createElement('script');
     this.myScriptElement2 = document.createElement('script');
@@ -63,17 +66,6 @@ export class LandingPageComponent implements OnInit {
     this.myScriptElement7.src = '../../../assets/js/bootstrap-datepicker.js';
     this.myScriptElement8.src = '../../../assets/css/landing/icomoon.css';
     this.myScriptElement9.src = '../../../assets/js/main.js';
-
-    document.body.appendChild(this.myScriptElement);
-    document.body.appendChild(this.myScriptElement1);
-    document.body.appendChild(this.myScriptElement2);
-    document.body.appendChild(this.myScriptElement3);
-    document.body.appendChild(this.myScriptElement4);
-    document.body.appendChild(this.myScriptElement5);
-    document.body.appendChild(this.myScriptElement6);
-    document.body.appendChild(this.myScriptElement7);
-    document.body.appendChild(this.myScriptElement8);
-    document.body.appendChild(this.myScriptElement9);
   }
 
   ngOnInit(): void {}

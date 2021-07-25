@@ -12,8 +12,13 @@
 
   <jhi-footer></jhi-footer>
 </div> -->
-
-<div id="main-wrapper" [ngClass]="{ 'menu-toggle': sharedService.hamburgerClass, '': !sharedService.hamburgerClass }" class="show">
+<router-outlet *ngIf="!isAuthenticated()"></router-outlet>
+<div
+  *ngIf="isAuthenticated()"
+  id="main-wrapper"
+  [ngClass]="{ 'menu-toggle': sharedService.hamburgerClass, '': !sharedService.hamburgerClass }"
+  class="show"
+>
   <!-- <app-loading></app-loading> -->
 
   <app-nav-header></app-nav-header>
