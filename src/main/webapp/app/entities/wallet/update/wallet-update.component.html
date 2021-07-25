@@ -105,7 +105,6 @@
         <div class="form-group">
           <label class="form-control-label" jhiTranslate="moneyRoombaApp.wallet.currency" for="field_currency">Currency</label>
           <select class="form-control" id="field_currency" data-cy="currency" name="currency" formControlName="currency">
-            <option [ngValue]="null"></option>
             <option
               [ngValue]="currencyOption.id === editForm.get('currency')!.value?.id ? editForm.get('currency')!.value : currencyOption"
               *ngFor="let currencyOption of currenciesSharedCollection; trackBy: trackCurrencyById"

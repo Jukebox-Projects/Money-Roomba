@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-
+import { AccountService } from '../../../core/auth/account.service';
 import { IWallet } from '../wallet.model';
 import { WalletService } from '../service/wallet.service';
 import { WalletDeleteDialogComponent } from '../delete/wallet-delete-dialog.component';
+import { Authority } from '../../../config/authority.constants';
 
 @Component({
   selector: 'jhi-wallet',
@@ -15,8 +16,9 @@ export class WalletComponent implements OnInit {
   allwallets?: IWallet[];
   isLoading = false;
   inputText = '';
+  adminUser = false;
 
-  constructor(protected walletService: WalletService, protected modalService: NgbModal) {}
+  constructor(protected walletService: WalletService, protected accountService: AccountService, protected modalService: NgbModal) {}
 
   loadAll(): void {
     this.isLoading = true;
@@ -34,6 +36,7 @@ export class WalletComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.isAdmin();
     this.loadAll();
   }
 
@@ -66,5 +69,9 @@ export class WalletComponent implements OnInit {
         this.loadAll();
       }
     });
+  }
+
+  isAdmin(): void {
+    this.adminUser = this.accountService.hasAnyAuthority(Authority.ADMIN);
   }
 }
