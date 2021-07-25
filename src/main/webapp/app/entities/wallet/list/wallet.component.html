@@ -11,6 +11,7 @@
       </button>
 
       <button
+        *ngIf="!this.adminUser"
         id="jh-create-entity"
         data-cy="entityCreateButton"
         class="btn btn-primary jh-create-entity create-wallet"
