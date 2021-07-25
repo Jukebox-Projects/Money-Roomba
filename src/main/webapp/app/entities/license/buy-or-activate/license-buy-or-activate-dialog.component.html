@@ -1,0 +1,41 @@
+<form name="creationForm" (ngSubmit)="activate()" role="form" novalidate [formGroup]="creationForm">
+  <div class="modal-header">
+    <h4 class="modal-title" data-cy="licenseCreateDialogHeading" jhiTranslate="moneyRoombaApp.license.buyOrActivate.title">
+      Buy or activate a licence
+    </h4>
+
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true" (click)="cancel()">&times;</button>
+  </div>
+
+  <div class="modal-body">
+    <jhi-alert-error></jhi-alert-error>
+    <jhi-alert></jhi-alert>
+
+    <div class="form-group">
+      <label class="form-control-label" jhiTranslate="moneyRoombaApp.license.buyOrActivate.activateLicenseText" for="field_code"
+        >Please enter your licence code</label
+      >
+
+      <div class="input-group input-group-sm mb-3">
+        <div class="input-group-prepend">
+          <span class="input-group-text" jhiTranslate="moneyRoombaApp.license.code">Code</span>
+        </div>
+        <input type="text" class="form-control" name="code" id="field_code" data-cy="code" formControlName="code" />
+        <div class="input-group-append">
+          <button class="btn btn-primary" type="submit" jhiTranslate="moneyRoombaApp.license.buyOrActivate.activateText">Activar</button>
+        </div>
+      </div>
+      <div *ngIf="creationForm.get('code')!.invalid && (creationForm.get('code')!.dirty || creationForm.get('code')!.touched)">
+        <small class="form-text text-danger" *ngIf="creationForm.get('code')?.errors?.required" jhiTranslate="entity.validation.required">
+          This field is required.
+        </small>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="cancel()">
+      <fa-icon icon="ban"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
+    </button>
+  </div>
+</form>

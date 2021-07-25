@@ -6,6 +6,7 @@
         "refreshListLabel": "Refresh list",
         "createLabel": "Create a new Transaction",
         "createOrEditLabel": "Create or edit a Transaction",
+        "searchbar": "Search",
         "notFound": "No Transactions found"
       },
       "created": "A new Transaction is created with identifier {{ param }}",
@@ -15,7 +16,8 @@
         "question": "Are you sure you want to delete Transaction {{ id }}?"
       },
       "detail": {
-        "title": "Transaction"
+        "title": "Transaction",
+        "none": "None"
       },
       "id": "ID",
       "name": "Name",

@@ -2,6 +2,7 @@ package com.moneyroomba.web.rest;
 
 import com.moneyroomba.domain.UserDetails;
 import com.moneyroomba.repository.UserDetailsRepository;
+import com.moneyroomba.security.AuthoritiesConstants;
 import com.moneyroomba.web.rest.errors.BadRequestAlertException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -14,6 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import tech.jhipster.web.util.HeaderUtil;
@@ -48,6 +50,7 @@ public class UserDetailsResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/user-details")
+    @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\")")
     public ResponseEntity<UserDetails> createUserDetails(@Valid @RequestBody UserDetails userDetails) throws URISyntaxException {
         log.debug("REST request to save UserDetails : {}", userDetails);
         if (userDetails.getId() != null) {
@@ -71,6 +74,7 @@ public class UserDetailsResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/user-details/{id}")
+    @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\")")
     public ResponseEntity<UserDetails> updateUserDetails(
         @PathVariable(value = "id", required = false) final Long id,
         @Valid @RequestBody UserDetails userDetails
@@ -106,6 +110,7 @@ public class UserDetailsResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PatchMapping(value = "/user-details/{id}", consumes = "application/merge-patch+json")
+    @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\")")
     public ResponseEntity<UserDetails> partialUpdateUserDetails(
         @PathVariable(value = "id", required = false) final Long id,
         @NotNull @RequestBody UserDetails userDetails
@@ -188,6 +193,7 @@ public class UserDetailsResource {
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/user-details/{id}")
+    @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\")")
     public ResponseEntity<Void> deleteUserDetails(@PathVariable Long id) {
         log.debug("REST request to delete UserDetails : {}", id);
         userDetailsRepository.deleteById(id);

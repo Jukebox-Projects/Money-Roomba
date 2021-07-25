@@ -25,7 +25,8 @@
       },
       "account": {
         "main": "Account",
-        "greetings": "Hello, {{param}}",
+        "greetings": "Hello, <strong>{{param}}</strong>",
+        "becomePremium": "Upgrade to premium",
         "settings": "Settings",
         "password": "Password",
         "sessions": "Sessions",
@@ -65,7 +66,9 @@
       "country.label": "Country",
       "country.placeholder": "Your country",
       "phone.label": "Phone",
-      "phone.placeholder": "Your phone"
+      "phone.placeholder": "Your phone",
+      "apiKey.label": "API key",
+      "apiKey.placeholder": "API key"
     },
     "messages": {
       "info": {
@@ -137,6 +140,7 @@
       "view": "View",
       "activate": "Activate",
       "deactivate": "Deactivate",
+      "generateApiKey": "Generate API key",
       "resetPassword": "Reset password"
     },
     "detail": {
@@ -179,6 +183,10 @@
     "idnull": "Invalid ID",
     "idinvalid": "Invalid ID",
     "idnotfound": "ID cannot be found",
+    "licenseNotFound": "License cannot be found",
+    "licenseAssigned": "License is assigned",
+    "licenseInvalid": "License format is invalid",
+    "licenseNotActive": "License is not active",
     "insufficientfunds": "You cannot register this transaction because of insufficient balance.",
     "nopermission": "Could not complete action due to lack of permission according to your user roles.",
     "admincantregister": "Admin cannot register {{ entityName }}.",

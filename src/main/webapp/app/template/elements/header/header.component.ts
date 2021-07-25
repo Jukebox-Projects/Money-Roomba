@@ -1,3 +1,4 @@
+import { Authority } from './../../../config/authority.constants';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
@@ -46,6 +47,14 @@ export class HeaderComponent implements OnInit {
     this.accountService.getAuthenticationState().subscribe(account => (this.account = account));
   }
 
+  isPremium(): boolean {
+    return this.accountService.hasAnyAuthority(Authority.PREMIUM_USER) || this.accountService.hasAnyAuthority(Authority.ADMIN);
+  }
+
+  isAuthenticated(): boolean {
+    return this.accountService.isAuthenticated();
+  }
+
   changeLanguage(languageKey: string): void {
     this.sessionStorageService.store('locale', languageKey);
     this.translateService.use(languageKey);
@@ -57,6 +66,8 @@ export class HeaderComponent implements OnInit {
 
   logout(): void {
     this.loginService.logout();
-    this.router.navigate(['']);
+    this.router.navigateByUrl('/landing', { skipLocationChange: true }).then(() => {
+      this.router.navigate(['landing']);
+    });
   }
 }
