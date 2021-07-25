@@ -6,8 +6,7 @@ package com.moneyroomba.domain.enumeration;
 public enum TransactionState {
     ACCEPTED("Accepted"),
     DENIED("Denied"),
-    PENDING,
-    APPROVAL("Pending approval"),
+    PENDING_APPROVAL("Pending approval"),
     NA("Does not apply");
 
     private String value;
