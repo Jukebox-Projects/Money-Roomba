@@ -14,12 +14,12 @@
   },
   "rules": {
     "arrow-body-style": "error",
-    "curly": "error",
-    "no-bitwise": "error",
+    "curly": "off",
+    "no-bitwise": "off",
     "no-caller": "error",
     "no-console": ["error", { "allow": ["warn", "error"] }],
     "no-eval": "error",
-    "radix": "error",
+    "radix": "off",
     "spaced-comment": ["warn", "always"]
   }
 }
