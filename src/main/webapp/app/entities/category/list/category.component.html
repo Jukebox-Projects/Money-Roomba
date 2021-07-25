@@ -52,7 +52,9 @@
           <td>{{ category.name }}</td>
           <td>{{ category.isActive }}</td>
           <td>{{ category.userCreated }}</td>
-          <td>{{ category.icon }}</td>
+          <td class="table-icon-cell">
+            <img class="icon" src="{{ getIcon(category.icon).path }}" alt="{{ getIcon(category.icon).name }}" />
+          </td>
           <td>
             <div *ngIf="category.parent">
               <a [routerLink]="['/category', category.parent?.id, 'view']">{{ category.parent?.name }}</a>
