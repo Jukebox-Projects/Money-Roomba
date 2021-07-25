@@ -1,0 +1,25 @@
+<div id="icons-container">
+  <div class="modal-header">
+    <h4 class="modal-title" data-cy="iconPickerDialogHeading" jhiTranslate="moneyRoombaApp.iconPicker.modal.title">Select an icon</h4>
+
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true" (click)="cancel()">&times;</button>
+  </div>
+
+  <div class="modal-body">
+    <jhi-alert-error></jhi-alert-error>
+
+    <div class="container">
+      <div class="row">
+        <div *ngFor="let iconData of iconList" class="col-4 col-md-2 col-xl-2 p-1 icon-container" (click)="selectIcon(iconData)">
+          <img src="{{ iconData.path }}" alt="{{ iconData.name }}" class="img-thumbnail" />
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="cancel()">
+      <fa-icon icon="ban"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
+    </button>
+  </div>
+</div>

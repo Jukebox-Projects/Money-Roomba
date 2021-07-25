@@ -95,6 +95,7 @@ import { MatStepperModule } from '@angular/material/stepper';
 import { MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatTreeModule } from '@angular/material/tree';
+import { IconPickerComponent } from './shared/icon-picker/icon-picker.component';
 import { LandingPageComponent } from './landing/landing-page/landing-page.component';
 
 @NgModule({
@@ -185,6 +186,7 @@ import { LandingPageComponent } from './landing/landing-page/landing-page.compon
     NavHeaderComponent,
     HeaderComponent,
     NavigationComponent,
+    IconPickerComponent,
     LandingPageComponent,
   ],
   bootstrap: [MainComponent],

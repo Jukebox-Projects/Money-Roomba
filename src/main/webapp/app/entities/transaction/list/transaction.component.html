@@ -95,12 +95,7 @@
                 </div>
               </td>
               <td>
-                <span *ngIf="transaction.movementType.toLowerCase().includes('expense')" class="text-black fs-20 font-w600"
-                  >-{{ transaction.currency?.code }}{{ ' ' }}{{ transaction.amount }}
-                </span>
-                <span *ngIf="transaction.movementType.toLowerCase().includes('income')" class="text-black fs-20 font-w600"
-                  >+{{ transaction.currency?.code }}{{ ' ' }}{{ transaction.amount }}
-                </span>
+                <span class="text-black fs-20 font-w600">{{ transaction.currency?.code }}{{ ' ' }}{{ transaction.originalAmount }} </span>
               </td>
 
               <td>
