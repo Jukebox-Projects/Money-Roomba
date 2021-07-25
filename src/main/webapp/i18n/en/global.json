@@ -20,6 +20,7 @@
         "notification": "Notification",
         "event": "Event",
         "systemSetting": "System Setting",
+        "currency-converter": "Currency converter",
         "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)"
       },
       "account": {
@@ -135,7 +136,8 @@
       "save": "Save",
       "view": "View",
       "activate": "Activate",
-      "deactivate": "Deactivate"
+      "deactivate": "Deactivate",
+      "resetPassword": "Reset password"
     },
     "detail": {
       "field": "Field",

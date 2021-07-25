@@ -17,7 +17,12 @@ export class SystemSettingUpdateComponent implements OnInit {
 
   editForm = this.fb.group({
     id: [],
-    key: [null, [Validators.required]],
+    key: [
+      {
+        value: '',
+        disabled: true,
+      },
+    ],
     value: [null, [Validators.required]],
   });
 

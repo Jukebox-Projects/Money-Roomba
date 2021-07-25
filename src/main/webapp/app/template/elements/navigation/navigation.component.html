@@ -47,6 +47,14 @@
               >Category</a
             >
           </li>
+          <li>
+            <a
+              class="{{ currentHref == '/currency-converter' ? 'mm-active' : '' }}"
+              [routerLink]="['/currency-converter']"
+              jhiTranslate="global.menu.entities.currency-converter"
+              >Wallet</a
+            >
+          </li>
         </ul>
       </li>
       <li [ngClass]="{ 'mm-active': adminArray.indexOf(currentHref) > -1 }" *jhiHasAnyAuthority="'ROLE_ADMIN'">

@@ -17,6 +17,7 @@ import { UserManagementDeleteDialogComponent } from '../delete/user-management-d
 })
 export class UserManagementComponent implements OnInit {
   currentAccount: Account | null = null;
+  allUsers: User[] | null = null;
   users: User[] | null = null;
   isLoading = false;
   totalItems = 0;
@@ -24,6 +25,7 @@ export class UserManagementComponent implements OnInit {
   page!: number;
   predicate!: string;
   ascending!: boolean;
+  inputText = '';
 
   constructor(
     private userService: UserManagementService,
@@ -46,6 +48,30 @@ export class UserManagementComponent implements OnInit {
     return item.id!;
   }
 
+  filter(): void {
+    /* eslint-disable no-console */
+    if (this.users !== undefined) {
+      this.users = this.users.filter(user => {
+        if (user.authorities !== undefined && this.inputText.toLowerCase().includes('premium')) {
+          if (user.authorities.includes('ROLE_PREMIUM_USER')) {
+            return true;
+          }
+        }
+        if (user.firstName !== undefined || user.lastName !== undefined || user.email !== undefined) {
+          return (
+            user.firstName.toLowerCase().includes(this.inputText.toLowerCase()) ||
+            user.lastName.toLowerCase().includes(this.inputText.toLowerCase()) ||
+            user.email.toLowerCase().includes(this.inputText.toLowerCase())
+          );
+        } else {
+          return false;
+        }
+      });
+    }
+    if (this.inputText === '') {
+      this.users = this.allUsers;
+    }
+  }
   deleteUser(user: User): void {
     const modalRef = this.modalService.open(UserManagementDeleteDialogComponent, { size: 'lg', backdrop: 'static' });
     modalRef.componentInstance.user = user;
@@ -55,6 +81,10 @@ export class UserManagementComponent implements OnInit {
         this.loadAll();
       }
     });
+  }
+
+  resetPassword(user: User): void {
+    this.userService.resetPassword(user).subscribe(() => this.loadAll());
   }
 
   loadAll(): void {
@@ -106,5 +136,6 @@ export class UserManagementComponent implements OnInit {
   private onSuccess(users: User[] | null, headers: HttpHeaders): void {
     this.totalItems = Number(headers.get('X-Total-Count'));
     this.users = users;
+    this.allUsers = users;
   }
 }
