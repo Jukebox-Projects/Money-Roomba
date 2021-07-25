@@ -5,4 +5,5 @@ img {
 
 .icon-container:hover {
   background-color: #ddd;
+  border-radius: 12px;
 }

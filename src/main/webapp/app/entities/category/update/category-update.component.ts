@@ -12,10 +12,12 @@ import { CategoryService, EntityArrayResponseType } from '../service/category.se
 import { IUserDetails } from 'app/entities/user-details/user-details.model';
 import { UserDetailsService } from 'app/entities/user-details/service/user-details.service';
 import { IconPickerComponent } from '../../../shared/icon-picker/icon-picker.component';
+import { IconService } from '../../../shared/icon-picker/service/icon.service';
 
 @Component({
   selector: 'jhi-category-update',
   templateUrl: './category-update.component.html',
+  styleUrls: ['./category-update.component.css'],
 })
 export class CategoryUpdateComponent implements OnInit {
   isSaving = false;
@@ -27,7 +29,7 @@ export class CategoryUpdateComponent implements OnInit {
   editForm = this.fb.group({
     id: [],
     name: [null, [Validators.required]],
-    icon: [],
+    icon: [null, [Validators.required]],
     parent: [],
   });
 
@@ -36,7 +38,8 @@ export class CategoryUpdateComponent implements OnInit {
     protected userDetailsService: UserDetailsService,
     protected activatedRoute: ActivatedRoute,
     protected fb: FormBuilder,
-    protected modalService: NgbModal
+    protected modalService: NgbModal,
+    protected iconService: IconService
   ) {}
 
   ngOnInit(): void {
@@ -73,8 +76,9 @@ export class CategoryUpdateComponent implements OnInit {
     const modalRef = this.modalService.open(IconPickerComponent, { size: 'lg', backdrop: 'static' });
     modalRef.componentInstance.icon = this.selectedIcon;
     // unsubscribe not needed because closed completes on modal close
-    modalRef.closed.subscribe(iconId => {
-      this.selectedIcon = iconId;
+    modalRef.closed.subscribe(icon => {
+      this.selectedIcon = icon;
+      this.editForm.get(['icon']).patchValue(icon.id);
     });
   }
 
@@ -116,6 +120,8 @@ export class CategoryUpdateComponent implements OnInit {
       this.userDetailsSharedCollection,
       category.user
     );
+
+    this.selectedIcon = this.iconService.getIcon(category.icon);
   }
 
   protected loadRelationshipsOptions(category?: ICategory): void {

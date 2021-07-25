@@ -10,7 +10,7 @@
 
     <div class="container">
       <div class="row">
-        <div *ngFor="let iconData of iconList" class="col-4 col-md-2 col-xl-2 p-1 icon-container">
+        <div *ngFor="let iconData of iconList" class="col-4 col-md-2 col-xl-2 p-1 icon-container" (click)="selectIcon(iconData)">
           <img src="{{ iconData.path }}" alt="{{ iconData.name }}" class="img-thumbnail" />
         </div>
       </div>
@@ -20,10 +20,6 @@
   <div class="modal-footer">
     <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="cancel()">
       <fa-icon icon="ban"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
-    </button>
-
-    <button id="jhi-confirm-icon-selection" data-cy="confirmIconSelection" type="submit" class="btn btn-primary">
-      <fa-icon icon="save"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
     </button>
   </div>
 </div>

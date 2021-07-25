@@ -28,6 +28,6 @@ export class IconPickerComponent implements OnInit {
   }
 
   selectIcon(icon: IICon): void {
-    this.activeModal.close(icon.id);
+    this.activeModal.close(icon);
   }
 }
