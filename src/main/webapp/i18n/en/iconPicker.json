@@ -1,0 +1,14 @@
+{
+  "moneyRoombaApp": {
+    "iconPicker": {
+      "modal": {
+        "title": "Select an icon",
+        "notFound": "No icon found",
+        "list": "Icon list available"
+      },
+      "id": "ID",
+      "name": "Name",
+      "path": "Path to icon"
+    }
+  }
+}

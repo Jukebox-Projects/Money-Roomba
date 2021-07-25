@@ -1,0 +1,12 @@
+{
+  "moneyRoombaApp": {
+    "icon": {
+      "default": "Seleccione un ícono...",
+      "gaming": "Video juegos",
+      "christmas": "Navidad",
+      "idea": "Idea",
+      "colorpalette": "Paleta de colores",
+      "plus18": "Para más de 18"
+    }
+  }
+}

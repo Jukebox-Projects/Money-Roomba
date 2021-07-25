@@ -1,0 +1,9 @@
+img {
+  cursor: pointer;
+  width: 100%;
+}
+
+.icon-container:hover {
+  background-color: #ddd;
+  border-radius: 12px;
+}
