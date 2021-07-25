@@ -5,10 +5,12 @@ import { WalletDetailComponent } from './detail/wallet-detail.component';
 import { WalletUpdateComponent } from './update/wallet-update.component';
 import { WalletDeleteDialogComponent } from './delete/wallet-delete-dialog.component';
 import { WalletRoutingModule } from './route/wallet-routing.module';
+import { IconService } from '../../shared/icon-picker/service/icon.service';
 
 @NgModule({
   imports: [SharedModule, WalletRoutingModule],
   declarations: [WalletComponent, WalletDetailComponent, WalletUpdateComponent, WalletDeleteDialogComponent],
   entryComponents: [WalletDeleteDialogComponent],
+  providers: [IconService],
 })
 export class WalletModule {}
