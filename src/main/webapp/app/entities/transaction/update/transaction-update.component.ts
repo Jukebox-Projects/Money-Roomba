@@ -18,6 +18,7 @@ import { CategoryService } from 'app/entities/category/service/category.service'
 import { IUserDetails } from 'app/entities/user-details/user-details.model';
 import { UserDetailsService } from 'app/entities/user-details/service/user-details.service';
 import { TransactionType } from 'app/entities/enumerations/transaction-type.model';
+import { TransactionState } from 'app/entities/enumerations/transaction-state.model';
 
 @Component({
   selector: 'jhi-transaction-update',
@@ -49,6 +50,7 @@ export class TransactionUpdateComponent implements OnInit {
     currency: [null, [Validators.required]],
     category: [],
     sourceUser: [],
+    transactionState: [],
     recievingUser: [],
   });
 
@@ -236,6 +238,7 @@ export class TransactionUpdateComponent implements OnInit {
       category: this.editForm.get(['category'])!.value,
       sourceUser: this.editForm.get(['sourceUser'])!.value,
       recievingUser: this.editForm.get(['recievingUser'])!.value,
+      state: this.editForm.get(['transactionState'])!.value,
     };
   }
 }

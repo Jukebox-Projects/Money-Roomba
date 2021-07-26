@@ -67,6 +67,7 @@ public class TransactionService {
     public Transaction save(Transaction transaction) {
         double currentBalance;
         Wallet wallet = transaction.getWallet();
+        Optional<Wallet> fullWallet = walletRepository.findById(wallet.getId());
         log.debug("Request to save Transaction : {}", transaction);
         if (!SecurityUtils.hasCurrentUserThisAuthority(AuthoritiesConstants.ADMIN)) {
             Optional<User> user = userRepository.findOneByLogin(
@@ -76,11 +77,38 @@ public class TransactionService {
             );
             if (transaction.getId() != null) {
                 Optional<Transaction> existingTransaction = transactionRepository.findById(transaction.getId());
-                wallet = existingTransaction.get().getWallet();
-                if (existingTransaction.get().getMovementType().equals(MovementType.EXPENSE)) {
-                    wallet.setBalance(wallet.getBalance() + existingTransaction.get().getAmount());
+                Optional<Wallet> registeredWallet = walletRepository.findById(existingTransaction.get().getWallet().getId());
+                if (
+                    existingTransaction.get().getState() != TransactionState.NA &&
+                    existingTransaction.get().getState() != null &&
+                    existingTransaction.get().getState().equals(TransactionState.PENDING_APPROVAL) &&
+                    (transaction.getState().equals(TransactionState.ACCEPTED) || transaction.getState().equals(TransactionState.DENIED))
+                ) {
+                    if (transaction.getState().equals(TransactionState.DENIED)) {
+                        transactionRepository.delete(transaction);
+                        return null;
+                    }
+                    transaction.setState(TransactionState.NA);
                 } else {
-                    wallet.setBalance(wallet.getBalance() - existingTransaction.get().getAmount());
+                    if (registeredWallet.get().equals(fullWallet)) {
+                        //si no cambia el wallet
+                        if (existingTransaction.get().getMovementType().equals(MovementType.EXPENSE)) {
+                            fullWallet.get().setBalance(wallet.getBalance() + existingTransaction.get().getAmount());
+                        } else {
+                            fullWallet.get().setBalance(wallet.getBalance() - existingTransaction.get().getAmount());
+                        }
+                    } else {
+                        //si cambia el wallet
+                        System.out.println("CURRENT BALANCE BEFORE CHANGES:" + registeredWallet.get().getBalance());
+                        System.out.println("AMOUNT TO REIMBURSE ON ORIGINAL WALLET:" + existingTransaction.get().getAmount());
+                        if (existingTransaction.get().getMovementType().equals(MovementType.EXPENSE)) {
+                            registeredWallet.get().setBalance(wallet.getBalance() + existingTransaction.get().getAmount());
+                        } else {
+                            registeredWallet.get().setBalance(wallet.getBalance() - existingTransaction.get().getAmount());
+                        }
+                        System.out.println("CURRENT BALANCE AFTER CHANGES:" + registeredWallet.get().getBalance());
+                        walletRepository.save(registeredWallet.get());
+                    }
                 }
             }
             Optional<UserDetails> userDetails = userDetailsRepository.findOneByInternalUser(user.get());
@@ -88,20 +116,19 @@ public class TransactionService {
             transaction.setTransactionType(TransactionType.MANUAL);
             transaction.setIncomingTransaction(false);
             transaction.setScheduled(false);
-            //logica de parseo de monedas....
-            if (transaction.getCurrency().equals(wallet.getCurrency())) {
+
+            if (transaction.getCurrency().equals(fullWallet.get().getCurrency())) {
                 transaction.setAmount(transaction.getOriginalAmount());
             } else {
                 double transactionInDollars = transaction.getOriginalAmount() / transaction.getCurrency().getConversionRate();
-                transaction.setAmount(transactionInDollars * wallet.getCurrency().getConversionRate());
+                transaction.setAmount(transactionInDollars * fullWallet.get().getCurrency().getConversionRate());
             }
-            currentBalance = transaction.getWallet().getBalance();
             if (transaction.getMovementType().equals(MovementType.EXPENSE)) {
-                if (wallet.getBalance() > 0 && wallet.getBalance() >= transaction.getAmount()) {
-                    currentBalance = wallet.getBalance();
+                if (fullWallet.get().getBalance() > 0 && fullWallet.get().getBalance() >= transaction.getAmount()) {
+                    currentBalance = fullWallet.get().getBalance();
                     currentBalance = currentBalance - transaction.getAmount();
-                    wallet.setBalance(currentBalance);
-                    walletRepository.save(wallet);
+                    fullWallet.get().setBalance(currentBalance);
+                    walletRepository.save(fullWallet.get());
                 } else {
                     //throw insufficient funds exception
                     throw new BadRequestAlertException(
@@ -112,10 +139,10 @@ public class TransactionService {
                 }
             } else {
                 if (transaction.getAmount() > 0) {
-                    currentBalance = wallet.getBalance();
+                    currentBalance = fullWallet.get().getBalance();
                     currentBalance = currentBalance + transaction.getAmount();
-                    wallet.setBalance(currentBalance);
-                    walletRepository.save(wallet);
+                    fullWallet.get().setBalance(currentBalance);
+                    walletRepository.save(fullWallet.get());
                 } else {
                     //throw cannot register negative transaction exception.
                     throw new BadRequestAlertException(
@@ -125,6 +152,7 @@ public class TransactionService {
                     );
                 }
             }
+            transaction.setState(TransactionState.NA);
             return transactionRepository.save(transaction);
         } else {
             throw new BadRequestAlertException("Los administradores no pueden crear transacciones", ENTITY_NAME, "nopermission");
@@ -158,27 +186,11 @@ public class TransactionService {
             incomingTransaction.setScheduled(false);
             incomingTransaction.setTransactionType(TransactionType.SHARED);
             List<Wallet> wallets = walletRepository.findAllByUser(receivingUser);
-            Wallet pendingTransactions = new Wallet();
-            for (Wallet w : wallets) {
-                if (w.getName().equals("Pending Transactions")) {
-                    pendingTransactions = w;
-                }
+            if (wallets.get(0) != null) {
+                incomingTransaction.setWallet(wallets.get(0));
+            } else {
+                throw new BadRequestAlertException("User has no wallets", ENTITY_NAME, "nowallets");
             }
-
-            if (pendingTransactions.equals(new Wallet())) {
-                Wallet pendingTransactionsWallet = new Wallet();
-                pendingTransactionsWallet.setBalance(0.0);
-                pendingTransactionsWallet.setCurrency(null);
-                pendingTransactionsWallet.setDescription("Wallet for transactions pending user approval.");
-                pendingTransactionsWallet.setName("Pending Transactions");
-                pendingTransactionsWallet.setIcon(0);
-                pendingTransactionsWallet.setInReports(false);
-                pendingTransactionsWallet.setIsActive(true);
-                pendingTransactionsWallet.setUser(receivingUser);
-                pendingTransactions = walletRepository.save(pendingTransactions);
-            }
-
-            incomingTransaction.setWallet(pendingTransactions);
 
             if (transaction.getMovementType().equals(MovementType.EXPENSE)) {
                 incomingTransaction.setMovementType(MovementType.INCOME);

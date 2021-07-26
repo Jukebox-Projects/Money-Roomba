@@ -35,7 +35,8 @@
       "category": "Category",
       "sourceUser": "Source User",
       "recievingUser": "Receiving User",
-      "outgoingTransaction": "Outgoing Transaction"
+      "outgoingTransaction": "Outgoing Transaction",
+      "transactionState": "Estado de aceptación"
     }
   }
 }
