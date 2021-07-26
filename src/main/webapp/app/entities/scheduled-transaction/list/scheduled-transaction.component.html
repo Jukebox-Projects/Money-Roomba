@@ -28,8 +28,12 @@
     <span jhiTranslate="moneyRoombaApp.scheduledTransaction.home.notFound">No scheduledTransactions found</span>
   </div>
 
-  <div class="table-responsive" id="entities" *ngIf="scheduledTransactions && scheduledTransactions.length > 0">
-    <table class="table table-striped" aria-describedby="page-heading">
+  <div
+    class="etabl-responsive table-hover fs-14 card-tableetabl-responsive table-hover fs-14 card-table"
+    id="entities"
+    *ngIf="scheduledTransactions && scheduledTransactions.length > 0"
+  >
+    <table class="table display mb-4 dataTablesCard dataTable card-table" aria-describedby="page-heading">
       <thead>
         <tr>
           <th scope="col"><span jhiTranslate="global.field.id">ID</span></th>

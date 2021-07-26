@@ -18,8 +18,8 @@
 
   <jhi-alert></jhi-alert>
 
-  <div class="table-responsive" *ngIf="users">
-    <table class="table table-striped" aria-describedby="user-management-page-heading">
+  <div class="etabl-responsive table-hover fs-14 card-tableetabl-responsive table-hover fs-14 card-table" id="entities" *ngIf="users">
+    <table class="table display mb-4 dataTablesCard dataTable card-table" aria-describedby="user-management-page-heading">
       <thead>
         <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" [callback]="transition.bind(this)">
           <th scope="col" jhiSortBy="id"><span jhiTranslate="global.field.id">ID</span> <fa-icon icon="sort"></fa-icon></th>

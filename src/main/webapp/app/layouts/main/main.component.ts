@@ -36,7 +36,11 @@ export class MainComponent implements OnInit {
       if (event instanceof NavigationEnd) {
         this.updateTitle();
       }
-      if (this.router.routerState.snapshot.url === '/login') {
+      if (
+        this.router.routerState.snapshot.url === '/login' ||
+        this.router.routerState.snapshot.url === '/account/reset/request' ||
+        this.router.routerState.snapshot.url === '/account/register'
+      ) {
         this.showHead = true;
       } else {
         this.showHead = false;
