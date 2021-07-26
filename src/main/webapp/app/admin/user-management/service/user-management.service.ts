@@ -21,6 +21,9 @@ export class UserManagementService {
   update(user: IUser): Observable<IUser> {
     return this.http.put<IUser>(this.resourceUrl, user);
   }
+  updateActivation(user: IUser): Observable<IUser> {
+    return this.http.put<IUser>(`${this.resourceUrl}/activation`, user);
+  }
 
   find(login: string): Observable<IUser> {
     return this.http.get<IUser>(`${this.resourceUrl}/${login}`);

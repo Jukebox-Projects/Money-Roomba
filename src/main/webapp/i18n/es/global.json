@@ -115,7 +115,7 @@
           "required": "Se requiere su país."
         },
         "phone": {
-          "required": "Se requiere su teléfono."
+          "required": "Se requiere su teléfono. Formato (XXX) XXXX XXXX"
         }
       }
     },

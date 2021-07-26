@@ -21,7 +21,7 @@ export class UserManagementUpdateComponent implements OnInit {
     id: [],
     firstName: ['', [Validators.maxLength(50)]],
     lastName: ['', [Validators.maxLength(50)]],
-    phone: ['', [Validators.required]],
+    phone: [null, [Validators.required, Validators.pattern(/\(?([0-9]{3})\)?([ .-]?)([0-9]{4})\2([0-9]{4})/)]],
     country: ['', [Validators.required]],
     email: ['', [Validators.minLength(5), Validators.maxLength(254), Validators.email]],
     notifications: [],
