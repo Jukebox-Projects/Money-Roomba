@@ -6,10 +6,13 @@ import { IWallet } from '../wallet.model';
 import { WalletService } from '../service/wallet.service';
 import { WalletDeleteDialogComponent } from '../delete/wallet-delete-dialog.component';
 import { Authority } from '../../../config/authority.constants';
+import { IICon } from '../../../shared/icon-picker/icon.model';
+import { IconService } from '../../../shared/icon-picker/service/icon.service';
 
 @Component({
   selector: 'jhi-wallet',
   templateUrl: './wallet.component.html',
+  styleUrls: ['./wallet.component.css'],
 })
 export class WalletComponent implements OnInit {
   wallets?: IWallet[];
@@ -18,7 +21,12 @@ export class WalletComponent implements OnInit {
   inputText = '';
   adminUser = false;
 
-  constructor(protected walletService: WalletService, protected accountService: AccountService, protected modalService: NgbModal) {}
+  constructor(
+    protected walletService: WalletService,
+    protected accountService: AccountService,
+    protected modalService: NgbModal,
+    protected iconService: IconService
+  ) {}
 
   loadAll(): void {
     this.isLoading = true;
@@ -73,5 +81,8 @@ export class WalletComponent implements OnInit {
 
   isAdmin(): void {
     this.adminUser = this.accountService.hasAnyAuthority(Authority.ADMIN);
+  }
+  getIcon(iconId: number): IICon {
+    return this.iconService.getIcon(iconId);
   }
 }

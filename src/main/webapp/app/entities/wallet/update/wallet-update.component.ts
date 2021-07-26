@@ -4,6 +4,7 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { finalize, map } from 'rxjs/operators';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { IWallet, Wallet } from '../wallet.model';
 import { WalletService } from '../service/wallet.service';
@@ -11,16 +12,21 @@ import { IUserDetails, UserDetails } from 'app/entities/user-details/user-detail
 import { UserDetailsService } from 'app/entities/user-details/service/user-details.service';
 import { ICurrency } from 'app/entities/currency/currency.model';
 import { CurrencyService } from 'app/entities/currency/service/currency.service';
+import { IconService } from '../../../shared/icon-picker/service/icon.service';
+import { IICon } from '../../../shared/icon-picker/icon.model';
+import { IconPickerComponent } from '../../../shared/icon-picker/icon-picker.component';
 
 @Component({
   selector: 'jhi-wallet-update',
   templateUrl: './wallet-update.component.html',
+  styleUrls: ['./wallet-update.component.css'],
 })
 export class WalletUpdateComponent implements OnInit {
   isSaving = false;
 
   userDetailsSharedCollection: IUserDetails[] = [];
   currenciesSharedCollection: ICurrency[] = [];
+  selectedIcon: IICon;
 
   editForm = this.fb.group({
     id: [],
@@ -29,7 +35,7 @@ export class WalletUpdateComponent implements OnInit {
     inReports: [null, [Validators.required]],
     isActive: [null, [Validators.required]],
     balance: [null, [Validators.required]],
-    icon: [null, [Validators.min(0)]],
+    icon: [null, [Validators.min(0), Validators.required]],
     user: [],
     currency: [],
   });
@@ -39,7 +45,9 @@ export class WalletUpdateComponent implements OnInit {
     protected userDetailsService: UserDetailsService,
     protected currencyService: CurrencyService,
     protected activatedRoute: ActivatedRoute,
-    protected fb: FormBuilder
+    protected fb: FormBuilder,
+    protected modalService: NgbModal,
+    protected iconService: IconService
   ) {}
 
   ngOnInit(): void {
@@ -70,6 +78,16 @@ export class WalletUpdateComponent implements OnInit {
 
   trackCurrencyById(index: number, item: ICurrency): number {
     return item.id!;
+  }
+
+  openIconPickerModal(): void {
+    const modalRef = this.modalService.open(IconPickerComponent, { size: 'lg', backdrop: 'static' });
+    modalRef.componentInstance.icon = this.selectedIcon;
+    // unsubscribe not needed because closed completes on modal close
+    modalRef.closed.subscribe(icon => {
+      this.selectedIcon = icon;
+      this.editForm.get(['icon']).patchValue(icon.id);
+    });
   }
 
   protected subscribeToSaveResponse(result: Observable<HttpResponse<IWallet>>): void {
@@ -112,6 +130,8 @@ export class WalletUpdateComponent implements OnInit {
       this.currenciesSharedCollection,
       wallet.currency
     );
+
+    this.selectedIcon = this.iconService.getIcon(wallet.icon);
   }
 
   protected loadRelationshipsOptions(): void {

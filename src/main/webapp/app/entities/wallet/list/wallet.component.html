@@ -62,7 +62,9 @@
             <span *ngIf="!wallet.isActive" class="badge badge-danger"> Inactive </span>
           </td>
           <td>{{ wallet.balance }}</td>
-          <td>{{ wallet.icon }}</td>
+          <td class="table-icon-cell">
+            <img class="icon" src="{{ getIcon(wallet.icon).path }}" alt="{{ getIcon(wallet.icon).name }}" />
+          </td>
           <td>
             <div *ngIf="wallet.user">
               <a [routerLink]="['/user-details', wallet.user?.id, 'view']">{{ wallet.user?.id }}</a>
