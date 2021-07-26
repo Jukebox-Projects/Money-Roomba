@@ -34,7 +34,8 @@
       "currency": "Currency",
       "category": "Category",
       "sourceUser": "Source User",
-      "recievingUser": "Recieving User"
+      "recievingUser": "Receiving User",
+      "outgoingTransaction": "Outgoing Transaction"
     }
   }
 }

@@ -159,6 +159,11 @@
     },
     "validation": {
       "required": "Este campo es obligatorio.",
+      "mustaddwallet": "Es necesario seleccionar una cartera.",
+      "transactiontyperequired": "Es necesario seleccionar un tipo de transacción.",
+      "movementtyperequired": "Es necesario especificar el tipo de movimiento de la transacción.",
+      "daterequired": "Es necesario especificar la fecha de la transacción.",
+      "namerequired": "Es necesario indicar un nombre.",
       "minlength": "Este campo requiere al menos {{min}} caracteres.",
       "maxlength": "Este campo no puede superar más de {{max}} caracteres.",
       "min": "Este campo debe ser mayor que {{min}}.",

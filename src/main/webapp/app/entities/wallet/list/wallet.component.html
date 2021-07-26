@@ -53,8 +53,14 @@
           </td>
           <td>{{ wallet.name }}</td>
           <td>{{ wallet.description }}</td>
-          <td>{{ wallet.inReports }}</td>
-          <td>{{ wallet.isActive }}</td>
+          <td>
+            <span *ngIf="wallet.inReports" class="badge badge-success"> yes </span>
+            <span *ngIf="!wallet.inReports" class="badge badge-danger"> no </span>
+          </td>
+          <td>
+            <span *ngIf="wallet.isActive" class="badge badge-success"> Active </span>
+            <span *ngIf="!wallet.isActive" class="badge badge-danger"> Inactive </span>
+          </td>
           <td>{{ wallet.balance }}</td>
           <td>{{ wallet.icon }}</td>
           <td>

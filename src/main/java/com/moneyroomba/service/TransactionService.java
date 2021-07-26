@@ -2,6 +2,7 @@ package com.moneyroomba.service;
 
 import com.moneyroomba.domain.*;
 import com.moneyroomba.domain.enumeration.MovementType;
+import com.moneyroomba.domain.enumeration.TransactionState;
 import com.moneyroomba.domain.enumeration.TransactionType;
 import com.moneyroomba.repository.*;
 import com.moneyroomba.security.AuthoritiesConstants;
@@ -125,6 +126,68 @@ public class TransactionService {
                 }
             }
             return transactionRepository.save(transaction);
+        } else {
+            throw new BadRequestAlertException("Los administradores no pueden crear transacciones", ENTITY_NAME, "nopermission");
+        }
+    }
+
+    @Transactional
+    public Transaction saveOutgoingTransaction(Transaction transaction) {
+        log.debug("Request to save Transaction : {}", transaction);
+        if (!SecurityUtils.hasCurrentUserThisAuthority(AuthoritiesConstants.ADMIN)) {
+            Optional<User> user = userRepository.findOneByLogin(
+                SecurityUtils
+                    .getCurrentUserLogin()
+                    .orElseThrow(() -> new BadRequestAlertException("Current user login not found", ENTITY_NAME, ""))
+            );
+            Optional<UserDetails> userDetails = userDetailsRepository.findOneByInternalUser(user.get());
+            transaction.setSourceUser(userDetails.get());
+            UserDetails receivingUser = transaction.getRecievingUser();
+            Transaction incomingTransaction = new Transaction();
+            incomingTransaction.setName("Incoming Transaction from " + user.get().getLogin());
+            incomingTransaction.setDescription(transaction.getDescription());
+            incomingTransaction.setOriginalAmount(transaction.getOriginalAmount());
+            incomingTransaction.setAmount(transaction.getAmount());
+            incomingTransaction.setCurrency(transaction.getCurrency());
+            incomingTransaction.setAddToReports(false);
+            incomingTransaction.setAttachment(transaction.getAttachment());
+            incomingTransaction.setDateAdded(transaction.getDateAdded());
+            incomingTransaction.setIncomingTransaction(true);
+            incomingTransaction.setState(TransactionState.PENDING_APPROVAL);
+            incomingTransaction.setSourceUser(receivingUser);
+            incomingTransaction.setScheduled(false);
+            incomingTransaction.setTransactionType(TransactionType.SHARED);
+            List<Wallet> wallets = walletRepository.findAllByUser(receivingUser);
+            Wallet pendingTransactions = new Wallet();
+            for (Wallet w : wallets) {
+                if (w.getName().equals("Pending Transactions")) {
+                    pendingTransactions = w;
+                }
+            }
+
+            if (pendingTransactions.equals(new Wallet())) {
+                Wallet pendingTransactionsWallet = new Wallet();
+                pendingTransactionsWallet.setBalance(0.0);
+                pendingTransactionsWallet.setCurrency(null);
+                pendingTransactionsWallet.setDescription("Wallet for transactions pending user approval.");
+                pendingTransactionsWallet.setName("Pending Transactions");
+                pendingTransactionsWallet.setIcon(0);
+                pendingTransactionsWallet.setInReports(false);
+                pendingTransactionsWallet.setIsActive(true);
+                pendingTransactionsWallet.setUser(receivingUser);
+                pendingTransactions = walletRepository.save(pendingTransactions);
+            }
+
+            incomingTransaction.setWallet(pendingTransactions);
+
+            if (transaction.getMovementType().equals(MovementType.EXPENSE)) {
+                incomingTransaction.setMovementType(MovementType.INCOME);
+            } else {
+                incomingTransaction.setMovementType(MovementType.EXPENSE);
+            }
+            System.out.println(incomingTransaction.toString());
+            transactionRepository.save(incomingTransaction);
+            return save(transaction);
         } else {
             throw new BadRequestAlertException("Los administradores no pueden crear transacciones", ENTITY_NAME, "nopermission");
         }

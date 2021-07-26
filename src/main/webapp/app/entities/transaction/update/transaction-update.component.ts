@@ -25,7 +25,7 @@ import { TransactionType } from 'app/entities/enumerations/transaction-type.mode
 })
 export class TransactionUpdateComponent implements OnInit {
   isSaving = false;
-
+  isOutgoing = false;
   attachmentsCollection: IAttachment[] = [];
   walletsSharedCollection: IWallet[] = [];
   currenciesSharedCollection: ICurrency[] = [];
@@ -49,6 +49,7 @@ export class TransactionUpdateComponent implements OnInit {
     currency: [null, [Validators.required]],
     category: [],
     sourceUser: [],
+    recievingUser: [],
   });
 
   constructor(
@@ -61,6 +62,10 @@ export class TransactionUpdateComponent implements OnInit {
     protected activatedRoute: ActivatedRoute,
     protected fb: FormBuilder
   ) {}
+
+  toggleOutgoing(): void {
+    this.isOutgoing = !this.isOutgoing;
+  }
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ transaction }) => {
@@ -141,6 +146,7 @@ export class TransactionUpdateComponent implements OnInit {
       currency: transaction.currency,
       category: transaction.category,
       sourceUser: transaction.sourceUser,
+      recievingUser: transaction.recievingUser,
     });
 
     this.attachmentsCollection = this.attachmentService.addAttachmentToCollectionIfMissing(
@@ -158,7 +164,7 @@ export class TransactionUpdateComponent implements OnInit {
     );
     this.userDetailsSharedCollection = this.userDetailsService.addUserDetailsToCollectionIfMissing(
       this.userDetailsSharedCollection,
-      transaction.sourceUser
+      transaction.recievingUser
     );
   }
 
@@ -204,7 +210,7 @@ export class TransactionUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<IUserDetails[]>) => res.body ?? []))
       .pipe(
         map((userDetails: IUserDetails[]) =>
-          this.userDetailsService.addUserDetailsToCollectionIfMissing(userDetails, this.editForm.get('sourceUser')!.value)
+          this.userDetailsService.addUserDetailsToCollectionIfMissing(userDetails, this.editForm.get('recievingUser')!.value)
         )
       )
       .subscribe((userDetails: IUserDetails[]) => (this.userDetailsSharedCollection = userDetails));
@@ -229,6 +235,7 @@ export class TransactionUpdateComponent implements OnInit {
       currency: this.editForm.get(['currency'])!.value,
       category: this.editForm.get(['category'])!.value,
       sourceUser: this.editForm.get(['sourceUser'])!.value,
+      recievingUser: this.editForm.get(['recievingUser'])!.value,
     };
   }
 }
