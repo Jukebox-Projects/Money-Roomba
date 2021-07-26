@@ -28,7 +28,10 @@
           <div class="form-control p-0 icon-container" id="field_icon" (click)="openIconPickerModal()">
             <div *ngIf="selectedIcon">
               <img src="{{ selectedIcon.path }}" alt="{{ selectedIcon.name }}" class="icon rounded m-1 float-left" />
-              <p jhiTranslate="moneyRoombaApp.icon.{{ selectedIcon.name }}" class="float-left p-3 m-0"></p>
+              <p
+                jhiTranslate="moneyRoombaApp.icon.{{ selectedIcon.name ? selectedIcon.name.trim() : 'default' }}"
+                class="float-left p-3 m-0"
+              ></p>
             </div>
           </div>
           <div *ngIf="editForm.get('icon')!.invalid && (editForm.get('icon')!.dirty || editForm.get('icon')!.touched)">
