@@ -3,9 +3,7 @@ export enum TransactionState {
 
   DENIED = 'Denied',
 
-  PENDING = 'PENDING',
-
-  APPROVAL = 'Pending approval',
+  PENDING_APPROVAL = 'Pending approval',
 
   NA = 'Does not apply',
 }

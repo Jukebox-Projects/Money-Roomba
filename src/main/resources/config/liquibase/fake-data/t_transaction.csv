@@ -3,9 +3,9 @@ id;name;description;date_added;amount;original_amount;movement_type;scheduled;ad
 2;Shilling;cross-platform grow;2021-07-15;63291;78266;INCOME;false;false;false;EMAIL;DENIED;2
 3;Estratega embrace didactica;holistic;2021-07-14;94816;53629;EXPENSE;true;true;true;SHARED;NA;3
 4;up;Reactivo multitarea withdrawal;2021-07-14;26114;80828;INCOME;false;false;false;SHARED;NA;4
-5;Gris end-to-end optimize;Letonia;2021-07-14;84427;88371;EXPENSE;true;true;false;EMAIL;APPROVAL;5
-6;Para innovate;enable;2021-07-14;55214;18074;EXPENSE;true;true;true;SCHEDULED;APPROVAL;6
-7;overriding Parafarmacia global;invoice Sopa connect;2021-07-14;86056;90732;EXPENSE;true;true;false;API;PENDING;7
-8;SSL Juguetería parsing;Arquitecto holistic Verde;2021-07-14;53343;40767;EXPENSE;true;true;false;SHARED;APPROVAL;8
-9;Productor;Extremadura;2021-07-14;4088;49489;INCOME;true;true;true;SHARED;APPROVAL;9
-10;Silla Bielorusia;Electrónica Zelanda;2021-07-14;42234;20794;INCOME;false;false;false;MANUAL;APPROVAL;10
+5;Gris end-to-end optimize;Letonia;2021-07-14;84427;88371;EXPENSE;true;true;false;EMAIL;PENDING_APPROVAL;5
+6;Para innovate;enable;2021-07-14;55214;18074;EXPENSE;true;true;true;SCHEDULED;PENDING_APPROVAL;6
+7;overriding Parafarmacia global;invoice Sopa connect;2021-07-14;86056;90732;EXPENSE;true;true;false;API;PENDING_APPROVAL;7
+8;SSL Juguetería parsing;Arquitecto holistic Verde;2021-07-14;53343;40767;EXPENSE;true;true;false;SHARED;PENDING_APPROVAL;8
+9;Productor;Extremadura;2021-07-14;4088;49489;INCOME;true;true;true;SHARED;PENDING_APPROVAL;9
+10;Silla Bielorusia;Electrónica Zelanda;2021-07-14;42234;20794;INCOME;false;false;false;MANUAL;PENDING_APPROVAL;10
