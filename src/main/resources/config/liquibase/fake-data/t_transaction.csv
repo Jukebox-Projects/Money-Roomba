@@ -1,11 +1,11 @@
-id;name;description;date_added;amount;original_amount;movement_type;scheduled;add_to_reports;incoming_transaction;transaction_type;wallet_id
-1;Cantabria;Inteligente;2021-07-14;16431;99701;EXPENSE;true;true;true;SCHEDULED;1
-2;necesidades Optimización;Camiseta Rojo;2021-07-14;38347;39660;INCOME;false;true;false;API;2
-3;Ingeniero Hormigon modular;Ejecutivo Operaciones;2021-07-14;83747;52466;EXPENSE;true;false;true;MANUAL;3
-4;compressing e-tailers;withdrawal incentivize homogénea;2021-07-14;99687;82194;EXPENSE;false;false;true;SCHEDULED;4
-5;Juguetería;Genérico Bedfordshire JBOD;2021-07-14;39480;54845;EXPENSE;false;false;false;MANUAL;5
-6;port enable;Chad optical Verde;2021-07-14;21598;58305;INCOME;true;true;false;EMAIL;6
-7;Inversor generación maximize;Cambridgeshire JSON Cataluña;2021-07-14;57816;78909;EXPENSE;false;false;false;SCHEDULED;7
-8;parsing JBOD;holistic;2021-07-14;69647;51839;INCOME;true;false;true;SHARED;8
-9;Decoración Violeta deposit;Facilitador Berkshire;2021-07-14;68142;82326;EXPENSE;true;false;false;SCHEDULED;9
-10;Global;Andalucía;2021-07-14;53281;67464;EXPENSE;true;false;false;MANUAL;10
+id;name;description;date_added;amount;original_amount;movement_type;scheduled;add_to_reports;incoming_transaction;transaction_type;state;wallet_id
+1;Cantabria;Inteligente;2021-07-14;16431;99701;EXPENSE;true;true;true;SCHEDULED;DENIED;1
+2;Shilling;cross-platform grow;2021-07-15;63291;78266;INCOME;false;false;false;EMAIL;DENIED;2
+3;Estratega embrace didactica;holistic;2021-07-14;94816;53629;EXPENSE;true;true;true;SHARED;NA;3
+4;up;Reactivo multitarea withdrawal;2021-07-14;26114;80828;INCOME;false;false;false;SHARED;NA;4
+5;Gris end-to-end optimize;Letonia;2021-07-14;84427;88371;EXPENSE;true;true;false;EMAIL;PENDING_APPROVAL;5
+6;Para innovate;enable;2021-07-14;55214;18074;EXPENSE;true;true;true;SCHEDULED;PENDING_APPROVAL;6
+7;overriding Parafarmacia global;invoice Sopa connect;2021-07-14;86056;90732;EXPENSE;true;true;false;API;PENDING_APPROVAL;7
+8;SSL Juguetería parsing;Arquitecto holistic Verde;2021-07-14;53343;40767;EXPENSE;true;true;false;SHARED;PENDING_APPROVAL;8
+9;Productor;Extremadura;2021-07-14;4088;49489;INCOME;true;true;true;SHARED;PENDING_APPROVAL;9
+10;Silla Bielorusia;Electrónica Zelanda;2021-07-14;42234;20794;INCOME;false;false;false;MANUAL;PENDING_APPROVAL;10

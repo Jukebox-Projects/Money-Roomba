@@ -403,11 +403,11 @@
         <div class="form-group">
           <label class="form-control-label" for="phone" jhiTranslate="global.form.phone.label">phone</label>
           <input
-            type="phone"
+            type="text"
             class="form-control"
             id="phone"
-            phone="phone"
-            placeholder="{{ 'global.form.phone.placeholder' | translate }}"
+            name="phone"
+            placeholder="(XXX) XXXX XXXX"
             formControlName="phone"
             data-cy="phone"
           />
@@ -433,9 +433,10 @@
           </button>
         </div>
 
-        <div class="form-check">
+        <div class="form-check custom-control custom-checkbox mb-3 check-xs">
           <label class="form-check-label" for="notifications">
-            <input class="form-check-input" type="checkbox" id="notifications" name="notifications" formControlName="notifications" />
+            <input class="custom-control-input" type="checkbox" id="notifications" name="notifications" formControlName="notifications" />
+            <label class="custom-control-label" for="notifications"></label>
             <span jhiTranslate="userManagement.notifications">Notifications</span>
           </label>
         </div>

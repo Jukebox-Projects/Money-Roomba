@@ -3,7 +3,9 @@
     <span jhiTranslate="moneyRoombaApp.license.home.title">Licenses</span>
 
     <div class="d-flex justify-content-end">
-      <input jhiTranslate="moneyRoombaApp.category.home.searchbar" type="text" [(ngModel)]="inputText" (input)="filter()" />
+      <div class="pt-3 p-1" style="font-size: 24px">
+        <input jhiTranslate="moneyRoombaApp.category.home.searchbar" type="text" [(ngModel)]="inputText" (input)="filter()" />
+      </div>
       <button class="btn btn-info mr-2" (click)="loadAll()" [disabled]="isLoading">
         <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
         <span jhiTranslate="moneyRoombaApp.license.home.refreshListLabel">Refresh List</span>
@@ -31,7 +33,6 @@
           <th scope="col"><span jhiTranslate="global.field.id">ID</span></th>
           <th scope="col"><span jhiTranslate="moneyRoombaApp.license.code">Code</span></th>
           <th scope="col"><span jhiTranslate="moneyRoombaApp.license.isAssigned">Is Assigned</span></th>
-          <th scope="col"></th>
           <th scope="col"><span jhiTranslate="moneyRoombaApp.license.createMethod">Create Method</span></th>
           <th scope="col"></th>
         </tr>
@@ -43,34 +44,8 @@
           </td>
           <td>{{ license.code }}</td>
           <td>
-            <div class="custom-control custom-checkbox mb-3 checkbox-info check-xl">
-              <input
-                type="checkbox"
-                class="custom-control-input"
-                (click)="checkbox($event)"
-                [checked]="license.isAssigned == true"
-                id="customCheckBox9"
-              />
-              <label class="custom-control-label" for="customCheckBox9"></label>
-            </div>
-          </td>
-          <td>
-            <button
-              class="btn btn-danger btn-sm"
-              (click)="setActive(license, true)"
-              *ngIf="!license.isActive"
-              jhiTranslate="moneyRoombaApp.license.deactivated"
-            >
-              Deactivated
-            </button>
-            <button
-              class="btn btn-success btn-sm"
-              (click)="setActive(license, false)"
-              *ngIf="license.isActive"
-              jhiTranslate="moneyRoombaApp.license.activated"
-            >
-              Activated
-            </button>
+            <span *ngIf="license.isAssigned" class="badge badge-success">Redimida</span>
+            <span *ngIf="!license.isAssigned" class="badge badge-warning">Pendiente</span>
           </td>
           <td jhiTranslate="{{ 'moneyRoombaApp.LicenseCreateMethod.' + license.createMethod }}">{{ license.createMethod }}</td>
           <td class="text-right">
@@ -93,6 +68,24 @@
               >
                 <fa-icon icon="pencil-alt"></fa-icon>
                 <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
+              </button>
+
+              <button
+                class="btn btn-secondary btn-sm"
+                (click)="setActive(license, true)"
+                *ngIf="!license.isActive"
+                jhiTranslate="moneyRoombaApp.license.deactivated"
+              >
+                Deactivated
+              </button>
+              <button
+                class="btn btn-secondary btn-sm"
+                (click)="setActive(license, false)"
+                *ngIf="license.isActive"
+                [disabled]="license.isAssigned"
+                jhiTranslate="moneyRoombaApp.license.activated"
+              >
+                Activated
               </button>
 
               <button

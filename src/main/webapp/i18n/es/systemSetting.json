@@ -2,21 +2,21 @@
   "moneyRoombaApp": {
     "systemSetting": {
       "home": {
-        "title": "System Settings",
+        "title": "Configuración del Sistema",
         "refreshListLabel": "Refrescar lista",
         "createLabel": "Crear nuevo System Setting",
-        "createOrEditLabel": "Editar System Setting",
-        "notFound": "Ningún System Settings encontrado"
+        "createOrEditLabel": "Editar Configuración Del Sistema",
+        "notFound": "Ningúna configuración del sistema encontrado"
       },
       "keys": { "price": "Precio de licencia", "tax": "Impuesto de ventas" },
       "created": "Un nuevo System Setting ha sido creado con el identificador {{ param }}",
-      "updated": "Un System Setting ha sido actualizado con el identificador {{ param }}",
+      "updated": "Una configuración del sistema ha sido actualizado con el identificador {{ param }}",
       "deleted": "Un System Setting ha sido eliminado con el identificador {{ param }}",
       "delete": {
         "question": "¿Seguro que quiere eliminar System Setting {{ id }}?"
       },
       "detail": {
-        "title": "System Setting"
+        "title": "Configuración Del Sistema"
       },
       "id": "ID",
       "key": "Llave",

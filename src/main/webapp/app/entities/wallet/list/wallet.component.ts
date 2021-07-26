@@ -82,7 +82,6 @@ export class WalletComponent implements OnInit {
   isAdmin(): void {
     this.adminUser = this.accountService.hasAnyAuthority(Authority.ADMIN);
   }
-
   getIcon(iconId: number): IICon {
     return this.iconService.getIcon(iconId);
   }
