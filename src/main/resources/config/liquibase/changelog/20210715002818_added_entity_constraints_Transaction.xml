@@ -37,5 +37,11 @@
                                  constraintName="fk_t_transaction__source_user_id"
                                  referencedColumnNames="id"
                                  referencedTableName="t_user"/>
+
+        <addForeignKeyConstraint baseColumnNames="recieving_user_id"
+                                 baseTableName="t_transaction"
+                                 constraintName="fk_t_transaction__recieving_user_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="t_user"/>
     </changeSet>
 </databaseChangeLog>
