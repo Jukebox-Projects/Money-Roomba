@@ -26,7 +26,15 @@ entity Transaction(T_TRANSACTION) {
     scheduled Boolean required,
     addToReports Boolean required,
     incomingTransaction Boolean required,
-    transactionType TransactionType required
+    transactionType TransactionType required,
+    state TransactionState
+}
+
+enum TransactionState{
+    ACCEPTED ("Accepted"),
+    DENIED ("Denied"),
+    PENDING APPROVAL ("Pending approval"),
+    NA ("Does not apply")
 }
 
 enum TransactionType {
@@ -173,6 +181,10 @@ relationship OneToMany {
   UserDetails to Transaction {sourceUser},
   Currency to Invoice{currency(code)},
   UserDetails to UserDetails {contact}
+}
+
+relationship OneToMany{
+  UserDetails{recievedTransactions} to Transaction {recievingUser}
 }
 
 relationship OneToOne {

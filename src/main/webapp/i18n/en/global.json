@@ -115,7 +115,7 @@
           "required": "Your country is required."
         },
         "phone": {
-          "required": "Your phone is required."
+          "required": "Your phone is required. Format (XXX) XXXX XXXX"
         }
       }
     },
@@ -198,5 +198,5 @@
       "not.image": "File was expected to be an image but was found to be \"{{ fileType }}\""
     }
   },
-  "footer": "This is your footer"
+  "footer": "© 2021 Money Roomba"
 }

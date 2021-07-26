@@ -3,7 +3,9 @@
     <span id="user-management-page-heading" jhiTranslate="userManagement.home.title" data-cy="userManagementPageHeading">Users</span>
 
     <div class="d-flex justify-content-end">
-      <input jhiTranslate="userManagement.home.searchbar" type="text" [(ngModel)]="inputText" (input)="filter()" />
+      <div class="pt-3 p-1" style="font-size: 24px">
+        <input jhiTranslate="userManagement.home.searchbar" type="text" [(ngModel)]="inputText" (input)="filter()" />
+      </div>
       <button class="btn btn-info mr-2" (click)="loadAll()" [disabled]="isLoading">
         <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
         <span jhiTranslate="userManagement.home.refreshListLabel">Refresh List</span>
@@ -83,6 +85,11 @@
                 <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
               </button>
 
+              <button type="submit" (click)="resetPassword(user)" class="btn btn-secondary btn-sm">
+                <fa-icon icon="flag"></fa-icon>
+                <span class="d-none d-md-inline" jhiTranslate="entity.action.resetPassword">Reset Password</span>
+              </button>
+
               <button
                 type="button"
                 (click)="deleteUser(user)"
@@ -91,11 +98,6 @@
               >
                 <fa-icon icon="times"></fa-icon>
                 <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
-              </button>
-
-              <button type="submit" (click)="resetPassword(user)" class="btn btn-secondary btn-sm">
-                <fa-icon icon="flag"></fa-icon>
-                <span class="d-none d-md-inline" jhiTranslate="entity.action.resetPassword">Reset Password</span>
               </button>
             </div>
           </td>

@@ -1,0 +1,15 @@
+.icon {
+  width: 4.5%;
+  min-width: 45px;
+}
+
+.icon-container {
+  min-height: 53px;
+  cursor: pointer;
+}
+
+@media (max-width: 576px) {
+  .icon {
+    width: 15%;
+  }
+}

@@ -18,6 +18,7 @@
   id="main-wrapper"
   [ngClass]="{ 'menu-toggle': sharedService.hamburgerClass, '': !sharedService.hamburgerClass }"
   class="show"
+  style="min-height: 88%"
 >
   <!-- <app-loading></app-loading> -->
 
@@ -29,6 +30,5 @@
       <router-outlet></router-outlet>
     </div>
   </div>
-
-  <jhi-footer></jhi-footer>
 </div>
+<jhi-footer *ngIf="isAuthenticated()" class="mt-2"></jhi-footer>

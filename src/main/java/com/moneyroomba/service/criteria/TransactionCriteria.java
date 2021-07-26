@@ -1,6 +1,7 @@
 package com.moneyroomba.service.criteria;
 
 import com.moneyroomba.domain.enumeration.MovementType;
+import com.moneyroomba.domain.enumeration.TransactionState;
 import com.moneyroomba.domain.enumeration.TransactionType;
 import java.io.Serializable;
 import java.util.Objects;
@@ -59,6 +60,23 @@ public class TransactionCriteria implements Serializable, Criteria {
         }
     }
 
+    /**
+     * Class for filtering TransactionState
+     */
+    public static class TransactionStateFilter extends Filter<TransactionState> {
+
+        public TransactionStateFilter() {}
+
+        public TransactionStateFilter(TransactionStateFilter filter) {
+            super(filter);
+        }
+
+        @Override
+        public TransactionStateFilter copy() {
+            return new TransactionStateFilter(this);
+        }
+    }
+
     private static final long serialVersionUID = 1L;
 
     private LongFilter id;
@@ -83,6 +101,8 @@ public class TransactionCriteria implements Serializable, Criteria {
 
     private TransactionTypeFilter transactionType;
 
+    private TransactionStateFilter state;
+
     private LongFilter attachmentId;
 
     private LongFilter walletId;
@@ -92,6 +112,8 @@ public class TransactionCriteria implements Serializable, Criteria {
     private LongFilter categoryId;
 
     private LongFilter sourceUserId;
+
+    private LongFilter recievingUserId;
 
     public TransactionCriteria() {}
 
@@ -107,11 +129,13 @@ public class TransactionCriteria implements Serializable, Criteria {
         this.addToReports = other.addToReports == null ? null : other.addToReports.copy();
         this.incomingTransaction = other.incomingTransaction == null ? null : other.incomingTransaction.copy();
         this.transactionType = other.transactionType == null ? null : other.transactionType.copy();
+        this.state = other.state == null ? null : other.state.copy();
         this.attachmentId = other.attachmentId == null ? null : other.attachmentId.copy();
         this.walletId = other.walletId == null ? null : other.walletId.copy();
         this.currencyId = other.currencyId == null ? null : other.currencyId.copy();
         this.categoryId = other.categoryId == null ? null : other.categoryId.copy();
         this.sourceUserId = other.sourceUserId == null ? null : other.sourceUserId.copy();
+        this.recievingUserId = other.recievingUserId == null ? null : other.recievingUserId.copy();
     }
 
     @Override
@@ -284,6 +308,21 @@ public class TransactionCriteria implements Serializable, Criteria {
         this.transactionType = transactionType;
     }
 
+    public TransactionStateFilter getState() {
+        return state;
+    }
+
+    public TransactionStateFilter state() {
+        if (state == null) {
+            state = new TransactionStateFilter();
+        }
+        return state;
+    }
+
+    public void setState(TransactionStateFilter state) {
+        this.state = state;
+    }
+
     public LongFilter getAttachmentId() {
         return attachmentId;
     }
@@ -359,6 +398,21 @@ public class TransactionCriteria implements Serializable, Criteria {
         this.sourceUserId = sourceUserId;
     }
 
+    public LongFilter getRecievingUserId() {
+        return recievingUserId;
+    }
+
+    public LongFilter recievingUserId() {
+        if (recievingUserId == null) {
+            recievingUserId = new LongFilter();
+        }
+        return recievingUserId;
+    }
+
+    public void setRecievingUserId(LongFilter recievingUserId) {
+        this.recievingUserId = recievingUserId;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -380,11 +434,13 @@ public class TransactionCriteria implements Serializable, Criteria {
             Objects.equals(addToReports, that.addToReports) &&
             Objects.equals(incomingTransaction, that.incomingTransaction) &&
             Objects.equals(transactionType, that.transactionType) &&
+            Objects.equals(state, that.state) &&
             Objects.equals(attachmentId, that.attachmentId) &&
             Objects.equals(walletId, that.walletId) &&
             Objects.equals(currencyId, that.currencyId) &&
             Objects.equals(categoryId, that.categoryId) &&
-            Objects.equals(sourceUserId, that.sourceUserId)
+            Objects.equals(sourceUserId, that.sourceUserId) &&
+            Objects.equals(recievingUserId, that.recievingUserId)
         );
     }
 
@@ -402,11 +458,13 @@ public class TransactionCriteria implements Serializable, Criteria {
             addToReports,
             incomingTransaction,
             transactionType,
+            state,
             attachmentId,
             walletId,
             currencyId,
             categoryId,
-            sourceUserId
+            sourceUserId,
+            recievingUserId
         );
     }
 
@@ -425,11 +483,13 @@ public class TransactionCriteria implements Serializable, Criteria {
             (addToReports != null ? "addToReports=" + addToReports + ", " : "") +
             (incomingTransaction != null ? "incomingTransaction=" + incomingTransaction + ", " : "") +
             (transactionType != null ? "transactionType=" + transactionType + ", " : "") +
+            (state != null ? "state=" + state + ", " : "") +
             (attachmentId != null ? "attachmentId=" + attachmentId + ", " : "") +
             (walletId != null ? "walletId=" + walletId + ", " : "") +
             (currencyId != null ? "currencyId=" + currencyId + ", " : "") +
             (categoryId != null ? "categoryId=" + categoryId + ", " : "") +
             (sourceUserId != null ? "sourceUserId=" + sourceUserId + ", " : "") +
+            (recievingUserId != null ? "recievingUserId=" + recievingUserId + ", " : "") +
             "}";
     }
 }

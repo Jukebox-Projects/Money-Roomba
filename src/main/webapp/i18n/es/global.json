@@ -115,7 +115,7 @@
           "required": "Se requiere su país."
         },
         "phone": {
-          "required": "Se requiere su teléfono."
+          "required": "Se requiere su teléfono. Formato (XXX) XXXX XXXX"
         }
       }
     },
@@ -197,5 +197,5 @@
       "not.image": "Se esperaba que el fichero fuera una imagen pero se encontro \"{{ fileType }}\""
     }
   },
-  "footer": "Pie de página"
+  "footer": "© 2021 Money Roomba"
 }
