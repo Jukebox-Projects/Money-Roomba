@@ -1,0 +1,228 @@
+#customers-testimonials .shadow-effect {
+  background: #fff;
+  padding: 20px;
+  border-radius: 4px;
+  text-align: center;
+  border: 1px solid #ececec;
+  box-shadow: 0 19px 38px rgba(0, 0, 0, 0.1), 0 15px 12px rgba(0, 0, 0, 0.02);
+}
+#Testimonials.content-section {
+  padding-bottom: 0;
+  background-color: #fafafa;
+}
+#customers-testimonials .shadow-effect p {
+  font-family: inherit;
+  font-size: 16px;
+  line-height: 1.5;
+  margin: 0 0 17px 0;
+  font-weight: 300;
+}
+#customers-testimonials .testimonial-name {
+  margin: -17px auto 0;
+  display: table;
+  width: auto;
+  background-color: #02ccba;
+  color: #fff;
+  padding: 9px 35px;
+  border-radius: 12px;
+  text-align: center;
+  color: #fff;
+}
+#customers-testimonials .item {
+  text-align: center;
+  padding: 50px;
+  margin-bottom: 80px;
+  opacity: 0.2;
+  -webkit-transform: scale3d(0.8, 0.8, 1);
+  transform: scale3d(0.8, 0.8, 1);
+  -webkit-transition: all 0.3s ease-in-out;
+  -moz-transition: all 0.3s ease-in-out;
+  transition: all 0.3s ease-in-out;
+}
+#customers-testimonials .owl-item.active.center .item {
+  opacity: 1;
+  -webkit-transform: scale3d(1, 1, 1);
+  transform: scale3d(1, 1, 1);
+}
+.owl-carousel .owl-item img {
+  transform-style: preserve-3d;
+  max-width: 90px;
+  margin: 0 auto 17px;
+}
+#customers-testimonials.owl-carousel.owl-theme .owl-dots .owl-dot.active span,
+#customers-testimonials.owl-carousel.owl-theme .owl-dots .owl-dot:hover span {
+  background: #28cb75;
+  transform: translate3d(0px, -50%, 0px) scale(0.7);
+}
+#customers-testimonials.owl-carousel.owl-theme .owl-dots .owl-dot span {
+  background: #c4c4cc;
+  display: block;
+  height: 20px;
+  margin: 0 2px 5px;
+  transform: translate3d(0px, -50%, 0px) scale(0.3);
+  transform-origin: 50% 50% 0;
+  transition: all 250ms ease-out 0s;
+  width: 20px;
+}
+
+.home-slider {
+  z-index: 0;
+  position: relative;
+}
+.home-slider .slider-item {
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center center;
+  height: calc(100vh - 117px);
+  min-height: 800px;
+  position: relative;
+}
+.home-slider .slider-item .overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  content: '';
+  opacity: 0.99;
+  background: #448ef6;
+  background: -moz-linear-gradient(45deg, #29bae4 0%, #e8ecea 100%);
+  background: -webkit-gradient(left bottom, right top, color-stop(0%, #29bae4), color-stop(100%, #e5e8e6));
+  background: -webkit-linear-gradient(45deg, #29bae4 0%, #dde3e2 100%);
+  background: -o-linear-gradient(45deg, #29bae4 0%, #d1e0de 100%);
+  background: -ms-linear-gradient(45deg, #29bae4 0%, #aee5ca 100%);
+  background: linear-gradient(45deg, #29bae4 0%, #9ee5cf 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#448ef6', endColorstr='#af05a9', GradientType=1 );
+}
+.home-slider .slider-item .slider-text {
+  color: #fff;
+  height: calc(100vh - 117px);
+  min-height: 500px;
+}
+.home-slider .slider-item .slider-text h1 {
+  font-size: 52px;
+  color: #fff;
+  line-height: 1.2;
+  font-weight: 200;
+}
+@media (max-width: 991.98px) {
+  .home-slider .slider-item .slider-text h1 {
+    font-size: 40px;
+  }
+}
+.home-slider .slider-item .slider-text h1 strong {
+  font-weight: 800;
+}
+.home-slider .slider-item .slider-text .typewrite > .wrap {
+  position: relative;
+  border-right: 0.08em solid rgba(255, 255, 255, 0);
+}
+.home-slider .slider-item .slider-text .typewrite > .wrap:after {
+  position: absolute;
+  top: 0;
+  bottom: 12px;
+  right: -5px;
+  width: 4px;
+  content: '';
+  background: #fff;
+}
+.home-slider .slider-item .slider-text p {
+  font-size: 20px;
+  line-height: 1.5;
+  font-weight: 300;
+  color: rgba(255, 255, 255, 0.8);
+}
+.home-slider .slider-item .slider-text p strong {
+  font-weight: 700;
+}
+.home-slider .slider-item .slider-text p strong a {
+  color: #fff;
+}
+.home-slider .slider-item .slider-text .breadcrumbs {
+  text-transform: uppercase;
+  font-size: 13px;
+  letter-spacing: 1px;
+  margin-bottom: 20px;
+  z-index: 99;
+}
+.home-slider .slider-item .slider-text .breadcrumbs span {
+  border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+}
+.home-slider .slider-item .slider-text .breadcrumbs span a {
+  color: #fff;
+}
+.home-slider .slider-item .slider-text .bread {
+  font-weight: 300 !important;
+}
+.home-slider .slider-item .slider-text .btn-primary {
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  -webkit-border-radius: 30px;
+  -moz-border-radius: 30px;
+  -ms-border-radius: 30px;
+  border-radius: 30px;
+}
+.home-slider .slider-item .slider-text .btn-primary:hover,
+.home-slider .slider-item .slider-text .btn-primary:focus {
+  background: #fff !important;
+  color: #404044;
+}
+.home-slider .slider-item.bread-wrap .slider-text {
+  color: #fff;
+  min-height: 750px;
+}
+.home-slider .owl-nav .owl-prev span,
+.home-slider .owl-nav .owl-next span {
+  color: #fff;
+}
+.home-slider:hover .owl-nav .owl-prev,
+.home-slider:hover .owl-nav .owl-next {
+  opacity: 1;
+}
+.home-slider:hover .owl-nav .owl-prev {
+  left: 20px;
+}
+.home-slider:hover .owl-nav .owl-next {
+  right: 20px;
+}
+.home-slider .owl-dots {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 60px;
+  width: 100%;
+  text-align: center;
+}
+.home-slider .owl-dots .owl-dot {
+  width: 18px;
+  height: 18px;
+  margin: 5px;
+  border-radius: 50%;
+  background: white;
+  background: none;
+  border: 2px solid rgba(255, 255, 255, 0.5);
+  outline: none !important;
+  position: relative;
+  -webkit-transition: 0.3s all ease;
+  -o-transition: 0.3s all ease;
+  transition: 0.3s all ease;
+  display: inline-block;
+}
+.home-slider .owl-dots .owl-dot span {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: 50% !important;
+  left: 50%;
+  top: 50%;
+  display: block;
+  -webkit-transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+}
+.home-slider .owl-dots .owl-dot.active {
+  border: 2px solid white;
+}
+.home-slider .owl-dots .owl-dot.active span {
+  background: white;
+}

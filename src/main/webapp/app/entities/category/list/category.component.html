@@ -3,8 +3,9 @@
     <span jhiTranslate="moneyRoombaApp.category.home.title">Categories</span>
 
     <div class="d-flex justify-content-end">
-      <input jhiTranslate="moneyRoombaApp.category.home.searchbar" type="text" [(ngModel)]="inputText" (input)="filterCategory()" />
-
+      <div class="pt-3 p-1" style="font-size: 24px">
+        <input jhiTranslate="moneyRoombaApp.category.home.searchbar" type="text" [(ngModel)]="inputText" (input)="filterCategory()" />
+      </div>
       <button class="btn btn-info mr-2" (click)="loadAll()" [disabled]="isLoading">
         <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
         <span jhiTranslate="moneyRoombaApp.category.home.refreshListLabel">Refresh List</span>
@@ -30,8 +31,12 @@
     <span jhiTranslate="moneyRoombaApp.category.home.notFound">No categories found</span>
   </div>
 
-  <div class="table-responsive" id="entities" *ngIf="categories && categories.length > 0">
-    <table class="table table-striped" aria-describedby="page-heading">
+  <div
+    class="etabl-responsive table-hover fs-14 card-tableetabl-responsive table-hover fs-14 card-table"
+    id="entities"
+    *ngIf="categories && categories.length > 0"
+  >
+    <table class="table display mb-4 dataTablesCard dataTable card-table" aria-describedby="page-heading">
       <thead>
         <tr>
           <th scope="col"><span jhiTranslate="global.field.id">ID</span></th>
