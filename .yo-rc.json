@@ -59,7 +59,7 @@
     "rememberMeKey": "a3c7f3ae3c9ca55dc637068efed7ccee2acee7d88d7a4a4763a14d81574b511e87a7f8b9f7c6ba21461288d985d20d6d11f2",
     "devServerPort": 4200,
     "lastLiquibaseTimestamp": 1626308908000,
-    "herokuAppName": "moneyromba-oficial",
+    "herokuAppName": "money-roomba-oficial-it-1",
     "herokuDeployType": "git",
     "herokuJavaVersion": "11"
   }
