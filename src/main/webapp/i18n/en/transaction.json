@@ -36,7 +36,9 @@
       "sourceUser": "Source User",
       "recievingUser": "Receiving User",
       "outgoingTransaction": "Outgoing Transaction",
-      "transactionState": "Approval State"
+      "transactionState": "Approval State",
+      "active": "Active",
+      "inactive": "Inactive"
     }
   }
 }

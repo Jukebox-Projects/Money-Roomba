@@ -7,9 +7,11 @@ import { TransactionDeleteDialogComponent } from './delete/transaction-delete-di
 import { TransactionRoutingModule } from './route/transaction-routing.module';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatDatepickerModule } from '@angular/material/datepicker';
+import { IconService } from '../../shared/icon-picker/service/icon.service';
 @NgModule({
   imports: [SharedModule, TransactionRoutingModule, MatFormFieldModule, MatDatepickerModule],
   declarations: [TransactionComponent, TransactionDetailComponent, TransactionUpdateComponent, TransactionDeleteDialogComponent],
   entryComponents: [TransactionDeleteDialogComponent],
+  providers: [IconService],
 })
 export class TransactionModule {}

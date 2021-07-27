@@ -36,7 +36,9 @@
       "transaction": "Transaction",
       "icon": "Icon",
       "parent": "Parent category",
-      "user": "Category owner"
+      "user": "Category owner",
+      "active": "Active",
+      "inactive": "Inactive"
     }
   }
 }

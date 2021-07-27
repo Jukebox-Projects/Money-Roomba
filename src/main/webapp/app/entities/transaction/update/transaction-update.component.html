@@ -205,34 +205,6 @@
           </div>
         </div>
 
-        <!-- <div class="form-group">
-          <label class="form-control-label" jhiTranslate="moneyRoombaApp.transaction.incomingTransaction" for="field_incomingTransaction"
-            >Incoming Transaction</label
-          >
-          <input
-            type="checkbox"
-            class="form-check"
-            name="incomingTransaction"
-            id="field_incomingTransaction"
-            data-cy="incomingTransaction"
-            formControlName="incomingTransaction"
-          />
-          <div
-            *ngIf="
-              editForm.get('incomingTransaction')!.invalid &&
-              (editForm.get('incomingTransaction')!.dirty || editForm.get('incomingTransaction')!.touched)
-            "
-          >
-            <small
-              class="form-text text-danger"
-              *ngIf="editForm.get('incomingTransaction')?.errors?.required"
-              jhiTranslate="entity.validation.required"
-            >
-              This field is required.
-            </small>
-          </div>
-        </div> -->
-
         <div class="form-group">
           <label class="form-control-label" jhiTranslate="moneyRoombaApp.transaction.transactionType" for="field_transactionType"
             >Transaction Type</label
@@ -351,7 +323,7 @@
           </select>
         </div>
 
-        <div class="form-group">
+        <div class="form-group" *ngIf="editForm.get('incomingTransaction').value === true">
           <label class="form-control-label" jhiTranslate="moneyRoombaApp.transaction.transactionState" for="field_transactionState"
             >Transaction State</label
           >
@@ -375,6 +347,34 @@
               class="form-text text-danger"
               *ngIf="editForm.get('transactionState')?.errors?.required"
               jhiTranslate="entity.validation.movementtyperequired"
+            >
+              This field is required.
+            </small>
+          </div>
+        </div>
+
+        <div class="form-group" hidden>
+          <label class="form-control-label" jhiTranslate="moneyRoombaApp.transaction.incomingTransaction" for="field_incomingTransaction"
+            >Incoming Transaction</label
+          >
+          <input
+            type="checkbox"
+            class="form-check"
+            name="incomingTransaction"
+            id="field_incomingTransaction"
+            data-cy="incomingTransaction"
+            formControlName="incomingTransaction"
+          />
+          <div
+            *ngIf="
+              editForm.get('incomingTransaction')!.invalid &&
+              (editForm.get('incomingTransaction')!.dirty || editForm.get('incomingTransaction')!.touched)
+            "
+          >
+            <small
+              class="form-text text-danger"
+              *ngIf="editForm.get('incomingTransaction')?.errors?.required"
+              jhiTranslate="entity.validation.required"
             >
               This field is required.
             </small>

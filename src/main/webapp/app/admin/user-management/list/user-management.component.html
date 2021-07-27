@@ -49,6 +49,10 @@
           <td>{{ user.lastName }}</td>
           <td>{{ user.email }}</td>
           <td>
+            <span *ngIf="!user.activated" class="badge badge-danger" jhiTranslate="userManagement.deactivated"> Deactivated </span>
+            <span *ngIf="user.activated" class="badge badge-success" jhiTranslate="userManagement.activated"> Activated </span>
+          </td>
+          <!--<td>
             <button
               class="btn btn-danger btn-sm"
               (click)="setActive(user, true)"
@@ -66,7 +70,7 @@
             >
               Activated
             </button>
-          </td>
+          </td>-->
           <td>
             <div *ngFor="let authority of user.authorities">
               <span class="badge badge-info">{{ authority }}</span>

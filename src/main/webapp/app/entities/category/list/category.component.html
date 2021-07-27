@@ -39,24 +39,27 @@
     <table class="table display mb-4 dataTablesCard dataTable card-table" aria-describedby="page-heading">
       <thead>
         <tr>
-          <th scope="col"><span jhiTranslate="global.field.id">ID</span></th>
+          <!--<th scope="col"><span jhiTranslate="global.field.id">ID</span></th>-->
           <th scope="col"><span jhiTranslate="moneyRoombaApp.category.name">Name</span></th>
           <th scope="col"><span jhiTranslate="moneyRoombaApp.category.isActive">Is Active</span></th>
-          <th scope="col"><span jhiTranslate="moneyRoombaApp.category.userCreated">User Created</span></th>
+          <!--<th scope="col"><span jhiTranslate="moneyRoombaApp.category.userCreated">User Created</span></th>-->
           <th scope="col"><span jhiTranslate="moneyRoombaApp.category.icon">Icon</span></th>
           <th scope="col"><span jhiTranslate="moneyRoombaApp.category.parent">Parent</span></th>
-          <th scope="col"><span jhiTranslate="moneyRoombaApp.category.user">User</span></th>
+          <!-- <th scope="col"><span jhiTranslate="moneyRoombaApp.category.user">User</span></th>-->
           <th scope="col"></th>
         </tr>
       </thead>
       <tbody>
         <tr *ngFor="let category of categories; trackBy: trackId" data-cy="entityTable">
-          <td>
+          <!-- <td>
             <a [routerLink]="['/category', category.id, 'view']">{{ category.id }}</a>
-          </td>
+          </td>-->
           <td>{{ category.name }}</td>
-          <td>{{ category.isActive }}</td>
-          <td>{{ category.userCreated }}</td>
+          <td>
+            <span *ngIf="category.isActive" class="badge badge-success" jhiTranslate="moneyRoombaApp.category.active"> Active </span>
+            <span *ngIf="!category.isActive" class="badge badge-danger" jhiTranslate="moneyRoombaApp.category.inactive"> Inactive </span>
+          </td>
+          <!--<td>{{ category.userCreated }}</td>-->
           <td class="table-icon-cell">
             <img class="icon" src="{{ getIcon(category.icon).path }}" alt="{{ getIcon(category.icon).name }}" />
           </td>
@@ -65,11 +68,12 @@
               <a [routerLink]="['/category', category.parent?.id, 'view']">{{ category.parent?.name }}</a>
             </div>
           </td>
+          <!--
           <td>
             <div *ngIf="category.user">
               <a [routerLink]="['/user-details', category.user?.id, 'view']">{{ category.user?.id }}</a>
             </div>
-          </td>
+          </td>-->
           <td class="text-right">
             <div class="btn-group">
               <button
