@@ -411,6 +411,15 @@
             formControlName="phone"
             data-cy="phone"
           />
+          <div>
+            <small
+              class="form-text text-danger"
+              *ngIf="settingsForm.get('phone')?.errors?.pattern"
+              jhiTranslate="global.messages.validate.phone.required"
+            >
+              Your phone is required. Format (XXX) XXXX XXXX.
+            </small>
+          </div>
         </div>
 
         <div class="form-group">

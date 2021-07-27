@@ -302,6 +302,16 @@
         <div class="form-group">
           <label jhiTranslate="userManagement.phone">Phone</label>
           <input type="text" class="form-control" placeholder="(XXX) XXXX XXXX" name="phone" formControlName="phone" />
+
+          <div>
+            <small
+              class="form-text text-danger"
+              *ngIf="editForm.get('phone')?.errors?.pattern"
+              jhiTranslate="global.messages.validate.phone.required"
+            >
+              Your phone is required. Format (XXX) XXXX XXXX.
+            </small>
+          </div>
         </div>
 
         <div class="form-check custom-control custom-checkbox mb-3 check-xs">

@@ -357,13 +357,13 @@
             data-cy="phone"
           />
 
-          <div *ngIf="registerForm.get('phone')!.invalid && (registerForm.get('phone')!.dirty || registerForm.get('phone')!.touched)">
+          <div>
             <small
               class="form-text text-danger"
-              *ngIf="registerForm.get('phone')?.errors?.required"
+              *ngIf="registerForm.get('phone')?.errors?.pattern"
               jhiTranslate="global.messages.validate.phone.required"
             >
-              Your phone is required.
+              Your phone is required. Format (XXX) XXXX XXXX.
             </small>
           </div>
         </div>
