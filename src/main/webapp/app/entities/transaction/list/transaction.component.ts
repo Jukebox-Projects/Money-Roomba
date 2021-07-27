@@ -9,6 +9,7 @@ import { IWallet } from '../../wallet/wallet.model';
 import { FormGroup, FormControl } from '@angular/forms';
 import { IICon } from '../../../shared/icon-picker/icon.model';
 import { IconService } from '../../../shared/icon-picker/service/icon.service';
+import { TransactionState } from '../../enumerations/transaction-state.model';
 
 @Component({
   selector: 'jhi-transaction',
@@ -105,5 +106,15 @@ export class TransactionComponent implements OnInit {
   }
   getIcon(iconId: number): IICon {
     return this.iconService.getIcon(iconId);
+  }
+  isPending(transactionState: TransactionState): boolean {
+    if (transactionState === null) {
+      return false;
+    }
+    if (transactionState.toString() === 'PENDING_APPROVAL') {
+      return true;
+    } else {
+      return false;
+    }
   }
 }

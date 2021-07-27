@@ -241,4 +241,14 @@ export class TransactionUpdateComponent implements OnInit {
       state: this.editForm.get(['transactionState'])!.value,
     };
   }
+
+  isPending(transactionState): boolean {
+    /* eslint-disable no-console */
+    console.log(transactionState);
+    if (transactionState.toString() === 'PENDING_APPROVAL') {
+      return true;
+    } else {
+      return false;
+    }
+  }
 }

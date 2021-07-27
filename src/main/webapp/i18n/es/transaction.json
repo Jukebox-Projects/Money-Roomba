@@ -2,41 +2,43 @@
   "moneyRoombaApp": {
     "transaction": {
       "home": {
-        "title": "Transactions",
+        "title": "Transacciones",
         "refreshListLabel": "Refrescar lista",
-        "createLabel": "Crear nuevo Transaction",
-        "createOrEditLabel": "Crear o editar Transaction",
-        "notFound": "Ningún Transactions encontrado"
+        "createLabel": "Crear nueva transacción",
+        "createOrEditLabel": "Crear o editar una transacción",
+        "notFound": "Ningúna transacción encontrada"
       },
-      "created": "Un nuevo Transaction ha sido creado con el identificador {{ param }}",
-      "updated": "Un Transaction ha sido actualizado con el identificador {{ param }}",
-      "deleted": "Un Transaction ha sido eliminado con el identificador {{ param }}",
+      "created": "Una nueva transacción ha sido creada con el identificador {{ param }}",
+      "updated": "Una transacción ha sido actualizada con el identificador {{ param }}",
+      "deleted": "Una transacción ha sido eliminada con el identificador {{ param }}",
       "delete": {
-        "question": "¿Seguro que quiere eliminar Transaction {{ id }}?"
+        "question": "¿Seguro que quiere eliminar la transacción {{ id }}?"
       },
       "detail": {
-        "title": "Transaction"
+        "title": "Transacciones"
       },
       "id": "ID",
-      "name": "Name",
-      "description": "Description",
-      "dateAdded": "Date Added",
-      "amount": "Amount",
-      "originalAmount": "Original Amount",
-      "movementType": "Movement Type",
-      "scheduled": "Scheduled",
-      "addToReports": "Add To Reports",
-      "incomingTransaction": "Incoming Transaction",
-      "transactionType": "Transaction Type",
-      "state": "State",
-      "attachment": "Attachment",
-      "wallet": "Wallet",
-      "currency": "Currency",
-      "category": "Category",
-      "sourceUser": "Source User",
-      "recievingUser": "Receiving User",
-      "outgoingTransaction": "Outgoing Transaction",
-      "transactionState": "Estado de aceptación"
+      "name": "Nombre",
+      "description": "Descripción",
+      "dateAdded": "Fecha",
+      "amount": "Monto",
+      "originalAmount": "Monto",
+      "movementType": "Tipo de movimiento",
+      "scheduled": "Programada",
+      "addToReports": "Agregar a reportes",
+      "incomingTransaction": "Transaccion entrante",
+      "transactionType": "Tipo de transacción",
+      "state": "Estado",
+      "attachment": "Adjunto",
+      "wallet": "Cartera",
+      "currency": "Moneda",
+      "category": "Categoría",
+      "sourceUser": "Usuario",
+      "recievingUser": "Receptor",
+      "outgoingTransaction": "Transaccion saliente",
+      "transactionState": "Estado",
+      "active": "Activo",
+      "inactive": "Inactivo"
     }
   }
 }

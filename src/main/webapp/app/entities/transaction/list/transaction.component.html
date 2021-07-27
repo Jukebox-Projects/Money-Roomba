@@ -79,8 +79,8 @@
               <th scope="col"><span jhiTranslate="moneyRoombaApp.transaction.wallet">Wallet</span></th>
               <th scope="col"><span jhiTranslate="moneyRoombaApp.transaction.amount">Amount</span></th>
               <th scope="col"><span jhiTranslate="moneyRoombaApp.transaction.movementType">Movement Type</span></th>
-              <th scope="col"><span jhiTranslate="moneyRoombaApp.transaction.transactionType">Transaction Type</span></th>
               <th scope="col"><span jhiTranslate="moneyRoombaApp.transaction.category">Category</span></th>
+              <th scope="col"><span jhiTranslate="moneyRoombaApp.transaction.transactionState">Status</span></th>
 
               <th scope="col"></th>
             </tr>
@@ -111,11 +111,7 @@
                 </div>
               </td>
 
-              <td jhiTranslate="{{ 'moneyRoombaApp.TransactionType.' + transaction.transactionType }}">
-                {{ transaction.transactionType }}
-              </td>
-
-              <td class="table-icon-cell" *ngIf="transaction.category">
+              <td class="table-icon-cell">
                 <!--<a [routerLink]="['/category', transaction.category?.id, 'view']">{{ transaction.category?.name }}</a>-->
                 <img
                   class="icon"
@@ -123,6 +119,11 @@
                   src="{{ getIcon(transaction.category?.icon).path }}"
                   alt="{{ getIcon(transaction.category?.icon).name }}"
                 />
+              </td>
+              <td>
+                <a class="btn btn-rounded btn-outline-warning" *ngIf="isPending(transaction.state)">Pending</a>
+                <a class="btn btn-rounded btn-outline-success" *ngIf="!isPending(transaction.state)">Accepted</a>
+                <!--{{ transaction.transactionType }}-->
               </td>
 
               <td class="text-right">
