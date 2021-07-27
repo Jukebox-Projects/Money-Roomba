@@ -67,7 +67,7 @@ public class TransactionService {
     public Transaction save(Transaction transaction) {
         double currentBalance;
         Wallet wallet = transaction.getWallet();
-        Optional<Wallet> fullWallet = walletRepository.findById(wallet.getId());
+        Optional<Wallet> targetWallet = walletRepository.findById(wallet.getId());
         log.debug("Request to save Transaction : {}", transaction);
         if (!SecurityUtils.hasCurrentUserThisAuthority(AuthoritiesConstants.ADMIN)) {
             Optional<User> user = userRepository.findOneByLogin(
@@ -90,23 +90,20 @@ public class TransactionService {
                     }
                     transaction.setState(TransactionState.NA);
                 } else {
-                    if (registeredWallet.get().equals(fullWallet)) {
+                    if (registeredWallet.get().equals(targetWallet)) {
                         //si no cambia el wallet
                         if (existingTransaction.get().getMovementType().equals(MovementType.EXPENSE)) {
-                            fullWallet.get().setBalance(wallet.getBalance() + existingTransaction.get().getAmount());
+                            targetWallet.get().setBalance(wallet.getBalance() + existingTransaction.get().getAmount());
                         } else {
-                            fullWallet.get().setBalance(wallet.getBalance() - existingTransaction.get().getAmount());
+                            targetWallet.get().setBalance(wallet.getBalance() - existingTransaction.get().getAmount());
                         }
                     } else {
                         //si cambia el wallet
-                        System.out.println("CURRENT BALANCE BEFORE CHANGES:" + registeredWallet.get().getBalance());
-                        System.out.println("AMOUNT TO REIMBURSE ON ORIGINAL WALLET:" + existingTransaction.get().getAmount());
                         if (existingTransaction.get().getMovementType().equals(MovementType.EXPENSE)) {
-                            registeredWallet.get().setBalance(wallet.getBalance() + existingTransaction.get().getAmount());
+                            registeredWallet.get().setBalance(registeredWallet.get().getBalance() + existingTransaction.get().getAmount());
                         } else {
-                            registeredWallet.get().setBalance(wallet.getBalance() - existingTransaction.get().getAmount());
+                            registeredWallet.get().setBalance(registeredWallet.get().getBalance() - existingTransaction.get().getAmount());
                         }
-                        System.out.println("CURRENT BALANCE AFTER CHANGES:" + registeredWallet.get().getBalance());
                         walletRepository.save(registeredWallet.get());
                     }
                 }
@@ -117,18 +114,18 @@ public class TransactionService {
             transaction.setIncomingTransaction(false);
             transaction.setScheduled(false);
 
-            if (transaction.getCurrency().equals(fullWallet.get().getCurrency())) {
+            if (transaction.getCurrency().equals(targetWallet.get().getCurrency())) {
                 transaction.setAmount(transaction.getOriginalAmount());
             } else {
                 double transactionInDollars = transaction.getOriginalAmount() / transaction.getCurrency().getConversionRate();
-                transaction.setAmount(transactionInDollars * fullWallet.get().getCurrency().getConversionRate());
+                transaction.setAmount(transactionInDollars * targetWallet.get().getCurrency().getConversionRate());
             }
             if (transaction.getMovementType().equals(MovementType.EXPENSE)) {
-                if (fullWallet.get().getBalance() > 0 && fullWallet.get().getBalance() >= transaction.getAmount()) {
-                    currentBalance = fullWallet.get().getBalance();
+                if (targetWallet.get().getBalance() > 0 && targetWallet.get().getBalance() >= transaction.getAmount()) {
+                    currentBalance = targetWallet.get().getBalance();
                     currentBalance = currentBalance - transaction.getAmount();
-                    fullWallet.get().setBalance(currentBalance);
-                    walletRepository.save(fullWallet.get());
+                    targetWallet.get().setBalance(currentBalance);
+                    walletRepository.save(targetWallet.get());
                 } else {
                     //throw insufficient funds exception
                     throw new BadRequestAlertException(
@@ -139,10 +136,10 @@ public class TransactionService {
                 }
             } else {
                 if (transaction.getAmount() > 0) {
-                    currentBalance = fullWallet.get().getBalance();
+                    currentBalance = targetWallet.get().getBalance();
                     currentBalance = currentBalance + transaction.getAmount();
-                    fullWallet.get().setBalance(currentBalance);
-                    walletRepository.save(fullWallet.get());
+                    targetWallet.get().setBalance(currentBalance);
+                    walletRepository.save(targetWallet.get());
                 } else {
                     //throw cannot register negative transaction exception.
                     throw new BadRequestAlertException(
