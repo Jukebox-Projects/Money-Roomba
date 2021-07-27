@@ -3,8 +3,22 @@
     <span jhiTranslate="moneyRoombaApp.wallet.home.title">Wallets</span>
 
     <div class="d-flex justify-content-end">
-      <div class="pt-3 p-1" style="font-size: 24px">
-        <input jhiTranslate="moneyRoombaApp.wallet.home.searchbar" type="text" [(ngModel)]="inputText" (input)="filterWallets()" />
+      <div class="pt-3" style="font-size: 24px">
+        <select [(ngModel)]="filterType" name="filterType">
+          <option class="dropdown-item" value="name" jhiTranslate="moneyRoombaApp.wallet.name">Name</option>
+          <option class="dropdown-item" value="currency" jhiTranslate="moneyRoombaApp.wallet.currency">Currency</option>
+        </select>
+      </div>
+      <div *ngIf="filterType === 'currency'" class="pt-3 p-1" style="font-size: 24px">
+        <input
+          jhiTranslate="moneyRoombaApp.wallet.home.searchbar"
+          type="text"
+          [(ngModel)]="inputText"
+          (input)="filterWalletsByCurrency()"
+        />
+      </div>
+      <div *ngIf="filterType === 'name'" class="pt-3 p-1" style="font-size: 24px">
+        <input jhiTranslate="moneyRoombaApp.wallet.home.searchbar" type="text" [(ngModel)]="inputText" (input)="filterWalletsByName()" />
       </div>
       <button class="btn btn-info mr-2" (click)="loadAll()" [disabled]="isLoading">
         <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
@@ -39,40 +53,30 @@
     <table class="table display mb-4 dataTablesCard dataTable card-table" aria-describedby="page-heading">
       <thead>
         <tr>
-          <th scope="col"><span jhiTranslate="global.field.id">ID</span></th>
           <th scope="col"><span jhiTranslate="moneyRoombaApp.wallet.name">Name</span></th>
           <th scope="col"><span jhiTranslate="moneyRoombaApp.wallet.description">Description</span></th>
           <th scope="col"><span jhiTranslate="moneyRoombaApp.wallet.inReports">In Reports</span></th>
           <th scope="col"><span jhiTranslate="moneyRoombaApp.wallet.isActive">Is Active</span></th>
           <th scope="col"><span jhiTranslate="moneyRoombaApp.wallet.balance">Balance</span></th>
           <th scope="col"><span jhiTranslate="moneyRoombaApp.wallet.icon">Icon</span></th>
-          <th scope="col"><span jhiTranslate="moneyRoombaApp.wallet.user">User</span></th>
-          <th scope="col"><span jhiTranslate="moneyRoombaApp.wallet.currency">Currency</span></th>
           <th scope="col"></th>
         </tr>
       </thead>
       <tbody>
         <tr *ngFor="let wallet of wallets; trackBy: trackId" data-cy="entityTable">
-          <td>
-            <a [routerLink]="['/wallet', wallet.id, 'view']">{{ wallet.id }}</a>
-          </td>
           <td>{{ wallet.name }}</td>
           <td>{{ wallet.description }}</td>
-          <td>{{ wallet.inReports }}</td>
-          <td>{{ wallet.isActive }}</td>
-          <td>{{ wallet.balance }}</td>
+          <td>
+            <span *ngIf="wallet.inReports" class="badge badge-success" jhiTranslate="moneyRoombaApp.wallet.reportsTrue"> yes </span>
+            <span *ngIf="!wallet.inReports" class="badge badge-danger" jhiTranslate="moneyRoombaApp.wallet.reportsFalse"> no </span>
+          </td>
+          <td>
+            <span *ngIf="wallet.isActive" class="badge badge-success" jhiTranslate="moneyRoombaApp.wallet.active"> Active </span>
+            <span *ngIf="!wallet.isActive" class="badge badge-danger" jhiTranslate="moneyRoombaApp.wallet.inactive"> Inactive </span>
+          </td>
+          <td>{{ wallet.currency?.code }} {{ wallet.balance | number: '1.2-2' }}</td>
           <td class="table-icon-cell">
             <img class="icon" src="{{ getIcon(wallet.icon).path }}" alt="{{ getIcon(wallet.icon).name }}" />
-          </td>
-          <td>
-            <div *ngIf="wallet.user">
-              <a [routerLink]="['/user-details', wallet.user?.id, 'view']">{{ wallet.user?.id }}</a>
-            </div>
-          </td>
-          <td>
-            <div *ngIf="wallet.currency">
-              <a [routerLink]="['/currency', wallet.currency?.id, 'view']">{{ wallet.currency?.code }}</a>
-            </div>
           </td>
           <td class="text-right">
             <div class="btn-group">

@@ -27,7 +27,11 @@
       "icon": "Icono",
       "transaction": "Transaction",
       "user": "Usuario",
-      "currency": "Tipo de Moneda"
+      "currency": "Tipo de Moneda",
+      "active": "Activo",
+      "inactive": "Inactivo",
+      "reportsTrue": "Sí",
+      "reportsFalse": "No"
     }
   }
 }

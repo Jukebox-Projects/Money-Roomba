@@ -27,7 +27,11 @@
       "icon": "Icon",
       "transaction": "Transaction",
       "user": "User",
-      "currency": "Currency"
+      "currency": "Currency",
+      "active": "Active",
+      "inactive": "Inactive",
+      "reportsTrue": "Yes",
+      "reportsFalse": "No"
     }
   }
 }

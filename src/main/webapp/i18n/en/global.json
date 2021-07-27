@@ -159,6 +159,11 @@
     },
     "validation": {
       "required": "This field is required.",
+      "mustaddwallet": "You must select a wallet.",
+      "transactiontyperequired": "You must specify a transaction type.",
+      "movementtyperequired": "You must specify a movement type.",
+      "daterequired": "You must specify a date for the transaction.",
+      "namerequired": "You must specify a name.",
       "minlength": "This field is required to be at least {{ min }} characters.",
       "maxlength": "This field cannot be longer than {{ max }} characters.",
       "min": "This field should be at least {{ min }}.",

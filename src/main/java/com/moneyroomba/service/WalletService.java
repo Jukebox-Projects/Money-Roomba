@@ -1,8 +1,10 @@
 package com.moneyroomba.service;
 
+import com.moneyroomba.domain.Transaction;
 import com.moneyroomba.domain.User;
 import com.moneyroomba.domain.UserDetails;
 import com.moneyroomba.domain.Wallet;
+import com.moneyroomba.repository.TransactionRepository;
 import com.moneyroomba.repository.UserDetailsRepository;
 import com.moneyroomba.repository.UserRepository;
 import com.moneyroomba.repository.WalletRepository;
@@ -42,10 +44,18 @@ public class WalletService {
 
     private final UserDetailsRepository userDetailsRepository;
 
-    public WalletService(WalletRepository walletRepository, UserRepository userRepository, UserDetailsRepository userDetailsRepository) {
+    private final TransactionRepository transactionRepository;
+
+    public WalletService(
+        WalletRepository walletRepository,
+        UserRepository userRepository,
+        UserDetailsRepository userDetailsRepository,
+        TransactionRepository transactionRepository
+    ) {
         this.walletRepository = walletRepository;
         this.userRepository = userRepository;
         this.userDetailsRepository = userDetailsRepository;
+        this.transactionRepository = transactionRepository;
     }
 
     /**
@@ -56,7 +66,6 @@ public class WalletService {
      */
     public Wallet save(Wallet wallet) {
         log.debug("Request to save Wallet : {}", wallet);
-        int walletCount = 0;
         Optional<User> user = userRepository.findOneByLogin(
             SecurityUtils
                 .getCurrentUserLogin()
@@ -70,19 +79,25 @@ public class WalletService {
                 )
         );
         Optional<UserDetails> userDetails = userDetailsRepository.findOneByInternalUser(user.get());
-        wallet.setUser(userDetails.get());
-        List<Wallet> userWallets = walletRepository.findAllByUser(userDetails.get());
-        if (!SecurityUtils.hasCurrentUserThisAuthority(AuthoritiesConstants.PREMIUM_USER)) {
-            if (userWallets.size() >= 3) {
-                throw new BadRequestAlertException(
-                    "User has reached the max amount of wallets that his accounts can handle.",
-                    ENTITY_NAME,
-                    "nomorewallets"
-                );
+        if (wallet.getId() == null) {
+            wallet.setUser(userDetails.get());
+            List<Wallet> userWallets = walletRepository.findAllByUser(userDetails.get());
+            if (!SecurityUtils.hasCurrentUserThisAuthority(AuthoritiesConstants.PREMIUM_USER)) {
+                if (userWallets.size() >= 3) {
+                    throw new BadRequestAlertException(
+                        "User has reached the max amount of wallets that his accounts can handle.",
+                        ENTITY_NAME,
+                        "nomorewallets"
+                    );
+                } else {
+                    return walletRepository.save(wallet);
+                }
             } else {
                 return walletRepository.save(wallet);
             }
         } else {
+            Optional<Wallet> existingWallet = walletRepository.findById(wallet.getId());
+            wallet.setUser(existingWallet.get().getUser());
             return walletRepository.save(wallet);
         }
     }
@@ -197,6 +212,13 @@ public class WalletService {
      */
     public void delete(Long id) {
         log.debug("Request to delete Wallet : {}", id);
+        Optional<Wallet> wallet = walletRepository.findById(id);
+        List<Transaction> transactions = transactionRepository.findAllByWallet(wallet.get());
+        if (!transactions.isEmpty()) {
+            for (Transaction t : transactions) {
+                transactionRepository.delete(t);
+            }
+        }
         walletRepository.deleteById(id);
     }
 }
