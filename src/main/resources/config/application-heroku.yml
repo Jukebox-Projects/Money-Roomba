@@ -12,7 +12,7 @@
 
 eureka:
   instance:
-    hostname: moneyroomba-oficial-1.herokuapp.com
+    hostname: money-roomba-oficial-1.herokuapp.com
     non-secure-port: 80
     prefer-ip-address: false
 
