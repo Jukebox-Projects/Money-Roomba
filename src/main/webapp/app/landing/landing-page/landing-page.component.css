@@ -418,7 +418,6 @@ h6,
 .text-light .h4,
 .text-light .h5,
 .text-light .h6 {
-  color: !important;
 }
 .text-sm {
   font-size: 18px;
@@ -1164,7 +1163,7 @@ label {
   left: 99.6%;
   width: 57.2%;
   height: 87.88%;
-  background-image: url('../images/hero-top-illustration.svg');
+  background-image: url('../../../assets/landing/images/hero-top-illustration.svg');
 }
 .hero-figure-box {
   position: absolute;
@@ -1436,7 +1435,7 @@ label {
   bottom: 18.8%;
   -webkit-transform: translateX(-50%);
   transform: translateX(-50%);
-  background-image: url('../images/pricing-illustration.svg');
+  background-image: url('../../../assets/landing/images/pricing-illustration.svg');
 }
 .pricing-table-header,
 .pricing-table-features-title,
@@ -1518,7 +1517,7 @@ label {
   top: -117px;
   width: 160px;
   height: 187px;
-  background-image: url('../images/cta-illustration.svg');
+  background-image: url('../../../assets/landing/images/cta-illustration.svg');
   background-repeat: no-repeat;
 }
 .cta-inner > * {
