@@ -153,7 +153,7 @@ public class CategoryService {
         List<Transaction> entityList = transactionRepository.findAll();
 
         for (Transaction t : entityList) {
-            if (t.getCategory().equals(category)) {
+            if (t.getCategory() != null && t.getCategory().equals(category.get())) {
                 throw new BadRequestAlertException(
                     "Cannot delete category because there are transactions associated to it",
                     ENTITY_NAME,
