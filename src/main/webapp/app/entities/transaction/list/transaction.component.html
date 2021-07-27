@@ -115,10 +115,14 @@
                 {{ transaction.transactionType }}
               </td>
 
-              <td>
-                <div *ngIf="transaction.category">
-                  <a [routerLink]="['/category', transaction.category?.id, 'view']">{{ transaction.category?.name }}</a>
-                </div>
+              <td class="table-icon-cell" *ngIf="transaction.category">
+                <!--<a [routerLink]="['/category', transaction.category?.id, 'view']">{{ transaction.category?.name }}</a>-->
+                <img
+                  class="icon"
+                  [routerLink]="['/category', transaction.category?.id, 'view']"
+                  src="{{ getIcon(transaction.category?.icon).path }}"
+                  alt="{{ getIcon(transaction.category?.icon).name }}"
+                />
               </td>
 
               <td class="text-right">

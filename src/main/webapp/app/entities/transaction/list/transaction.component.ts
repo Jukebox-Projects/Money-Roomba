@@ -7,10 +7,13 @@ import { TransactionService } from '../service/transaction.service';
 import { TransactionDeleteDialogComponent } from '../delete/transaction-delete-dialog.component';
 import { IWallet } from '../../wallet/wallet.model';
 import { FormGroup, FormControl } from '@angular/forms';
+import { IICon } from '../../../shared/icon-picker/icon.model';
+import { IconService } from '../../../shared/icon-picker/service/icon.service';
 
 @Component({
   selector: 'jhi-transaction',
   templateUrl: './transaction.component.html',
+  styleUrls: ['./transaction.component.css'],
 })
 export class TransactionComponent implements OnInit {
   transactions?: ITransaction[];
@@ -26,7 +29,7 @@ export class TransactionComponent implements OnInit {
     end: new FormControl(),
   });
 
-  constructor(protected transactionService: TransactionService, protected modalService: NgbModal) {}
+  constructor(protected transactionService: TransactionService, protected modalService: NgbModal, protected iconService: IconService) {}
 
   loadAll(): void {
     /* eslint-disable no-console */
@@ -99,5 +102,8 @@ export class TransactionComponent implements OnInit {
 
   trackId(index: number, item: ITransaction): number {
     return item.id!;
+  }
+  getIcon(iconId: number): IICon {
+    return this.iconService.getIcon(iconId);
   }
 }
