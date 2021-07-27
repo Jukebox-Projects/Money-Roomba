@@ -21,7 +21,11 @@
           <label class="form-control-label" jhiTranslate="moneyRoombaApp.transaction.name" for="field_name">Name</label>
           <input type="text" class="form-control" name="name" id="field_name" data-cy="name" formControlName="name" />
           <div *ngIf="editForm.get('name')!.invalid && (editForm.get('name')!.dirty || editForm.get('name')!.touched)">
-            <small class="form-text text-danger" *ngIf="editForm.get('name')?.errors?.required" jhiTranslate="entity.validation.required">
+            <small
+              class="form-text text-danger"
+              *ngIf="editForm.get('name')?.errors?.required"
+              jhiTranslate="entity.validation.namerequired"
+            >
               This field is required.
             </small>
           </div>
@@ -64,7 +68,7 @@
             <small
               class="form-text text-danger"
               *ngIf="editForm.get('dateAdded')?.errors?.required"
-              jhiTranslate="entity.validation.required"
+              jhiTranslate="entity.validation.daterequired"
             >
               This field is required.
             </small>
@@ -90,9 +94,7 @@
         </div> -->
 
         <div class="form-group">
-          <label class="form-control-label" jhiTranslate="moneyRoombaApp.transaction.originalAmount" for="field_originalAmount"
-            >Amount</label
-          >
+          <label class="form-control-label" jhiTranslate="moneyRoombaApp.transaction.amount" for="field_originalAmount">Amount</label>
           <input
             type="number"
             class="form-control"
@@ -132,6 +134,18 @@
         </div>
 
         <div class="form-group">
+          <label class="form-control-label" jhiTranslate="moneyRoombaApp.transaction.currency" for="field_currency">Currency</label>
+          <select class="form-control" id="field_currency" data-cy="currency" name="currency" formControlName="currency">
+            <option
+              [ngValue]="currencyOption.id === editForm.get('currency')!.value?.id ? editForm.get('currency')!.value : currencyOption"
+              *ngFor="let currencyOption of currenciesSharedCollection; trackBy: trackCurrencyById"
+            >
+              {{ currencyOption.code }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
           <label class="form-control-label" jhiTranslate="moneyRoombaApp.transaction.movementType" for="field_movementType"
             >Movement Type</label
           >
@@ -145,7 +159,7 @@
             <small
               class="form-text text-danger"
               *ngIf="editForm.get('movementType')?.errors?.required"
-              jhiTranslate="entity.validation.required"
+              jhiTranslate="entity.validation.movementtyperequired"
             >
               This field is required.
             </small>
@@ -245,7 +259,7 @@
             <small
               class="form-text text-danger"
               *ngIf="editForm.get('transactionType')?.errors?.required"
-              jhiTranslate="entity.validation.required"
+              jhiTranslate="entity.validation.transactiontyperequired"
             >
               This field is required.
             </small>
@@ -279,21 +293,13 @@
           </select>
         </div>
         <div *ngIf="editForm.get(['wallet'])!.invalid && (editForm.get(['wallet'])!.dirty || editForm.get(['wallet'])!.touched)">
-          <small class="form-text text-danger" *ngIf="editForm.get(['wallet'])?.errors?.required" jhiTranslate="entity.validation.required">
-            This field is required.
+          <small
+            class="form-text text-danger"
+            *ngIf="editForm.get(['wallet'])?.errors?.required"
+            jhiTranslate="entity.validation.mustaddwallet"
+          >
+            You must select a wallet.
           </small>
-        </div>
-
-        <div class="form-group">
-          <label class="form-control-label" jhiTranslate="moneyRoombaApp.transaction.currency" for="field_currency">Currency</label>
-          <select class="form-control" id="field_currency" data-cy="currency" name="currency" formControlName="currency">
-            <option
-              [ngValue]="currencyOption.id === editForm.get('currency')!.value?.id ? editForm.get('currency')!.value : currencyOption"
-              *ngFor="let currencyOption of currenciesSharedCollection; trackBy: trackCurrencyById"
-            >
-              {{ currencyOption.code }}
-            </option>
-          </select>
         </div>
 
         <div class="form-group">
@@ -306,6 +312,73 @@
               {{ categoryOption.name }}
             </option>
           </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" jhiTranslate="moneyRoombaApp.transaction.outgoingTransaction" for="field_outgoingTransaction"
+            >Outgoing Transaction</label
+          >
+          <input
+            type="checkbox"
+            class="form-check"
+            name="outgoingTransaction"
+            id="field_outgoingTransaction"
+            data-cy="outgoingTransaction"
+            [(ngModel)]="isOutgoing"
+            (click)="this.toggleOutgoing()"
+          />
+        </div>
+
+        <div class="form-group" *ngIf="this.isOutgoing">
+          <label class="form-control-label" jhiTranslate="moneyRoombaApp.transaction.recievingUser" for="field_recievingUser"
+            >Receiving User</label
+          >
+          <select
+            class="form-control"
+            id="field_recievingUser"
+            data-cy="recievingUser"
+            name="recievingUser"
+            formControlName="recievingUser"
+          >
+            <option
+              [ngValue]="
+                userDetailsOption.id === editForm.get('recievingUser')!.value?.id ? editForm.get('recievingUser')!.value : userDetailsOption
+              "
+              *ngFor="let userDetailsOption of userDetailsSharedCollection; trackBy: trackUserDetailsById"
+            >
+              {{ userDetailsOption.phone }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" jhiTranslate="moneyRoombaApp.transaction.transactionState" for="field_transactionState"
+            >Transaction State</label
+          >
+          <select
+            class="form-control"
+            name="transactionState"
+            formControlName="transactionState"
+            id="field_transactionState"
+            data-cy="transactionState"
+          >
+            <option value="ACCEPTED">{{ 'moneyRoombaApp.TransactionState.ACCEPTED' | translate }}</option>
+            <option value="DENIED">{{ 'moneyRoombaApp.TransactionState.DENIED' | translate }}</option>
+          </select>
+          <div
+            *ngIf="
+              editForm.get('transactionState')!.invalid &&
+              (editForm.get('transactionState')!.dirty || editForm.get('transactionState')!.touched)
+            "
+          >
+            <small
+              class="form-text text-danger"
+              *ngIf="editForm.get('transactionState')?.errors?.required"
+              jhiTranslate="entity.validation.movementtyperequired"
+            >
+              This field is required.
+            </small>
+          </div>
         </div>
       </div>
 

@@ -53,6 +53,7 @@ export class Transaction implements ITransaction {
     this.scheduled = this.scheduled ?? false;
     this.addToReports = this.addToReports ?? false;
     this.incomingTransaction = this.incomingTransaction ?? false;
+    this.state = this.state ?? TransactionState.NA;
   }
 }
 

@@ -17,7 +17,11 @@
           <label class="form-control-label" jhiTranslate="moneyRoombaApp.wallet.name" for="field_name">Name</label>
           <input type="text" class="form-control" name="name" id="field_name" data-cy="name" formControlName="name" />
           <div *ngIf="editForm.get('name')!.invalid && (editForm.get('name')!.dirty || editForm.get('name')!.touched)">
-            <small class="form-text text-danger" *ngIf="editForm.get('name')?.errors?.required" jhiTranslate="entity.validation.required">
+            <small
+              class="form-text text-danger"
+              *ngIf="editForm.get('name')?.errors?.required"
+              jhiTranslate="entity.validation.namerequired"
+            >
               This field is required.
             </small>
           </div>

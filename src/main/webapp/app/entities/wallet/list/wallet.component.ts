@@ -20,6 +20,7 @@ export class WalletComponent implements OnInit {
   isLoading = false;
   inputText = '';
   adminUser = false;
+  filterType: string = 'name';
 
   constructor(
     protected walletService: WalletService,
@@ -52,12 +53,31 @@ export class WalletComponent implements OnInit {
     return item.id!;
   }
 
-  filterWallets(): void {
+  filterWalletsByName(): void {
     /* eslint-disable no-console */
     if (this.wallets !== undefined) {
       this.wallets = this.wallets.filter(wallet => {
         if (wallet.name !== undefined) {
           return wallet.name.toLowerCase().includes(this.inputText.toLowerCase());
+        } else {
+          return false;
+        }
+      });
+    }
+    if (this.inputText === '') {
+      this.wallets = this.allwallets;
+    }
+  }
+
+  filterWalletsByCurrency(): void {
+    /* eslint-disable no-console */
+    if (this.wallets !== undefined) {
+      this.wallets = this.wallets.filter(wallet => {
+        if (wallet.currency.name !== undefined) {
+          return (
+            wallet.currency.name.toLowerCase().includes(this.inputText.toLowerCase()) ||
+            wallet.currency.code.toLowerCase().includes(this.inputText.toLowerCase())
+          );
         } else {
           return false;
         }
