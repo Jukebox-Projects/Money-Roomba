@@ -33,9 +33,9 @@ spring:
       enabled: false
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
-    url: jdbc:mysql://k6lzybo700wox309:g3i2k8urnildri4o@ohunm00fjsjs1uzy.cbetxkdyhwsb.us-east-1.rds.amazonaws.com:3306/oz6mcjgs14di26qd
-    username: k6lzybo700wox309
-    password: g3i2k8urnildri4o
+    url: jdbc:mysql://ikn7cp12d0maxh48:hkg5nji0wv7n7lbj@pk1l4ihepirw9fob.cbetxkdyhwsb.us-east-1.rds.amazonaws.com:3306/bzavahbosdx1rt1p?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
+    username: ikn7cp12d0maxh48
+    password: hkg5nji0wv7n7lbj
     hikari:
       poolName: Hikari
       auto-commit: false
@@ -49,12 +49,14 @@ spring:
   liquibase:
     contexts: prod
   mail:
-    host: localhost
-    port: 25
-    username:
-    password:
+    host: smtp.mailtrap.io
+    port: 587
+    username: 06df9f00a6292f
+    password: b1865999017097
+  messages:
+    cache-duration: PT1S # 1 second, see the ISO 8601 standard
   thymeleaf:
-    cache: true
+    cache: false
 
 # ===================================================================
 # To enable TLS in production, generate a certificate using:
