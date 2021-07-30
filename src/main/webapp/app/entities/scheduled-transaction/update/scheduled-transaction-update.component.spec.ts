@@ -11,6 +11,10 @@ import { ScheduledTransactionService } from '../service/scheduled-transaction.se
 import { IScheduledTransaction, ScheduledTransaction } from '../scheduled-transaction.model';
 import { ICurrency } from 'app/entities/currency/currency.model';
 import { CurrencyService } from 'app/entities/currency/service/currency.service';
+import { IUserDetails } from 'app/entities/user-details/user-details.model';
+import { UserDetailsService } from 'app/entities/user-details/service/user-details.service';
+import { ICategory } from 'app/entities/category/category.model';
+import { CategoryService } from 'app/entities/category/service/category.service';
 
 import { ScheduledTransactionUpdateComponent } from './scheduled-transaction-update.component';
 
@@ -21,6 +25,8 @@ describe('Component Tests', () => {
     let activatedRoute: ActivatedRoute;
     let scheduledTransactionService: ScheduledTransactionService;
     let currencyService: CurrencyService;
+    let userDetailsService: UserDetailsService;
+    let categoryService: CategoryService;
 
     beforeEach(() => {
       TestBed.configureTestingModule({
@@ -35,6 +41,8 @@ describe('Component Tests', () => {
       activatedRoute = TestBed.inject(ActivatedRoute);
       scheduledTransactionService = TestBed.inject(ScheduledTransactionService);
       currencyService = TestBed.inject(CurrencyService);
+      userDetailsService = TestBed.inject(UserDetailsService);
+      categoryService = TestBed.inject(CategoryService);
 
       comp = fixture.componentInstance;
     });
@@ -59,16 +67,63 @@ describe('Component Tests', () => {
         expect(comp.currenciesSharedCollection).toEqual(expectedCollection);
       });
 
+      it('Should call UserDetails query and add missing value', () => {
+        const scheduledTransaction: IScheduledTransaction = { id: 456 };
+        const sourceUser: IUserDetails = { id: 71384 };
+        scheduledTransaction.sourceUser = sourceUser;
+
+        const userDetailsCollection: IUserDetails[] = [{ id: 60587 }];
+        jest.spyOn(userDetailsService, 'query').mockReturnValue(of(new HttpResponse({ body: userDetailsCollection })));
+        const additionalUserDetails = [sourceUser];
+        const expectedCollection: IUserDetails[] = [...additionalUserDetails, ...userDetailsCollection];
+        jest.spyOn(userDetailsService, 'addUserDetailsToCollectionIfMissing').mockReturnValue(expectedCollection);
+
+        activatedRoute.data = of({ scheduledTransaction });
+        comp.ngOnInit();
+
+        expect(userDetailsService.query).toHaveBeenCalled();
+        expect(userDetailsService.addUserDetailsToCollectionIfMissing).toHaveBeenCalledWith(
+          userDetailsCollection,
+          ...additionalUserDetails
+        );
+        expect(comp.userDetailsSharedCollection).toEqual(expectedCollection);
+      });
+
+      it('Should call Category query and add missing value', () => {
+        const scheduledTransaction: IScheduledTransaction = { id: 456 };
+        const category: ICategory = { id: 28975 };
+        scheduledTransaction.category = category;
+
+        const categoryCollection: ICategory[] = [{ id: 20486 }];
+        jest.spyOn(categoryService, 'query').mockReturnValue(of(new HttpResponse({ body: categoryCollection })));
+        const additionalCategories = [category];
+        const expectedCollection: ICategory[] = [...additionalCategories, ...categoryCollection];
+        jest.spyOn(categoryService, 'addCategoryToCollectionIfMissing').mockReturnValue(expectedCollection);
+
+        activatedRoute.data = of({ scheduledTransaction });
+        comp.ngOnInit();
+
+        expect(categoryService.query).toHaveBeenCalled();
+        expect(categoryService.addCategoryToCollectionIfMissing).toHaveBeenCalledWith(categoryCollection, ...additionalCategories);
+        expect(comp.categoriesSharedCollection).toEqual(expectedCollection);
+      });
+
       it('Should update editForm', () => {
         const scheduledTransaction: IScheduledTransaction = { id: 456 };
         const currency: ICurrency = { id: 31698 };
         scheduledTransaction.currency = currency;
+        const sourceUser: IUserDetails = { id: 42774 };
+        scheduledTransaction.sourceUser = sourceUser;
+        const category: ICategory = { id: 81875 };
+        scheduledTransaction.category = category;
 
         activatedRoute.data = of({ scheduledTransaction });
         comp.ngOnInit();
 
         expect(comp.editForm.value).toEqual(expect.objectContaining(scheduledTransaction));
         expect(comp.currenciesSharedCollection).toContain(currency);
+        expect(comp.userDetailsSharedCollection).toContain(sourceUser);
+        expect(comp.categoriesSharedCollection).toContain(category);
       });
     });
 
@@ -141,6 +196,22 @@ describe('Component Tests', () => {
         it('Should return tracked Currency primary key', () => {
           const entity = { id: 123 };
           const trackResult = comp.trackCurrencyById(0, entity);
+          expect(trackResult).toEqual(entity.id);
+        });
+      });
+
+      describe('trackUserDetailsById', () => {
+        it('Should return tracked UserDetails primary key', () => {
+          const entity = { id: 123 };
+          const trackResult = comp.trackUserDetailsById(0, entity);
+          expect(trackResult).toEqual(entity.id);
+        });
+      });
+
+      describe('trackCategoryById', () => {
+        it('Should return tracked Category primary key', () => {
+          const entity = { id: 123 };
+          const trackResult = comp.trackCategoryById(0, entity);
           expect(trackResult).toEqual(entity.id);
         });
       });

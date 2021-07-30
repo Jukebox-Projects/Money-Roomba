@@ -2,10 +2,9 @@ package com.moneyroomba.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.moneyroomba.domain.enumeration.MovementType;
+import com.moneyroomba.domain.enumeration.RecurringType;
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.Set;
 import javax.persistence.*;
 import javax.validation.constraints.*;
 import org.hibernate.annotations.Cache;
@@ -54,17 +53,64 @@ public class ScheduledTransaction implements Serializable {
     private Boolean addToReports;
 
     @NotNull
-    @Column(name = "incoming_transaction", nullable = false)
-    private Boolean incomingTransaction;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "recurring_type", nullable = false)
+    private RecurringType recurringType;
 
-    @OneToMany(mappedBy = "scheduleTransaction")
-    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @JsonIgnoreProperties(value = { "scheduleTransaction" }, allowSetters = true)
-    private Set<SchedulePattern> schedulePatterns = new HashSet<>();
+    @Min(value = 0)
+    @Column(name = "separation_count")
+    private Integer separationCount;
+
+    @Column(name = "max_number_of_ocurrences")
+    private Integer maxNumberOfOcurrences;
+
+    @Min(value = 0)
+    @Max(value = 6)
+    @Column(name = "day_of_week")
+    private Integer dayOfWeek;
+
+    @Min(value = 0)
+    @Max(value = 5)
+    @Column(name = "week_of_month")
+    private Integer weekOfMonth;
+
+    @Min(value = 0)
+    @Max(value = 31)
+    @Column(name = "day_of_month")
+    private Integer dayOfMonth;
+
+    @Min(value = 0)
+    @Max(value = 11)
+    @Column(name = "month_of_year")
+    private Integer monthOfYear;
 
     @ManyToOne
     @JsonIgnoreProperties(value = { "transactions", "scheduledTransactions", "wallets", "invoices" }, allowSetters = true)
     private Currency currency;
+
+    @ManyToOne
+    @JsonIgnoreProperties(
+        value = {
+            "internalUser",
+            "license",
+            "wallets",
+            "categories",
+            "events",
+            "transactions",
+            "scheduledTransactions",
+            "userDetails",
+            "recievedTransactions",
+            "targetContacts",
+            "contact",
+            "sourceContacts",
+        },
+        allowSetters = true
+    )
+    private UserDetails sourceUser;
+
+    @ManyToOne
+    @JsonIgnoreProperties(value = { "categories", "transactions", "scheduledTransactions", "parent", "user" }, allowSetters = true)
+    private Category category;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
     public Long getId() {
@@ -171,48 +217,95 @@ public class ScheduledTransaction implements Serializable {
         this.addToReports = addToReports;
     }
 
-    public Boolean getIncomingTransaction() {
-        return this.incomingTransaction;
+    public RecurringType getRecurringType() {
+        return this.recurringType;
     }
 
-    public ScheduledTransaction incomingTransaction(Boolean incomingTransaction) {
-        this.incomingTransaction = incomingTransaction;
+    public ScheduledTransaction recurringType(RecurringType recurringType) {
+        this.recurringType = recurringType;
         return this;
     }
 
-    public void setIncomingTransaction(Boolean incomingTransaction) {
-        this.incomingTransaction = incomingTransaction;
+    public void setRecurringType(RecurringType recurringType) {
+        this.recurringType = recurringType;
     }
 
-    public Set<SchedulePattern> getSchedulePatterns() {
-        return this.schedulePatterns;
+    public Integer getSeparationCount() {
+        return this.separationCount;
     }
 
-    public ScheduledTransaction schedulePatterns(Set<SchedulePattern> schedulePatterns) {
-        this.setSchedulePatterns(schedulePatterns);
+    public ScheduledTransaction separationCount(Integer separationCount) {
+        this.separationCount = separationCount;
         return this;
     }
 
-    public ScheduledTransaction addSchedulePattern(SchedulePattern schedulePattern) {
-        this.schedulePatterns.add(schedulePattern);
-        schedulePattern.setScheduleTransaction(this);
+    public void setSeparationCount(Integer separationCount) {
+        this.separationCount = separationCount;
+    }
+
+    public Integer getMaxNumberOfOcurrences() {
+        return this.maxNumberOfOcurrences;
+    }
+
+    public ScheduledTransaction maxNumberOfOcurrences(Integer maxNumberOfOcurrences) {
+        this.maxNumberOfOcurrences = maxNumberOfOcurrences;
         return this;
     }
 
-    public ScheduledTransaction removeSchedulePattern(SchedulePattern schedulePattern) {
-        this.schedulePatterns.remove(schedulePattern);
-        schedulePattern.setScheduleTransaction(null);
+    public void setMaxNumberOfOcurrences(Integer maxNumberOfOcurrences) {
+        this.maxNumberOfOcurrences = maxNumberOfOcurrences;
+    }
+
+    public Integer getDayOfWeek() {
+        return this.dayOfWeek;
+    }
+
+    public ScheduledTransaction dayOfWeek(Integer dayOfWeek) {
+        this.dayOfWeek = dayOfWeek;
         return this;
     }
 
-    public void setSchedulePatterns(Set<SchedulePattern> schedulePatterns) {
-        if (this.schedulePatterns != null) {
-            this.schedulePatterns.forEach(i -> i.setScheduleTransaction(null));
-        }
-        if (schedulePatterns != null) {
-            schedulePatterns.forEach(i -> i.setScheduleTransaction(this));
-        }
-        this.schedulePatterns = schedulePatterns;
+    public void setDayOfWeek(Integer dayOfWeek) {
+        this.dayOfWeek = dayOfWeek;
+    }
+
+    public Integer getWeekOfMonth() {
+        return this.weekOfMonth;
+    }
+
+    public ScheduledTransaction weekOfMonth(Integer weekOfMonth) {
+        this.weekOfMonth = weekOfMonth;
+        return this;
+    }
+
+    public void setWeekOfMonth(Integer weekOfMonth) {
+        this.weekOfMonth = weekOfMonth;
+    }
+
+    public Integer getDayOfMonth() {
+        return this.dayOfMonth;
+    }
+
+    public ScheduledTransaction dayOfMonth(Integer dayOfMonth) {
+        this.dayOfMonth = dayOfMonth;
+        return this;
+    }
+
+    public void setDayOfMonth(Integer dayOfMonth) {
+        this.dayOfMonth = dayOfMonth;
+    }
+
+    public Integer getMonthOfYear() {
+        return this.monthOfYear;
+    }
+
+    public ScheduledTransaction monthOfYear(Integer monthOfYear) {
+        this.monthOfYear = monthOfYear;
+        return this;
+    }
+
+    public void setMonthOfYear(Integer monthOfYear) {
+        this.monthOfYear = monthOfYear;
     }
 
     public Currency getCurrency() {
@@ -226,6 +319,32 @@ public class ScheduledTransaction implements Serializable {
 
     public void setCurrency(Currency currency) {
         this.currency = currency;
+    }
+
+    public UserDetails getSourceUser() {
+        return this.sourceUser;
+    }
+
+    public ScheduledTransaction sourceUser(UserDetails userDetails) {
+        this.setSourceUser(userDetails);
+        return this;
+    }
+
+    public void setSourceUser(UserDetails userDetails) {
+        this.sourceUser = userDetails;
+    }
+
+    public Category getCategory() {
+        return this.category;
+    }
+
+    public ScheduledTransaction category(Category category) {
+        this.setCategory(category);
+        return this;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
     }
 
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
@@ -259,7 +378,13 @@ public class ScheduledTransaction implements Serializable {
             ", startDate='" + getStartDate() + "'" +
             ", endDate='" + getEndDate() + "'" +
             ", addToReports='" + getAddToReports() + "'" +
-            ", incomingTransaction='" + getIncomingTransaction() + "'" +
+            ", recurringType='" + getRecurringType() + "'" +
+            ", separationCount=" + getSeparationCount() +
+            ", maxNumberOfOcurrences=" + getMaxNumberOfOcurrences() +
+            ", dayOfWeek=" + getDayOfWeek() +
+            ", weekOfMonth=" + getWeekOfMonth() +
+            ", dayOfMonth=" + getDayOfMonth() +
+            ", monthOfYear=" + getMonthOfYear() +
             "}";
     }
 }

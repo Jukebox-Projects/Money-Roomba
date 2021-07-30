@@ -49,6 +49,13 @@ public class Category implements Serializable {
     @JsonIgnoreProperties(value = { "attachment", "wallet", "currency", "category", "sourceUser" }, allowSetters = true)
     private Set<Transaction> transactions = new HashSet<>();
 
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @JsonIgnoreProperties(
+        value = { "currency", "category", "sourceUser", "startDate", "endDate", "separationCount", "maxNumberOfOcurrences" },
+        allowSetters = true
+    )
+    private Set<Transaction> scheduledTransactions = new HashSet<>();
+
     @ManyToOne
     @JsonIgnoreProperties(value = { "categories", "transactions", "parent", "user" }, allowSetters = true)
     private Category parent;

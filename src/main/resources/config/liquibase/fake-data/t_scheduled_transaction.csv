@@ -1,11 +1,11 @@
-id;name;description;original_amount;movement_type;start_date;end_date;add_to_reports;incoming_transaction
-1;haptic Alemania;Sopa EXE;62944;INCOME;2021-07-14;2021-07-14;true;true
-2;Funcionalidad engage;Pollo;63441;EXPENSE;2021-07-14;2021-07-14;false;true
-3;solid Account Negro;IB transform;88257;EXPENSE;2021-07-14;2021-07-14;true;false
-4;Violeta Bacon Faro;redundant Madera Rústico;43744;INCOME;2021-07-14;2021-07-14;false;true
-5;Torrente Seguridada;recíproca explícita;37190;EXPENSE;2021-07-14;2021-07-14;true;true
-6;XML;sinergia;95879;INCOME;2021-07-14;2021-07-14;false;false
-7;redundant;Som Metal;56143;INCOME;2021-07-14;2021-07-14;false;false
-8;Plástico;Loan Open-source payment;97641;INCOME;2021-07-14;2021-07-14;false;false
-9;Loan Factores up;República;76419;EXPENSE;2021-07-14;2021-07-14;false;true
-10;back-end;syndicate mobile;73143;EXPENSE;2021-07-14;2021-07-14;true;false
+id;name;description;original_amount;movement_type;start_date;end_date;add_to_reports;recurring_type;separation_count;max_number_of_ocurrences;day_of_week;week_of_month;day_of_month;month_of_year
+1;haptic Alemania;Sopa EXE;62944;INCOME;2021-07-14;2021-07-14;true;YEARLY;40009;94547;1;0;12;7
+2;Rústico Inversor bypass;Datos middleware microchip;84632;INCOME;2021-07-14;2021-07-14;false;WEEKLY;11473;9216;6;4;28;4
+3;infomediaries Especialista transmitting;1080p;44293;EXPENSE;2021-07-14;2021-07-14;false;DAILY;17083;32189;3;0;19;5
+4;Grupo;parse payment optical;36947;EXPENSE;2021-07-14;2021-07-14;false;DAILY;56469;85873;1;5;15;1
+5;sinergia;Coche implement redundant;59787;EXPENSE;2021-07-14;2021-07-14;false;MONTHLY;35069;56143;0;1;12;4
+6;Acero;Borders Loan;22302;EXPENSE;2021-07-14;2021-07-14;true;DAILY;97641;44361;2;3;7;0
+7;Loan Factores up;República;76419;EXPENSE;2021-07-14;2021-07-14;false;MONTHLY;1902;78692;1;5;14;4
+8;Datos a;Rojo Ladrillo Barbados;16367;EXPENSE;2021-07-14;2021-07-14;true;YEARLY;75527;98672;6;4;0;3
+9;Bebes niches;bluetooth Personal;1810;INCOME;2021-07-14;2021-07-14;false;DAILY;7199;56907;6;4;24;5
+10;Bricolaje up;Especialista Jefe invoice;23635;INCOME;2021-07-14;2021-07-14;true;DAILY;82748;10847;3;5;25;0

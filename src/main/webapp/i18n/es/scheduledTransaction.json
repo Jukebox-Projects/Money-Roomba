@@ -25,9 +25,16 @@
       "startDate": "Start Date",
       "endDate": "End Date",
       "addToReports": "Add To Reports",
-      "incomingTransaction": "Incoming Transaction",
-      "schedulePattern": "Schedule Pattern",
-      "currency": "Currency"
+      "recurringType": "Recurring Type",
+      "separationCount": "Separation Count",
+      "maxNumberOfOcurrences": "Max Number Of Ocurrences",
+      "dayOfWeek": "Day Of Week",
+      "weekOfMonth": "Week Of Month",
+      "dayOfMonth": "Day Of Month",
+      "monthOfYear": "Month Of Year",
+      "currency": "Currency",
+      "sourceUser": "Source User",
+      "category": "Category"
     }
   }
 }

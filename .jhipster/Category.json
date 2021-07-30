@@ -37,6 +37,12 @@
       "relationshipName": "transaction"
     },
     {
+      "relationshipType": "one-to-many",
+      "otherEntityName": "scheduledTransaction",
+      "otherEntityRelationshipName": "category",
+      "relationshipName": "scheduledTransaction"
+    },
+    {
       "relationshipType": "many-to-one",
       "otherEntityName": "category",
       "otherEntityRelationshipName": "category",

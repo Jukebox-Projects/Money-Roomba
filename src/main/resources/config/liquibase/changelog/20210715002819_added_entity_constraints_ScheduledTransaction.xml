@@ -13,5 +13,17 @@
                                  constraintName="fk_t_scheduled_transaction__currency_id"
                                  referencedColumnNames="id"
                                  referencedTableName="t_currency"/>
+
+        <addForeignKeyConstraint baseColumnNames="source_user_id"
+                                 baseTableName="t_scheduled_transaction"
+                                 constraintName="fk_t_scheduled_transaction__source_user_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="t_user"/>
+
+        <addForeignKeyConstraint baseColumnNames="category_id"
+                                 baseTableName="t_scheduled_transaction"
+                                 constraintName="fk_t_scheduled_transaction__category_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="t_category"/>
     </changeSet>
 </databaseChangeLog>
