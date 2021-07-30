@@ -65,6 +65,9 @@
             <column name="category_id" type="bigint">
                 <constraints nullable="true" />
             </column>
+            <column name="wallet_id" type="bigint">
+                <constraints nullable="false" />
+            </column>
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here -->
         </createTable>
     </changeSet>
@@ -99,6 +102,7 @@
             <column name="week_of_month" type="numeric"/>
             <column name="day_of_month" type="numeric"/>
             <column name="month_of_year" type="numeric"/>
+            <column name="wallet_id" type="numeric"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here -->
         </loadData>
     </changeSet>

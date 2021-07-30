@@ -57,7 +57,7 @@ public class UserDetails implements Serializable {
 
     @OneToMany(mappedBy = "user")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @JsonIgnoreProperties(value = { "transactions", "user", "currency" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "transactions", "scheduledTransactions", "user", "currency" }, allowSetters = true)
     private Set<Wallet> wallets = new HashSet<>();
 
     @OneToMany(mappedBy = "user")
@@ -77,7 +77,7 @@ public class UserDetails implements Serializable {
 
     @OneToMany(mappedBy = "sourceUser")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @JsonIgnoreProperties(value = { "currency", "sourceUser", "category" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "currency", "sourceUser", "category", "wallet" }, allowSetters = true)
     private Set<ScheduledTransaction> scheduledTransactions = new HashSet<>();
 
     @OneToMany(mappedBy = "contact")

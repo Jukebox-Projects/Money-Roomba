@@ -100,6 +100,14 @@
       "otherEntityRelationshipName": "scheduledTransaction",
       "relationshipName": "category",
       "otherEntityField": "name"
+    },
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "wallet",
+      "otherEntityRelationshipName": "scheduledTransaction",
+      "relationshipValidateRules": "required",
+      "relationshipName": "wallet",
+      "otherEntityField": "name"
     }
   ],
   "entityTableName": "t_scheduled_transaction",

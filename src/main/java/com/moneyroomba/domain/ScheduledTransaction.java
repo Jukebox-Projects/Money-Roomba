@@ -112,6 +112,11 @@ public class ScheduledTransaction implements Serializable {
     @JsonIgnoreProperties(value = { "categories", "transactions", "scheduledTransactions", "parent", "user" }, allowSetters = true)
     private Category category;
 
+    @ManyToOne(optional = false)
+    @NotNull
+    @JsonIgnoreProperties(value = { "transactions", "scheduledTransactions", "user", "currency" }, allowSetters = true)
+    private Wallet wallet;
+
     // jhipster-needle-entity-add-field - JHipster will add fields here
     public Long getId() {
         return id;
@@ -345,6 +350,19 @@ public class ScheduledTransaction implements Serializable {
 
     public void setCategory(Category category) {
         this.category = category;
+    }
+
+    public Wallet getWallet() {
+        return this.wallet;
+    }
+
+    public ScheduledTransaction wallet(Wallet wallet) {
+        this.setWallet(wallet);
+        return this;
+    }
+
+    public void setWallet(Wallet wallet) {
+        this.wallet = wallet;
     }
 
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here

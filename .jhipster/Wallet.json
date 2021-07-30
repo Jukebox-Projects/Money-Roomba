@@ -40,6 +40,12 @@
       "relationshipName": "transaction"
     },
     {
+      "relationshipType": "one-to-many",
+      "otherEntityName": "scheduledTransaction",
+      "otherEntityRelationshipName": "wallet",
+      "relationshipName": "scheduledTransaction"
+    },
+    {
       "relationshipType": "many-to-one",
       "otherEntityName": "userDetails",
       "otherEntityRelationshipName": "wallet",

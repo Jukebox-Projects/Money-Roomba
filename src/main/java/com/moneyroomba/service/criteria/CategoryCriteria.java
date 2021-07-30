@@ -38,6 +38,8 @@ public class CategoryCriteria implements Serializable, Criteria {
 
     private LongFilter transactionId;
 
+    private LongFilter scheduledTransactionId;
+
     private LongFilter parentId;
 
     private LongFilter userId;
@@ -52,6 +54,7 @@ public class CategoryCriteria implements Serializable, Criteria {
         this.icon = other.icon == null ? null : other.icon.copy();
         this.categoryId = other.categoryId == null ? null : other.categoryId.copy();
         this.transactionId = other.transactionId == null ? null : other.transactionId.copy();
+        this.scheduledTransactionId = other.scheduledTransactionId == null ? null : other.scheduledTransactionId.copy();
         this.parentId = other.parentId == null ? null : other.parentId.copy();
         this.userId = other.userId == null ? null : other.userId.copy();
     }
@@ -166,6 +169,21 @@ public class CategoryCriteria implements Serializable, Criteria {
         this.transactionId = transactionId;
     }
 
+    public LongFilter getScheduledTransactionId() {
+        return scheduledTransactionId;
+    }
+
+    public LongFilter scheduledTransactionId() {
+        if (scheduledTransactionId == null) {
+            scheduledTransactionId = new LongFilter();
+        }
+        return scheduledTransactionId;
+    }
+
+    public void setScheduledTransactionId(LongFilter scheduledTransactionId) {
+        this.scheduledTransactionId = scheduledTransactionId;
+    }
+
     public LongFilter getParentId() {
         return parentId;
     }
@@ -213,6 +231,7 @@ public class CategoryCriteria implements Serializable, Criteria {
             Objects.equals(icon, that.icon) &&
             Objects.equals(categoryId, that.categoryId) &&
             Objects.equals(transactionId, that.transactionId) &&
+            Objects.equals(scheduledTransactionId, that.scheduledTransactionId) &&
             Objects.equals(parentId, that.parentId) &&
             Objects.equals(userId, that.userId)
         );
@@ -220,7 +239,7 @@ public class CategoryCriteria implements Serializable, Criteria {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, isActive, userCreated, icon, categoryId, transactionId, parentId, userId);
+        return Objects.hash(id, name, isActive, userCreated, icon, categoryId, transactionId, scheduledTransactionId, parentId, userId);
     }
 
     // prettier-ignore
@@ -234,6 +253,7 @@ public class CategoryCriteria implements Serializable, Criteria {
             (icon != null ? "icon=" + icon + ", " : "") +
             (categoryId != null ? "categoryId=" + categoryId + ", " : "") +
             (transactionId != null ? "transactionId=" + transactionId + ", " : "") +
+            (scheduledTransactionId != null ? "scheduledTransactionId=" + scheduledTransactionId + ", " : "") +
             (parentId != null ? "parentId=" + parentId + ", " : "") +
             (userId != null ? "userId=" + userId + ", " : "") +
             "}";

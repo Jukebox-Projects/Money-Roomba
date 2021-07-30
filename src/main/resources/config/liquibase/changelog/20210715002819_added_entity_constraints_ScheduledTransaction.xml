@@ -25,5 +25,11 @@
                                  constraintName="fk_t_scheduled_transaction__category_id"
                                  referencedColumnNames="id"
                                  referencedTableName="t_category"/>
+
+        <addForeignKeyConstraint baseColumnNames="wallet_id"
+                                 baseTableName="t_scheduled_transaction"
+                                 constraintName="fk_t_scheduled_transaction__wallet_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="t_wallet"/>
     </changeSet>
 </databaseChangeLog>

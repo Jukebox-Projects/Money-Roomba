@@ -41,23 +41,21 @@ public class Category implements Serializable {
 
     @OneToMany(mappedBy = "parent")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @JsonIgnoreProperties(value = { "categories", "transactions", "parent", "user" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "categories", "transactions", "scheduledTransactions", "parent", "user" }, allowSetters = true)
     private Set<Category> categories = new HashSet<>();
 
     @OneToMany(mappedBy = "category")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @JsonIgnoreProperties(value = { "attachment", "wallet", "currency", "category", "sourceUser" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "attachment", "wallet", "currency", "category", "sourceUser", "recievingUser" }, allowSetters = true)
     private Set<Transaction> transactions = new HashSet<>();
 
+    @OneToMany(mappedBy = "category")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @JsonIgnoreProperties(
-        value = { "currency", "category", "sourceUser", "startDate", "endDate", "separationCount", "maxNumberOfOcurrences" },
-        allowSetters = true
-    )
-    private Set<Transaction> scheduledTransactions = new HashSet<>();
+    @JsonIgnoreProperties(value = { "currency", "sourceUser", "category", "wallet" }, allowSetters = true)
+    private Set<ScheduledTransaction> scheduledTransactions = new HashSet<>();
 
     @ManyToOne
-    @JsonIgnoreProperties(value = { "categories", "transactions", "parent", "user" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "categories", "transactions", "scheduledTransactions", "parent", "user" }, allowSetters = true)
     private Category parent;
 
     @ManyToOne
@@ -69,7 +67,9 @@ public class Category implements Serializable {
             "categories",
             "events",
             "transactions",
+            "scheduledTransactions",
             "userDetails",
+            "recievedTransactions",
             "targetContacts",
             "contact",
             "sourceContacts",
@@ -204,6 +204,37 @@ public class Category implements Serializable {
             transactions.forEach(i -> i.setCategory(this));
         }
         this.transactions = transactions;
+    }
+
+    public Set<ScheduledTransaction> getScheduledTransactions() {
+        return this.scheduledTransactions;
+    }
+
+    public Category scheduledTransactions(Set<ScheduledTransaction> scheduledTransactions) {
+        this.setScheduledTransactions(scheduledTransactions);
+        return this;
+    }
+
+    public Category addScheduledTransaction(ScheduledTransaction scheduledTransaction) {
+        this.scheduledTransactions.add(scheduledTransaction);
+        scheduledTransaction.setCategory(this);
+        return this;
+    }
+
+    public Category removeScheduledTransaction(ScheduledTransaction scheduledTransaction) {
+        this.scheduledTransactions.remove(scheduledTransaction);
+        scheduledTransaction.setCategory(null);
+        return this;
+    }
+
+    public void setScheduledTransactions(Set<ScheduledTransaction> scheduledTransactions) {
+        if (this.scheduledTransactions != null) {
+            this.scheduledTransactions.forEach(i -> i.setCategory(null));
+        }
+        if (scheduledTransactions != null) {
+            scheduledTransactions.forEach(i -> i.setCategory(this));
+        }
+        this.scheduledTransactions = scheduledTransactions;
     }
 
     public Category getParent() {
