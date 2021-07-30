@@ -4,6 +4,7 @@ import * as dayjs from 'dayjs';
 
 import { DATE_FORMAT } from 'app/config/input.constants';
 import { MovementType } from 'app/entities/enumerations/movement-type.model';
+import { RecurringType } from 'app/entities/enumerations/recurring-type.model';
 import { IScheduledTransaction, ScheduledTransaction } from '../scheduled-transaction.model';
 
 import { ScheduledTransactionService } from './scheduled-transaction.service';
@@ -34,7 +35,13 @@ describe('Service Tests', () => {
         startDate: currentDate,
         endDate: currentDate,
         addToReports: false,
-        incomingTransaction: false,
+        recurringType: RecurringType.DAILY,
+        separationCount: 0,
+        maxNumberOfOcurrences: 0,
+        dayOfWeek: 0,
+        weekOfMonth: 0,
+        dayOfMonth: 0,
+        monthOfYear: 0,
       };
     });
 
@@ -91,7 +98,13 @@ describe('Service Tests', () => {
             startDate: currentDate.format(DATE_FORMAT),
             endDate: currentDate.format(DATE_FORMAT),
             addToReports: true,
-            incomingTransaction: true,
+            recurringType: 'BBBBBB',
+            separationCount: 1,
+            maxNumberOfOcurrences: 1,
+            dayOfWeek: 1,
+            weekOfMonth: 1,
+            dayOfMonth: 1,
+            monthOfYear: 1,
           },
           elemDefault
         );
@@ -118,7 +131,11 @@ describe('Service Tests', () => {
             description: 'BBBBBB',
             originalAmount: 1,
             addToReports: true,
-            incomingTransaction: true,
+            recurringType: 'BBBBBB',
+            maxNumberOfOcurrences: 1,
+            dayOfWeek: 1,
+            dayOfMonth: 1,
+            monthOfYear: 1,
           },
           new ScheduledTransaction()
         );
@@ -151,7 +168,13 @@ describe('Service Tests', () => {
             startDate: currentDate.format(DATE_FORMAT),
             endDate: currentDate.format(DATE_FORMAT),
             addToReports: true,
-            incomingTransaction: true,
+            recurringType: 'BBBBBB',
+            separationCount: 1,
+            maxNumberOfOcurrences: 1,
+            dayOfWeek: 1,
+            weekOfMonth: 1,
+            dayOfMonth: 1,
+            monthOfYear: 1,
           },
           elemDefault
         );
@@ -209,7 +232,7 @@ describe('Service Tests', () => {
         });
 
         it('should add only unique ScheduledTransaction to an array', () => {
-          const scheduledTransactionArray: IScheduledTransaction[] = [{ id: 123 }, { id: 456 }, { id: 35328 }];
+          const scheduledTransactionArray: IScheduledTransaction[] = [{ id: 123 }, { id: 456 }, { id: 95175 }];
           const scheduledTransactionCollection: IScheduledTransaction[] = [{ id: 123 }];
           expectedResult = service.addScheduledTransactionToCollectionIfMissing(
             scheduledTransactionCollection,

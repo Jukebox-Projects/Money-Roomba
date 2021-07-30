@@ -103,18 +103,30 @@ public class ScheduledTransactionQueryService extends QueryService<ScheduledTran
             if (criteria.getAddToReports() != null) {
                 specification = specification.and(buildSpecification(criteria.getAddToReports(), ScheduledTransaction_.addToReports));
             }
-            if (criteria.getIncomingTransaction() != null) {
-                specification =
-                    specification.and(buildSpecification(criteria.getIncomingTransaction(), ScheduledTransaction_.incomingTransaction));
+            if (criteria.getRecurringType() != null) {
+                specification = specification.and(buildSpecification(criteria.getRecurringType(), ScheduledTransaction_.recurringType));
             }
-            if (criteria.getSchedulePatternId() != null) {
+            if (criteria.getSeparationCount() != null) {
+                specification =
+                    specification.and(buildRangeSpecification(criteria.getSeparationCount(), ScheduledTransaction_.separationCount));
+            }
+            if (criteria.getMaxNumberOfOcurrences() != null) {
                 specification =
                     specification.and(
-                        buildSpecification(
-                            criteria.getSchedulePatternId(),
-                            root -> root.join(ScheduledTransaction_.schedulePatterns, JoinType.LEFT).get(SchedulePattern_.id)
-                        )
+                        buildRangeSpecification(criteria.getMaxNumberOfOcurrences(), ScheduledTransaction_.maxNumberOfOcurrences)
                     );
+            }
+            if (criteria.getDayOfWeek() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getDayOfWeek(), ScheduledTransaction_.dayOfWeek));
+            }
+            if (criteria.getWeekOfMonth() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getWeekOfMonth(), ScheduledTransaction_.weekOfMonth));
+            }
+            if (criteria.getDayOfMonth() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getDayOfMonth(), ScheduledTransaction_.dayOfMonth));
+            }
+            if (criteria.getMonthOfYear() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getMonthOfYear(), ScheduledTransaction_.monthOfYear));
             }
             if (criteria.getCurrencyId() != null) {
                 specification =
@@ -122,6 +134,24 @@ public class ScheduledTransactionQueryService extends QueryService<ScheduledTran
                         buildSpecification(
                             criteria.getCurrencyId(),
                             root -> root.join(ScheduledTransaction_.currency, JoinType.LEFT).get(Currency_.id)
+                        )
+                    );
+            }
+            if (criteria.getSourceUserId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(
+                            criteria.getSourceUserId(),
+                            root -> root.join(ScheduledTransaction_.sourceUser, JoinType.LEFT).get(UserDetails_.id)
+                        )
+                    );
+            }
+            if (criteria.getCategoryId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(
+                            criteria.getCategoryId(),
+                            root -> root.join(ScheduledTransaction_.category, JoinType.LEFT).get(Category_.id)
                         )
                     );
             }

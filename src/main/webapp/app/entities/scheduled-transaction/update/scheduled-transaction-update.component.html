@@ -182,32 +182,235 @@
         </div>
 
         <div class="form-group">
-          <label
-            class="form-control-label"
-            jhiTranslate="moneyRoombaApp.scheduledTransaction.incomingTransaction"
-            for="field_incomingTransaction"
-            >Incoming Transaction</label
+          <label class="form-control-label" jhiTranslate="moneyRoombaApp.scheduledTransaction.recurringType" for="field_recurringType"
+            >Recurring Type</label
           >
-          <input
-            type="checkbox"
-            class="form-check"
-            name="incomingTransaction"
-            id="field_incomingTransaction"
-            data-cy="incomingTransaction"
-            formControlName="incomingTransaction"
-          />
+          <select
+            class="form-control"
+            name="recurringType"
+            formControlName="recurringType"
+            id="field_recurringType"
+            data-cy="recurringType"
+          >
+            <option [ngValue]="null">{{ 'moneyRoombaApp.RecurringType.null' | translate }}</option>
+            <option value="DAILY">{{ 'moneyRoombaApp.RecurringType.DAILY' | translate }}</option>
+            <option value="WEEKLY">{{ 'moneyRoombaApp.RecurringType.WEEKLY' | translate }}</option>
+            <option value="MONTHLY">{{ 'moneyRoombaApp.RecurringType.MONTHLY' | translate }}</option>
+            <option value="YEARLY">{{ 'moneyRoombaApp.RecurringType.YEARLY' | translate }}</option>
+          </select>
           <div
             *ngIf="
-              editForm.get('incomingTransaction')!.invalid &&
-              (editForm.get('incomingTransaction')!.dirty || editForm.get('incomingTransaction')!.touched)
+              editForm.get('recurringType')!.invalid && (editForm.get('recurringType')!.dirty || editForm.get('recurringType')!.touched)
             "
           >
             <small
               class="form-text text-danger"
-              *ngIf="editForm.get('incomingTransaction')?.errors?.required"
+              *ngIf="editForm.get('recurringType')?.errors?.required"
               jhiTranslate="entity.validation.required"
             >
               This field is required.
+            </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" jhiTranslate="moneyRoombaApp.scheduledTransaction.separationCount" for="field_separationCount"
+            >Separation Count</label
+          >
+          <input
+            type="number"
+            class="form-control"
+            name="separationCount"
+            id="field_separationCount"
+            data-cy="separationCount"
+            formControlName="separationCount"
+          />
+          <div
+            *ngIf="
+              editForm.get('separationCount')!.invalid &&
+              (editForm.get('separationCount')!.dirty || editForm.get('separationCount')!.touched)
+            "
+          >
+            <small
+              class="form-text text-danger"
+              *ngIf="editForm.get('separationCount')?.errors?.min"
+              jhiTranslate="entity.validation.min"
+              [translateValues]="{ min: 0 }"
+            >
+              This field should be at least 0.
+            </small>
+            <small
+              class="form-text text-danger"
+              [hidden]="!editForm.get('separationCount')?.errors?.number"
+              jhiTranslate="entity.validation.number"
+            >
+              This field should be a number.
+            </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label
+            class="form-control-label"
+            jhiTranslate="moneyRoombaApp.scheduledTransaction.maxNumberOfOcurrences"
+            for="field_maxNumberOfOcurrences"
+            >Max Number Of Ocurrences</label
+          >
+          <input
+            type="number"
+            class="form-control"
+            name="maxNumberOfOcurrences"
+            id="field_maxNumberOfOcurrences"
+            data-cy="maxNumberOfOcurrences"
+            formControlName="maxNumberOfOcurrences"
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" jhiTranslate="moneyRoombaApp.scheduledTransaction.dayOfWeek" for="field_dayOfWeek"
+            >Day Of Week</label
+          >
+          <input type="number" class="form-control" name="dayOfWeek" id="field_dayOfWeek" data-cy="dayOfWeek" formControlName="dayOfWeek" />
+          <div *ngIf="editForm.get('dayOfWeek')!.invalid && (editForm.get('dayOfWeek')!.dirty || editForm.get('dayOfWeek')!.touched)">
+            <small
+              class="form-text text-danger"
+              *ngIf="editForm.get('dayOfWeek')?.errors?.min"
+              jhiTranslate="entity.validation.min"
+              [translateValues]="{ min: 0 }"
+            >
+              This field should be at least 0.
+            </small>
+            <small
+              class="form-text text-danger"
+              *ngIf="editForm.get('dayOfWeek')?.errors?.max"
+              jhiTranslate="entity.validation.max"
+              [translateValues]="{ max: 6 }"
+            >
+              This field cannot be more than 6.
+            </small>
+            <small
+              class="form-text text-danger"
+              [hidden]="!editForm.get('dayOfWeek')?.errors?.number"
+              jhiTranslate="entity.validation.number"
+            >
+              This field should be a number.
+            </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" jhiTranslate="moneyRoombaApp.scheduledTransaction.weekOfMonth" for="field_weekOfMonth"
+            >Week Of Month</label
+          >
+          <input
+            type="number"
+            class="form-control"
+            name="weekOfMonth"
+            id="field_weekOfMonth"
+            data-cy="weekOfMonth"
+            formControlName="weekOfMonth"
+          />
+          <div *ngIf="editForm.get('weekOfMonth')!.invalid && (editForm.get('weekOfMonth')!.dirty || editForm.get('weekOfMonth')!.touched)">
+            <small
+              class="form-text text-danger"
+              *ngIf="editForm.get('weekOfMonth')?.errors?.min"
+              jhiTranslate="entity.validation.min"
+              [translateValues]="{ min: 0 }"
+            >
+              This field should be at least 0.
+            </small>
+            <small
+              class="form-text text-danger"
+              *ngIf="editForm.get('weekOfMonth')?.errors?.max"
+              jhiTranslate="entity.validation.max"
+              [translateValues]="{ max: 5 }"
+            >
+              This field cannot be more than 5.
+            </small>
+            <small
+              class="form-text text-danger"
+              [hidden]="!editForm.get('weekOfMonth')?.errors?.number"
+              jhiTranslate="entity.validation.number"
+            >
+              This field should be a number.
+            </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" jhiTranslate="moneyRoombaApp.scheduledTransaction.dayOfMonth" for="field_dayOfMonth"
+            >Day Of Month</label
+          >
+          <input
+            type="number"
+            class="form-control"
+            name="dayOfMonth"
+            id="field_dayOfMonth"
+            data-cy="dayOfMonth"
+            formControlName="dayOfMonth"
+          />
+          <div *ngIf="editForm.get('dayOfMonth')!.invalid && (editForm.get('dayOfMonth')!.dirty || editForm.get('dayOfMonth')!.touched)">
+            <small
+              class="form-text text-danger"
+              *ngIf="editForm.get('dayOfMonth')?.errors?.min"
+              jhiTranslate="entity.validation.min"
+              [translateValues]="{ min: 0 }"
+            >
+              This field should be at least 0.
+            </small>
+            <small
+              class="form-text text-danger"
+              *ngIf="editForm.get('dayOfMonth')?.errors?.max"
+              jhiTranslate="entity.validation.max"
+              [translateValues]="{ max: 31 }"
+            >
+              This field cannot be more than 31.
+            </small>
+            <small
+              class="form-text text-danger"
+              [hidden]="!editForm.get('dayOfMonth')?.errors?.number"
+              jhiTranslate="entity.validation.number"
+            >
+              This field should be a number.
+            </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" jhiTranslate="moneyRoombaApp.scheduledTransaction.monthOfYear" for="field_monthOfYear"
+            >Month Of Year</label
+          >
+          <input
+            type="number"
+            class="form-control"
+            name="monthOfYear"
+            id="field_monthOfYear"
+            data-cy="monthOfYear"
+            formControlName="monthOfYear"
+          />
+          <div *ngIf="editForm.get('monthOfYear')!.invalid && (editForm.get('monthOfYear')!.dirty || editForm.get('monthOfYear')!.touched)">
+            <small
+              class="form-text text-danger"
+              *ngIf="editForm.get('monthOfYear')?.errors?.min"
+              jhiTranslate="entity.validation.min"
+              [translateValues]="{ min: 0 }"
+            >
+              This field should be at least 0.
+            </small>
+            <small
+              class="form-text text-danger"
+              *ngIf="editForm.get('monthOfYear')?.errors?.max"
+              jhiTranslate="entity.validation.max"
+              [translateValues]="{ max: 11 }"
+            >
+              This field cannot be more than 11.
+            </small>
+            <small
+              class="form-text text-danger"
+              [hidden]="!editForm.get('monthOfYear')?.errors?.number"
+              jhiTranslate="entity.validation.number"
+            >
+              This field should be a number.
             </small>
           </div>
         </div>
@@ -223,6 +426,38 @@
               *ngFor="let currencyOption of currenciesSharedCollection; trackBy: trackCurrencyById"
             >
               {{ currencyOption.id }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" jhiTranslate="moneyRoombaApp.scheduledTransaction.sourceUser" for="field_sourceUser"
+            >Source User</label
+          >
+          <select class="form-control" id="field_sourceUser" data-cy="sourceUser" name="sourceUser" formControlName="sourceUser">
+            <option [ngValue]="null"></option>
+            <option
+              [ngValue]="
+                userDetailsOption.id === editForm.get('sourceUser')!.value?.id ? editForm.get('sourceUser')!.value : userDetailsOption
+              "
+              *ngFor="let userDetailsOption of userDetailsSharedCollection; trackBy: trackUserDetailsById"
+            >
+              {{ userDetailsOption.id }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" jhiTranslate="moneyRoombaApp.scheduledTransaction.category" for="field_category"
+            >Category</label
+          >
+          <select class="form-control" id="field_category" data-cy="category" name="category" formControlName="category">
+            <option [ngValue]="null"></option>
+            <option
+              [ngValue]="categoryOption.id === editForm.get('category')!.value?.id ? editForm.get('category')!.value : categoryOption"
+              *ngFor="let categoryOption of categoriesSharedCollection; trackBy: trackCategoryById"
+            >
+              {{ categoryOption.name }}
             </option>
           </select>
         </div>

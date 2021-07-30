@@ -7,10 +7,12 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import com.moneyroomba.IntegrationTest;
+import com.moneyroomba.domain.Category;
 import com.moneyroomba.domain.Currency;
-import com.moneyroomba.domain.SchedulePattern;
 import com.moneyroomba.domain.ScheduledTransaction;
+import com.moneyroomba.domain.UserDetails;
 import com.moneyroomba.domain.enumeration.MovementType;
+import com.moneyroomba.domain.enumeration.RecurringType;
 import com.moneyroomba.repository.ScheduledTransactionRepository;
 import com.moneyroomba.service.criteria.ScheduledTransactionCriteria;
 import java.time.LocalDate;
@@ -60,8 +62,32 @@ class ScheduledTransactionResourceIT {
     private static final Boolean DEFAULT_ADD_TO_REPORTS = false;
     private static final Boolean UPDATED_ADD_TO_REPORTS = true;
 
-    private static final Boolean DEFAULT_INCOMING_TRANSACTION = false;
-    private static final Boolean UPDATED_INCOMING_TRANSACTION = true;
+    private static final RecurringType DEFAULT_RECURRING_TYPE = RecurringType.DAILY;
+    private static final RecurringType UPDATED_RECURRING_TYPE = RecurringType.WEEKLY;
+
+    private static final Integer DEFAULT_SEPARATION_COUNT = 0;
+    private static final Integer UPDATED_SEPARATION_COUNT = 1;
+    private static final Integer SMALLER_SEPARATION_COUNT = 0 - 1;
+
+    private static final Integer DEFAULT_MAX_NUMBER_OF_OCURRENCES = 1;
+    private static final Integer UPDATED_MAX_NUMBER_OF_OCURRENCES = 2;
+    private static final Integer SMALLER_MAX_NUMBER_OF_OCURRENCES = 1 - 1;
+
+    private static final Integer DEFAULT_DAY_OF_WEEK = 0;
+    private static final Integer UPDATED_DAY_OF_WEEK = 1;
+    private static final Integer SMALLER_DAY_OF_WEEK = 0 - 1;
+
+    private static final Integer DEFAULT_WEEK_OF_MONTH = 0;
+    private static final Integer UPDATED_WEEK_OF_MONTH = 1;
+    private static final Integer SMALLER_WEEK_OF_MONTH = 0 - 1;
+
+    private static final Integer DEFAULT_DAY_OF_MONTH = 0;
+    private static final Integer UPDATED_DAY_OF_MONTH = 1;
+    private static final Integer SMALLER_DAY_OF_MONTH = 0 - 1;
+
+    private static final Integer DEFAULT_MONTH_OF_YEAR = 0;
+    private static final Integer UPDATED_MONTH_OF_YEAR = 1;
+    private static final Integer SMALLER_MONTH_OF_YEAR = 0 - 1;
 
     private static final String ENTITY_API_URL = "/api/scheduled-transactions";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
@@ -95,7 +121,13 @@ class ScheduledTransactionResourceIT {
             .startDate(DEFAULT_START_DATE)
             .endDate(DEFAULT_END_DATE)
             .addToReports(DEFAULT_ADD_TO_REPORTS)
-            .incomingTransaction(DEFAULT_INCOMING_TRANSACTION);
+            .recurringType(DEFAULT_RECURRING_TYPE)
+            .separationCount(DEFAULT_SEPARATION_COUNT)
+            .maxNumberOfOcurrences(DEFAULT_MAX_NUMBER_OF_OCURRENCES)
+            .dayOfWeek(DEFAULT_DAY_OF_WEEK)
+            .weekOfMonth(DEFAULT_WEEK_OF_MONTH)
+            .dayOfMonth(DEFAULT_DAY_OF_MONTH)
+            .monthOfYear(DEFAULT_MONTH_OF_YEAR);
         return scheduledTransaction;
     }
 
@@ -114,7 +146,13 @@ class ScheduledTransactionResourceIT {
             .startDate(UPDATED_START_DATE)
             .endDate(UPDATED_END_DATE)
             .addToReports(UPDATED_ADD_TO_REPORTS)
-            .incomingTransaction(UPDATED_INCOMING_TRANSACTION);
+            .recurringType(UPDATED_RECURRING_TYPE)
+            .separationCount(UPDATED_SEPARATION_COUNT)
+            .maxNumberOfOcurrences(UPDATED_MAX_NUMBER_OF_OCURRENCES)
+            .dayOfWeek(UPDATED_DAY_OF_WEEK)
+            .weekOfMonth(UPDATED_WEEK_OF_MONTH)
+            .dayOfMonth(UPDATED_DAY_OF_MONTH)
+            .monthOfYear(UPDATED_MONTH_OF_YEAR);
         return scheduledTransaction;
     }
 
@@ -148,7 +186,13 @@ class ScheduledTransactionResourceIT {
         assertThat(testScheduledTransaction.getStartDate()).isEqualTo(DEFAULT_START_DATE);
         assertThat(testScheduledTransaction.getEndDate()).isEqualTo(DEFAULT_END_DATE);
         assertThat(testScheduledTransaction.getAddToReports()).isEqualTo(DEFAULT_ADD_TO_REPORTS);
-        assertThat(testScheduledTransaction.getIncomingTransaction()).isEqualTo(DEFAULT_INCOMING_TRANSACTION);
+        assertThat(testScheduledTransaction.getRecurringType()).isEqualTo(DEFAULT_RECURRING_TYPE);
+        assertThat(testScheduledTransaction.getSeparationCount()).isEqualTo(DEFAULT_SEPARATION_COUNT);
+        assertThat(testScheduledTransaction.getMaxNumberOfOcurrences()).isEqualTo(DEFAULT_MAX_NUMBER_OF_OCURRENCES);
+        assertThat(testScheduledTransaction.getDayOfWeek()).isEqualTo(DEFAULT_DAY_OF_WEEK);
+        assertThat(testScheduledTransaction.getWeekOfMonth()).isEqualTo(DEFAULT_WEEK_OF_MONTH);
+        assertThat(testScheduledTransaction.getDayOfMonth()).isEqualTo(DEFAULT_DAY_OF_MONTH);
+        assertThat(testScheduledTransaction.getMonthOfYear()).isEqualTo(DEFAULT_MONTH_OF_YEAR);
     }
 
     @Test
@@ -286,10 +330,10 @@ class ScheduledTransactionResourceIT {
 
     @Test
     @Transactional
-    void checkIncomingTransactionIsRequired() throws Exception {
+    void checkRecurringTypeIsRequired() throws Exception {
         int databaseSizeBeforeTest = scheduledTransactionRepository.findAll().size();
         // set the field null
-        scheduledTransaction.setIncomingTransaction(null);
+        scheduledTransaction.setRecurringType(null);
 
         // Create the ScheduledTransaction, which fails.
 
@@ -325,7 +369,13 @@ class ScheduledTransactionResourceIT {
             .andExpect(jsonPath("$.[*].startDate").value(hasItem(DEFAULT_START_DATE.toString())))
             .andExpect(jsonPath("$.[*].endDate").value(hasItem(DEFAULT_END_DATE.toString())))
             .andExpect(jsonPath("$.[*].addToReports").value(hasItem(DEFAULT_ADD_TO_REPORTS.booleanValue())))
-            .andExpect(jsonPath("$.[*].incomingTransaction").value(hasItem(DEFAULT_INCOMING_TRANSACTION.booleanValue())));
+            .andExpect(jsonPath("$.[*].recurringType").value(hasItem(DEFAULT_RECURRING_TYPE.toString())))
+            .andExpect(jsonPath("$.[*].separationCount").value(hasItem(DEFAULT_SEPARATION_COUNT)))
+            .andExpect(jsonPath("$.[*].maxNumberOfOcurrences").value(hasItem(DEFAULT_MAX_NUMBER_OF_OCURRENCES)))
+            .andExpect(jsonPath("$.[*].dayOfWeek").value(hasItem(DEFAULT_DAY_OF_WEEK)))
+            .andExpect(jsonPath("$.[*].weekOfMonth").value(hasItem(DEFAULT_WEEK_OF_MONTH)))
+            .andExpect(jsonPath("$.[*].dayOfMonth").value(hasItem(DEFAULT_DAY_OF_MONTH)))
+            .andExpect(jsonPath("$.[*].monthOfYear").value(hasItem(DEFAULT_MONTH_OF_YEAR)));
     }
 
     @Test
@@ -347,7 +397,13 @@ class ScheduledTransactionResourceIT {
             .andExpect(jsonPath("$.startDate").value(DEFAULT_START_DATE.toString()))
             .andExpect(jsonPath("$.endDate").value(DEFAULT_END_DATE.toString()))
             .andExpect(jsonPath("$.addToReports").value(DEFAULT_ADD_TO_REPORTS.booleanValue()))
-            .andExpect(jsonPath("$.incomingTransaction").value(DEFAULT_INCOMING_TRANSACTION.booleanValue()));
+            .andExpect(jsonPath("$.recurringType").value(DEFAULT_RECURRING_TYPE.toString()))
+            .andExpect(jsonPath("$.separationCount").value(DEFAULT_SEPARATION_COUNT))
+            .andExpect(jsonPath("$.maxNumberOfOcurrences").value(DEFAULT_MAX_NUMBER_OF_OCURRENCES))
+            .andExpect(jsonPath("$.dayOfWeek").value(DEFAULT_DAY_OF_WEEK))
+            .andExpect(jsonPath("$.weekOfMonth").value(DEFAULT_WEEK_OF_MONTH))
+            .andExpect(jsonPath("$.dayOfMonth").value(DEFAULT_DAY_OF_MONTH))
+            .andExpect(jsonPath("$.monthOfYear").value(DEFAULT_MONTH_OF_YEAR));
     }
 
     @Test
@@ -942,75 +998,680 @@ class ScheduledTransactionResourceIT {
 
     @Test
     @Transactional
-    void getAllScheduledTransactionsByIncomingTransactionIsEqualToSomething() throws Exception {
+    void getAllScheduledTransactionsByRecurringTypeIsEqualToSomething() throws Exception {
         // Initialize the database
         scheduledTransactionRepository.saveAndFlush(scheduledTransaction);
 
-        // Get all the scheduledTransactionList where incomingTransaction equals to DEFAULT_INCOMING_TRANSACTION
-        defaultScheduledTransactionShouldBeFound("incomingTransaction.equals=" + DEFAULT_INCOMING_TRANSACTION);
+        // Get all the scheduledTransactionList where recurringType equals to DEFAULT_RECURRING_TYPE
+        defaultScheduledTransactionShouldBeFound("recurringType.equals=" + DEFAULT_RECURRING_TYPE);
 
-        // Get all the scheduledTransactionList where incomingTransaction equals to UPDATED_INCOMING_TRANSACTION
-        defaultScheduledTransactionShouldNotBeFound("incomingTransaction.equals=" + UPDATED_INCOMING_TRANSACTION);
+        // Get all the scheduledTransactionList where recurringType equals to UPDATED_RECURRING_TYPE
+        defaultScheduledTransactionShouldNotBeFound("recurringType.equals=" + UPDATED_RECURRING_TYPE);
     }
 
     @Test
     @Transactional
-    void getAllScheduledTransactionsByIncomingTransactionIsNotEqualToSomething() throws Exception {
+    void getAllScheduledTransactionsByRecurringTypeIsNotEqualToSomething() throws Exception {
         // Initialize the database
         scheduledTransactionRepository.saveAndFlush(scheduledTransaction);
 
-        // Get all the scheduledTransactionList where incomingTransaction not equals to DEFAULT_INCOMING_TRANSACTION
-        defaultScheduledTransactionShouldNotBeFound("incomingTransaction.notEquals=" + DEFAULT_INCOMING_TRANSACTION);
+        // Get all the scheduledTransactionList where recurringType not equals to DEFAULT_RECURRING_TYPE
+        defaultScheduledTransactionShouldNotBeFound("recurringType.notEquals=" + DEFAULT_RECURRING_TYPE);
 
-        // Get all the scheduledTransactionList where incomingTransaction not equals to UPDATED_INCOMING_TRANSACTION
-        defaultScheduledTransactionShouldBeFound("incomingTransaction.notEquals=" + UPDATED_INCOMING_TRANSACTION);
+        // Get all the scheduledTransactionList where recurringType not equals to UPDATED_RECURRING_TYPE
+        defaultScheduledTransactionShouldBeFound("recurringType.notEquals=" + UPDATED_RECURRING_TYPE);
     }
 
     @Test
     @Transactional
-    void getAllScheduledTransactionsByIncomingTransactionIsInShouldWork() throws Exception {
+    void getAllScheduledTransactionsByRecurringTypeIsInShouldWork() throws Exception {
         // Initialize the database
         scheduledTransactionRepository.saveAndFlush(scheduledTransaction);
 
-        // Get all the scheduledTransactionList where incomingTransaction in DEFAULT_INCOMING_TRANSACTION or UPDATED_INCOMING_TRANSACTION
+        // Get all the scheduledTransactionList where recurringType in DEFAULT_RECURRING_TYPE or UPDATED_RECURRING_TYPE
+        defaultScheduledTransactionShouldBeFound("recurringType.in=" + DEFAULT_RECURRING_TYPE + "," + UPDATED_RECURRING_TYPE);
+
+        // Get all the scheduledTransactionList where recurringType equals to UPDATED_RECURRING_TYPE
+        defaultScheduledTransactionShouldNotBeFound("recurringType.in=" + UPDATED_RECURRING_TYPE);
+    }
+
+    @Test
+    @Transactional
+    void getAllScheduledTransactionsByRecurringTypeIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        scheduledTransactionRepository.saveAndFlush(scheduledTransaction);
+
+        // Get all the scheduledTransactionList where recurringType is not null
+        defaultScheduledTransactionShouldBeFound("recurringType.specified=true");
+
+        // Get all the scheduledTransactionList where recurringType is null
+        defaultScheduledTransactionShouldNotBeFound("recurringType.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllScheduledTransactionsBySeparationCountIsEqualToSomething() throws Exception {
+        // Initialize the database
+        scheduledTransactionRepository.saveAndFlush(scheduledTransaction);
+
+        // Get all the scheduledTransactionList where separationCount equals to DEFAULT_SEPARATION_COUNT
+        defaultScheduledTransactionShouldBeFound("separationCount.equals=" + DEFAULT_SEPARATION_COUNT);
+
+        // Get all the scheduledTransactionList where separationCount equals to UPDATED_SEPARATION_COUNT
+        defaultScheduledTransactionShouldNotBeFound("separationCount.equals=" + UPDATED_SEPARATION_COUNT);
+    }
+
+    @Test
+    @Transactional
+    void getAllScheduledTransactionsBySeparationCountIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        scheduledTransactionRepository.saveAndFlush(scheduledTransaction);
+
+        // Get all the scheduledTransactionList where separationCount not equals to DEFAULT_SEPARATION_COUNT
+        defaultScheduledTransactionShouldNotBeFound("separationCount.notEquals=" + DEFAULT_SEPARATION_COUNT);
+
+        // Get all the scheduledTransactionList where separationCount not equals to UPDATED_SEPARATION_COUNT
+        defaultScheduledTransactionShouldBeFound("separationCount.notEquals=" + UPDATED_SEPARATION_COUNT);
+    }
+
+    @Test
+    @Transactional
+    void getAllScheduledTransactionsBySeparationCountIsInShouldWork() throws Exception {
+        // Initialize the database
+        scheduledTransactionRepository.saveAndFlush(scheduledTransaction);
+
+        // Get all the scheduledTransactionList where separationCount in DEFAULT_SEPARATION_COUNT or UPDATED_SEPARATION_COUNT
+        defaultScheduledTransactionShouldBeFound("separationCount.in=" + DEFAULT_SEPARATION_COUNT + "," + UPDATED_SEPARATION_COUNT);
+
+        // Get all the scheduledTransactionList where separationCount equals to UPDATED_SEPARATION_COUNT
+        defaultScheduledTransactionShouldNotBeFound("separationCount.in=" + UPDATED_SEPARATION_COUNT);
+    }
+
+    @Test
+    @Transactional
+    void getAllScheduledTransactionsBySeparationCountIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        scheduledTransactionRepository.saveAndFlush(scheduledTransaction);
+
+        // Get all the scheduledTransactionList where separationCount is not null
+        defaultScheduledTransactionShouldBeFound("separationCount.specified=true");
+
+        // Get all the scheduledTransactionList where separationCount is null
+        defaultScheduledTransactionShouldNotBeFound("separationCount.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllScheduledTransactionsBySeparationCountIsGreaterThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        scheduledTransactionRepository.saveAndFlush(scheduledTransaction);
+
+        // Get all the scheduledTransactionList where separationCount is greater than or equal to DEFAULT_SEPARATION_COUNT
+        defaultScheduledTransactionShouldBeFound("separationCount.greaterThanOrEqual=" + DEFAULT_SEPARATION_COUNT);
+
+        // Get all the scheduledTransactionList where separationCount is greater than or equal to UPDATED_SEPARATION_COUNT
+        defaultScheduledTransactionShouldNotBeFound("separationCount.greaterThanOrEqual=" + UPDATED_SEPARATION_COUNT);
+    }
+
+    @Test
+    @Transactional
+    void getAllScheduledTransactionsBySeparationCountIsLessThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        scheduledTransactionRepository.saveAndFlush(scheduledTransaction);
+
+        // Get all the scheduledTransactionList where separationCount is less than or equal to DEFAULT_SEPARATION_COUNT
+        defaultScheduledTransactionShouldBeFound("separationCount.lessThanOrEqual=" + DEFAULT_SEPARATION_COUNT);
+
+        // Get all the scheduledTransactionList where separationCount is less than or equal to SMALLER_SEPARATION_COUNT
+        defaultScheduledTransactionShouldNotBeFound("separationCount.lessThanOrEqual=" + SMALLER_SEPARATION_COUNT);
+    }
+
+    @Test
+    @Transactional
+    void getAllScheduledTransactionsBySeparationCountIsLessThanSomething() throws Exception {
+        // Initialize the database
+        scheduledTransactionRepository.saveAndFlush(scheduledTransaction);
+
+        // Get all the scheduledTransactionList where separationCount is less than DEFAULT_SEPARATION_COUNT
+        defaultScheduledTransactionShouldNotBeFound("separationCount.lessThan=" + DEFAULT_SEPARATION_COUNT);
+
+        // Get all the scheduledTransactionList where separationCount is less than UPDATED_SEPARATION_COUNT
+        defaultScheduledTransactionShouldBeFound("separationCount.lessThan=" + UPDATED_SEPARATION_COUNT);
+    }
+
+    @Test
+    @Transactional
+    void getAllScheduledTransactionsBySeparationCountIsGreaterThanSomething() throws Exception {
+        // Initialize the database
+        scheduledTransactionRepository.saveAndFlush(scheduledTransaction);
+
+        // Get all the scheduledTransactionList where separationCount is greater than DEFAULT_SEPARATION_COUNT
+        defaultScheduledTransactionShouldNotBeFound("separationCount.greaterThan=" + DEFAULT_SEPARATION_COUNT);
+
+        // Get all the scheduledTransactionList where separationCount is greater than SMALLER_SEPARATION_COUNT
+        defaultScheduledTransactionShouldBeFound("separationCount.greaterThan=" + SMALLER_SEPARATION_COUNT);
+    }
+
+    @Test
+    @Transactional
+    void getAllScheduledTransactionsByMaxNumberOfOcurrencesIsEqualToSomething() throws Exception {
+        // Initialize the database
+        scheduledTransactionRepository.saveAndFlush(scheduledTransaction);
+
+        // Get all the scheduledTransactionList where maxNumberOfOcurrences equals to DEFAULT_MAX_NUMBER_OF_OCURRENCES
+        defaultScheduledTransactionShouldBeFound("maxNumberOfOcurrences.equals=" + DEFAULT_MAX_NUMBER_OF_OCURRENCES);
+
+        // Get all the scheduledTransactionList where maxNumberOfOcurrences equals to UPDATED_MAX_NUMBER_OF_OCURRENCES
+        defaultScheduledTransactionShouldNotBeFound("maxNumberOfOcurrences.equals=" + UPDATED_MAX_NUMBER_OF_OCURRENCES);
+    }
+
+    @Test
+    @Transactional
+    void getAllScheduledTransactionsByMaxNumberOfOcurrencesIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        scheduledTransactionRepository.saveAndFlush(scheduledTransaction);
+
+        // Get all the scheduledTransactionList where maxNumberOfOcurrences not equals to DEFAULT_MAX_NUMBER_OF_OCURRENCES
+        defaultScheduledTransactionShouldNotBeFound("maxNumberOfOcurrences.notEquals=" + DEFAULT_MAX_NUMBER_OF_OCURRENCES);
+
+        // Get all the scheduledTransactionList where maxNumberOfOcurrences not equals to UPDATED_MAX_NUMBER_OF_OCURRENCES
+        defaultScheduledTransactionShouldBeFound("maxNumberOfOcurrences.notEquals=" + UPDATED_MAX_NUMBER_OF_OCURRENCES);
+    }
+
+    @Test
+    @Transactional
+    void getAllScheduledTransactionsByMaxNumberOfOcurrencesIsInShouldWork() throws Exception {
+        // Initialize the database
+        scheduledTransactionRepository.saveAndFlush(scheduledTransaction);
+
+        // Get all the scheduledTransactionList where maxNumberOfOcurrences in DEFAULT_MAX_NUMBER_OF_OCURRENCES or UPDATED_MAX_NUMBER_OF_OCURRENCES
         defaultScheduledTransactionShouldBeFound(
-            "incomingTransaction.in=" + DEFAULT_INCOMING_TRANSACTION + "," + UPDATED_INCOMING_TRANSACTION
+            "maxNumberOfOcurrences.in=" + DEFAULT_MAX_NUMBER_OF_OCURRENCES + "," + UPDATED_MAX_NUMBER_OF_OCURRENCES
         );
 
-        // Get all the scheduledTransactionList where incomingTransaction equals to UPDATED_INCOMING_TRANSACTION
-        defaultScheduledTransactionShouldNotBeFound("incomingTransaction.in=" + UPDATED_INCOMING_TRANSACTION);
+        // Get all the scheduledTransactionList where maxNumberOfOcurrences equals to UPDATED_MAX_NUMBER_OF_OCURRENCES
+        defaultScheduledTransactionShouldNotBeFound("maxNumberOfOcurrences.in=" + UPDATED_MAX_NUMBER_OF_OCURRENCES);
     }
 
     @Test
     @Transactional
-    void getAllScheduledTransactionsByIncomingTransactionIsNullOrNotNull() throws Exception {
+    void getAllScheduledTransactionsByMaxNumberOfOcurrencesIsNullOrNotNull() throws Exception {
         // Initialize the database
         scheduledTransactionRepository.saveAndFlush(scheduledTransaction);
 
-        // Get all the scheduledTransactionList where incomingTransaction is not null
-        defaultScheduledTransactionShouldBeFound("incomingTransaction.specified=true");
+        // Get all the scheduledTransactionList where maxNumberOfOcurrences is not null
+        defaultScheduledTransactionShouldBeFound("maxNumberOfOcurrences.specified=true");
 
-        // Get all the scheduledTransactionList where incomingTransaction is null
-        defaultScheduledTransactionShouldNotBeFound("incomingTransaction.specified=false");
+        // Get all the scheduledTransactionList where maxNumberOfOcurrences is null
+        defaultScheduledTransactionShouldNotBeFound("maxNumberOfOcurrences.specified=false");
     }
 
     @Test
     @Transactional
-    void getAllScheduledTransactionsBySchedulePatternIsEqualToSomething() throws Exception {
+    void getAllScheduledTransactionsByMaxNumberOfOcurrencesIsGreaterThanOrEqualToSomething() throws Exception {
         // Initialize the database
         scheduledTransactionRepository.saveAndFlush(scheduledTransaction);
-        SchedulePattern schedulePattern = SchedulePatternResourceIT.createEntity(em);
-        em.persist(schedulePattern);
-        em.flush();
-        scheduledTransaction.addSchedulePattern(schedulePattern);
+
+        // Get all the scheduledTransactionList where maxNumberOfOcurrences is greater than or equal to DEFAULT_MAX_NUMBER_OF_OCURRENCES
+        defaultScheduledTransactionShouldBeFound("maxNumberOfOcurrences.greaterThanOrEqual=" + DEFAULT_MAX_NUMBER_OF_OCURRENCES);
+
+        // Get all the scheduledTransactionList where maxNumberOfOcurrences is greater than or equal to UPDATED_MAX_NUMBER_OF_OCURRENCES
+        defaultScheduledTransactionShouldNotBeFound("maxNumberOfOcurrences.greaterThanOrEqual=" + UPDATED_MAX_NUMBER_OF_OCURRENCES);
+    }
+
+    @Test
+    @Transactional
+    void getAllScheduledTransactionsByMaxNumberOfOcurrencesIsLessThanOrEqualToSomething() throws Exception {
+        // Initialize the database
         scheduledTransactionRepository.saveAndFlush(scheduledTransaction);
-        Long schedulePatternId = schedulePattern.getId();
 
-        // Get all the scheduledTransactionList where schedulePattern equals to schedulePatternId
-        defaultScheduledTransactionShouldBeFound("schedulePatternId.equals=" + schedulePatternId);
+        // Get all the scheduledTransactionList where maxNumberOfOcurrences is less than or equal to DEFAULT_MAX_NUMBER_OF_OCURRENCES
+        defaultScheduledTransactionShouldBeFound("maxNumberOfOcurrences.lessThanOrEqual=" + DEFAULT_MAX_NUMBER_OF_OCURRENCES);
 
-        // Get all the scheduledTransactionList where schedulePattern equals to (schedulePatternId + 1)
-        defaultScheduledTransactionShouldNotBeFound("schedulePatternId.equals=" + (schedulePatternId + 1));
+        // Get all the scheduledTransactionList where maxNumberOfOcurrences is less than or equal to SMALLER_MAX_NUMBER_OF_OCURRENCES
+        defaultScheduledTransactionShouldNotBeFound("maxNumberOfOcurrences.lessThanOrEqual=" + SMALLER_MAX_NUMBER_OF_OCURRENCES);
+    }
+
+    @Test
+    @Transactional
+    void getAllScheduledTransactionsByMaxNumberOfOcurrencesIsLessThanSomething() throws Exception {
+        // Initialize the database
+        scheduledTransactionRepository.saveAndFlush(scheduledTransaction);
+
+        // Get all the scheduledTransactionList where maxNumberOfOcurrences is less than DEFAULT_MAX_NUMBER_OF_OCURRENCES
+        defaultScheduledTransactionShouldNotBeFound("maxNumberOfOcurrences.lessThan=" + DEFAULT_MAX_NUMBER_OF_OCURRENCES);
+
+        // Get all the scheduledTransactionList where maxNumberOfOcurrences is less than UPDATED_MAX_NUMBER_OF_OCURRENCES
+        defaultScheduledTransactionShouldBeFound("maxNumberOfOcurrences.lessThan=" + UPDATED_MAX_NUMBER_OF_OCURRENCES);
+    }
+
+    @Test
+    @Transactional
+    void getAllScheduledTransactionsByMaxNumberOfOcurrencesIsGreaterThanSomething() throws Exception {
+        // Initialize the database
+        scheduledTransactionRepository.saveAndFlush(scheduledTransaction);
+
+        // Get all the scheduledTransactionList where maxNumberOfOcurrences is greater than DEFAULT_MAX_NUMBER_OF_OCURRENCES
+        defaultScheduledTransactionShouldNotBeFound("maxNumberOfOcurrences.greaterThan=" + DEFAULT_MAX_NUMBER_OF_OCURRENCES);
+
+        // Get all the scheduledTransactionList where maxNumberOfOcurrences is greater than SMALLER_MAX_NUMBER_OF_OCURRENCES
+        defaultScheduledTransactionShouldBeFound("maxNumberOfOcurrences.greaterThan=" + SMALLER_MAX_NUMBER_OF_OCURRENCES);
+    }
+
+    @Test
+    @Transactional
+    void getAllScheduledTransactionsByDayOfWeekIsEqualToSomething() throws Exception {
+        // Initialize the database
+        scheduledTransactionRepository.saveAndFlush(scheduledTransaction);
+
+        // Get all the scheduledTransactionList where dayOfWeek equals to DEFAULT_DAY_OF_WEEK
+        defaultScheduledTransactionShouldBeFound("dayOfWeek.equals=" + DEFAULT_DAY_OF_WEEK);
+
+        // Get all the scheduledTransactionList where dayOfWeek equals to UPDATED_DAY_OF_WEEK
+        defaultScheduledTransactionShouldNotBeFound("dayOfWeek.equals=" + UPDATED_DAY_OF_WEEK);
+    }
+
+    @Test
+    @Transactional
+    void getAllScheduledTransactionsByDayOfWeekIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        scheduledTransactionRepository.saveAndFlush(scheduledTransaction);
+
+        // Get all the scheduledTransactionList where dayOfWeek not equals to DEFAULT_DAY_OF_WEEK
+        defaultScheduledTransactionShouldNotBeFound("dayOfWeek.notEquals=" + DEFAULT_DAY_OF_WEEK);
+
+        // Get all the scheduledTransactionList where dayOfWeek not equals to UPDATED_DAY_OF_WEEK
+        defaultScheduledTransactionShouldBeFound("dayOfWeek.notEquals=" + UPDATED_DAY_OF_WEEK);
+    }
+
+    @Test
+    @Transactional
+    void getAllScheduledTransactionsByDayOfWeekIsInShouldWork() throws Exception {
+        // Initialize the database
+        scheduledTransactionRepository.saveAndFlush(scheduledTransaction);
+
+        // Get all the scheduledTransactionList where dayOfWeek in DEFAULT_DAY_OF_WEEK or UPDATED_DAY_OF_WEEK
+        defaultScheduledTransactionShouldBeFound("dayOfWeek.in=" + DEFAULT_DAY_OF_WEEK + "," + UPDATED_DAY_OF_WEEK);
+
+        // Get all the scheduledTransactionList where dayOfWeek equals to UPDATED_DAY_OF_WEEK
+        defaultScheduledTransactionShouldNotBeFound("dayOfWeek.in=" + UPDATED_DAY_OF_WEEK);
+    }
+
+    @Test
+    @Transactional
+    void getAllScheduledTransactionsByDayOfWeekIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        scheduledTransactionRepository.saveAndFlush(scheduledTransaction);
+
+        // Get all the scheduledTransactionList where dayOfWeek is not null
+        defaultScheduledTransactionShouldBeFound("dayOfWeek.specified=true");
+
+        // Get all the scheduledTransactionList where dayOfWeek is null
+        defaultScheduledTransactionShouldNotBeFound("dayOfWeek.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllScheduledTransactionsByDayOfWeekIsGreaterThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        scheduledTransactionRepository.saveAndFlush(scheduledTransaction);
+
+        // Get all the scheduledTransactionList where dayOfWeek is greater than or equal to DEFAULT_DAY_OF_WEEK
+        defaultScheduledTransactionShouldBeFound("dayOfWeek.greaterThanOrEqual=" + DEFAULT_DAY_OF_WEEK);
+
+        // Get all the scheduledTransactionList where dayOfWeek is greater than or equal to (DEFAULT_DAY_OF_WEEK + 1)
+        defaultScheduledTransactionShouldNotBeFound("dayOfWeek.greaterThanOrEqual=" + (DEFAULT_DAY_OF_WEEK + 1));
+    }
+
+    @Test
+    @Transactional
+    void getAllScheduledTransactionsByDayOfWeekIsLessThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        scheduledTransactionRepository.saveAndFlush(scheduledTransaction);
+
+        // Get all the scheduledTransactionList where dayOfWeek is less than or equal to DEFAULT_DAY_OF_WEEK
+        defaultScheduledTransactionShouldBeFound("dayOfWeek.lessThanOrEqual=" + DEFAULT_DAY_OF_WEEK);
+
+        // Get all the scheduledTransactionList where dayOfWeek is less than or equal to SMALLER_DAY_OF_WEEK
+        defaultScheduledTransactionShouldNotBeFound("dayOfWeek.lessThanOrEqual=" + SMALLER_DAY_OF_WEEK);
+    }
+
+    @Test
+    @Transactional
+    void getAllScheduledTransactionsByDayOfWeekIsLessThanSomething() throws Exception {
+        // Initialize the database
+        scheduledTransactionRepository.saveAndFlush(scheduledTransaction);
+
+        // Get all the scheduledTransactionList where dayOfWeek is less than DEFAULT_DAY_OF_WEEK
+        defaultScheduledTransactionShouldNotBeFound("dayOfWeek.lessThan=" + DEFAULT_DAY_OF_WEEK);
+
+        // Get all the scheduledTransactionList where dayOfWeek is less than (DEFAULT_DAY_OF_WEEK + 1)
+        defaultScheduledTransactionShouldBeFound("dayOfWeek.lessThan=" + (DEFAULT_DAY_OF_WEEK + 1));
+    }
+
+    @Test
+    @Transactional
+    void getAllScheduledTransactionsByDayOfWeekIsGreaterThanSomething() throws Exception {
+        // Initialize the database
+        scheduledTransactionRepository.saveAndFlush(scheduledTransaction);
+
+        // Get all the scheduledTransactionList where dayOfWeek is greater than DEFAULT_DAY_OF_WEEK
+        defaultScheduledTransactionShouldNotBeFound("dayOfWeek.greaterThan=" + DEFAULT_DAY_OF_WEEK);
+
+        // Get all the scheduledTransactionList where dayOfWeek is greater than SMALLER_DAY_OF_WEEK
+        defaultScheduledTransactionShouldBeFound("dayOfWeek.greaterThan=" + SMALLER_DAY_OF_WEEK);
+    }
+
+    @Test
+    @Transactional
+    void getAllScheduledTransactionsByWeekOfMonthIsEqualToSomething() throws Exception {
+        // Initialize the database
+        scheduledTransactionRepository.saveAndFlush(scheduledTransaction);
+
+        // Get all the scheduledTransactionList where weekOfMonth equals to DEFAULT_WEEK_OF_MONTH
+        defaultScheduledTransactionShouldBeFound("weekOfMonth.equals=" + DEFAULT_WEEK_OF_MONTH);
+
+        // Get all the scheduledTransactionList where weekOfMonth equals to UPDATED_WEEK_OF_MONTH
+        defaultScheduledTransactionShouldNotBeFound("weekOfMonth.equals=" + UPDATED_WEEK_OF_MONTH);
+    }
+
+    @Test
+    @Transactional
+    void getAllScheduledTransactionsByWeekOfMonthIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        scheduledTransactionRepository.saveAndFlush(scheduledTransaction);
+
+        // Get all the scheduledTransactionList where weekOfMonth not equals to DEFAULT_WEEK_OF_MONTH
+        defaultScheduledTransactionShouldNotBeFound("weekOfMonth.notEquals=" + DEFAULT_WEEK_OF_MONTH);
+
+        // Get all the scheduledTransactionList where weekOfMonth not equals to UPDATED_WEEK_OF_MONTH
+        defaultScheduledTransactionShouldBeFound("weekOfMonth.notEquals=" + UPDATED_WEEK_OF_MONTH);
+    }
+
+    @Test
+    @Transactional
+    void getAllScheduledTransactionsByWeekOfMonthIsInShouldWork() throws Exception {
+        // Initialize the database
+        scheduledTransactionRepository.saveAndFlush(scheduledTransaction);
+
+        // Get all the scheduledTransactionList where weekOfMonth in DEFAULT_WEEK_OF_MONTH or UPDATED_WEEK_OF_MONTH
+        defaultScheduledTransactionShouldBeFound("weekOfMonth.in=" + DEFAULT_WEEK_OF_MONTH + "," + UPDATED_WEEK_OF_MONTH);
+
+        // Get all the scheduledTransactionList where weekOfMonth equals to UPDATED_WEEK_OF_MONTH
+        defaultScheduledTransactionShouldNotBeFound("weekOfMonth.in=" + UPDATED_WEEK_OF_MONTH);
+    }
+
+    @Test
+    @Transactional
+    void getAllScheduledTransactionsByWeekOfMonthIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        scheduledTransactionRepository.saveAndFlush(scheduledTransaction);
+
+        // Get all the scheduledTransactionList where weekOfMonth is not null
+        defaultScheduledTransactionShouldBeFound("weekOfMonth.specified=true");
+
+        // Get all the scheduledTransactionList where weekOfMonth is null
+        defaultScheduledTransactionShouldNotBeFound("weekOfMonth.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllScheduledTransactionsByWeekOfMonthIsGreaterThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        scheduledTransactionRepository.saveAndFlush(scheduledTransaction);
+
+        // Get all the scheduledTransactionList where weekOfMonth is greater than or equal to DEFAULT_WEEK_OF_MONTH
+        defaultScheduledTransactionShouldBeFound("weekOfMonth.greaterThanOrEqual=" + DEFAULT_WEEK_OF_MONTH);
+
+        // Get all the scheduledTransactionList where weekOfMonth is greater than or equal to (DEFAULT_WEEK_OF_MONTH + 1)
+        defaultScheduledTransactionShouldNotBeFound("weekOfMonth.greaterThanOrEqual=" + (DEFAULT_WEEK_OF_MONTH + 1));
+    }
+
+    @Test
+    @Transactional
+    void getAllScheduledTransactionsByWeekOfMonthIsLessThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        scheduledTransactionRepository.saveAndFlush(scheduledTransaction);
+
+        // Get all the scheduledTransactionList where weekOfMonth is less than or equal to DEFAULT_WEEK_OF_MONTH
+        defaultScheduledTransactionShouldBeFound("weekOfMonth.lessThanOrEqual=" + DEFAULT_WEEK_OF_MONTH);
+
+        // Get all the scheduledTransactionList where weekOfMonth is less than or equal to SMALLER_WEEK_OF_MONTH
+        defaultScheduledTransactionShouldNotBeFound("weekOfMonth.lessThanOrEqual=" + SMALLER_WEEK_OF_MONTH);
+    }
+
+    @Test
+    @Transactional
+    void getAllScheduledTransactionsByWeekOfMonthIsLessThanSomething() throws Exception {
+        // Initialize the database
+        scheduledTransactionRepository.saveAndFlush(scheduledTransaction);
+
+        // Get all the scheduledTransactionList where weekOfMonth is less than DEFAULT_WEEK_OF_MONTH
+        defaultScheduledTransactionShouldNotBeFound("weekOfMonth.lessThan=" + DEFAULT_WEEK_OF_MONTH);
+
+        // Get all the scheduledTransactionList where weekOfMonth is less than (DEFAULT_WEEK_OF_MONTH + 1)
+        defaultScheduledTransactionShouldBeFound("weekOfMonth.lessThan=" + (DEFAULT_WEEK_OF_MONTH + 1));
+    }
+
+    @Test
+    @Transactional
+    void getAllScheduledTransactionsByWeekOfMonthIsGreaterThanSomething() throws Exception {
+        // Initialize the database
+        scheduledTransactionRepository.saveAndFlush(scheduledTransaction);
+
+        // Get all the scheduledTransactionList where weekOfMonth is greater than DEFAULT_WEEK_OF_MONTH
+        defaultScheduledTransactionShouldNotBeFound("weekOfMonth.greaterThan=" + DEFAULT_WEEK_OF_MONTH);
+
+        // Get all the scheduledTransactionList where weekOfMonth is greater than SMALLER_WEEK_OF_MONTH
+        defaultScheduledTransactionShouldBeFound("weekOfMonth.greaterThan=" + SMALLER_WEEK_OF_MONTH);
+    }
+
+    @Test
+    @Transactional
+    void getAllScheduledTransactionsByDayOfMonthIsEqualToSomething() throws Exception {
+        // Initialize the database
+        scheduledTransactionRepository.saveAndFlush(scheduledTransaction);
+
+        // Get all the scheduledTransactionList where dayOfMonth equals to DEFAULT_DAY_OF_MONTH
+        defaultScheduledTransactionShouldBeFound("dayOfMonth.equals=" + DEFAULT_DAY_OF_MONTH);
+
+        // Get all the scheduledTransactionList where dayOfMonth equals to UPDATED_DAY_OF_MONTH
+        defaultScheduledTransactionShouldNotBeFound("dayOfMonth.equals=" + UPDATED_DAY_OF_MONTH);
+    }
+
+    @Test
+    @Transactional
+    void getAllScheduledTransactionsByDayOfMonthIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        scheduledTransactionRepository.saveAndFlush(scheduledTransaction);
+
+        // Get all the scheduledTransactionList where dayOfMonth not equals to DEFAULT_DAY_OF_MONTH
+        defaultScheduledTransactionShouldNotBeFound("dayOfMonth.notEquals=" + DEFAULT_DAY_OF_MONTH);
+
+        // Get all the scheduledTransactionList where dayOfMonth not equals to UPDATED_DAY_OF_MONTH
+        defaultScheduledTransactionShouldBeFound("dayOfMonth.notEquals=" + UPDATED_DAY_OF_MONTH);
+    }
+
+    @Test
+    @Transactional
+    void getAllScheduledTransactionsByDayOfMonthIsInShouldWork() throws Exception {
+        // Initialize the database
+        scheduledTransactionRepository.saveAndFlush(scheduledTransaction);
+
+        // Get all the scheduledTransactionList where dayOfMonth in DEFAULT_DAY_OF_MONTH or UPDATED_DAY_OF_MONTH
+        defaultScheduledTransactionShouldBeFound("dayOfMonth.in=" + DEFAULT_DAY_OF_MONTH + "," + UPDATED_DAY_OF_MONTH);
+
+        // Get all the scheduledTransactionList where dayOfMonth equals to UPDATED_DAY_OF_MONTH
+        defaultScheduledTransactionShouldNotBeFound("dayOfMonth.in=" + UPDATED_DAY_OF_MONTH);
+    }
+
+    @Test
+    @Transactional
+    void getAllScheduledTransactionsByDayOfMonthIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        scheduledTransactionRepository.saveAndFlush(scheduledTransaction);
+
+        // Get all the scheduledTransactionList where dayOfMonth is not null
+        defaultScheduledTransactionShouldBeFound("dayOfMonth.specified=true");
+
+        // Get all the scheduledTransactionList where dayOfMonth is null
+        defaultScheduledTransactionShouldNotBeFound("dayOfMonth.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllScheduledTransactionsByDayOfMonthIsGreaterThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        scheduledTransactionRepository.saveAndFlush(scheduledTransaction);
+
+        // Get all the scheduledTransactionList where dayOfMonth is greater than or equal to DEFAULT_DAY_OF_MONTH
+        defaultScheduledTransactionShouldBeFound("dayOfMonth.greaterThanOrEqual=" + DEFAULT_DAY_OF_MONTH);
+
+        // Get all the scheduledTransactionList where dayOfMonth is greater than or equal to (DEFAULT_DAY_OF_MONTH + 1)
+        defaultScheduledTransactionShouldNotBeFound("dayOfMonth.greaterThanOrEqual=" + (DEFAULT_DAY_OF_MONTH + 1));
+    }
+
+    @Test
+    @Transactional
+    void getAllScheduledTransactionsByDayOfMonthIsLessThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        scheduledTransactionRepository.saveAndFlush(scheduledTransaction);
+
+        // Get all the scheduledTransactionList where dayOfMonth is less than or equal to DEFAULT_DAY_OF_MONTH
+        defaultScheduledTransactionShouldBeFound("dayOfMonth.lessThanOrEqual=" + DEFAULT_DAY_OF_MONTH);
+
+        // Get all the scheduledTransactionList where dayOfMonth is less than or equal to SMALLER_DAY_OF_MONTH
+        defaultScheduledTransactionShouldNotBeFound("dayOfMonth.lessThanOrEqual=" + SMALLER_DAY_OF_MONTH);
+    }
+
+    @Test
+    @Transactional
+    void getAllScheduledTransactionsByDayOfMonthIsLessThanSomething() throws Exception {
+        // Initialize the database
+        scheduledTransactionRepository.saveAndFlush(scheduledTransaction);
+
+        // Get all the scheduledTransactionList where dayOfMonth is less than DEFAULT_DAY_OF_MONTH
+        defaultScheduledTransactionShouldNotBeFound("dayOfMonth.lessThan=" + DEFAULT_DAY_OF_MONTH);
+
+        // Get all the scheduledTransactionList where dayOfMonth is less than (DEFAULT_DAY_OF_MONTH + 1)
+        defaultScheduledTransactionShouldBeFound("dayOfMonth.lessThan=" + (DEFAULT_DAY_OF_MONTH + 1));
+    }
+
+    @Test
+    @Transactional
+    void getAllScheduledTransactionsByDayOfMonthIsGreaterThanSomething() throws Exception {
+        // Initialize the database
+        scheduledTransactionRepository.saveAndFlush(scheduledTransaction);
+
+        // Get all the scheduledTransactionList where dayOfMonth is greater than DEFAULT_DAY_OF_MONTH
+        defaultScheduledTransactionShouldNotBeFound("dayOfMonth.greaterThan=" + DEFAULT_DAY_OF_MONTH);
+
+        // Get all the scheduledTransactionList where dayOfMonth is greater than SMALLER_DAY_OF_MONTH
+        defaultScheduledTransactionShouldBeFound("dayOfMonth.greaterThan=" + SMALLER_DAY_OF_MONTH);
+    }
+
+    @Test
+    @Transactional
+    void getAllScheduledTransactionsByMonthOfYearIsEqualToSomething() throws Exception {
+        // Initialize the database
+        scheduledTransactionRepository.saveAndFlush(scheduledTransaction);
+
+        // Get all the scheduledTransactionList where monthOfYear equals to DEFAULT_MONTH_OF_YEAR
+        defaultScheduledTransactionShouldBeFound("monthOfYear.equals=" + DEFAULT_MONTH_OF_YEAR);
+
+        // Get all the scheduledTransactionList where monthOfYear equals to UPDATED_MONTH_OF_YEAR
+        defaultScheduledTransactionShouldNotBeFound("monthOfYear.equals=" + UPDATED_MONTH_OF_YEAR);
+    }
+
+    @Test
+    @Transactional
+    void getAllScheduledTransactionsByMonthOfYearIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        scheduledTransactionRepository.saveAndFlush(scheduledTransaction);
+
+        // Get all the scheduledTransactionList where monthOfYear not equals to DEFAULT_MONTH_OF_YEAR
+        defaultScheduledTransactionShouldNotBeFound("monthOfYear.notEquals=" + DEFAULT_MONTH_OF_YEAR);
+
+        // Get all the scheduledTransactionList where monthOfYear not equals to UPDATED_MONTH_OF_YEAR
+        defaultScheduledTransactionShouldBeFound("monthOfYear.notEquals=" + UPDATED_MONTH_OF_YEAR);
+    }
+
+    @Test
+    @Transactional
+    void getAllScheduledTransactionsByMonthOfYearIsInShouldWork() throws Exception {
+        // Initialize the database
+        scheduledTransactionRepository.saveAndFlush(scheduledTransaction);
+
+        // Get all the scheduledTransactionList where monthOfYear in DEFAULT_MONTH_OF_YEAR or UPDATED_MONTH_OF_YEAR
+        defaultScheduledTransactionShouldBeFound("monthOfYear.in=" + DEFAULT_MONTH_OF_YEAR + "," + UPDATED_MONTH_OF_YEAR);
+
+        // Get all the scheduledTransactionList where monthOfYear equals to UPDATED_MONTH_OF_YEAR
+        defaultScheduledTransactionShouldNotBeFound("monthOfYear.in=" + UPDATED_MONTH_OF_YEAR);
+    }
+
+    @Test
+    @Transactional
+    void getAllScheduledTransactionsByMonthOfYearIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        scheduledTransactionRepository.saveAndFlush(scheduledTransaction);
+
+        // Get all the scheduledTransactionList where monthOfYear is not null
+        defaultScheduledTransactionShouldBeFound("monthOfYear.specified=true");
+
+        // Get all the scheduledTransactionList where monthOfYear is null
+        defaultScheduledTransactionShouldNotBeFound("monthOfYear.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllScheduledTransactionsByMonthOfYearIsGreaterThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        scheduledTransactionRepository.saveAndFlush(scheduledTransaction);
+
+        // Get all the scheduledTransactionList where monthOfYear is greater than or equal to DEFAULT_MONTH_OF_YEAR
+        defaultScheduledTransactionShouldBeFound("monthOfYear.greaterThanOrEqual=" + DEFAULT_MONTH_OF_YEAR);
+
+        // Get all the scheduledTransactionList where monthOfYear is greater than or equal to (DEFAULT_MONTH_OF_YEAR + 1)
+        defaultScheduledTransactionShouldNotBeFound("monthOfYear.greaterThanOrEqual=" + (DEFAULT_MONTH_OF_YEAR + 1));
+    }
+
+    @Test
+    @Transactional
+    void getAllScheduledTransactionsByMonthOfYearIsLessThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        scheduledTransactionRepository.saveAndFlush(scheduledTransaction);
+
+        // Get all the scheduledTransactionList where monthOfYear is less than or equal to DEFAULT_MONTH_OF_YEAR
+        defaultScheduledTransactionShouldBeFound("monthOfYear.lessThanOrEqual=" + DEFAULT_MONTH_OF_YEAR);
+
+        // Get all the scheduledTransactionList where monthOfYear is less than or equal to SMALLER_MONTH_OF_YEAR
+        defaultScheduledTransactionShouldNotBeFound("monthOfYear.lessThanOrEqual=" + SMALLER_MONTH_OF_YEAR);
+    }
+
+    @Test
+    @Transactional
+    void getAllScheduledTransactionsByMonthOfYearIsLessThanSomething() throws Exception {
+        // Initialize the database
+        scheduledTransactionRepository.saveAndFlush(scheduledTransaction);
+
+        // Get all the scheduledTransactionList where monthOfYear is less than DEFAULT_MONTH_OF_YEAR
+        defaultScheduledTransactionShouldNotBeFound("monthOfYear.lessThan=" + DEFAULT_MONTH_OF_YEAR);
+
+        // Get all the scheduledTransactionList where monthOfYear is less than (DEFAULT_MONTH_OF_YEAR + 1)
+        defaultScheduledTransactionShouldBeFound("monthOfYear.lessThan=" + (DEFAULT_MONTH_OF_YEAR + 1));
+    }
+
+    @Test
+    @Transactional
+    void getAllScheduledTransactionsByMonthOfYearIsGreaterThanSomething() throws Exception {
+        // Initialize the database
+        scheduledTransactionRepository.saveAndFlush(scheduledTransaction);
+
+        // Get all the scheduledTransactionList where monthOfYear is greater than DEFAULT_MONTH_OF_YEAR
+        defaultScheduledTransactionShouldNotBeFound("monthOfYear.greaterThan=" + DEFAULT_MONTH_OF_YEAR);
+
+        // Get all the scheduledTransactionList where monthOfYear is greater than SMALLER_MONTH_OF_YEAR
+        defaultScheduledTransactionShouldBeFound("monthOfYear.greaterThan=" + SMALLER_MONTH_OF_YEAR);
     }
 
     @Test
@@ -1032,6 +1693,44 @@ class ScheduledTransactionResourceIT {
         defaultScheduledTransactionShouldNotBeFound("currencyId.equals=" + (currencyId + 1));
     }
 
+    @Test
+    @Transactional
+    void getAllScheduledTransactionsBySourceUserIsEqualToSomething() throws Exception {
+        // Initialize the database
+        scheduledTransactionRepository.saveAndFlush(scheduledTransaction);
+        UserDetails sourceUser = UserDetailsResourceIT.createEntity(em);
+        em.persist(sourceUser);
+        em.flush();
+        scheduledTransaction.setSourceUser(sourceUser);
+        scheduledTransactionRepository.saveAndFlush(scheduledTransaction);
+        Long sourceUserId = sourceUser.getId();
+
+        // Get all the scheduledTransactionList where sourceUser equals to sourceUserId
+        defaultScheduledTransactionShouldBeFound("sourceUserId.equals=" + sourceUserId);
+
+        // Get all the scheduledTransactionList where sourceUser equals to (sourceUserId + 1)
+        defaultScheduledTransactionShouldNotBeFound("sourceUserId.equals=" + (sourceUserId + 1));
+    }
+
+    @Test
+    @Transactional
+    void getAllScheduledTransactionsByCategoryIsEqualToSomething() throws Exception {
+        // Initialize the database
+        scheduledTransactionRepository.saveAndFlush(scheduledTransaction);
+        Category category = CategoryResourceIT.createEntity(em);
+        em.persist(category);
+        em.flush();
+        scheduledTransaction.setCategory(category);
+        scheduledTransactionRepository.saveAndFlush(scheduledTransaction);
+        Long categoryId = category.getId();
+
+        // Get all the scheduledTransactionList where category equals to categoryId
+        defaultScheduledTransactionShouldBeFound("categoryId.equals=" + categoryId);
+
+        // Get all the scheduledTransactionList where category equals to (categoryId + 1)
+        defaultScheduledTransactionShouldNotBeFound("categoryId.equals=" + (categoryId + 1));
+    }
+
     /**
      * Executes the search, and checks that the default entity is returned.
      */
@@ -1048,7 +1747,13 @@ class ScheduledTransactionResourceIT {
             .andExpect(jsonPath("$.[*].startDate").value(hasItem(DEFAULT_START_DATE.toString())))
             .andExpect(jsonPath("$.[*].endDate").value(hasItem(DEFAULT_END_DATE.toString())))
             .andExpect(jsonPath("$.[*].addToReports").value(hasItem(DEFAULT_ADD_TO_REPORTS.booleanValue())))
-            .andExpect(jsonPath("$.[*].incomingTransaction").value(hasItem(DEFAULT_INCOMING_TRANSACTION.booleanValue())));
+            .andExpect(jsonPath("$.[*].recurringType").value(hasItem(DEFAULT_RECURRING_TYPE.toString())))
+            .andExpect(jsonPath("$.[*].separationCount").value(hasItem(DEFAULT_SEPARATION_COUNT)))
+            .andExpect(jsonPath("$.[*].maxNumberOfOcurrences").value(hasItem(DEFAULT_MAX_NUMBER_OF_OCURRENCES)))
+            .andExpect(jsonPath("$.[*].dayOfWeek").value(hasItem(DEFAULT_DAY_OF_WEEK)))
+            .andExpect(jsonPath("$.[*].weekOfMonth").value(hasItem(DEFAULT_WEEK_OF_MONTH)))
+            .andExpect(jsonPath("$.[*].dayOfMonth").value(hasItem(DEFAULT_DAY_OF_MONTH)))
+            .andExpect(jsonPath("$.[*].monthOfYear").value(hasItem(DEFAULT_MONTH_OF_YEAR)));
 
         // Check, that the count call also returns 1
         restScheduledTransactionMockMvc
@@ -1104,7 +1809,13 @@ class ScheduledTransactionResourceIT {
             .startDate(UPDATED_START_DATE)
             .endDate(UPDATED_END_DATE)
             .addToReports(UPDATED_ADD_TO_REPORTS)
-            .incomingTransaction(UPDATED_INCOMING_TRANSACTION);
+            .recurringType(UPDATED_RECURRING_TYPE)
+            .separationCount(UPDATED_SEPARATION_COUNT)
+            .maxNumberOfOcurrences(UPDATED_MAX_NUMBER_OF_OCURRENCES)
+            .dayOfWeek(UPDATED_DAY_OF_WEEK)
+            .weekOfMonth(UPDATED_WEEK_OF_MONTH)
+            .dayOfMonth(UPDATED_DAY_OF_MONTH)
+            .monthOfYear(UPDATED_MONTH_OF_YEAR);
 
         restScheduledTransactionMockMvc
             .perform(
@@ -1126,7 +1837,13 @@ class ScheduledTransactionResourceIT {
         assertThat(testScheduledTransaction.getStartDate()).isEqualTo(UPDATED_START_DATE);
         assertThat(testScheduledTransaction.getEndDate()).isEqualTo(UPDATED_END_DATE);
         assertThat(testScheduledTransaction.getAddToReports()).isEqualTo(UPDATED_ADD_TO_REPORTS);
-        assertThat(testScheduledTransaction.getIncomingTransaction()).isEqualTo(UPDATED_INCOMING_TRANSACTION);
+        assertThat(testScheduledTransaction.getRecurringType()).isEqualTo(UPDATED_RECURRING_TYPE);
+        assertThat(testScheduledTransaction.getSeparationCount()).isEqualTo(UPDATED_SEPARATION_COUNT);
+        assertThat(testScheduledTransaction.getMaxNumberOfOcurrences()).isEqualTo(UPDATED_MAX_NUMBER_OF_OCURRENCES);
+        assertThat(testScheduledTransaction.getDayOfWeek()).isEqualTo(UPDATED_DAY_OF_WEEK);
+        assertThat(testScheduledTransaction.getWeekOfMonth()).isEqualTo(UPDATED_WEEK_OF_MONTH);
+        assertThat(testScheduledTransaction.getDayOfMonth()).isEqualTo(UPDATED_DAY_OF_MONTH);
+        assertThat(testScheduledTransaction.getMonthOfYear()).isEqualTo(UPDATED_MONTH_OF_YEAR);
     }
 
     @Test
@@ -1207,7 +1924,9 @@ class ScheduledTransactionResourceIT {
         partialUpdatedScheduledTransaction
             .name(UPDATED_NAME)
             .addToReports(UPDATED_ADD_TO_REPORTS)
-            .incomingTransaction(UPDATED_INCOMING_TRANSACTION);
+            .recurringType(UPDATED_RECURRING_TYPE)
+            .maxNumberOfOcurrences(UPDATED_MAX_NUMBER_OF_OCURRENCES)
+            .dayOfMonth(UPDATED_DAY_OF_MONTH);
 
         restScheduledTransactionMockMvc
             .perform(
@@ -1229,7 +1948,13 @@ class ScheduledTransactionResourceIT {
         assertThat(testScheduledTransaction.getStartDate()).isEqualTo(DEFAULT_START_DATE);
         assertThat(testScheduledTransaction.getEndDate()).isEqualTo(DEFAULT_END_DATE);
         assertThat(testScheduledTransaction.getAddToReports()).isEqualTo(UPDATED_ADD_TO_REPORTS);
-        assertThat(testScheduledTransaction.getIncomingTransaction()).isEqualTo(UPDATED_INCOMING_TRANSACTION);
+        assertThat(testScheduledTransaction.getRecurringType()).isEqualTo(UPDATED_RECURRING_TYPE);
+        assertThat(testScheduledTransaction.getSeparationCount()).isEqualTo(DEFAULT_SEPARATION_COUNT);
+        assertThat(testScheduledTransaction.getMaxNumberOfOcurrences()).isEqualTo(UPDATED_MAX_NUMBER_OF_OCURRENCES);
+        assertThat(testScheduledTransaction.getDayOfWeek()).isEqualTo(DEFAULT_DAY_OF_WEEK);
+        assertThat(testScheduledTransaction.getWeekOfMonth()).isEqualTo(DEFAULT_WEEK_OF_MONTH);
+        assertThat(testScheduledTransaction.getDayOfMonth()).isEqualTo(UPDATED_DAY_OF_MONTH);
+        assertThat(testScheduledTransaction.getMonthOfYear()).isEqualTo(DEFAULT_MONTH_OF_YEAR);
     }
 
     @Test
@@ -1252,7 +1977,13 @@ class ScheduledTransactionResourceIT {
             .startDate(UPDATED_START_DATE)
             .endDate(UPDATED_END_DATE)
             .addToReports(UPDATED_ADD_TO_REPORTS)
-            .incomingTransaction(UPDATED_INCOMING_TRANSACTION);
+            .recurringType(UPDATED_RECURRING_TYPE)
+            .separationCount(UPDATED_SEPARATION_COUNT)
+            .maxNumberOfOcurrences(UPDATED_MAX_NUMBER_OF_OCURRENCES)
+            .dayOfWeek(UPDATED_DAY_OF_WEEK)
+            .weekOfMonth(UPDATED_WEEK_OF_MONTH)
+            .dayOfMonth(UPDATED_DAY_OF_MONTH)
+            .monthOfYear(UPDATED_MONTH_OF_YEAR);
 
         restScheduledTransactionMockMvc
             .perform(
@@ -1274,7 +2005,13 @@ class ScheduledTransactionResourceIT {
         assertThat(testScheduledTransaction.getStartDate()).isEqualTo(UPDATED_START_DATE);
         assertThat(testScheduledTransaction.getEndDate()).isEqualTo(UPDATED_END_DATE);
         assertThat(testScheduledTransaction.getAddToReports()).isEqualTo(UPDATED_ADD_TO_REPORTS);
-        assertThat(testScheduledTransaction.getIncomingTransaction()).isEqualTo(UPDATED_INCOMING_TRANSACTION);
+        assertThat(testScheduledTransaction.getRecurringType()).isEqualTo(UPDATED_RECURRING_TYPE);
+        assertThat(testScheduledTransaction.getSeparationCount()).isEqualTo(UPDATED_SEPARATION_COUNT);
+        assertThat(testScheduledTransaction.getMaxNumberOfOcurrences()).isEqualTo(UPDATED_MAX_NUMBER_OF_OCURRENCES);
+        assertThat(testScheduledTransaction.getDayOfWeek()).isEqualTo(UPDATED_DAY_OF_WEEK);
+        assertThat(testScheduledTransaction.getWeekOfMonth()).isEqualTo(UPDATED_WEEK_OF_MONTH);
+        assertThat(testScheduledTransaction.getDayOfMonth()).isEqualTo(UPDATED_DAY_OF_MONTH);
+        assertThat(testScheduledTransaction.getMonthOfYear()).isEqualTo(UPDATED_MONTH_OF_YEAR);
     }
 
     @Test
