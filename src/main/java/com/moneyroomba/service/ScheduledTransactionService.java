@@ -69,8 +69,26 @@ public class ScheduledTransactionService {
                     if (scheduledTransaction.getAddToReports() != null) {
                         existingScheduledTransaction.setAddToReports(scheduledTransaction.getAddToReports());
                     }
-                    if (scheduledTransaction.getIncomingTransaction() != null) {
-                        existingScheduledTransaction.setIncomingTransaction(scheduledTransaction.getIncomingTransaction());
+                    if (scheduledTransaction.getRecurringType() != null) {
+                        existingScheduledTransaction.setRecurringType(scheduledTransaction.getRecurringType());
+                    }
+                    if (scheduledTransaction.getSeparationCount() != null) {
+                        existingScheduledTransaction.setSeparationCount(scheduledTransaction.getSeparationCount());
+                    }
+                    if (scheduledTransaction.getMaxNumberOfOcurrences() != null) {
+                        existingScheduledTransaction.setMaxNumberOfOcurrences(scheduledTransaction.getMaxNumberOfOcurrences());
+                    }
+                    if (scheduledTransaction.getDayOfWeek() != null) {
+                        existingScheduledTransaction.setDayOfWeek(scheduledTransaction.getDayOfWeek());
+                    }
+                    if (scheduledTransaction.getWeekOfMonth() != null) {
+                        existingScheduledTransaction.setWeekOfMonth(scheduledTransaction.getWeekOfMonth());
+                    }
+                    if (scheduledTransaction.getDayOfMonth() != null) {
+                        existingScheduledTransaction.setDayOfMonth(scheduledTransaction.getDayOfMonth());
+                    }
+                    if (scheduledTransaction.getMonthOfYear() != null) {
+                        existingScheduledTransaction.setMonthOfYear(scheduledTransaction.getMonthOfYear());
                     }
 
                     return existingScheduledTransaction;

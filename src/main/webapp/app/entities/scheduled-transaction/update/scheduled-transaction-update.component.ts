@@ -9,6 +9,10 @@ import { IScheduledTransaction, ScheduledTransaction } from '../scheduled-transa
 import { ScheduledTransactionService } from '../service/scheduled-transaction.service';
 import { ICurrency } from 'app/entities/currency/currency.model';
 import { CurrencyService } from 'app/entities/currency/service/currency.service';
+import { IUserDetails } from 'app/entities/user-details/user-details.model';
+import { UserDetailsService } from 'app/entities/user-details/service/user-details.service';
+import { ICategory } from 'app/entities/category/category.model';
+import { CategoryService } from 'app/entities/category/service/category.service';
 
 @Component({
   selector: 'jhi-scheduled-transaction-update',
@@ -18,6 +22,8 @@ export class ScheduledTransactionUpdateComponent implements OnInit {
   isSaving = false;
 
   currenciesSharedCollection: ICurrency[] = [];
+  userDetailsSharedCollection: IUserDetails[] = [];
+  categoriesSharedCollection: ICategory[] = [];
 
   editForm = this.fb.group({
     id: [],
@@ -28,13 +34,23 @@ export class ScheduledTransactionUpdateComponent implements OnInit {
     startDate: [null, [Validators.required]],
     endDate: [],
     addToReports: [null, [Validators.required]],
-    incomingTransaction: [null, [Validators.required]],
+    recurringType: [null, [Validators.required]],
+    separationCount: [null, [Validators.min(0)]],
+    maxNumberOfOcurrences: [],
+    dayOfWeek: [null, [Validators.min(0), Validators.max(6)]],
+    weekOfMonth: [null, [Validators.min(0), Validators.max(5)]],
+    dayOfMonth: [null, [Validators.min(0), Validators.max(31)]],
+    monthOfYear: [null, [Validators.min(0), Validators.max(11)]],
     currency: [],
+    sourceUser: [],
+    category: [],
   });
 
   constructor(
     protected scheduledTransactionService: ScheduledTransactionService,
     protected currencyService: CurrencyService,
+    protected userDetailsService: UserDetailsService,
+    protected categoryService: CategoryService,
     protected activatedRoute: ActivatedRoute,
     protected fb: FormBuilder
   ) {}
@@ -62,6 +78,14 @@ export class ScheduledTransactionUpdateComponent implements OnInit {
   }
 
   trackCurrencyById(index: number, item: ICurrency): number {
+    return item.id!;
+  }
+
+  trackUserDetailsById(index: number, item: IUserDetails): number {
+    return item.id!;
+  }
+
+  trackCategoryById(index: number, item: ICategory): number {
     return item.id!;
   }
 
@@ -94,13 +118,29 @@ export class ScheduledTransactionUpdateComponent implements OnInit {
       startDate: scheduledTransaction.startDate,
       endDate: scheduledTransaction.endDate,
       addToReports: scheduledTransaction.addToReports,
-      incomingTransaction: scheduledTransaction.incomingTransaction,
+      recurringType: scheduledTransaction.recurringType,
+      separationCount: scheduledTransaction.separationCount,
+      maxNumberOfOcurrences: scheduledTransaction.maxNumberOfOcurrences,
+      dayOfWeek: scheduledTransaction.dayOfWeek,
+      weekOfMonth: scheduledTransaction.weekOfMonth,
+      dayOfMonth: scheduledTransaction.dayOfMonth,
+      monthOfYear: scheduledTransaction.monthOfYear,
       currency: scheduledTransaction.currency,
+      sourceUser: scheduledTransaction.sourceUser,
+      category: scheduledTransaction.category,
     });
 
     this.currenciesSharedCollection = this.currencyService.addCurrencyToCollectionIfMissing(
       this.currenciesSharedCollection,
       scheduledTransaction.currency
+    );
+    this.userDetailsSharedCollection = this.userDetailsService.addUserDetailsToCollectionIfMissing(
+      this.userDetailsSharedCollection,
+      scheduledTransaction.sourceUser
+    );
+    this.categoriesSharedCollection = this.categoryService.addCategoryToCollectionIfMissing(
+      this.categoriesSharedCollection,
+      scheduledTransaction.category
     );
   }
 
@@ -114,6 +154,26 @@ export class ScheduledTransactionUpdateComponent implements OnInit {
         )
       )
       .subscribe((currencies: ICurrency[]) => (this.currenciesSharedCollection = currencies));
+
+    this.userDetailsService
+      .query()
+      .pipe(map((res: HttpResponse<IUserDetails[]>) => res.body ?? []))
+      .pipe(
+        map((userDetails: IUserDetails[]) =>
+          this.userDetailsService.addUserDetailsToCollectionIfMissing(userDetails, this.editForm.get('sourceUser')!.value)
+        )
+      )
+      .subscribe((userDetails: IUserDetails[]) => (this.userDetailsSharedCollection = userDetails));
+
+    this.categoryService
+      .query()
+      .pipe(map((res: HttpResponse<ICategory[]>) => res.body ?? []))
+      .pipe(
+        map((categories: ICategory[]) =>
+          this.categoryService.addCategoryToCollectionIfMissing(categories, this.editForm.get('category')!.value)
+        )
+      )
+      .subscribe((categories: ICategory[]) => (this.categoriesSharedCollection = categories));
   }
 
   protected createFromForm(): IScheduledTransaction {
@@ -127,8 +187,16 @@ export class ScheduledTransactionUpdateComponent implements OnInit {
       startDate: this.editForm.get(['startDate'])!.value,
       endDate: this.editForm.get(['endDate'])!.value,
       addToReports: this.editForm.get(['addToReports'])!.value,
-      incomingTransaction: this.editForm.get(['incomingTransaction'])!.value,
+      recurringType: this.editForm.get(['recurringType'])!.value,
+      separationCount: this.editForm.get(['separationCount'])!.value,
+      maxNumberOfOcurrences: this.editForm.get(['maxNumberOfOcurrences'])!.value,
+      dayOfWeek: this.editForm.get(['dayOfWeek'])!.value,
+      weekOfMonth: this.editForm.get(['weekOfMonth'])!.value,
+      dayOfMonth: this.editForm.get(['dayOfMonth'])!.value,
+      monthOfYear: this.editForm.get(['monthOfYear'])!.value,
       currency: this.editForm.get(['currency'])!.value,
+      sourceUser: this.editForm.get(['sourceUser'])!.value,
+      category: this.editForm.get(['category'])!.value,
     };
   }
 }
