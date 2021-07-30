@@ -63,7 +63,7 @@ export class NavigationComponent implements OnInit {
     this.toggleIcon = !this.toggleIcon;
   }
 
-  dashboardArray = ['/', '/wallet', '/category', '/transaction'];
+  dashboardArray = ['/', '/wallet', '/category', '/transaction', '/sheduled-transaction'];
 
   adminArray = [
     '/admin/user-management',

@@ -69,7 +69,15 @@
 
         <div class="form-group">
           <label class="form-control-label" jhiTranslate="moneyRoombaApp.wallet.balance" for="field_balance">Balance</label>
-          <input type="number" class="form-control" name="balance" id="field_balance" data-cy="balance" formControlName="balance" />
+          <input
+            type="number"
+            class="form-control"
+            name="balance"
+            id="field_balance"
+            data-cy="balance"
+            formControlName="balance"
+            style="-moz-appearance: textfield; -webkit-appearance: none"
+          />
           <div *ngIf="editForm.get('balance')!.invalid && (editForm.get('balance')!.dirty || editForm.get('balance')!.touched)">
             <small
               class="form-text text-danger"
@@ -84,6 +92,27 @@
               jhiTranslate="entity.validation.number"
             >
               This field should be a number.
+            </small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" jhiTranslate="moneyRoombaApp.wallet.currency" for="field_currency">Currency</label>
+          <select class="form-control" id="field_currency" data-cy="currency" name="currency" formControlName="currency">
+            <option
+              [ngValue]="currencyOption.id === editForm.get('currency')!.value?.id ? editForm.get('currency')!.value : currencyOption"
+              *ngFor="let currencyOption of currenciesSharedCollection; trackBy: trackCurrencyById"
+            >
+              {{ currencyOption.code }}
+            </option>
+          </select>
+          <div *ngIf="editForm.get('currency')!.invalid && (editForm.get('currency')!.dirty || editForm.get('currency')!.touched)">
+            <small
+              class="form-text text-danger"
+              *ngIf="editForm.get('currency')?.errors?.required"
+              jhiTranslate="entity.validation.required"
+            >
+              This field is required.
             </small>
           </div>
         </div>
@@ -112,18 +141,6 @@
               This field should be a number.
             </small>
           </div>
-        </div>
-
-        <div class="form-group">
-          <label class="form-control-label" jhiTranslate="moneyRoombaApp.wallet.currency" for="field_currency">Currency</label>
-          <select class="form-control" id="field_currency" data-cy="currency" name="currency" formControlName="currency">
-            <option
-              [ngValue]="currencyOption.id === editForm.get('currency')!.value?.id ? editForm.get('currency')!.value : currencyOption"
-              *ngFor="let currencyOption of currenciesSharedCollection; trackBy: trackCurrencyById"
-            >
-              {{ currencyOption.code }}
-            </option>
-          </select>
         </div>
       </div>
 

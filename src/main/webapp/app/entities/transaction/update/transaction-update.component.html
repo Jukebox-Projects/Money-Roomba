@@ -102,6 +102,7 @@
             id="field_originalAmount"
             data-cy="originalAmount"
             formControlName="originalAmount"
+            style="-moz-appearance: textfield; -webkit-appearance: none"
           />
           <div
             *ngIf="
@@ -143,6 +144,15 @@
               {{ currencyOption.code }}
             </option>
           </select>
+          <div *ngIf="editForm.get('currency')!.invalid && (editForm.get('currency')!.dirty || editForm.get('currency')!.touched)">
+            <small
+              class="form-text text-danger"
+              *ngIf="editForm.get('currency')?.errors?.required"
+              jhiTranslate="entity.validation.required"
+            >
+              This field is required.
+            </small>
+          </div>
         </div>
 
         <div class="form-group">
@@ -218,9 +228,6 @@
           >
             <option value="MANUAL">{{ 'moneyRoombaApp.TransactionType.MANUAL' | translate }}</option>
             <option value="SCHEDULED">{{ 'moneyRoombaApp.TransactionType.SCHEDULED' | translate }}</option>
-            <option value="EMAIL">{{ 'moneyRoombaApp.TransactionType.EMAIL' | translate }}</option>
-            <option value="API">{{ 'moneyRoombaApp.TransactionType.API' | translate }}</option>
-            <option value="SHARED">{{ 'moneyRoombaApp.TransactionType.SHARED' | translate }}</option>
           </select>
           <div
             *ngIf="
@@ -334,8 +341,8 @@
             id="field_transactionState"
             data-cy="transactionState"
           >
-            <option value="ACCEPTED">{{ 'moneyRoombaApp.TransactionState.ACCEPTED' | translate }}</option>
-            <option value="DENIED">{{ 'moneyRoombaApp.TransactionState.DENIED' | translate }}</option>
+            <option value="ACCEPTED">{{ 'moneyRoombaApp.TransactionState.Accept' | translate }}</option>
+            <option value="DENIED">{{ 'moneyRoombaApp.TransactionState.Deny' | translate }}</option>
           </select>
           <div
             *ngIf="
