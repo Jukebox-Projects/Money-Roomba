@@ -325,6 +325,18 @@ public class TransactionService {
     }
 
     /**
+     * Get one transaction by wallet id.
+     *
+     * @param wallet the entity.
+     * @return the entity.
+     */
+    @Transactional(readOnly = true)
+    public List<Transaction> findAllByWallet(Wallet wallet) {
+        log.debug("Request to get Transaction : {}", wallet);
+        return transactionRepository.findAllByWallet(wallet);
+    }
+
+    /**
      * Delete the transaction by id.
      *
      * @param id the id of the entity.
