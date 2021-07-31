@@ -1,20 +1,30 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-
+import { IWallet } from 'app/entities/wallet/wallet.model';
 import { IScheduledTransaction } from '../scheduled-transaction.model';
 import { ScheduledTransactionService } from '../service/scheduled-transaction.service';
 import { ScheduledTransactionDeleteDialogComponent } from '../delete/scheduled-transaction-delete-dialog.component';
+import { IICon } from '../../../shared/icon-picker/icon.model';
+import { IconService } from '../../../shared/icon-picker/service/icon.service';
 
 @Component({
   selector: 'jhi-scheduled-transaction',
   templateUrl: './scheduled-transaction.component.html',
+  styleUrls: ['./scheduled-transaction.component.css'],
 })
 export class ScheduledTransactionComponent implements OnInit {
   scheduledTransactions?: IScheduledTransaction[];
+  allTransactions?: IScheduledTransaction[];
   isLoading = false;
+  inputText = '';
+  filterType: string = 'name';
 
-  constructor(protected scheduledTransactionService: ScheduledTransactionService, protected modalService: NgbModal) {}
+  constructor(
+    protected scheduledTransactionService: ScheduledTransactionService,
+    protected modalService: NgbModal,
+    protected iconService: IconService
+  ) {}
 
   loadAll(): void {
     this.isLoading = true;
@@ -23,6 +33,7 @@ export class ScheduledTransactionComponent implements OnInit {
       (res: HttpResponse<IScheduledTransaction[]>) => {
         this.isLoading = false;
         this.scheduledTransactions = res.body ?? [];
+        this.allTransactions = res.body ?? [];
       },
       () => {
         this.isLoading = false;
@@ -36,6 +47,44 @@ export class ScheduledTransactionComponent implements OnInit {
 
   trackId(index: number, item: IScheduledTransaction): number {
     return item.id!;
+  }
+  filterTransactionsByName(): void {
+    /* eslint-disable no-console */
+    if (this.scheduledTransactions !== undefined) {
+      this.scheduledTransactions = this.scheduledTransactions.filter(t => {
+        if (t.name !== undefined) {
+          return t.name.toLowerCase().includes(this.inputText.toLowerCase());
+        } else {
+          return false;
+        }
+      });
+    }
+    if (this.inputText === '') {
+      this.scheduledTransactions = this.allTransactions;
+    }
+  }
+
+  filterTransactionsByCurrency(): void {
+    /* eslint-disable no-console */
+    if (this.scheduledTransactions !== undefined) {
+      this.scheduledTransactions = this.scheduledTransactions.filter(t => {
+        if (t.currency.name !== undefined) {
+          return (
+            t.currency.name.toLowerCase().includes(this.inputText.toLowerCase()) ||
+            t.currency.code.toLowerCase().includes(this.inputText.toLowerCase())
+          );
+        } else {
+          return false;
+        }
+      });
+    }
+    if (this.inputText === '') {
+      this.scheduledTransactions = this.allTransactions;
+    }
+  }
+
+  getIcon(iconId: number): IICon {
+    return this.iconService.getIcon(iconId);
   }
 
   delete(scheduledTransaction: IScheduledTransaction): void {

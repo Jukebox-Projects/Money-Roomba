@@ -13,6 +13,8 @@ import { IUserDetails } from 'app/entities/user-details/user-details.model';
 import { UserDetailsService } from 'app/entities/user-details/service/user-details.service';
 import { ICategory } from 'app/entities/category/category.model';
 import { CategoryService } from 'app/entities/category/service/category.service';
+import { IWallet } from 'app/entities/wallet/wallet.model';
+import { WalletService } from 'app/entities/wallet/service/wallet.service';
 
 @Component({
   selector: 'jhi-scheduled-transaction-update',
@@ -24,6 +26,7 @@ export class ScheduledTransactionUpdateComponent implements OnInit {
   currenciesSharedCollection: ICurrency[] = [];
   userDetailsSharedCollection: IUserDetails[] = [];
   categoriesSharedCollection: ICategory[] = [];
+  walletsSharedCollection: IWallet[] = [];
 
   editForm = this.fb.group({
     id: [],
@@ -44,12 +47,14 @@ export class ScheduledTransactionUpdateComponent implements OnInit {
     currency: [],
     sourceUser: [],
     category: [],
+    wallet: [null, [Validators.required]],
   });
 
   constructor(
     protected scheduledTransactionService: ScheduledTransactionService,
     protected currencyService: CurrencyService,
     protected userDetailsService: UserDetailsService,
+    protected walletService: WalletService,
     protected categoryService: CategoryService,
     protected activatedRoute: ActivatedRoute,
     protected fb: FormBuilder
@@ -82,6 +87,10 @@ export class ScheduledTransactionUpdateComponent implements OnInit {
   }
 
   trackUserDetailsById(index: number, item: IUserDetails): number {
+    return item.id!;
+  }
+
+  trackWalletById(index: number, item: IWallet): number {
     return item.id!;
   }
 
@@ -128,6 +137,7 @@ export class ScheduledTransactionUpdateComponent implements OnInit {
       currency: scheduledTransaction.currency,
       sourceUser: scheduledTransaction.sourceUser,
       category: scheduledTransaction.category,
+      wallet: scheduledTransaction.wallet,
     });
 
     this.currenciesSharedCollection = this.currencyService.addCurrencyToCollectionIfMissing(
@@ -137,6 +147,14 @@ export class ScheduledTransactionUpdateComponent implements OnInit {
     this.userDetailsSharedCollection = this.userDetailsService.addUserDetailsToCollectionIfMissing(
       this.userDetailsSharedCollection,
       scheduledTransaction.sourceUser
+    );
+    this.walletsSharedCollection = this.walletService.addWalletToCollectionIfMissing(
+      this.walletsSharedCollection,
+      scheduledTransaction.wallet
+    );
+    this.currenciesSharedCollection = this.currencyService.addCurrencyToCollectionIfMissing(
+      this.currenciesSharedCollection,
+      scheduledTransaction.currency
     );
     this.categoriesSharedCollection = this.categoryService.addCategoryToCollectionIfMissing(
       this.categoriesSharedCollection,
@@ -154,6 +172,12 @@ export class ScheduledTransactionUpdateComponent implements OnInit {
         )
       )
       .subscribe((currencies: ICurrency[]) => (this.currenciesSharedCollection = currencies));
+
+    this.walletService
+      .query()
+      .pipe(map((res: HttpResponse<IWallet[]>) => res.body ?? []))
+      .pipe(map((wallets: IWallet[]) => this.walletService.addWalletToCollectionIfMissing(wallets, this.editForm.get('wallet')!.value)))
+      .subscribe((wallets: IWallet[]) => (this.walletsSharedCollection = wallets));
 
     this.userDetailsService
       .query()
@@ -174,6 +198,38 @@ export class ScheduledTransactionUpdateComponent implements OnInit {
         )
       )
       .subscribe((categories: ICategory[]) => (this.categoriesSharedCollection = categories));
+  }
+
+  isDaily(): Boolean {
+    if (this.editForm.get(['recurringType'])!.value !== 'DAILY') {
+      return false;
+    } else {
+      return true;
+    }
+  }
+
+  isWeekly(): Boolean {
+    if (this.editForm.get(['recurringType'])!.value !== 'WEEKLY') {
+      return false;
+    } else {
+      return true;
+    }
+  }
+
+  isMonthly(): Boolean {
+    if (this.editForm.get(['recurringType'])!.value !== 'MONTHLY') {
+      return false;
+    } else {
+      return true;
+    }
+  }
+
+  isYearly(): Boolean {
+    if (this.editForm.get(['recurringType'])!.value !== 'YEARLY') {
+      return false;
+    } else {
+      return true;
+    }
   }
 
   protected createFromForm(): IScheduledTransaction {
@@ -197,6 +253,7 @@ export class ScheduledTransactionUpdateComponent implements OnInit {
       currency: this.editForm.get(['currency'])!.value,
       sourceUser: this.editForm.get(['sourceUser'])!.value,
       category: this.editForm.get(['category'])!.value,
+      wallet: this.editForm.get(['wallet'])!.value,
     };
   }
 }
