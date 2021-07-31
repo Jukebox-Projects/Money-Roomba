@@ -327,13 +327,14 @@ public class TransactionService {
     /**
      * Get one transaction by wallet id.
      *
-     * @param wallet the entity.
+     * @param id the entity.
      * @return the entity.
      */
     @Transactional(readOnly = true)
-    public List<Transaction> findAllByWallet(Wallet wallet) {
-        log.debug("Request to get Transaction : {}", wallet);
-        return transactionRepository.findAllByWallet(wallet);
+    public List<Transaction> findAllByWallet(Long id) {
+        log.debug("Request to get Transaction : {}", id);
+        Optional<Wallet> wallet = walletRepository.findById(id);
+        return transactionRepository.findAllByWallet(wallet.get());
     }
 
     /**
