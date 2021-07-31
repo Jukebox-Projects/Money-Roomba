@@ -34,7 +34,7 @@ public class ScheduledTransactionCronTaskService {
         this.transactionRepository = transactionRepository;
     }
 
-    @Scheduled(cron = "0 15 0 * * *")
+    @Scheduled(cron = "0 30 1 * * *")
     public void registerScheduledTransactions() throws Exception {
         List<ScheduledTransaction> allTransactions = scheduledTransactionRepository.findAll();
         LocalDate today = LocalDate.now();
