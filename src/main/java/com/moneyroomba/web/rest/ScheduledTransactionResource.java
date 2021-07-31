@@ -1,7 +1,10 @@
 package com.moneyroomba.web.rest;
 
 import com.moneyroomba.domain.ScheduledTransaction;
+import com.moneyroomba.domain.Wallet;
 import com.moneyroomba.repository.ScheduledTransactionRepository;
+import com.moneyroomba.security.AuthoritiesConstants;
+import com.moneyroomba.security.SecurityUtils;
 import com.moneyroomba.service.ScheduledTransactionQueryService;
 import com.moneyroomba.service.ScheduledTransactionService;
 import com.moneyroomba.service.criteria.ScheduledTransactionCriteria;
@@ -65,11 +68,15 @@ public class ScheduledTransactionResource {
         if (scheduledTransaction.getId() != null) {
             throw new BadRequestAlertException("A new scheduledTransaction cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        ScheduledTransaction result = scheduledTransactionService.save(scheduledTransaction);
-        return ResponseEntity
-            .created(new URI("/api/scheduled-transactions/" + result.getId()))
-            .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
-            .body(result);
+        if (!SecurityUtils.hasCurrentUserThisAuthority(AuthoritiesConstants.ADMIN)) {
+            ScheduledTransaction result = scheduledTransactionService.save(scheduledTransaction);
+            return ResponseEntity
+                .created(new URI("/api/wallets/" + result.getId()))
+                .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
+                .body(result);
+        } else {
+            throw new BadRequestAlertException("Admins cannot register transactions.", ENTITY_NAME, "nopermission");
+        }
     }
 
     /**
@@ -151,7 +158,7 @@ public class ScheduledTransactionResource {
     @GetMapping("/scheduled-transactions")
     public ResponseEntity<List<ScheduledTransaction>> getAllScheduledTransactions(ScheduledTransactionCriteria criteria) {
         log.debug("REST request to get ScheduledTransactions by criteria: {}", criteria);
-        List<ScheduledTransaction> entityList = scheduledTransactionQueryService.findByCriteria(criteria);
+        List<ScheduledTransaction> entityList = scheduledTransactionService.findAll();
         return ResponseEntity.ok().body(entityList);
     }
 

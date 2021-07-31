@@ -13,7 +13,7 @@
       "updated": "A Wallet has been updated.",
       "deleted": "A Wallet has been deleted.",
       "delete": {
-        "question": "Are you sure you want to delete Wallet {{ id }}?"
+        "question": "Are you sure you want to delete Wallet {{ id }}? All associated transactions will also be deleted."
       },
       "detail": {
         "title": "Wallet"
@@ -23,6 +23,7 @@
       "description": "Description",
       "inReports": "In Reports",
       "isActive": "Is Active",
+      "state": "State",
       "balance": "Balance",
       "icon": "Icon",
       "transaction": "Transaction",
