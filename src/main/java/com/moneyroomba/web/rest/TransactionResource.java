@@ -250,9 +250,6 @@ public class TransactionResource {
     public ResponseEntity<List<Transaction>> getTransactionsByWallet(@PathVariable Long id) {
         log.debug("REST request to get Transaction : {}", id);
         List<Transaction> entityList = transactionService.findAllByWallet(id);
-        System.out.println("SHEEEESH");
-        System.out.println("SHEEEESH");
-        System.out.println(entityList);
         return ResponseEntity.ok().body(entityList);
     }
 }

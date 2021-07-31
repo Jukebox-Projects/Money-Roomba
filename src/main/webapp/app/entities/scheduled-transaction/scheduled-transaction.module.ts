@@ -15,5 +15,6 @@ import { ScheduledTransactionRoutingModule } from './route/scheduled-transaction
     ScheduledTransactionDeleteDialogComponent,
   ],
   entryComponents: [ScheduledTransactionDeleteDialogComponent],
+  exports: [],
 })
 export class ScheduledTransactionModule {}

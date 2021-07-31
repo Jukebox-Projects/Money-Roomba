@@ -7,10 +7,19 @@ import { WalletDeleteDialogComponent } from './delete/wallet-delete-dialog.compo
 import { WalletRoutingModule } from './route/wallet-routing.module';
 import { IconService } from '../../shared/icon-picker/service/icon.service';
 import { UserTransactionsComponent } from '../transaction/user-transactions/user-transactions.component';
+import { UserScheduledTransactionsComponent } from '../scheduled-transaction/user-scheduled-transactions/user-scheduled-transactions.component';
+export * from '../scheduled-transaction/user-scheduled-transactions/user-scheduled-transactions.component';
 export * from '../transaction/user-transactions/user-transactions.component';
 @NgModule({
   imports: [SharedModule, WalletRoutingModule],
-  declarations: [WalletComponent, WalletDetailComponent, WalletUpdateComponent, WalletDeleteDialogComponent, UserTransactionsComponent],
+  declarations: [
+    WalletComponent,
+    WalletDetailComponent,
+    WalletUpdateComponent,
+    WalletDeleteDialogComponent,
+    UserTransactionsComponent,
+    UserScheduledTransactionsComponent,
+  ],
   entryComponents: [WalletDeleteDialogComponent],
   providers: [IconService],
 })
