@@ -1,7 +1,16 @@
 package com.moneyroomba.service;
 
 import com.moneyroomba.domain.ScheduledTransaction;
+import com.moneyroomba.domain.User;
+import com.moneyroomba.domain.UserDetails;
+import com.moneyroomba.domain.Wallet;
 import com.moneyroomba.repository.ScheduledTransactionRepository;
+import com.moneyroomba.repository.UserDetailsRepository;
+import com.moneyroomba.repository.UserRepository;
+import com.moneyroomba.security.AuthoritiesConstants;
+import com.moneyroomba.security.SecurityUtils;
+import com.moneyroomba.web.rest.errors.BadRequestAlertException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import org.slf4j.Logger;
@@ -16,12 +25,24 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class ScheduledTransactionService {
 
+    private final String ENTITY_NAME = "Scheduled Transaction";
+
     private final Logger log = LoggerFactory.getLogger(ScheduledTransactionService.class);
 
     private final ScheduledTransactionRepository scheduledTransactionRepository;
 
-    public ScheduledTransactionService(ScheduledTransactionRepository scheduledTransactionRepository) {
+    private final UserRepository userRepository;
+
+    private final UserDetailsRepository userDetailsRepository;
+
+    public ScheduledTransactionService(
+        ScheduledTransactionRepository scheduledTransactionRepository,
+        UserRepository userRepository,
+        UserDetailsRepository userDetailsRepository
+    ) {
         this.scheduledTransactionRepository = scheduledTransactionRepository;
+        this.userRepository = userRepository;
+        this.userDetailsRepository = userDetailsRepository;
     }
 
     /**
@@ -32,6 +53,20 @@ public class ScheduledTransactionService {
      */
     public ScheduledTransaction save(ScheduledTransaction scheduledTransaction) {
         log.debug("Request to save ScheduledTransaction : {}", scheduledTransaction);
+        Optional<User> user = userRepository.findOneByLogin(
+            SecurityUtils
+                .getCurrentUserLogin()
+                .orElseThrow(
+                    () ->
+                        new BadRequestAlertException(
+                            "Current user has no details on its account, could not complete action",
+                            ENTITY_NAME,
+                            "nonuserfound"
+                        )
+                )
+        );
+        Optional<UserDetails> userDetails = userDetailsRepository.findOneByInternalUser(user.get());
+        scheduledTransaction.setSourceUser(userDetails.get());
         return scheduledTransactionRepository.save(scheduledTransaction);
     }
 
@@ -69,8 +104,26 @@ public class ScheduledTransactionService {
                     if (scheduledTransaction.getAddToReports() != null) {
                         existingScheduledTransaction.setAddToReports(scheduledTransaction.getAddToReports());
                     }
-                    if (scheduledTransaction.getIncomingTransaction() != null) {
-                        existingScheduledTransaction.setIncomingTransaction(scheduledTransaction.getIncomingTransaction());
+                    if (scheduledTransaction.getRecurringType() != null) {
+                        existingScheduledTransaction.setRecurringType(scheduledTransaction.getRecurringType());
+                    }
+                    if (scheduledTransaction.getSeparationCount() != null) {
+                        existingScheduledTransaction.setSeparationCount(scheduledTransaction.getSeparationCount());
+                    }
+                    if (scheduledTransaction.getMaxNumberOfOcurrences() != null) {
+                        existingScheduledTransaction.setMaxNumberOfOcurrences(scheduledTransaction.getMaxNumberOfOcurrences());
+                    }
+                    if (scheduledTransaction.getDayOfWeek() != null) {
+                        existingScheduledTransaction.setDayOfWeek(scheduledTransaction.getDayOfWeek());
+                    }
+                    if (scheduledTransaction.getWeekOfMonth() != null) {
+                        existingScheduledTransaction.setWeekOfMonth(scheduledTransaction.getWeekOfMonth());
+                    }
+                    if (scheduledTransaction.getDayOfMonth() != null) {
+                        existingScheduledTransaction.setDayOfMonth(scheduledTransaction.getDayOfMonth());
+                    }
+                    if (scheduledTransaction.getMonthOfYear() != null) {
+                        existingScheduledTransaction.setMonthOfYear(scheduledTransaction.getMonthOfYear());
                     }
 
                     return existingScheduledTransaction;
@@ -87,7 +140,37 @@ public class ScheduledTransactionService {
     @Transactional(readOnly = true)
     public List<ScheduledTransaction> findAll() {
         log.debug("Request to get all ScheduledTransactions");
-        return scheduledTransactionRepository.findAll();
+        Optional<User> user = userRepository.findOneByLogin(
+            SecurityUtils
+                .getCurrentUserLogin()
+                .orElseThrow(() -> new BadRequestAlertException("A new wallet cannot already have an ID", ENTITY_NAME, "idexists"))
+        );
+        Optional<UserDetails> userDetails = userDetailsRepository.findOneByInternalUser(user.get());
+        List<ScheduledTransaction> entityList = scheduledTransactionRepository.findAll();
+        List<ScheduledTransaction> res = new ArrayList<ScheduledTransaction>();
+        if (
+            (!SecurityUtils.hasCurrentUserThisAuthority(AuthoritiesConstants.ADMIN)) &&
+            (
+                SecurityUtils.hasCurrentUserThisAuthority(AuthoritiesConstants.USER) ||
+                SecurityUtils.hasCurrentUserThisAuthority(AuthoritiesConstants.PREMIUM_USER)
+            )
+        ) {
+            if (userDetails.isPresent()) {
+                for (ScheduledTransaction st : entityList) {
+                    if (st.getSourceUser() == null) {} else {
+                        if (st.getSourceUser().equals(userDetails.get())) {
+                            res.add(st);
+                            System.out.println(res.size());
+                        }
+                    }
+                }
+            }
+        } else {
+            if (SecurityUtils.hasCurrentUserThisAuthority(AuthoritiesConstants.ADMIN)) {
+                res = entityList;
+            }
+        }
+        return res;
     }
 
     /**

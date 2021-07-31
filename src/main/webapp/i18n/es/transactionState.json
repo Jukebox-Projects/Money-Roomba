@@ -4,9 +4,10 @@
       "null": "",
       "ACCEPTED": "Aceptada",
       "DENIED": "Denegada",
-      "PENDING": "Pendiente de aprobar",
-      "APPROVAL": "Pending approval",
-      "NA": "Does not apply"
+      "PENDING_APPROVAL": "Pendiente de aprobar",
+      "NA": "No aplica",
+      "Accept": "Aceptar",
+      "Deny": "Denegar"
     }
   }
 }

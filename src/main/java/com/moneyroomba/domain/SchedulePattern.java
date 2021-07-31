@@ -55,7 +55,7 @@ public class SchedulePattern implements Serializable {
     private Integer monthOfYear;
 
     @ManyToOne
-    @JsonIgnoreProperties(value = { "schedulePatterns", "currency" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "currency", "sourceUser", "category" }, allowSetters = true)
     private ScheduledTransaction scheduleTransaction;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here

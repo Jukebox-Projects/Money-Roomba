@@ -111,6 +111,15 @@ public class CategoryQueryService extends QueryService<Category> {
                         )
                     );
             }
+            if (criteria.getScheduledTransactionId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(
+                            criteria.getScheduledTransactionId(),
+                            root -> root.join(Category_.scheduledTransactions, JoinType.LEFT).get(ScheduledTransaction_.id)
+                        )
+                    );
+            }
             if (criteria.getParentId() != null) {
                 specification =
                     specification.and(

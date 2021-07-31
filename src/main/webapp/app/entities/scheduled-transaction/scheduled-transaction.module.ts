@@ -5,7 +5,7 @@ import { ScheduledTransactionDetailComponent } from './detail/scheduled-transact
 import { ScheduledTransactionUpdateComponent } from './update/scheduled-transaction-update.component';
 import { ScheduledTransactionDeleteDialogComponent } from './delete/scheduled-transaction-delete-dialog.component';
 import { ScheduledTransactionRoutingModule } from './route/scheduled-transaction-routing.module';
-
+import { IconService } from '../../shared/icon-picker/service/icon.service';
 @NgModule({
   imports: [SharedModule, ScheduledTransactionRoutingModule],
   declarations: [
@@ -16,5 +16,6 @@ import { ScheduledTransactionRoutingModule } from './route/scheduled-transaction
   ],
   entryComponents: [ScheduledTransactionDeleteDialogComponent],
   exports: [],
+  providers: [IconService],
 })
 export class ScheduledTransactionModule {}
