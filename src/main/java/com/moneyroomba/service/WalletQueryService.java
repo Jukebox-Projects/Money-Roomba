@@ -108,6 +108,15 @@ public class WalletQueryService extends QueryService<Wallet> {
                         )
                     );
             }
+            if (criteria.getScheduledTransactionId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(
+                            criteria.getScheduledTransactionId(),
+                            root -> root.join(Wallet_.scheduledTransactions, JoinType.LEFT).get(ScheduledTransaction_.id)
+                        )
+                    );
+            }
             if (criteria.getUserId() != null) {
                 specification =
                     specification.and(

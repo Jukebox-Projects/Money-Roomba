@@ -28,12 +28,8 @@
     <span jhiTranslate="moneyRoombaApp.scheduledTransaction.home.notFound">No scheduledTransactions found</span>
   </div>
 
-  <div
-    class="etabl-responsive table-hover fs-14 card-tableetabl-responsive table-hover fs-14 card-table"
-    id="entities"
-    *ngIf="scheduledTransactions && scheduledTransactions.length > 0"
-  >
-    <table class="table display mb-4 dataTablesCard dataTable card-table" aria-describedby="page-heading">
+  <div class="table-responsive" id="entities" *ngIf="scheduledTransactions && scheduledTransactions.length > 0">
+    <table class="table table-striped" aria-describedby="page-heading">
       <thead>
         <tr>
           <th scope="col"><span jhiTranslate="global.field.id">ID</span></th>
@@ -44,8 +40,18 @@
           <th scope="col"><span jhiTranslate="moneyRoombaApp.scheduledTransaction.startDate">Start Date</span></th>
           <th scope="col"><span jhiTranslate="moneyRoombaApp.scheduledTransaction.endDate">End Date</span></th>
           <th scope="col"><span jhiTranslate="moneyRoombaApp.scheduledTransaction.addToReports">Add To Reports</span></th>
-          <th scope="col"><span jhiTranslate="moneyRoombaApp.scheduledTransaction.incomingTransaction">Incoming Transaction</span></th>
+          <th scope="col"><span jhiTranslate="moneyRoombaApp.scheduledTransaction.recurringType">Recurring Type</span></th>
+          <th scope="col"><span jhiTranslate="moneyRoombaApp.scheduledTransaction.separationCount">Separation Count</span></th>
+          <th scope="col">
+            <span jhiTranslate="moneyRoombaApp.scheduledTransaction.maxNumberOfOcurrences">Max Number Of Ocurrences</span>
+          </th>
+          <th scope="col"><span jhiTranslate="moneyRoombaApp.scheduledTransaction.dayOfWeek">Day Of Week</span></th>
+          <th scope="col"><span jhiTranslate="moneyRoombaApp.scheduledTransaction.weekOfMonth">Week Of Month</span></th>
+          <th scope="col"><span jhiTranslate="moneyRoombaApp.scheduledTransaction.dayOfMonth">Day Of Month</span></th>
+          <th scope="col"><span jhiTranslate="moneyRoombaApp.scheduledTransaction.monthOfYear">Month Of Year</span></th>
           <th scope="col"><span jhiTranslate="moneyRoombaApp.scheduledTransaction.currency">Currency</span></th>
+          <th scope="col"><span jhiTranslate="moneyRoombaApp.scheduledTransaction.sourceUser">Source User</span></th>
+          <th scope="col"><span jhiTranslate="moneyRoombaApp.scheduledTransaction.category">Category</span></th>
           <th scope="col"></th>
         </tr>
       </thead>
@@ -63,10 +69,28 @@
           <td>{{ scheduledTransaction.startDate | formatMediumDate }}</td>
           <td>{{ scheduledTransaction.endDate | formatMediumDate }}</td>
           <td>{{ scheduledTransaction.addToReports }}</td>
-          <td>{{ scheduledTransaction.incomingTransaction }}</td>
+          <td jhiTranslate="{{ 'moneyRoombaApp.RecurringType.' + scheduledTransaction.recurringType }}">
+            {{ scheduledTransaction.recurringType }}
+          </td>
+          <td>{{ scheduledTransaction.separationCount }}</td>
+          <td>{{ scheduledTransaction.maxNumberOfOcurrences }}</td>
+          <td>{{ scheduledTransaction.dayOfWeek }}</td>
+          <td>{{ scheduledTransaction.weekOfMonth }}</td>
+          <td>{{ scheduledTransaction.dayOfMonth }}</td>
+          <td>{{ scheduledTransaction.monthOfYear }}</td>
           <td>
             <div *ngIf="scheduledTransaction.currency">
               <a [routerLink]="['/currency', scheduledTransaction.currency?.id, 'view']">{{ scheduledTransaction.currency?.id }}</a>
+            </div>
+          </td>
+          <td>
+            <div *ngIf="scheduledTransaction.sourceUser">
+              <a [routerLink]="['/user-details', scheduledTransaction.sourceUser?.id, 'view']">{{ scheduledTransaction.sourceUser?.id }}</a>
+            </div>
+          </td>
+          <td>
+            <div *ngIf="scheduledTransaction.category">
+              <a [routerLink]="['/category', scheduledTransaction.category?.id, 'view']">{{ scheduledTransaction.category?.name }}</a>
             </div>
           </td>
           <td class="text-right">
