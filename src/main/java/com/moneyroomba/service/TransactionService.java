@@ -95,6 +95,7 @@ public class TransactionService {
                         transactionRepository.delete(transaction);
                         return null;
                     }
+                    transaction.setIncomingTransaction(false);
                     transaction.setState(TransactionState.NA);
                 } else {
                     if (registeredWallet.get().equals(targetWallet)) {
@@ -333,19 +334,10 @@ public class TransactionService {
                             }
                             double currentBalance;
                             if (transaction.getMovementType().equals(MovementType.EXPENSE)) {
-                                if (wallet.getBalance() > 0 && wallet.getBalance() >= existingTransaction.getAmount()) {
-                                    currentBalance = wallet.getBalance();
-                                    currentBalance = currentBalance - existingTransaction.getAmount();
-                                    wallet.setBalance(currentBalance);
-                                    walletRepository.save(wallet);
-                                } else {
-                                    //throw insufficient funds exception
-                                    throw new BadRequestAlertException(
-                                        "You cannot register this transaction because of insufficient balance.",
-                                        ENTITY_NAME,
-                                        "insufficientfunds"
-                                    );
-                                }
+                                currentBalance = wallet.getBalance();
+                                currentBalance = currentBalance - existingTransaction.getAmount();
+                                wallet.setBalance(currentBalance);
+                                walletRepository.save(wallet);
                             } else {
                                 if (transaction.getAmount() > 0) {
                                     currentBalance = wallet.getBalance();
@@ -483,6 +475,19 @@ public class TransactionService {
     public Optional<Transaction> findOne(Long id) {
         log.debug("Request to get Transaction : {}", id);
         return transactionRepository.findById(id);
+    }
+
+    /**
+     * Get one transaction by wallet id.
+     *
+     * @param id the entity.
+     * @return the entity.
+     */
+    @Transactional(readOnly = true)
+    public List<Transaction> findAllByWallet(Long id) {
+        log.debug("Request to get Transaction : {}", id);
+        Optional<Wallet> wallet = walletRepository.findById(id);
+        return transactionRepository.findAllByWallet(wallet.get());
     }
 
     /**

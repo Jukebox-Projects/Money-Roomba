@@ -2,11 +2,11 @@
   "moneyRoombaApp": {
     "TransactionType": {
       "null": "",
-      "MANUAL": "Creada manualmente",
-      "SCHEDULED": "Programada",
-      "EMAIL": "Recibida por correo",
-      "API": "Recibida por API",
-      "SHARED": "Recibida de otro usuario"
+      "MANUAL": "Created manually",
+      "SCHEDULED": "Scheduled",
+      "EMAIL": "Recieved via email",
+      "API": "Recieved via API",
+      "SHARED": "Shared"
     }
   }
 }

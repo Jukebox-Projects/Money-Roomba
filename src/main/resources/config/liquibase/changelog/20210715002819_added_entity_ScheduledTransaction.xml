@@ -35,11 +35,38 @@
             <column name="add_to_reports" type="boolean">
                 <constraints nullable="false" />
             </column>
-            <column name="incoming_transaction" type="boolean">
+            <column name="recurring_type" type="varchar(255)">
                 <constraints nullable="false" />
+            </column>
+            <column name="separation_count" type="integer">
+                <constraints nullable="true" />
+            </column>
+            <column name="max_number_of_ocurrences" type="integer">
+                <constraints nullable="true" />
+            </column>
+            <column name="day_of_week" type="integer">
+                <constraints nullable="true" />
+            </column>
+            <column name="week_of_month" type="integer">
+                <constraints nullable="true" />
+            </column>
+            <column name="day_of_month" type="integer">
+                <constraints nullable="true" />
+            </column>
+            <column name="month_of_year" type="integer">
+                <constraints nullable="true" />
             </column>
             <column name="currency_id" type="bigint">
                 <constraints nullable="true" />
+            </column>
+            <column name="source_user_id" type="bigint">
+                <constraints nullable="true" />
+            </column>
+            <column name="category_id" type="bigint">
+                <constraints nullable="true" />
+            </column>
+            <column name="wallet_id" type="bigint">
+                <constraints nullable="false" />
             </column>
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here -->
         </createTable>
@@ -68,7 +95,14 @@
             <column name="start_date" type="date"/>
             <column name="end_date" type="date"/>
             <column name="add_to_reports" type="boolean"/>
-            <column name="incoming_transaction" type="boolean"/>
+            <column name="recurring_type" type="string"/>
+            <column name="separation_count" type="numeric"/>
+            <column name="max_number_of_ocurrences" type="numeric"/>
+            <column name="day_of_week" type="numeric"/>
+            <column name="week_of_month" type="numeric"/>
+            <column name="day_of_month" type="numeric"/>
+            <column name="month_of_year" type="numeric"/>
+            <column name="wallet_id" type="numeric"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here -->
         </loadData>
     </changeSet>
