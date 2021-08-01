@@ -9,9 +9,10 @@ import { IconService } from '../../shared/icon-picker/service/icon.service';
 import { WalletSliderComponent } from './wallet-center/wallet-slider/wallet-slider.component';
 import { WalletStatisticComponent } from './wallet-center/wallet-statistic/wallet-statistic.component';
 import { CarouselModule } from 'ngx-owl-carousel-o';
+import { NgApexchartsModule } from 'ng-apexcharts';
 
 @NgModule({
-  imports: [SharedModule, WalletRoutingModule, CarouselModule],
+  imports: [SharedModule, WalletRoutingModule, CarouselModule, NgApexchartsModule],
   declarations: [
     WalletComponent,
     WalletDetailComponent,

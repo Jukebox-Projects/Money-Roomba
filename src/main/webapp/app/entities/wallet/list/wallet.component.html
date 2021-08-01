@@ -1,4 +1,5 @@
-<!--<div>
+<!-- *** Admin wallet listing *** -->
+<div *ngIf="this.adminUser">
   <h2 id="page-heading" data-cy="WalletHeading">
     <span jhiTranslate="moneyRoombaApp.wallet.home.title">Wallets</span>
 
@@ -23,17 +24,6 @@
       <button class="btn btn-info mr-2" (click)="loadAll()" [disabled]="isLoading">
         <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
         <span jhiTranslate="moneyRoombaApp.wallet.home.refreshListLabel">Refresh List</span>
-      </button>
-
-      <button
-        *ngIf="!this.adminUser"
-        id="jh-create-entity"
-        data-cy="entityCreateButton"
-        class="btn btn-primary jh-create-entity create-wallet"
-        [routerLink]="['/wallet/new']"
-      >
-        <fa-icon icon="plus"></fa-icon>
-        <span jhiTranslate="moneyRoombaApp.wallet.home.createLabel"> Create a new Wallet </span>
       </button>
     </div>
   </h2>
@@ -101,10 +91,10 @@
     </table>
   </div>
 </div>
--->
 
+<!-- *** Regular user wallet listing *** -->
 <!-- row -->
-<div class="container-fluid">
+<div *ngIf="!this.adminUser" class="container-fluid">
   <div class="d-sm-flex d-block justify-content-between align-items-center mb-4">
     <h2 class="text-black font-w600 mb-sm-0 mb-2">Wallet center</h2>
     <!--(click)="open(examplenewcard)"-->
@@ -164,23 +154,24 @@
             </div>
             <div class="card-body pb-0">
               <div class="d-flex mb-3 border-bottom justify-content-between flex-wrap align-items-center" *ngFor="let wallet of wallets">
-                <img
-                  class="rounded mr-3 pb-3"
-                  width="75"
-                  [routerLink]="['/wallet', wallet.id, 'view']"
-                  src="{{ getIcon(wallet.icon).path }}"
-                  alt="{{ getIcon(wallet.icon).name }}"
-                />
                 <div class="d-flex pb-3 align-items-center">
+                  <img
+                    class="rounded mr-3"
+                    width="75"
+                    [routerLink]="['/wallet', wallet.id, 'view']"
+                    src="{{ getIcon(wallet.icon).path }}"
+                    alt="{{ getIcon(wallet.icon).name }}"
+                  />
                   <div class="mr-3">
                     <p class="fs-14 mb-1" jhiTranslate="moneyRoombaApp.wallet.name">Name</p>
-                    <span class="text-black font-w500">{{ wallet.name }}</span>
+                    <span class="text-black font-w500" width="50">{{ wallet.name }}</span>
                   </div>
                 </div>
+                <!--
                 <div class="mr-3 pb-3">
                   <p class="fs-14 mb-1" jhiTranslate="moneyRoombaApp.wallet.description">Description</p>
                   <span class="text-black font-w500">Hello</span>
-                </div>
+                </div>-->
                 <div class="mr-3 pb-3">
                   <p class="fs-14 mb-1" jhiTranslate="moneyRoombaApp.wallet.inReports">In Reports</p>
 
@@ -228,6 +219,7 @@
     <div class="col-xl-3">
       <div class="row">
         <div class="col-xl-12"></div>
+        <app-wallet-statistic></app-wallet-statistic>
       </div>
     </div>
   </div>
