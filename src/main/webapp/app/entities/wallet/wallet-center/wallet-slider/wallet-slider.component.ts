@@ -1,37 +1,37 @@
 import { Component, OnInit, Input } from '@angular/core';
-//import { OwlOptions } from 'ngx-owl-carousel-o';
-
+import { OwlOptions } from 'ngx-owl-carousel-o';
+import { IWallet } from '../../wallet.model';
+import { IICon } from '../../../../shared/icon-picker/icon.model';
+import { IconService } from '../../../../shared/icon-picker/service/icon.service';
 @Component({
-  selector: 'app-waller-slider',
+  selector: 'app-wallet-slider',
   templateUrl: './wallet-slider.component.html',
   styleUrls: ['./wallet-slider.component.scss'],
 })
 export class WalletSliderComponent implements OnInit {
-  @Input() data: any;
+  @Input() walletsCarousel: IWallet[];
 
-  //customOptions: OwlOptions;
+  customOptions: OwlOptions;
 
-  constructor() {}
+  constructor(protected iconService: IconService) {}
 
   ngOnInit() {
-    /*setTimeout(() => {
-
+    setTimeout(() => {
       this.customOptions = {
-        loop:true,
-        margin:30,
-        nav:true,
-        center:true,
-        autoplay:false,
+        loop: true,
+        margin: 30,
+        nav: true,
+        center: true,
+        autoplay: false,
         dots: false,
         navText: ['', ''],
         responsiveRefreshRate: 100,
-        autoWidth:true,
+        autoWidth: true,
         // items:3
-
-
-      }
-
-
-    }, 300);*/
+      };
+    }, 1);
+  }
+  getIcon(iconId: number): IICon {
+    return this.iconService.getIcon(iconId);
   }
 }

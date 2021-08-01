@@ -8,9 +8,10 @@ import { WalletRoutingModule } from './route/wallet-routing.module';
 import { IconService } from '../../shared/icon-picker/service/icon.service';
 import { WalletSliderComponent } from './wallet-center/wallet-slider/wallet-slider.component';
 import { WalletStatisticComponent } from './wallet-center/wallet-statistic/wallet-statistic.component';
+import { CarouselModule } from 'ngx-owl-carousel-o';
 
 @NgModule({
-  imports: [SharedModule, WalletRoutingModule],
+  imports: [SharedModule, WalletRoutingModule, CarouselModule],
   declarations: [
     WalletComponent,
     WalletDetailComponent,

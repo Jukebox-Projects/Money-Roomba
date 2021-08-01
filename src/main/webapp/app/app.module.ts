@@ -153,6 +153,7 @@ import { LandingPageComponent } from './landing/landing-page/landing-page.compon
     MatTableModule,
     MatTooltipModule,
     MatTreeModule,
+
     // Set this to true to enable service worker (PWA)
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: false }),
     HttpClientModule,
