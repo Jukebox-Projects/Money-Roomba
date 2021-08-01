@@ -7,8 +7,8 @@
         "createLabel": "Create a new Wallet",
         "createOrEditLabel": "Create or edit a Wallet",
         "searchbar": "Search",
-        "notFound": "No Wallets found",
-        "upload": "Upload a transaction"
+        "upload": "Upload a transaction",
+        "notFound": "No Wallets found"
       },
       "created": "A new Wallet has been created.",
       "updated": "A Wallet has been updated.",
