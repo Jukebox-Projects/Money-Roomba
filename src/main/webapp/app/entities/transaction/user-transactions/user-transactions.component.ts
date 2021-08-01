@@ -9,6 +9,8 @@ import { HttpResponse } from '@angular/common/http';
 import { TransactionState } from '../../enumerations/transaction-state.model';
 import { TransactionDeleteDialogComponent } from '../delete/transaction-delete-dialog.component';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { IScheduledTransaction } from '../../scheduled-transaction/scheduled-transaction.model';
+import { ScheduledTransactionService } from '../../scheduled-transaction/service/scheduled-transaction.service';
 @Component({
   selector: 'app-user-transactions',
   templateUrl: './user-transactions.component.html',
@@ -18,6 +20,8 @@ export class UserTransactionsComponent implements OnInit {
   wallet: IWallet | null = null;
   transactions?: ITransaction[];
   allTransactions?: ITransaction[];
+  scheduledTransactions?: IScheduledTransaction[];
+  allScheduledTransactions?: IScheduledTransaction[];
   isLoading = false;
   collectionSize: any;
   @Input()
@@ -25,6 +29,7 @@ export class UserTransactionsComponent implements OnInit {
 
   constructor(
     protected transactionService: TransactionService,
+    protected scheduledTransactionService: ScheduledTransactionService,
     protected activatedRoute: ActivatedRoute,
     protected iconService: IconService,
     protected modalService: NgbModal
@@ -44,6 +49,16 @@ export class UserTransactionsComponent implements OnInit {
         this.isLoading = false;
       }
     );
+    this.scheduledTransactionService.query().subscribe(
+      (res: HttpResponse<IScheduledTransaction[]>) => {
+        this.isLoading = false;
+        this.scheduledTransactions = res.body ?? [];
+        this.allTransactions = res.body ?? [];
+      },
+      () => {
+        this.isLoading = false;
+      }
+    );
   }
 
   ngOnInit(): void {
@@ -55,6 +70,9 @@ export class UserTransactionsComponent implements OnInit {
   }
 
   trackId(index: number, item: ITransaction): number {
+    return item.id!;
+  }
+  trackIdScheduled(index: number, item: IScheduledTransaction): number {
     return item.id!;
   }
 

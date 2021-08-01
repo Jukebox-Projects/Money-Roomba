@@ -15,8 +15,8 @@ import { TransactionDeleteDialogComponent } from '../../transaction/delete/trans
   styleUrls: ['./user-scheduled-transactions.component.scss'],
 })
 export class UserScheduledTransactionsComponent implements OnInit {
-  scheduledTransacions?: IScheduledTransaction[];
-  allScheduledTransactions?: IScheduledTransaction[];
+  scheduledTransactions?: IScheduledTransaction[];
+  allTransactions?: IScheduledTransaction[];
   isLoading = false;
   collectionSize: any;
 
@@ -28,8 +28,17 @@ export class UserScheduledTransactionsComponent implements OnInit {
   ) {}
 
   loadAll(): void {
-    /* eslint-disable no-console */
     this.isLoading = true;
+    this.scheduledTransactionService.query().subscribe(
+      (res: HttpResponse<IScheduledTransaction[]>) => {
+        this.isLoading = false;
+        this.scheduledTransactions = res.body ?? [];
+        this.allTransactions = res.body ?? [];
+      },
+      () => {
+        this.isLoading = false;
+      }
+    );
   }
   ngOnInit(): void {
     this.loadAll();
