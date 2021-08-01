@@ -12,7 +12,9 @@ import com.moneyroomba.service.dto.factura.LineaDetalle;
 import com.moneyroomba.service.dto.factura.ResumenFactura;
 import com.moneyroomba.service.dto.factura.TiqueteElectronico;
 import com.moneyroomba.web.rest.errors.BadRequestAlertException;
+import java.time.LocalDate;
 import java.time.ZoneId;
+import java.time.temporal.TemporalAdjusters;
 import java.util.List;
 import java.util.Optional;
 import org.slf4j.Logger;
@@ -492,7 +494,10 @@ public class TransactionService {
         log.debug("Request to delete Transaction : {}", id);
         Optional<Transaction> existingTransaction = transactionRepository.findById(id);
         Wallet wallet = existingTransaction.get().getWallet();
-        if (existingTransaction.get().getState().equals(TransactionState.PENDING_APPROVAL)) return;
+        if (existingTransaction.get().getState().equals(TransactionState.PENDING_APPROVAL)) {
+            transactionRepository.deleteById(id);
+            return;
+        }
         if (existingTransaction.get().getMovementType().equals(MovementType.EXPENSE)) {
             wallet.setBalance(wallet.getBalance() + existingTransaction.get().getAmount());
         } else {
@@ -500,5 +505,24 @@ public class TransactionService {
         }
         walletRepository.save(wallet);
         transactionRepository.deleteById(id);
+    }
+
+    public boolean canAddMoreImportedTransactions() {
+        LocalDate startOfMonth = LocalDate.now().with(TemporalAdjusters.firstDayOfMonth());
+        LocalDate endOfMonth = LocalDate.now().with(TemporalAdjusters.lastDayOfMonth());
+
+        if (!SecurityUtils.hasCurrentUserThisAuthority(AuthoritiesConstants.PREMIUM_USER)) {
+            Optional<User> user = userRepository.findOneByLogin(
+                SecurityUtils
+                    .getCurrentUserLogin()
+                    .orElseThrow(() -> new BadRequestAlertException("Current user login not found", ENTITY_NAME, ""))
+            );
+            Optional<UserDetails> userDetails = userDetailsRepository.findOneByInternalUser(user.get());
+
+            int quantity = transactionRepository.countImportedTransactions(userDetails.get().getId(), startOfMonth, endOfMonth);
+            return quantity > 10;
+        } else {
+            return true;
+        }
     }
 }

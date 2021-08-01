@@ -50,13 +50,13 @@ public class InvoiceXMLResource {
             byte[] bytes = file.getBytes();
             String contenido = new String(file.getBytes());
 
-            //ve file : IMG_2331.JPG
-            //2021-07-30 10:01:59.569 DEBUG 254248 --- [  XNIO-1 task-1] c.m.web.rest.InvoiceXMLResource          : REST request to save file : file
-            //2021-07-30 10:01:59.569 DEBUG 254248 --- [  XNIO-1 task-1] c.m.web.rest.InvoiceXMLResource          : REST request to save file : image/jpeg
-            log.debug("REST request to save file : {}", file.getOriginalFilename());
-            log.debug("REST request to save file : {}", file.getName());
-            log.debug("REST request to save file : {}", file.getContentType());
-            log.debug("REST request to save file : {}", contenido);
+            if (!transactionService.canAddMoreImportedTransactions()) {
+                throw new BadRequestAlertException(
+                    "You have reached the maximum amount of imported transactions",
+                    ENTITY_NAME,
+                    "file.reachedMaximumTransactions"
+                );
+            }
 
             if (
                 file.getContentType().equals("text/xml") &&
@@ -76,7 +76,7 @@ public class InvoiceXMLResource {
 
                 return ResponseEntity
                     .created(new URI("/api/transactions/" + transaction.getId()))
-                    .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, transaction.getId().toString()))
+                    .headers(HeaderUtil.createAlert(applicationName, applicationName + ".transaction.upload", ""))
                     .body(transaction);
             } else {
                 throw new BadRequestAlertException("File type not supported, File type must be XML", ENTITY_NAME, "file.wrongFileType");

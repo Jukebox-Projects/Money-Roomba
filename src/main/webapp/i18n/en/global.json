@@ -203,7 +203,8 @@
       "could.not.extract": "Could not extract file",
       "not.image": "File was expected to be an image but was found to be \"{{ fileType }}\"",
       "noFileSelected": "No file was selected",
-      "wrongFileType": "File type not supported, File type must be XML"
+      "wrongFileType": "File type not supported, File type must be XML",
+      "reachedMaximumTransactions": "You have reached the maximum amount of imported transactions"
     }
   },
   "footer": "© 2021 Money Roomba"

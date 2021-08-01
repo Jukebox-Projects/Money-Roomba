@@ -29,22 +29,25 @@
         *ngIf="!this.adminUser"
         id="jh-create-entity"
         data-cy="entityCreateButton"
-        class="btn btn-primary jh-create-entity create-wallet"
+        class="btn btn-primary jh-create-entity create-wallet mr-2"
         [routerLink]="['/wallet/new']"
       >
         <fa-icon icon="plus"></fa-icon>
         <span jhiTranslate="moneyRoombaApp.wallet.home.createLabel"> Create a new Wallet </span>
       </button>
 
-      <input type="file" class="file-input" (change)="onFileSelected($event)" #fileUpload />
+      <input type="file" class="file-input" (change)="onFileSelected($event)" #fileUpload hidden />
 
-      <div class="file-upload">
-        {{ fileName || 'No file uploaded yet.' }}
-
-        <button mat-mini-fab color="primary" class="upload-btn" (click)="fileUpload.click()">
-          <fa-icon icon="plus"></fa-icon>
-        </button>
-      </div>
+      <button
+        *ngIf="!this.adminUser"
+        id="jh-upload-entity"
+        data-cy="entityUploadButton"
+        class="btn btn-success mr-2 jh-upload-entity upload-transaction"
+        (click)="fileUpload.click()"
+      >
+        <fa-icon icon="upload"></fa-icon>
+        <span jhiTranslate="moneyRoombaApp.wallet.home.upload"> Upload a transaction </span>
+      </button>
     </div>
   </h2>
 
