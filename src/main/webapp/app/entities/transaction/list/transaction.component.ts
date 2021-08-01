@@ -5,7 +5,6 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ITransaction } from '../transaction.model';
 import { TransactionService } from '../service/transaction.service';
 import { TransactionDeleteDialogComponent } from '../delete/transaction-delete-dialog.component';
-import { IWallet } from '../../wallet/wallet.model';
 import { FormGroup, FormControl } from '@angular/forms';
 import { IICon } from '../../../shared/icon-picker/icon.model';
 import { IconService } from '../../../shared/icon-picker/service/icon.service';
@@ -18,7 +17,7 @@ import { TransactionState } from '../../enumerations/transaction-state.model';
 })
 export class TransactionComponent implements OnInit {
   transactions?: ITransaction[];
-  allTransactions?: IWallet[];
+  allTransactions?: ITransaction[];
   isLoading = false;
   inputText = '';
   slctDataType: string;

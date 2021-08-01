@@ -15,6 +15,7 @@ import { IconService } from '../../shared/icon-picker/service/icon.service';
     ScheduledTransactionDeleteDialogComponent,
   ],
   entryComponents: [ScheduledTransactionDeleteDialogComponent],
+  exports: [],
   providers: [IconService],
 })
 export class ScheduledTransactionModule {}
