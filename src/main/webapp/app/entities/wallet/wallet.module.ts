@@ -6,10 +6,19 @@ import { WalletUpdateComponent } from './update/wallet-update.component';
 import { WalletDeleteDialogComponent } from './delete/wallet-delete-dialog.component';
 import { WalletRoutingModule } from './route/wallet-routing.module';
 import { IconService } from '../../shared/icon-picker/service/icon.service';
+import { WalletSliderComponent } from './wallet-center/wallet-slider/wallet-slider.component';
+import { WalletStatisticComponent } from './wallet-center/wallet-statistic/wallet-statistic.component';
 
 @NgModule({
   imports: [SharedModule, WalletRoutingModule],
-  declarations: [WalletComponent, WalletDetailComponent, WalletUpdateComponent, WalletDeleteDialogComponent],
+  declarations: [
+    WalletComponent,
+    WalletDetailComponent,
+    WalletUpdateComponent,
+    WalletDeleteDialogComponent,
+    WalletSliderComponent,
+    WalletStatisticComponent,
+  ],
   entryComponents: [WalletDeleteDialogComponent],
   providers: [IconService],
 })
