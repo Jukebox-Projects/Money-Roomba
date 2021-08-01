@@ -201,7 +201,9 @@
     "categorydeleteerror": "Cannot delete category because there are transactions associated to it",
     "file": {
       "could.not.extract": "Could not extract file",
-      "not.image": "File was expected to be an image but was found to be \"{{ fileType }}\""
+      "not.image": "File was expected to be an image but was found to be \"{{ fileType }}\"",
+      "noFileSelected": "No file was selected",
+      "wrongFileType": "File type not supported, File type must be XML"
     }
   },
   "footer": "© 2021 Money Roomba"
