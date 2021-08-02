@@ -56,29 +56,30 @@ public class ReportsService {
         return transactionRepository.getWalletBalanceReport(user.get().getId(), 13L, true, TransactionState.NA);
         // return walletRepository.findAll();
     }
-
     /**
      * Get report with expenses and income by category by wallet
      *
      * @return the report data needed in the front end graph.
      */
+    /*
     @Transactional(readOnly = true)
     public List<TransactionsByCategoryDTO> getTransactionsByCategoryByWallet(Long id) {
         log.debug("Request to get a transaction by category balance report per wallet");
         Optional<UserDetails> user = userService.getUserDetailsByLogin();
         return transactionRepository.getTransactionByCategoryReport(user.get().getId(), id, false, TransactionState.NA);
-    }
+    }*/
 
     /**
      * Get report with expenses and income by category from all wallets
      *
      * @return the report data needed in the front end graph.
      */
+    /*
     @Transactional(readOnly = true)
     public List<TransactionsByCategoryDTO> getTransactionsByCategory() {
         log.debug("Request to get a transaction by category balance report for all wallets");
         Optional<UserDetails> user = userService.getUserDetailsByLogin();
         // Se debe modificar para no recibir un ID de wallet y hacerlo por todos los wallets
         return transactionRepository.getTransactionByCategoryReport(user.get().getId(), 0L, false, TransactionState.NA);
-    }
+    }*/
 }
