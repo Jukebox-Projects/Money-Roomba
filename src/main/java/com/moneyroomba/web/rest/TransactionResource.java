@@ -239,4 +239,17 @@ public class TransactionResource {
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()))
             .build();
     }
+
+    /**
+     * {@code GET  /transactions/:id} : get the "id" transaction.
+     *
+     * @param id the id of the transaction to retrieve.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the transaction, or with status {@code 404 (Not Found)}.
+     */
+    @GetMapping("/transactions/wallet/{id}")
+    public ResponseEntity<List<Transaction>> getTransactionsByWallet(@PathVariable Long id) {
+        log.debug("REST request to get Transaction : {}", id);
+        List<Transaction> entityList = transactionService.findAllByWallet(id);
+        return ResponseEntity.ok().body(entityList);
+    }
 }

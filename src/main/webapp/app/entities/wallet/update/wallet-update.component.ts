@@ -37,7 +37,7 @@ export class WalletUpdateComponent implements OnInit {
     balance: [null, [Validators.required]],
     icon: [null, [Validators.min(0), Validators.required]],
     user: [],
-    currency: [],
+    currency: [null, [Validators.required]],
   });
 
   constructor(

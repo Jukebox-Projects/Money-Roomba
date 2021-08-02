@@ -4,6 +4,7 @@ import { IUserDetails } from 'app/entities/user-details/user-details.model';
 import { ICategory } from 'app/entities/category/category.model';
 import { MovementType } from 'app/entities/enumerations/movement-type.model';
 import { RecurringType } from 'app/entities/enumerations/recurring-type.model';
+import { IWallet } from 'app/entities/wallet/wallet.model';
 
 export interface IScheduledTransaction {
   id?: number;
@@ -24,6 +25,7 @@ export interface IScheduledTransaction {
   currency?: ICurrency | null;
   sourceUser?: IUserDetails | null;
   category?: ICategory | null;
+  wallet?: IWallet;
 }
 
 export class ScheduledTransaction implements IScheduledTransaction {
@@ -45,7 +47,8 @@ export class ScheduledTransaction implements IScheduledTransaction {
     public monthOfYear?: number | null,
     public currency?: ICurrency | null,
     public sourceUser?: IUserDetails | null,
-    public category?: ICategory | null
+    public category?: ICategory | null,
+    public wallet?: IWallet
   ) {
     this.addToReports = this.addToReports ?? false;
   }

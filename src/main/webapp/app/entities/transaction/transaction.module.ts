@@ -8,6 +8,7 @@ import { TransactionRoutingModule } from './route/transaction-routing.module';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { IconService } from '../../shared/icon-picker/service/icon.service';
+export * from '../scheduled-transaction/user-scheduled-transactions/user-scheduled-transactions.component';
 @NgModule({
   imports: [SharedModule, TransactionRoutingModule, MatFormFieldModule, MatDatepickerModule],
   declarations: [TransactionComponent, TransactionDetailComponent, TransactionUpdateComponent, TransactionDeleteDialogComponent],
