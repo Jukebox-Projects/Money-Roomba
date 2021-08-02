@@ -1,0 +1,12 @@
+{
+  "moneyRoombaApp": {
+    "report": {
+      "balance-report": {
+        "title": "Wallet balance report"
+      },
+      "noData": "No data found",
+      "income": "Income",
+      "expense": "Expense"
+    }
+  }
+}

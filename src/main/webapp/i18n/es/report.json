@@ -1,0 +1,12 @@
+{
+  "moneyRoombaApp": {
+    "report": {
+      "balance-report": {
+        "title": "Reporte de balance de cartera"
+      },
+      "noData": "Sin datos",
+      "income": "Ingresos",
+      "expense": "Gastos"
+    }
+  }
+}

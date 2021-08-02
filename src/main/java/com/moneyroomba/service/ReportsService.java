@@ -2,6 +2,7 @@ package com.moneyroomba.service;
 
 import com.moneyroomba.domain.User;
 import com.moneyroomba.domain.UserDetails;
+import com.moneyroomba.domain.Wallet;
 import com.moneyroomba.domain.enumeration.TransactionState;
 import com.moneyroomba.repository.TransactionRepository;
 import com.moneyroomba.repository.WalletRepository;
@@ -41,7 +42,13 @@ public class ReportsService {
     public List<WalletBalanceReportDTO> getBalancebyWallet(Long id) {
         log.debug("Request to get balance by wallet report");
         Optional<UserDetails> user = userService.getUserDetailsByLogin();
-        return transactionRepository.getWalletBalanceReport(user.get().getId(), id, true, TransactionState.NA);
+        Optional<Wallet> wallet = walletRepository.findById(id);
+        if (wallet.isPresent() && user.isPresent()) {
+            if (wallet.get().getInReports()) {
+                return transactionRepository.getWalletBalanceReport(user.get().getId(), id, true, TransactionState.NA);
+            }
+        }
+        return null;
     }
 
     /**

@@ -26,7 +26,7 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long>,
         " tr.state = ?4 AND" +
         " abs(datediff(tr.dateAdded, CURRENT_DATE)) BETWEEN 0 AND 30" +
         " GROUP BY tr.movementType, tr.wallet, tr.currency " +
-        " ORDER BY tr.wallet, tr.movementType"
+        " ORDER BY tr.wallet, tr.movementType DESC"
     )
     public List<WalletBalanceReportDTO> getWalletBalanceReport(Long userId, Long walletId, Boolean addToReports, TransactionState state);
     /*

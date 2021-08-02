@@ -12,6 +12,7 @@ import { WalletSliderComponent } from './wallet-center/wallet-slider/wallet-slid
 import { WalletStatisticComponent } from './wallet-center/wallet-statistic/wallet-statistic.component';
 import { CarouselModule } from 'ngx-owl-carousel-o';
 import { NgApexchartsModule } from 'ng-apexcharts';
+import { WalletBalanceComponent } from '../../reports/wallet-balance/wallet-balance.component';
 export * from '../scheduled-transaction/user-scheduled-transactions/user-scheduled-transactions.component';
 export * from '../transaction/user-transactions/user-transactions.component';
 
@@ -26,8 +27,9 @@ export * from '../transaction/user-transactions/user-transactions.component';
     UserScheduledTransactionsComponent,
     WalletSliderComponent,
     WalletStatisticComponent,
+    WalletBalanceComponent,
   ],
-  entryComponents: [WalletDeleteDialogComponent],
+  entryComponents: [WalletDeleteDialogComponent, WalletBalanceComponent],
   providers: [IconService],
 })
 export class WalletModule {}
