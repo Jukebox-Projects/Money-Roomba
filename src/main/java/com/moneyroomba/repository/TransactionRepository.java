@@ -29,12 +29,12 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long>,
         " ORDER BY tr.wallet, tr.movementType"
     )
     public List<WalletBalanceReportDTO> getWalletBalanceReport(Long userId, Long walletId, Boolean addToReports, TransactionState state);
-
+    /*
     //Agregar query - Reporte de Javier
     public List<TransactionsByCategoryDTO> getTransactionByCategoryReport(
         Long userId,
         Long walletId,
         Boolean addToReports,
         TransactionState state
-    );
+    );*/
 }

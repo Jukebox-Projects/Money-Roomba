@@ -32,6 +32,7 @@ public class ReportsResource {
     /**
      * GET transactionsByCategory
      */
+
     @GetMapping("/transactions-by-category")
     public ResponseEntity<List<TransactionsByCategoryDTO>> transactionsByCategory() {
         // Se debe implementar el funcionamiento del metodo getTransactionsByCategory
@@ -43,8 +44,8 @@ public class ReportsResource {
      */
     @GetMapping("/transactions-by-category/{id}")
     public ResponseEntity<List<TransactionsByCategoryDTO>> transactionsByCategoryByWallet(@PathVariable Long id) {
-        List<TransactionsByCategoryDTO> report = reportsService.getTransactionsByCategoryByWallet(id);
-        return ResponseEntity.ok().body(report);
+        //List<TransactionsByCategoryDTO> report = reportsService.getTransactionsByCategoryByWallet(id);
+        return ResponseEntity.ok().body(null);
     }
 
     /**
