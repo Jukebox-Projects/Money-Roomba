@@ -170,6 +170,10 @@ export class TransactionUpdateComponent implements OnInit {
     );
   }
 
+  isIncoming(): boolean {
+    return this.editForm.get(['incomingTransaction'])!.value;
+  }
+
   protected loadRelationshipsOptions(): void {
     this.attachmentService
       .query({ filter: 'transaction-is-null' })
