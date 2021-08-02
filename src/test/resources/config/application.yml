@@ -73,6 +73,11 @@ server:
   port: 10344
   address: localhost
 
+mailReceiver:
+  hostName: 'imap.gmail.com'
+  port: 993
+  userName: 'moneyroomba@gmail.com'
+  password: 'CashMoneyProductions123'
 # ===================================================================
 # JHipster specific properties
 #

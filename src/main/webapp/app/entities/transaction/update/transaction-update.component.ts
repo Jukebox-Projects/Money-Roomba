@@ -174,6 +174,10 @@ export class TransactionUpdateComponent implements OnInit {
     return this.editForm.get(['incomingtransaction'])!.value;
   }
 
+  isAPIorEmail(): boolean {
+    return this.editForm.get('transactionType')!.value == 'API' || this.editForm.get('transactionType')!.value == 'EMAIL';
+  }
+
   protected loadRelationshipsOptions(): void {
     this.attachmentService
       .query({ filter: 'transaction-is-null' })
