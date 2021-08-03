@@ -14,6 +14,7 @@ export class LicenseViewComponent implements OnInit {
   constructor(protected systemSettingService: SystemSettingService, protected modalService: NgbModal) {}
   systemSettings?: ISystemSetting[];
   isLoading = false;
+
   loadAll(): void {
     this.isLoading = true;
 
