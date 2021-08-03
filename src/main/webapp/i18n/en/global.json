@@ -115,7 +115,7 @@
           "required": "Your country is required."
         },
         "phone": {
-          "required": "Your phone is required."
+          "required": "Your phone is required. Format (XXX) XXXX XXXX"
         }
       }
     },
@@ -159,6 +159,11 @@
     },
     "validation": {
       "required": "This field is required.",
+      "mustaddwallet": "You must select a wallet.",
+      "transactiontyperequired": "You must specify a transaction type.",
+      "movementtyperequired": "You must specify a movement type.",
+      "daterequired": "You must specify a date for the transaction.",
+      "namerequired": "You must specify a name.",
       "minlength": "This field is required to be at least {{ min }} characters.",
       "maxlength": "This field cannot be longer than {{ max }} characters.",
       "min": "This field should be at least {{ min }}.",
@@ -193,10 +198,11 @@
     "nouserfound": "Current user has no details on its account, could not complete action",
     "nomorewallets": "User has reached the max amount of wallets that his accounts can handle.",
     "negativeincome": "You cannot register a transaction with an income lower than 0.",
+    "categorydeleteerror": "Cannot delete category because there are transactions associated to it",
     "file": {
       "could.not.extract": "Could not extract file",
       "not.image": "File was expected to be an image but was found to be \"{{ fileType }}\""
     }
   },
-  "footer": "This is your footer"
+  "footer": "© 2021 Money Roomba"
 }

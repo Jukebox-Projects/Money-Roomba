@@ -3,6 +3,28 @@
     <span jhiTranslate="moneyRoombaApp.scheduledTransaction.home.title">Scheduled Transactions</span>
 
     <div class="d-flex justify-content-end">
+      <div class="pt-3" style="font-size: 24px">
+        <select [(ngModel)]="filterType" name="filterType">
+          <option class="dropdown-item" value="name" jhiTranslate="moneyRoombaApp.scheduledTransaction.name">Name</option>
+          <option class="dropdown-item" value="currency" jhiTranslate="moneyRoombaApp.scheduledTransaction.currency">Currency</option>
+        </select>
+      </div>
+      <div *ngIf="filterType === 'currency'" class="pt-3 p-1" style="font-size: 24px">
+        <input
+          jhiTranslate="moneyRoombaApp.wallet.home.searchbar"
+          type="text"
+          [(ngModel)]="inputText"
+          (input)="filterTransactionsByCurrency()"
+        />
+      </div>
+      <div *ngIf="filterType === 'name'" class="pt-3 p-1" style="font-size: 24px">
+        <input
+          jhiTranslate="moneyRoombaApp.wallet.home.searchbar"
+          type="text"
+          [(ngModel)]="inputText"
+          (input)="filterTransactionsByName()"
+        />
+      </div>
       <button class="btn btn-info mr-2" (click)="loadAll()" [disabled]="isLoading">
         <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
         <span jhiTranslate="moneyRoombaApp.scheduledTransaction.home.refreshListLabel">Refresh List</span>
@@ -28,42 +50,63 @@
     <span jhiTranslate="moneyRoombaApp.scheduledTransaction.home.notFound">No scheduledTransactions found</span>
   </div>
 
-  <div class="table-responsive" id="entities" *ngIf="scheduledTransactions && scheduledTransactions.length > 0">
-    <table class="table table-striped" aria-describedby="page-heading">
+  <div
+    class="tabl-responsive table-hover fs-14 card-tableetabl-responsive table-hover fs-14 card-table"
+    id="entities"
+    *ngIf="scheduledTransactions && scheduledTransactions.length > 0"
+  >
+    <table class="table display mb-4 dataTablesCard dataTable card-table" aria-describedby="page-heading">
       <thead>
         <tr>
-          <th scope="col"><span jhiTranslate="global.field.id">ID</span></th>
           <th scope="col"><span jhiTranslate="moneyRoombaApp.scheduledTransaction.name">Name</span></th>
-          <th scope="col"><span jhiTranslate="moneyRoombaApp.scheduledTransaction.description">Description</span></th>
           <th scope="col"><span jhiTranslate="moneyRoombaApp.scheduledTransaction.originalAmount">Original Amount</span></th>
           <th scope="col"><span jhiTranslate="moneyRoombaApp.scheduledTransaction.movementType">Movement Type</span></th>
-          <th scope="col"><span jhiTranslate="moneyRoombaApp.scheduledTransaction.startDate">Start Date</span></th>
-          <th scope="col"><span jhiTranslate="moneyRoombaApp.scheduledTransaction.endDate">End Date</span></th>
+          <th scope="col"><span jhiTranslate="moneyRoombaApp.scheduledTransaction.startDate">Period</span></th>
           <th scope="col"><span jhiTranslate="moneyRoombaApp.scheduledTransaction.addToReports">Add To Reports</span></th>
-          <th scope="col"><span jhiTranslate="moneyRoombaApp.scheduledTransaction.incomingTransaction">Incoming Transaction</span></th>
-          <th scope="col"><span jhiTranslate="moneyRoombaApp.scheduledTransaction.currency">Currency</span></th>
+          <th scope="col"><span jhiTranslate="moneyRoombaApp.scheduledTransaction.recurringType">Recurring Type</span></th>
+          <th scope="col"><span jhiTranslate="moneyRoombaApp.scheduledTransaction.category">Category</span></th>
           <th scope="col"></th>
         </tr>
       </thead>
       <tbody>
         <tr *ngFor="let scheduledTransaction of scheduledTransactions; trackBy: trackId" data-cy="entityTable">
-          <td>
-            <a [routerLink]="['/scheduled-transaction', scheduledTransaction.id, 'view']">{{ scheduledTransaction.id }}</a>
-          </td>
           <td>{{ scheduledTransaction.name }}</td>
-          <td>{{ scheduledTransaction.description }}</td>
-          <td>{{ scheduledTransaction.originalAmount }}</td>
-          <td jhiTranslate="{{ 'moneyRoombaApp.MovementType.' + scheduledTransaction.movementType }}">
-            {{ scheduledTransaction.movementType }}
-          </td>
-          <td>{{ scheduledTransaction.startDate | formatMediumDate }}</td>
-          <td>{{ scheduledTransaction.endDate | formatMediumDate }}</td>
-          <td>{{ scheduledTransaction.addToReports }}</td>
-          <td>{{ scheduledTransaction.incomingTransaction }}</td>
+          <td>{{ scheduledTransaction.currency?.code }}{{ scheduledTransaction.originalAmount }}</td>
           <td>
-            <div *ngIf="scheduledTransaction.currency">
-              <a [routerLink]="['/currency', scheduledTransaction.currency?.id, 'view']">{{ scheduledTransaction.currency?.id }}</a>
+            <div class="text-black">
+              <span *ngIf="scheduledTransaction.movementType.toLowerCase().includes('expense')" class="mr-2 oi-icon {{ 'bgl-danger' }}">
+                <img src="{{ 'assets/images/ic_out.svg' }}" />
+              </span>
+
+              <span *ngIf="scheduledTransaction.movementType.toLowerCase().includes('income')" class="mr-2 oi-icon {{ 'bgl-success' }}">
+                <img src="{{ 'assets/images/ic_in.svg' }}" />
+              </span>
+              <span jhiTranslate="{{ 'moneyRoombaApp.MovementType.' + scheduledTransaction.movementType }}"> </span>
             </div>
+          </td>
+          <td *ngIf="scheduledTransaction.endDate">
+            {{ scheduledTransaction.startDate | formatMediumDate }} - {{ scheduledTransaction.endDate | formatMediumDate }}
+          </td>
+          <td *ngIf="!scheduledTransaction.endDate">From {{ scheduledTransaction.startDate | formatMediumDate }} on</td>
+          <td>
+            <span *ngIf="scheduledTransaction.addToReports" class="badge badge-success" jhiTranslate="moneyRoombaApp.wallet.reportsTrue">
+              yes
+            </span>
+            <span *ngIf="!scheduledTransaction.addToReports" class="badge badge-danger" jhiTranslate="moneyRoombaApp.wallet.reportsFalse">
+              no
+            </span>
+          </td>
+          <td jhiTranslate="{{ 'moneyRoombaApp.RecurringType.' + scheduledTransaction.recurringType }}">
+            {{ scheduledTransaction.recurringType }}
+          </td>
+          <td class="table-icon-cell">
+            <!--<a [routerLink]="['/category', transaction.category?.id, 'view']">{{ transaction.category?.name }}</a>-->
+            <img
+              class="icon"
+              [routerLink]="['/category', scheduledTransaction.category?.id, 'view']"
+              src="{{ getIcon(scheduledTransaction.category?.icon).path }}"
+              alt="{{ getIcon(scheduledTransaction.category?.icon).name }}"
+            />
           </td>
           <td class="text-right">
             <div class="btn-group">

@@ -4,26 +4,32 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { finalize, map } from 'rxjs/operators';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { ICategory, Category } from '../category.model';
+import { IICon } from '../../../shared/icon-picker/icon.model';
 import { CategoryService, EntityArrayResponseType } from '../service/category.service';
 import { IUserDetails } from 'app/entities/user-details/user-details.model';
 import { UserDetailsService } from 'app/entities/user-details/service/user-details.service';
+import { IconPickerComponent } from '../../../shared/icon-picker/icon-picker.component';
+import { IconService } from '../../../shared/icon-picker/service/icon.service';
 
 @Component({
   selector: 'jhi-category-update',
   templateUrl: './category-update.component.html',
+  styleUrls: ['./category-update.component.css'],
 })
 export class CategoryUpdateComponent implements OnInit {
   isSaving = false;
 
   categoriesSharedCollection: ICategory[] = [];
   userDetailsSharedCollection: IUserDetails[] = [];
+  selectedIcon: IICon;
 
   editForm = this.fb.group({
     id: [],
     name: [null, [Validators.required]],
-    icon: [],
+    icon: [null, [Validators.required]],
     parent: [],
   });
 
@@ -31,7 +37,9 @@ export class CategoryUpdateComponent implements OnInit {
     protected categoryService: CategoryService,
     protected userDetailsService: UserDetailsService,
     protected activatedRoute: ActivatedRoute,
-    protected fb: FormBuilder
+    protected fb: FormBuilder,
+    protected modalService: NgbModal,
+    protected iconService: IconService
   ) {}
 
   ngOnInit(): void {
@@ -62,6 +70,16 @@ export class CategoryUpdateComponent implements OnInit {
 
   trackUserDetailsById(index: number, item: IUserDetails): number {
     return item.id!;
+  }
+
+  openIconPickerModal(): void {
+    const modalRef = this.modalService.open(IconPickerComponent, { size: 'lg', backdrop: 'static' });
+    modalRef.componentInstance.icon = this.selectedIcon;
+    // unsubscribe not needed because closed completes on modal close
+    modalRef.closed.subscribe(icon => {
+      this.selectedIcon = icon;
+      this.editForm.get(['icon']).patchValue(icon.id);
+    });
   }
 
   protected subscribeToSaveResponse(result: Observable<HttpResponse<ICategory>>): void {
@@ -102,6 +120,8 @@ export class CategoryUpdateComponent implements OnInit {
       this.userDetailsSharedCollection,
       category.user
     );
+
+    this.selectedIcon = this.iconService.getIcon(category.icon);
   }
 
   protected loadRelationshipsOptions(category?: ICategory): void {

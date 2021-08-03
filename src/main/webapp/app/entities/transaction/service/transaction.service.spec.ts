@@ -5,6 +5,7 @@ import * as dayjs from 'dayjs';
 import { DATE_FORMAT } from 'app/config/input.constants';
 import { MovementType } from 'app/entities/enumerations/movement-type.model';
 import { TransactionType } from 'app/entities/enumerations/transaction-type.model';
+import { TransactionState } from 'app/entities/enumerations/transaction-state.model';
 import { ITransaction, Transaction } from '../transaction.model';
 
 import { TransactionService } from './transaction.service';
@@ -38,6 +39,7 @@ describe('Service Tests', () => {
         addToReports: false,
         incomingTransaction: false,
         transactionType: TransactionType.MANUAL,
+        state: TransactionState.ACCEPTED,
       };
     });
 
@@ -94,6 +96,7 @@ describe('Service Tests', () => {
             addToReports: true,
             incomingTransaction: true,
             transactionType: 'BBBBBB',
+            state: 'BBBBBB',
           },
           elemDefault
         );
@@ -157,6 +160,7 @@ describe('Service Tests', () => {
             addToReports: true,
             incomingTransaction: true,
             transactionType: 'BBBBBB',
+            state: 'BBBBBB',
           },
           elemDefault
         );
@@ -213,7 +217,7 @@ describe('Service Tests', () => {
         });
 
         it('should add only unique Transaction to an array', () => {
-          const transactionArray: ITransaction[] = [{ id: 123 }, { id: 456 }, { id: 9957 }];
+          const transactionArray: ITransaction[] = [{ id: 123 }, { id: 456 }, { id: 36254 }];
           const transactionCollection: ITransaction[] = [{ id: 123 }];
           expectedResult = service.addTransactionToCollectionIfMissing(transactionCollection, ...transactionArray);
           expect(expectedResult).toHaveLength(3);

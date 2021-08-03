@@ -4,37 +4,41 @@
       "home": {
         "title": "Transacciones",
         "refreshListLabel": "Refrescar lista",
-        "createLabel": "Crear nuevo Transaction",
-        "createOrEditLabel": "Crear o editar Transaction",
-        "searchbar": "Buscar",
-        "notFound": "Ningún Transactions encontrado"
+        "createLabel": "Crear nueva transacción",
+        "createOrEditLabel": "Crear o editar una transacción",
+        "notFound": "Ningúna transacción encontrada"
       },
-      "created": "Un nuevo Transaction ha sido creado con el identificador {{ param }}",
-      "updated": "Un Transaction ha sido actualizado con el identificador {{ param }}",
-      "deleted": "Un Transaction ha sido eliminado con el identificador {{ param }}",
+      "created": "Una nueva transacción ha sido creada con el identificador {{ param }}",
+      "updated": "Una transacción ha sido actualizada con el identificador {{ param }}",
+      "deleted": "Una transacción ha sido eliminada con el identificador {{ param }}",
       "delete": {
-        "question": "¿Seguro que quiere eliminar Transaction {{ id }}?"
+        "question": "¿Seguro que quiere eliminar la transacción {{ id }}?"
       },
       "detail": {
-        "title": "Transaction",
-        "none": "Ninguna"
+        "title": "Transacciones"
       },
       "id": "ID",
       "name": "Nombre",
       "description": "Descripción",
       "dateAdded": "Fecha",
       "amount": "Monto",
-      "originalAmount": "Monto Original",
-      "movementType": "Tipo de Movimiento",
+      "originalAmount": "Monto",
+      "movementType": "Tipo de movimiento",
       "scheduled": "Programada",
-      "addToReports": "En Reportes",
-      "incomingTransaction": "Transacción Entrante",
-      "transactionType": "Tipo",
-      "attachment": "Adjuntos",
+      "addToReports": "Agregar a reportes",
+      "incomingTransaction": "Transaccion entrante",
+      "transactionType": "Tipo de transacción",
+      "state": "Estado",
+      "attachment": "Adjunto",
       "wallet": "Cartera",
-      "currency": "Tipo de Moneda",
+      "currency": "Moneda",
       "category": "Categoría",
-      "sourceUser": "Usuario"
+      "sourceUser": "Usuario",
+      "recievingUser": "Receptor",
+      "outgoingTransaction": "Transaccion saliente",
+      "transactionState": "Estado",
+      "active": "Activo",
+      "inactive": "Inactivo"
     }
   }
 }

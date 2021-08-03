@@ -36,7 +36,9 @@
       "transaction": "Transacción",
       "icon": "Ícono",
       "parent": "Categoría padre",
-      "user": "Dueño de la Categoría"
+      "user": "Dueño de la Categoría",
+      "active": "Activo",
+      "inactive": "Inactivo"
     }
   }
 }

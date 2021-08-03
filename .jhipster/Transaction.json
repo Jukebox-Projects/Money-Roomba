@@ -53,6 +53,11 @@
       "fieldType": "TransactionType",
       "fieldValues": "MANUAL (Creada manualmente),SCHEDULED (Programada),EMAIL (Recibida por correo),API (Recibida por API),SHARED (Recibida de otro usuario)",
       "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "state",
+      "fieldType": "TransactionState",
+      "fieldValues": "ACCEPTED (Accepted),DENIED (Denied),PENDING,APPROVAL (Pending approval),NA (Does not apply)"
     }
   ],
   "relationships": [
@@ -90,6 +95,12 @@
       "otherEntityName": "userDetails",
       "otherEntityRelationshipName": "transaction",
       "relationshipName": "sourceUser"
+    },
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "userDetails",
+      "otherEntityRelationshipName": "recievedTransactions",
+      "relationshipName": "recievingUser"
     }
   ],
   "entityTableName": "t_transaction",

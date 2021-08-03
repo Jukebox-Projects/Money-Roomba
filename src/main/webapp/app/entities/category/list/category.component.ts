@@ -5,13 +5,16 @@ import { AccountService } from '../../../core/auth/account.service';
 
 import { ICategory } from '../category.model';
 import { CategoryService } from '../service/category.service';
+import { IconService } from '../../../shared/icon-picker/service/icon.service';
 import { CategoryDeleteDialogComponent } from '../delete/category-delete-dialog.component';
 import { CategoryStatusDialogComponent } from '../status/category-status-dialog.component';
 import { Authority } from '../../../config/authority.constants';
+import { IICon } from '../../../shared/icon-picker/icon.model';
 
 @Component({
   selector: 'jhi-category',
   templateUrl: './category.component.html',
+  styleUrls: ['./category.component.css'],
 })
 export class CategoryComponent implements OnInit {
   categories?: ICategory[];
@@ -20,7 +23,12 @@ export class CategoryComponent implements OnInit {
   inputText = '';
   adminUser = false;
 
-  constructor(protected categoryService: CategoryService, protected modalService: NgbModal, protected accountService: AccountService) {}
+  constructor(
+    protected categoryService: CategoryService,
+    protected modalService: NgbModal,
+    protected accountService: AccountService,
+    protected iconService: IconService
+  ) {}
 
   loadAll(): void {
     this.isLoading = true;
@@ -85,5 +93,9 @@ export class CategoryComponent implements OnInit {
 
   isAdmin(): void {
     this.adminUser = this.accountService.hasAnyAuthority(Authority.ADMIN);
+  }
+
+  getIcon(iconId: number): IICon {
+    return this.iconService.getIcon(iconId);
   }
 }

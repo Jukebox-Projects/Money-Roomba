@@ -6,7 +6,6 @@
         "refreshListLabel": "Refresh list",
         "createLabel": "Create a new Transaction",
         "createOrEditLabel": "Create or edit a Transaction",
-        "searchbar": "Search",
         "notFound": "No Transactions found"
       },
       "created": "A new Transaction is created with identifier {{ param }}",
@@ -16,8 +15,7 @@
         "question": "Are you sure you want to delete Transaction {{ id }}?"
       },
       "detail": {
-        "title": "Transaction",
-        "none": "None"
+        "title": "Transaction"
       },
       "id": "ID",
       "name": "Name",
@@ -30,11 +28,17 @@
       "addToReports": "Add To Reports",
       "incomingTransaction": "Incoming Transaction",
       "transactionType": "Transaction Type",
+      "state": "State",
       "attachment": "Attachment",
       "wallet": "Wallet",
       "currency": "Currency",
       "category": "Category",
-      "sourceUser": "Source User"
+      "sourceUser": "Source User",
+      "recievingUser": "Receiving User",
+      "outgoingTransaction": "Outgoing Transaction",
+      "transactionState": "Approval State",
+      "active": "Active",
+      "inactive": "Inactive"
     }
   }
 }

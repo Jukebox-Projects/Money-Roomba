@@ -16,7 +16,7 @@ export class MainComponent implements OnInit {
   title = 'Money Roomba';
   navSidebarClass: boolean = true;
   hamburgerClass: boolean = false;
-
+  showHead: boolean = false;
   constructor(
     private accountService: AccountService,
     private titleService: Title,
@@ -35,6 +35,15 @@ export class MainComponent implements OnInit {
     this.router.events.subscribe(event => {
       if (event instanceof NavigationEnd) {
         this.updateTitle();
+      }
+      if (
+        this.router.routerState.snapshot.url === '/login' ||
+        this.router.routerState.snapshot.url === '/account/reset/request' ||
+        this.router.routerState.snapshot.url === '/account/register'
+      ) {
+        this.showHead = true;
+      } else {
+        this.showHead = false;
       }
     });
 

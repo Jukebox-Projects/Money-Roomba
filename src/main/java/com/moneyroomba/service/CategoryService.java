@@ -1,9 +1,12 @@
 package com.moneyroomba.service;
 
 import com.moneyroomba.domain.Category;
+import com.moneyroomba.domain.Transaction;
 import com.moneyroomba.repository.CategoryRepository;
+import com.moneyroomba.repository.TransactionRepository;
 import com.moneyroomba.service.exception.Category.CategoryDepthException;
 import com.moneyroomba.service.exception.Category.ParentCategoryIsSameCategory;
+import com.moneyroomba.web.rest.errors.BadRequestAlertException;
 import java.util.List;
 import java.util.Optional;
 import org.slf4j.Logger;
@@ -24,9 +27,14 @@ public class CategoryService {
 
     private final UserService userService;
 
-    public CategoryService(CategoryRepository categoryRepository, UserService userService) {
+    private static final String ENTITY_NAME = "category";
+
+    private final TransactionRepository transactionRepository;
+
+    public CategoryService(CategoryRepository categoryRepository, UserService userService, TransactionRepository transactionRepository) {
         this.categoryRepository = categoryRepository;
         this.userService = userService;
+        this.transactionRepository = transactionRepository;
     }
 
     /**
@@ -141,6 +149,19 @@ public class CategoryService {
      */
     public void delete(Long id) {
         log.debug("Request to delete Category : {}", id);
+        Optional<Category> category = categoryRepository.findById(id);
+        List<Transaction> entityList = transactionRepository.findAll();
+
+        for (Transaction t : entityList) {
+            if (t.getCategory() != null && t.getCategory().equals(category.get())) {
+                throw new BadRequestAlertException(
+                    "Cannot delete category because there are transactions associated to it",
+                    ENTITY_NAME,
+                    "categorydeleteerror"
+                );
+            }
+        }
+
         categoryRepository.deleteById(id);
     }
 }

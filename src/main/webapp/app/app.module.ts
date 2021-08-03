@@ -95,7 +95,10 @@ import { MatStepperModule } from '@angular/material/stepper';
 import { MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatTreeModule } from '@angular/material/tree';
+import { IconPickerComponent } from './shared/icon-picker/icon-picker.component';
 import { LandingPageComponent } from './landing/landing-page/landing-page.component';
+import { NgApexchartsModule } from 'ng-apexcharts';
+//import { ChartComponent} from "ng-apexcharts";
 
 @NgModule({
   imports: [
@@ -152,6 +155,8 @@ import { LandingPageComponent } from './landing/landing-page/landing-page.compon
     MatTableModule,
     MatTooltipModule,
     MatTreeModule,
+    NgApexchartsModule,
+
     // Set this to true to enable service worker (PWA)
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: false }),
     HttpClientModule,
@@ -185,7 +190,9 @@ import { LandingPageComponent } from './landing/landing-page/landing-page.compon
     NavHeaderComponent,
     HeaderComponent,
     NavigationComponent,
+    IconPickerComponent,
     LandingPageComponent,
+    //   ChartComponent
   ],
   bootstrap: [MainComponent],
 })

@@ -61,7 +61,7 @@
             type="lastName"
             class="form-control"
             id="lastName"
-            lastName="lastName"
+            name="lastName"
             placeholder="{{ 'global.form.lastName.placeholder' | translate }}"
             formControlName="lastName"
             data-cy="lastName"
@@ -348,22 +348,22 @@
         <div class="form-group">
           <label class="form-control-label" for="phone" jhiTranslate="global.form.phone.label">phone</label>
           <input
-            type="phone"
+            type="text"
             class="form-control"
             id="phone"
-            phone="phone"
-            placeholder="{{ 'global.form.phone.placeholder' | translate }}"
+            name="phone"
+            placeholder="(XXX) XXXX XXXX"
             formControlName="phone"
             data-cy="phone"
           />
 
-          <div *ngIf="registerForm.get('phone')!.invalid && (registerForm.get('phone')!.dirty || registerForm.get('phone')!.touched)">
+          <div>
             <small
               class="form-text text-danger"
-              *ngIf="registerForm.get('phone')?.errors?.required"
+              *ngIf="registerForm.get('phone')?.errors?.pattern"
               jhiTranslate="global.messages.validate.phone.required"
             >
-              Your phone is required.
+              Your phone is required. Format (XXX) XXXX XXXX.
             </small>
           </div>
         </div>

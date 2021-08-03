@@ -72,9 +72,21 @@
     },
     {
       "relationshipType": "one-to-many",
+      "otherEntityName": "scheduledTransaction",
+      "otherEntityRelationshipName": "sourceUser",
+      "relationshipName": "scheduledTransaction"
+    },
+    {
+      "relationshipType": "one-to-many",
       "otherEntityName": "userDetails",
       "otherEntityRelationshipName": "contact",
       "relationshipName": "userDetails"
+    },
+    {
+      "relationshipType": "one-to-many",
+      "otherEntityName": "transaction",
+      "otherEntityRelationshipName": "recievingUser",
+      "relationshipName": "recievedTransactions"
     },
     {
       "relationshipType": "many-to-many",

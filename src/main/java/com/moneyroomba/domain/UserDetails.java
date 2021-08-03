@@ -57,12 +57,12 @@ public class UserDetails implements Serializable {
 
     @OneToMany(mappedBy = "user")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @JsonIgnoreProperties(value = { "transactions", "user", "currency" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "transactions", "scheduledTransactions", "user", "currency" }, allowSetters = true)
     private Set<Wallet> wallets = new HashSet<>();
 
     @OneToMany(mappedBy = "user")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @JsonIgnoreProperties(value = { "categories", "transactions", "parent", "user" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "categories", "transactions", "scheduledTransactions", "parent", "user" }, allowSetters = true)
     private Set<Category> categories = new HashSet<>();
 
     @OneToMany(mappedBy = "user")
@@ -72,8 +72,13 @@ public class UserDetails implements Serializable {
 
     @OneToMany(mappedBy = "sourceUser")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @JsonIgnoreProperties(value = { "attachment", "wallet", "currency", "category", "sourceUser" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "attachment", "wallet", "currency", "category", "sourceUser", "recievingUser" }, allowSetters = true)
     private Set<Transaction> transactions = new HashSet<>();
+
+    @OneToMany(mappedBy = "sourceUser")
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @JsonIgnoreProperties(value = { "currency", "sourceUser", "category", "wallet" }, allowSetters = true)
+    private Set<ScheduledTransaction> scheduledTransactions = new HashSet<>();
 
     @OneToMany(mappedBy = "contact")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
@@ -85,7 +90,9 @@ public class UserDetails implements Serializable {
             "categories",
             "events",
             "transactions",
+            "scheduledTransactions",
             "userDetails",
+            "recievedTransactions",
             "targetContacts",
             "contact",
             "sourceContacts",
@@ -93,6 +100,11 @@ public class UserDetails implements Serializable {
         allowSetters = true
     )
     private Set<UserDetails> userDetails = new HashSet<>();
+
+    @OneToMany(mappedBy = "recievingUser")
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @JsonIgnoreProperties(value = { "attachment", "wallet", "currency", "category", "sourceUser", "recievingUser" }, allowSetters = true)
+    private Set<Transaction> recievedTransactions = new HashSet<>();
 
     @ManyToMany
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
@@ -109,7 +121,9 @@ public class UserDetails implements Serializable {
             "categories",
             "events",
             "transactions",
+            "scheduledTransactions",
             "userDetails",
+            "recievedTransactions",
             "targetContacts",
             "contact",
             "sourceContacts",
@@ -127,7 +141,9 @@ public class UserDetails implements Serializable {
             "categories",
             "events",
             "transactions",
+            "scheduledTransactions",
             "userDetails",
+            "recievedTransactions",
             "targetContacts",
             "contact",
             "sourceContacts",
@@ -146,7 +162,9 @@ public class UserDetails implements Serializable {
             "categories",
             "events",
             "transactions",
+            "scheduledTransactions",
             "userDetails",
+            "recievedTransactions",
             "targetContacts",
             "contact",
             "sourceContacts",
@@ -397,6 +415,37 @@ public class UserDetails implements Serializable {
         this.transactions = transactions;
     }
 
+    public Set<ScheduledTransaction> getScheduledTransactions() {
+        return this.scheduledTransactions;
+    }
+
+    public UserDetails scheduledTransactions(Set<ScheduledTransaction> scheduledTransactions) {
+        this.setScheduledTransactions(scheduledTransactions);
+        return this;
+    }
+
+    public UserDetails addScheduledTransaction(ScheduledTransaction scheduledTransaction) {
+        this.scheduledTransactions.add(scheduledTransaction);
+        scheduledTransaction.setSourceUser(this);
+        return this;
+    }
+
+    public UserDetails removeScheduledTransaction(ScheduledTransaction scheduledTransaction) {
+        this.scheduledTransactions.remove(scheduledTransaction);
+        scheduledTransaction.setSourceUser(null);
+        return this;
+    }
+
+    public void setScheduledTransactions(Set<ScheduledTransaction> scheduledTransactions) {
+        if (this.scheduledTransactions != null) {
+            this.scheduledTransactions.forEach(i -> i.setSourceUser(null));
+        }
+        if (scheduledTransactions != null) {
+            scheduledTransactions.forEach(i -> i.setSourceUser(this));
+        }
+        this.scheduledTransactions = scheduledTransactions;
+    }
+
     public Set<UserDetails> getUserDetails() {
         return this.userDetails;
     }
@@ -426,6 +475,37 @@ public class UserDetails implements Serializable {
             userDetails.forEach(i -> i.setContact(this));
         }
         this.userDetails = userDetails;
+    }
+
+    public Set<Transaction> getRecievedTransactions() {
+        return this.recievedTransactions;
+    }
+
+    public UserDetails recievedTransactions(Set<Transaction> transactions) {
+        this.setRecievedTransactions(transactions);
+        return this;
+    }
+
+    public UserDetails addRecievedTransactions(Transaction transaction) {
+        this.recievedTransactions.add(transaction);
+        transaction.setRecievingUser(this);
+        return this;
+    }
+
+    public UserDetails removeRecievedTransactions(Transaction transaction) {
+        this.recievedTransactions.remove(transaction);
+        transaction.setRecievingUser(null);
+        return this;
+    }
+
+    public void setRecievedTransactions(Set<Transaction> transactions) {
+        if (this.recievedTransactions != null) {
+            this.recievedTransactions.forEach(i -> i.setRecievingUser(null));
+        }
+        if (transactions != null) {
+            transactions.forEach(i -> i.setRecievingUser(this));
+        }
+        this.recievedTransactions = transactions;
     }
 
     public Set<UserDetails> getTargetContacts() {

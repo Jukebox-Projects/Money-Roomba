@@ -79,11 +79,17 @@ public class TransactionResource {
     @PostMapping("/transactions")
     public ResponseEntity<Transaction> createTransaction(@Valid @RequestBody Transaction transaction) throws URISyntaxException {
         log.debug("REST request to save Transaction : {}", transaction);
+        Transaction result;
         if (transaction.getId() != null) {
             throw new BadRequestAlertException("A new transaction cannot already have an ID", ENTITY_NAME, "idexists");
         }
         if (!SecurityUtils.hasCurrentUserThisAuthority(AuthoritiesConstants.ADMIN)) {
-            Transaction result = transactionService.save(transaction);
+            if (transaction.getRecievingUser() != null) {
+                result = transactionService.saveOutgoingTransaction(transaction);
+            } else {
+                result = transactionService.save(transaction);
+            }
+
             return ResponseEntity
                 .created(new URI("/api/transactions/" + result.getId()))
                 .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
@@ -232,5 +238,18 @@ public class TransactionResource {
             .noContent()
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()))
             .build();
+    }
+
+    /**
+     * {@code GET  /transactions/:id} : get the "id" transaction.
+     *
+     * @param id the id of the transaction to retrieve.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the transaction, or with status {@code 404 (Not Found)}.
+     */
+    @GetMapping("/transactions/wallet/{id}")
+    public ResponseEntity<List<Transaction>> getTransactionsByWallet(@PathVariable Long id) {
+        log.debug("REST request to get Transaction : {}", id);
+        List<Transaction> entityList = transactionService.findAllByWallet(id);
+        return ResponseEntity.ok().body(entityList);
     }
 }

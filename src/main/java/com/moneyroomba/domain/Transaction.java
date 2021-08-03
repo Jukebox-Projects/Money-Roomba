@@ -2,6 +2,7 @@ package com.moneyroomba.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.moneyroomba.domain.enumeration.MovementType;
+import com.moneyroomba.domain.enumeration.TransactionState;
 import com.moneyroomba.domain.enumeration.TransactionType;
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -66,6 +67,10 @@ public class Transaction implements Serializable {
     @Column(name = "transaction_type", nullable = false)
     private TransactionType transactionType;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "state")
+    private TransactionState state;
+
     @OneToOne
     @JoinColumn(unique = true)
     private Attachment attachment;
@@ -93,6 +98,7 @@ public class Transaction implements Serializable {
             "events",
             "transactions",
             "userDetails",
+            "recievedTransactions",
             "targetContacts",
             "contact",
             "sourceContacts",
@@ -100,6 +106,25 @@ public class Transaction implements Serializable {
         allowSetters = true
     )
     private UserDetails sourceUser;
+
+    @ManyToOne
+    @JsonIgnoreProperties(
+        value = {
+            "internalUser",
+            "license",
+            "wallets",
+            "categories",
+            "events",
+            "transactions",
+            "userDetails",
+            "recievedTransactions",
+            "targetContacts",
+            "contact",
+            "sourceContacts",
+        },
+        allowSetters = true
+    )
+    private UserDetails recievingUser;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
     public Long getId() {
@@ -245,6 +270,19 @@ public class Transaction implements Serializable {
         this.transactionType = transactionType;
     }
 
+    public TransactionState getState() {
+        return this.state;
+    }
+
+    public Transaction state(TransactionState state) {
+        this.state = state;
+        return this;
+    }
+
+    public void setState(TransactionState state) {
+        this.state = state;
+    }
+
     public Attachment getAttachment() {
         return this.attachment;
     }
@@ -310,6 +348,19 @@ public class Transaction implements Serializable {
         this.sourceUser = userDetails;
     }
 
+    public UserDetails getRecievingUser() {
+        return this.recievingUser;
+    }
+
+    public Transaction recievingUser(UserDetails userDetails) {
+        this.setRecievingUser(userDetails);
+        return this;
+    }
+
+    public void setRecievingUser(UserDetails userDetails) {
+        this.recievingUser = userDetails;
+    }
+
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
     @Override
@@ -344,6 +395,7 @@ public class Transaction implements Serializable {
             ", addToReports='" + getAddToReports() + "'" +
             ", incomingTransaction='" + getIncomingTransaction() + "'" +
             ", transactionType='" + getTransactionType() + "'" +
+            ", state='" + getState() + "'" +
             "}";
     }
 }

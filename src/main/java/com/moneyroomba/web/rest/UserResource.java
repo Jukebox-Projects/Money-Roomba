@@ -156,6 +156,17 @@ public class UserResource {
         );
     }
 
+    @PutMapping("/users/activation")
+    @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\")")
+    public ResponseEntity<AdminUserDTO> updateUserActivation(@Valid @RequestBody AdminUserDTO userDTO) {
+        Optional<AdminUserDTO> updatedUser = userService.updateActivation(userDTO);
+
+        return ResponseUtil.wrapOrNotFound(
+            updatedUser,
+            HeaderUtil.createAlert(applicationName, "userManagement.updated", userDTO.getLogin())
+        );
+    }
+
     /**
      * {@code GET /admin/users} : get all users with all the details - calling this are only allowed for the administrators.
      *

@@ -1,0 +1,13 @@
+{
+  "moneyRoombaApp": {
+    "TransactionState": {
+      "null": "",
+      "ACCEPTED": "Accepted",
+      "DENIED": "Denied",
+      "PENDING_APPROVAL": "Pending approval",
+      "NA": "Does not apply",
+      "Accept": "Accept",
+      "Deny": "Deny"
+    }
+  }
+}

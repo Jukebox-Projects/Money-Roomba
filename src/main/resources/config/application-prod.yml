@@ -33,9 +33,9 @@ spring:
       enabled: false
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
-    url: jdbc:mysql://localhost:3306/moneyRoomba?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
-    username: root
-    password:
+    url: jdbc:mysql://k6lzybo700wox309:g3i2k8urnildri4o@ohunm00fjsjs1uzy.cbetxkdyhwsb.us-east-1.rds.amazonaws.com:3306/oz6mcjgs14di26qd
+    username: k6lzybo700wox309
+    password: g3i2k8urnildri4o
     hikari:
       poolName: Hikari
       auto-commit: false

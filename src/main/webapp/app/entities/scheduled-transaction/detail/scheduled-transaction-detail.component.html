@@ -46,14 +46,52 @@
         <dd>
           <span>{{ scheduledTransaction.addToReports }}</span>
         </dd>
-        <dt><span jhiTranslate="moneyRoombaApp.scheduledTransaction.incomingTransaction">Incoming Transaction</span></dt>
+        <dt><span jhiTranslate="moneyRoombaApp.scheduledTransaction.recurringType">Recurring Type</span></dt>
         <dd>
-          <span>{{ scheduledTransaction.incomingTransaction }}</span>
+          <span jhiTranslate="{{ 'moneyRoombaApp.RecurringType.' + scheduledTransaction.recurringType }}">{{
+            scheduledTransaction.recurringType
+          }}</span>
+        </dd>
+        <dt><span jhiTranslate="moneyRoombaApp.scheduledTransaction.separationCount">Separation Count</span></dt>
+        <dd>
+          <span>{{ scheduledTransaction.separationCount }}</span>
+        </dd>
+        <dt><span jhiTranslate="moneyRoombaApp.scheduledTransaction.maxNumberOfOcurrences">Max Number Of Ocurrences</span></dt>
+        <dd>
+          <span>{{ scheduledTransaction.maxNumberOfOcurrences }}</span>
+        </dd>
+        <dt><span jhiTranslate="moneyRoombaApp.scheduledTransaction.dayOfWeek">Day Of Week</span></dt>
+        <dd>
+          <span>{{ scheduledTransaction.dayOfWeek }}</span>
+        </dd>
+        <dt><span jhiTranslate="moneyRoombaApp.scheduledTransaction.weekOfMonth">Week Of Month</span></dt>
+        <dd>
+          <span>{{ scheduledTransaction.weekOfMonth }}</span>
+        </dd>
+        <dt><span jhiTranslate="moneyRoombaApp.scheduledTransaction.dayOfMonth">Day Of Month</span></dt>
+        <dd>
+          <span>{{ scheduledTransaction.dayOfMonth }}</span>
+        </dd>
+        <dt><span jhiTranslate="moneyRoombaApp.scheduledTransaction.monthOfYear">Month Of Year</span></dt>
+        <dd>
+          <span>{{ scheduledTransaction.monthOfYear }}</span>
         </dd>
         <dt><span jhiTranslate="moneyRoombaApp.scheduledTransaction.currency">Currency</span></dt>
         <dd>
           <div *ngIf="scheduledTransaction.currency">
             <a [routerLink]="['/currency', scheduledTransaction.currency?.id, 'view']">{{ scheduledTransaction.currency?.id }}</a>
+          </div>
+        </dd>
+        <dt><span jhiTranslate="moneyRoombaApp.scheduledTransaction.sourceUser">Source User</span></dt>
+        <dd>
+          <div *ngIf="scheduledTransaction.sourceUser">
+            <a [routerLink]="['/user-details', scheduledTransaction.sourceUser?.id, 'view']">{{ scheduledTransaction.sourceUser?.id }}</a>
+          </div>
+        </dd>
+        <dt><span jhiTranslate="moneyRoombaApp.scheduledTransaction.category">Category</span></dt>
+        <dd>
+          <div *ngIf="scheduledTransaction.category">
+            <a [routerLink]="['/category', scheduledTransaction.category?.id, 'view']">{{ scheduledTransaction.category?.name }}</a>
           </div>
         </dd>
       </dl>
