@@ -18,17 +18,34 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long>,
     public List<Transaction> findAllByWallet(Wallet wallet);
 
     @Query(
-        value = "SELECT new com.moneyroomba.service.dto.reports.WalletBalanceReportDTO(sum(tr.amount), tr.movementType, tr.wallet, tr.currency) " +
+        value = "SELECT new com.moneyroomba.service.dto.reports.WalletBalanceReportDTO(SUM(tr.amount), tr.movementType, tr.wallet, tr.currency) " +
         "FROM Transaction tr " +
         "WHERE tr.sourceUser.id = ?1 AND" +
         " tr.wallet.id = ?2 AND" +
         " tr.addToReports = ?3 AND" +
         " tr.state = ?4 AND" +
-        " abs(datediff(tr.dateAdded, CURRENT_DATE)) BETWEEN 0 AND 30" +
+        " ABS(datediff(tr.dateAdded, CURRENT_DATE)) BETWEEN 0 AND 30" +
         " GROUP BY tr.movementType, tr.wallet, tr.currency " +
         " ORDER BY tr.wallet, tr.movementType DESC"
     )
     public List<WalletBalanceReportDTO> getWalletBalanceReport(Long userId, Long walletId, Boolean addToReports, TransactionState state);
+
+    @Query(
+        value = "SELECT new com.moneyroomba.service.dto.reports.WalletBalanceReportDTO(SUM(tr.amount), tr.movementType, tr.wallet, tr.currency) " +
+        "FROM Transaction tr " +
+        "WHERE tr.sourceUser.id = ?1 AND " +
+        "tr.addToReports = ?2 AND " +
+        "tr.state = ?3 AND " +
+        "ABS(DATEDIFF(tr.dateAdded, CURRENT_TIMESTAMP)) BETWEEN 0 AND ?4 " +
+        "GROUP BY tr.movementType, tr.wallet, tr.currency " +
+        "ORDER BY tr.wallet, tr.movementType DESC, tr.currency"
+    )
+    public List<WalletBalanceReportDTO> getAllWalletBalanceReport(
+        Long userId,
+        Boolean addToReports,
+        TransactionState state,
+        Integer daysInBetween
+    );
     /*
     //Agregar query - Reporte de Javier
     public List<TransactionsByCategoryDTO> getTransactionByCategoryReport(

@@ -4,6 +4,7 @@ import { IWalletBalance } from './wallet-balance.model';
 import { WalletBalanceService } from './service/wallet-balance.service';
 import { MovementType } from '../../entities/enumerations/movement-type.model';
 import { Wallet } from '../../entities/wallet/wallet.model';
+import { CurrencyPipe } from '@angular/common';
 
 @Component({
   selector: 'jhi-wallet-balance',
@@ -14,7 +15,7 @@ export class WalletBalanceComponent implements OnInit {
   reportData: IWalletBalance[];
   income: IWalletBalance;
   expense: IWalletBalance;
-  @Input() wallet: Wallet;
+  @Input() wallet: Wallet | null;
 
   constructor(protected walletBalanceService: WalletBalanceService) {}
 
@@ -23,13 +24,23 @@ export class WalletBalanceComponent implements OnInit {
   }
 
   loadAll(): void {
-    this.walletBalanceService.query(this.wallet.id).subscribe(
-      (res: HttpResponse<IWalletBalance[]>) => {
-        this.reportData = res.body ?? [];
-        this.resolveData(this.reportData);
-      },
-      error => {}
-    );
+    if (this.wallet) {
+      this.walletBalanceService.query(this.wallet.id).subscribe(
+        (res: HttpResponse<IWalletBalance[]>) => {
+          this.reportData = res.body ?? [];
+          this.resolveData(this.reportData);
+        },
+        error => {}
+      );
+    } else {
+      this.walletBalanceService.queryAll().subscribe(
+        (res: HttpResponse<IWalletBalance[]>) => {
+          this.reportData = res.body ?? [];
+          this.resolveData(this.reportData);
+        },
+        error => {}
+      );
+    }
   }
 
   protected resolveData(reportData: IWalletBalance[]): void {

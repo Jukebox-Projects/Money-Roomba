@@ -6,6 +6,7 @@ import { createRequestOption } from '../../../core/request/request-util';
 import { map } from 'rxjs/operators';
 import { IWalletBalance } from '../wallet-balance.model';
 import { ICurrency } from '../../../entities/currency/currency.model';
+import { DatePipe } from '@angular/common';
 
 export type EntityResponseType = HttpResponse<IWalletBalance>;
 export type EntityArrayResponseType = HttpResponse<IWalletBalance[]>;
@@ -16,14 +17,21 @@ export type EntityArrayResponseType = HttpResponse<IWalletBalance[]>;
 export class WalletBalanceService {
   protected resourceUrl = this.applicationConfigService.getEndpointFor('api/reports/wallet-balance');
 
-  constructor(protected http: HttpClient, protected applicationConfigService: ApplicationConfigService) {}
+  constructor(protected http: HttpClient, protected applicationConfigService: ApplicationConfigService, protected datePipe: DatePipe) {}
 
   query(id: number): Observable<EntityArrayResponseType> {
     return this.http.get<IWalletBalance[]>(`${this.resourceUrl}/${id}`, { observe: 'response' });
   }
 
-  find(req?: any): Observable<EntityResponseType> {
-    const options = createRequestOption(req);
-    return this.http.get<IWalletBalance>(`${this.resourceUrl}/2`, { params: options, observe: 'response' });
+  queryAll(): Observable<EntityArrayResponseType> {
+    var endDate = new Date();
+    var startDate = new Date(new Date().setDate(endDate.getDate() - 30));
+    const options = createRequestOption({
+      startDate: this.datePipe.transform(startDate, 'yyyy-MM-dd'),
+      endDate: this.datePipe.transform(endDate, 'yyyy-MM-dd'),
+    });
+    //const options = createRequestOption({startDate: startDate, endDate: endDate});
+
+    return this.http.get<IWalletBalance[]>(this.resourceUrl, { params: options, observe: 'response' });
   }
 }

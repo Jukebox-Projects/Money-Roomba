@@ -3,16 +3,12 @@ package com.moneyroomba.web.rest;
 import com.moneyroomba.service.ReportsService;
 import com.moneyroomba.service.dto.reports.TransactionsByCategoryDTO;
 import com.moneyroomba.service.dto.reports.WalletBalanceReportDTO;
+import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import tech.jhipster.web.util.ResponseUtil;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * ReportsResource controller
@@ -52,8 +48,9 @@ public class ReportsResource {
      * GET walletBalance
      */
     @GetMapping("/wallet-balance")
-    public ResponseEntity<WalletBalanceReportDTO> walletBalance() {
-        return ResponseEntity.ok().body(new WalletBalanceReportDTO());
+    public ResponseEntity<List<WalletBalanceReportDTO>> walletBalance(@RequestParam String startDate, @RequestParam String endDate) {
+        List<WalletBalanceReportDTO> report = reportsService.getBalanceAllWallets(startDate, endDate);
+        return ResponseEntity.ok().body(report);
     }
 
     /**
