@@ -150,7 +150,11 @@ public class TransactionService {
                     );
                 }
             }
-            transaction.setState(TransactionState.NA);
+            if (transaction.getName().contains("MoneyRoomba Premium")) {
+                transaction.setState(TransactionState.PENDING_APPROVAL);
+            } else {
+                transaction.setState(TransactionState.NA);
+            }
             return transactionRepository.save(transaction);
         } else {
             throw new BadRequestAlertException("Los administradores no pueden crear transacciones", ENTITY_NAME, "nopermission");

@@ -575,6 +575,13 @@ public class UserService {
     }*/
 
     @Transactional(readOnly = true)
+    public Optional<User> getUser() {
+        return userRepository.findOneByLogin(
+            this.getCurrentUserLogin().orElseThrow(() -> new NoSuchElementFoundException("No Login found"))
+        );
+    }
+
+    @Transactional(readOnly = true)
     public Optional<UserDetails> getUserDetailsByLogin() {
         Optional<User> user = userRepository.findOneByLogin(
             this.getCurrentUserLogin().orElseThrow(() -> new NoSuchElementFoundException("No Login found"))

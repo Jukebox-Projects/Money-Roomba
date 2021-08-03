@@ -36,11 +36,14 @@ export class LicenseViewComponent implements OnInit {
   getPrice(): number {
     return this.systemSettings?.find(kv => kv?.key === 'price')?.value || 0;
   }
+  getTax(): number {
+    return this.systemSettings?.find(kv => kv?.key === 'tax')?.value || 0;
+  }
 
   open(): void {
     const modalRef = this.modalService.open(LicenseBuyOrActivateDialogComponent, { size: 'lg', backdrop: 'static' });
     modalRef.closed.subscribe(reason => {
-      if (reason === 'bought') {
+      if (reason === 'activated') {
         setTimeout(() => {
           window.location.reload();
         }, 3500);
