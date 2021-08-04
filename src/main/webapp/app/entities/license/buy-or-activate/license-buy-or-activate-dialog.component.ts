@@ -24,7 +24,7 @@ export class LicenseBuyOrActivateDialogComponent {
     code: [{ value: null, disabled: this.isPremium() }, [Validators.required]],
   });
   giftForm = this.fb.group({
-    email: [{ value: '' }, [Validators.required, Validators.email]],
+    email: [null, [Validators.required, Validators.email]],
   });
   constructor(
     protected licenseService: LicenseService,
@@ -159,7 +159,7 @@ export class LicenseBuyOrActivateDialogComponent {
 
   payPal(): void {
     let paypal = {
-      isGift: this.isGift,
+      isGiftString: `${this.isGift}`,
       email: this.giftForm.get('email').value,
     };
     this.licenseService.payPal(paypal).subscribe(() => {

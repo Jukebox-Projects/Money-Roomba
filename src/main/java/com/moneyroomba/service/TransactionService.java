@@ -121,39 +121,40 @@ public class TransactionService {
                 double transactionInDollars = transaction.getOriginalAmount() / transaction.getCurrency().getConversionRate();
                 transaction.setAmount(transactionInDollars * targetWallet.get().getCurrency().getConversionRate());
             }
-            if (transaction.getMovementType().equals(MovementType.EXPENSE)) {
-                if (targetWallet.get().getBalance() > 0 && targetWallet.get().getBalance() >= transaction.getAmount()) {
-                    currentBalance = targetWallet.get().getBalance();
-                    currentBalance = currentBalance - transaction.getAmount();
-                    targetWallet.get().setBalance(currentBalance);
-                    walletRepository.save(targetWallet.get());
+
+            if (!transaction.getName().contains("MoneyRoomba Premium")) {
+                if (transaction.getMovementType().equals(MovementType.EXPENSE)) {
+                    if (targetWallet.get().getBalance() > 0 && targetWallet.get().getBalance() >= transaction.getAmount()) {
+                        currentBalance = targetWallet.get().getBalance();
+                        currentBalance = currentBalance - transaction.getAmount();
+                        targetWallet.get().setBalance(currentBalance);
+                        walletRepository.save(targetWallet.get());
+                    } else {
+                        //throw insufficient funds exception
+                        throw new BadRequestAlertException(
+                            "You cannot register this transaction because of insufficient balance.",
+                            ENTITY_NAME,
+                            "insufficientfunds"
+                        );
+                    }
                 } else {
-                    //throw insufficient funds exception
-                    throw new BadRequestAlertException(
-                        "You cannot register this transaction because of insufficient balance.",
-                        ENTITY_NAME,
-                        "insufficientfunds"
-                    );
+                    if (transaction.getAmount() > 0) {
+                        currentBalance = targetWallet.get().getBalance();
+                        currentBalance = currentBalance + transaction.getAmount();
+                        targetWallet.get().setBalance(currentBalance);
+                        walletRepository.save(targetWallet.get());
+                    } else {
+                        //throw cannot register negative transaction exception.
+                        throw new BadRequestAlertException(
+                            "You cannot register a transaction with an income lower than 0.",
+                            ENTITY_NAME,
+                            "negativeincome"
+                        );
+                    }
                 }
-            } else {
-                if (transaction.getAmount() > 0) {
-                    currentBalance = targetWallet.get().getBalance();
-                    currentBalance = currentBalance + transaction.getAmount();
-                    targetWallet.get().setBalance(currentBalance);
-                    walletRepository.save(targetWallet.get());
-                } else {
-                    //throw cannot register negative transaction exception.
-                    throw new BadRequestAlertException(
-                        "You cannot register a transaction with an income lower than 0.",
-                        ENTITY_NAME,
-                        "negativeincome"
-                    );
-                }
-            }
-            if (transaction.getName().contains("MoneyRoomba Premium")) {
-                transaction.setState(TransactionState.PENDING_APPROVAL);
-            } else {
                 transaction.setState(TransactionState.NA);
+            } else {
+                transaction.setState(TransactionState.PENDING_APPROVAL);
             }
             return transactionRepository.save(transaction);
         } else {
@@ -341,6 +342,10 @@ public class TransactionService {
     public void delete(Long id) {
         log.debug("Request to delete Transaction : {}", id);
         Optional<Transaction> existingTransaction = transactionRepository.findById(id);
+        if (existingTransaction.isPresent() && existingTransaction.get().getState() == TransactionState.PENDING_APPROVAL) {
+            transactionRepository.deleteById(id);
+            return;
+        }
         Wallet wallet = existingTransaction.get().getWallet();
         if (existingTransaction.get().getMovementType().equals(MovementType.EXPENSE)) {
             wallet.setBalance(wallet.getBalance() + existingTransaction.get().getAmount());

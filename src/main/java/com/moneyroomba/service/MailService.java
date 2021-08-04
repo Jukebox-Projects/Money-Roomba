@@ -1,7 +1,11 @@
 package com.moneyroomba.service;
 
+import com.moneyroomba.domain.Invoice;
+import com.moneyroomba.domain.License;
 import com.moneyroomba.domain.User;
 import com.moneyroomba.service.dto.AdminUserDTO;
+import com.moneyroomba.service.dto.LicenseDTO;
+import com.moneyroomba.service.dto.PayPalDTO;
 import java.nio.charset.StandardCharsets;
 import java.util.Locale;
 import javax.mail.MessagingException;
@@ -29,6 +33,10 @@ public class MailService {
     private final Logger log = LoggerFactory.getLogger(MailService.class);
 
     private static final String USER = "user";
+
+    private static final String INVOICE = "invoice";
+
+    private static final String LICENSE = "license";
 
     private static final String BASE_URL = "baseUrl";
 
@@ -94,6 +102,21 @@ public class MailService {
     }
 
     @Async
+    public void sendEmailFromTemplate(User user, License license, PayPalDTO payPalDTO, String templateName, String titleKey) {
+        if (payPalDTO.getEmail().isEmpty()) {
+            log.debug("Email doesn't exist for user '{}'", user.getLogin());
+            return;
+        }
+        Locale locale = Locale.forLanguageTag(user.getLangKey());
+        Context context = new Context(locale);
+        context.setVariable(LICENSE, license);
+        context.setVariable(BASE_URL, jHipsterProperties.getMail().getBaseUrl());
+        String content = templateEngine.process(templateName, context);
+        String subject = messageSource.getMessage(titleKey, null, locale);
+        sendEmail(payPalDTO.getEmail(), subject, content, false, true);
+    }
+
+    @Async
     public void sendEmailFromTemplate(User user, Object object, String templateName, String titleKey) {
         if (user.getEmail() == null) {
             log.debug("Email doesn't exist for user '{}'", user.getLogin());
@@ -110,6 +133,23 @@ public class MailService {
     }
 
     @Async
+    public void sendInvoice(Invoice invoice, User user, License license) {
+        if (invoice.getUserEmail() == null) {
+            log.debug("Email doesn't exist for user '{}'", user.getLogin());
+            return;
+        }
+        Locale locale = Locale.forLanguageTag(user.getLangKey());
+        Context context = new Context(locale);
+        context.setVariable(USER, user);
+        context.setVariable(INVOICE, invoice);
+        context.setVariable(LICENSE, license);
+        context.setVariable(BASE_URL, jHipsterProperties.getMail().getBaseUrl());
+        String content = templateEngine.process("mail/invoiceEmail", context);
+        String subject = messageSource.getMessage("email.invoice.title", null, locale);
+        sendEmail(invoice.getUserEmail(), subject, content, false, true);
+    }
+
+    @Async
     public void sendActivationEmail(User user) {
         log.debug("Sending activation email to '{}'", user.getEmail());
         sendEmailFromTemplate(user, "mail/activationEmail", "email.activation.title");
@@ -119,6 +159,12 @@ public class MailService {
     public void sendProfileChange(User user) {
         log.debug("Sending alert of profile changes to '{}'", user.getEmail());
         sendEmailFromTemplate(user, "mail/profileChanges", "profile.title");
+    }
+
+    @Async
+    public void sendGiftCode(User user, License license, PayPalDTO payPalDTO) {
+        log.debug("Sending gift code to '{}'", payPalDTO.getEmail());
+        sendEmailFromTemplate(user, license, payPalDTO, "mail/giftEmail", "gift.title");
     }
 
     @Async

@@ -21,7 +21,7 @@
         </button>
       </div>
 
-      <form name="giftForm" *ngIf="isGift && isBuying == false" (ngSubmit)="sendEmailGift()" role="form" novalidate [formGroup]="giftForm">
+      <form name="giftForm" *ngIf="isGift && isBuying == false" (ngSubmit)="sendEmailGift()" role="form" [formGroup]="giftForm">
         <label class="form-control-label" jhiTranslate="moneyRoombaApp.license.buyOrActivate.giftText" for="field_email"
           >Please enter the email to send the license code</label
         >
@@ -30,14 +30,29 @@
           <div class="input-group-prepend">
             <span class="input-group-text" jhiTranslate="moneyRoombaApp.license.email">Email</span>
           </div>
-          <input type="text" class="form-control" name="email" id="field_email" data-cy="email" formControlName="email" />
+          <input type="email" class="form-control" name="email" formControlName="email" id="field_email" required />
           <div class="input-group-append">
-            <button class="btn btn-primary" type="submit" jhiTranslate="moneyRoombaApp.license.buyOrActivate.send">Activar</button>
+            <button
+              class="btn btn-primary"
+              type="submit"
+              jhiTranslate="moneyRoombaApp.license.buyOrActivate.send"
+              [disabled]="!giftForm.valid"
+            >
+              Send
+            </button>
           </div>
         </div>
         <div *ngIf="giftForm.get('email')!.invalid && (giftForm.get('email')!.dirty || giftForm.get('email')!.touched)">
           <small class="form-text text-danger" *ngIf="giftForm.get('email')?.errors?.required" jhiTranslate="entity.validation.required">
             This field is required.
+          </small>
+
+          <small
+            class="form-text text-danger"
+            *ngIf="giftForm.get('email')?.errors?.email"
+            jhiTranslate="global.messages.validate.email.invalid"
+          >
+            Your email is invalid.
           </small>
         </div>
       </form>

@@ -43,6 +43,7 @@ public class PayPalResource {
     private final LicenseService licenseService;
     private final TransactionService transactionService;
     private final WalletRepository walletRepository;
+    private final MailService mailService;
 
     public PayPalResource(
         InvoiceService invoiceService,
@@ -51,7 +52,8 @@ public class PayPalResource {
         UserService userService,
         LicenseService licenseService,
         TransactionService transactionService,
-        WalletRepository walletRepository
+        WalletRepository walletRepository,
+        MailService mailService
     ) {
         this.invoiceService = invoiceService;
         this.currencyRepository = currencyRepository;
@@ -60,10 +62,13 @@ public class PayPalResource {
         this.licenseService = licenseService;
         this.transactionService = transactionService;
         this.walletRepository = walletRepository;
+        this.mailService = mailService;
     }
 
     @PostMapping("/paypal")
     public ResponseEntity<Void> createOrder(@Valid @RequestBody PayPalDTO payPalDTO) {
+        boolean isGift = false;
+        isGift = payPalDTO.getIsGiftString().equalsIgnoreCase("true");
         Invoice invoice = new Invoice();
         invoice.setCompanyName("MoneyRoomba");
         Optional<Currency> currencyRepo = currencyRepository.findOneByCode("USD");
@@ -71,7 +76,7 @@ public class PayPalResource {
         invoice.setCurrency(currency);
         invoice.setDateCreated(LocalDate.now());
         invoice.setItemQuantity(1);
-        invoice.setPurchaseDescription((payPalDTO.isGift() ? "MoneyRoomba Premium Gift" : "MoneyRoomba Premium"));
+        invoice.setPurchaseDescription((isGift ? "MoneyRoomba Premium Gift" : "MoneyRoomba Premium"));
         Optional<SystemSetting> priceSetting = systemSettingRepository.findOneByKey("price");
         Optional<SystemSetting> taxSetting = systemSettingRepository.findOneByKey("tax");
         double price = priceSetting.isPresent() ? priceSetting.get().getValue() : 0;
@@ -98,13 +103,13 @@ public class PayPalResource {
         license.setCode(UUID.randomUUID());
         license.setCreateMethod(LicenseCreateMethod.MANUAL);
         license.setIsActive(true);
-        license.setIsAssigned(payPalDTO.isGift() ? false : true);
+        license.setIsAssigned(isGift ? false : true);
         license.setInvoice(invoice);
         licenseService.save(license);
 
         Transaction transaction = new Transaction();
         transaction.setOriginalAmount(total);
-        transaction.setName((payPalDTO.isGift() ? "MoneyRoomba Premium Gift" : "MoneyRoomba Premium"));
+        transaction.setName((isGift ? "MoneyRoomba Premium Gift" : "MoneyRoomba Premium"));
         transaction.setMovementType(MovementType.EXPENSE);
         transaction.setState(TransactionState.PENDING_APPROVAL);
         transaction.setAddToReports(true);
@@ -117,9 +122,11 @@ public class PayPalResource {
         transaction.setWallet(wallets.get(0));
         transaction.setAttachment(null);
         transactionService.save(transaction);
-        if (!payPalDTO.isGift()) {
+
+        mailService.sendInvoice(invoice, user, license);
+
+        if (!isGift) {
             licenseService.activate(license);
-            //Enviar correo
             return ResponseEntity
                 .ok()
                 .headers(
@@ -127,8 +134,7 @@ public class PayPalResource {
                 )
                 .build();
         } else {
-            //Enviar correo a payPalDTO.getEmail()
-
+            mailService.sendGiftCode(user, license, payPalDTO);
             return ResponseEntity
                 .ok()
                 .headers(HeaderUtil.createAlert(applicationName, applicationName + "." + ENTITY_NAME + ".gift", ""))

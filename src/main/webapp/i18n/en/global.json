@@ -30,6 +30,7 @@
         "settings": "Settings",
         "password": "Password",
         "sessions": "Sessions",
+        "premium": "Premium",
         "login": "Sign in",
         "logout": "Sign out",
         "register": "Register"
