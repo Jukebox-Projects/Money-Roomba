@@ -10,8 +10,9 @@ import com.moneyroomba.domain.enumeration.TransactionState;
 import com.moneyroomba.repository.CurrencyRepository;
 import com.moneyroomba.repository.TransactionRepository;
 import com.moneyroomba.repository.WalletRepository;
-import com.moneyroomba.service.dto.reports.StartEndDatesDTO;
+import com.moneyroomba.service.dto.reports.TransactionCountReportDTO;
 import com.moneyroomba.service.dto.reports.WalletBalanceReportDTO;
+import com.moneyroomba.web.rest.errors.BadRequestAlertException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,6 +27,8 @@ import org.springframework.transaction.annotation.Transactional;
 public class ReportsService {
 
     private final Logger log = LoggerFactory.getLogger(ReportsService.class);
+
+    private static final String ENTITY_NAME = "report";
 
     private final WalletRepository walletRepository;
 
@@ -63,6 +66,8 @@ public class ReportsService {
             if (wallet.get().getInReports()) {
                 return transactionRepository.getWalletBalanceReport(user.get().getId(), id, true, TransactionState.NA);
             }
+        } else {
+            throw new BadRequestAlertException("Could not find the user", ENTITY_NAME, "nouserfound");
         }
         return null;
     }
@@ -88,6 +93,28 @@ public class ReportsService {
                     results = convertConversionForAllWallets(results, defaultCurrency);
                 }
             }
+        } else {
+            throw new BadRequestAlertException("Could not find the user", ENTITY_NAME, "nouserfound");
+        }
+        return results;
+        // return walletRepository.findAll();
+    }
+
+    /**
+     * Get report with expenses and income total from all wallets
+     *
+     * @return the report data needed in the front end graph.
+     */
+    @Transactional(readOnly = true)
+    public List<TransactionCountReportDTO> getTransactionCount(String startDate, String endDate) {
+        log.debug("Request to get amount of income and expense transactions by user");
+        Optional<UserDetails> user = userService.getUserDetailsByLogin();
+        List<TransactionCountReportDTO> results = null;
+        if (user.isPresent()) {
+            Long daysInBetween = DAYS.between(LocalDate.parse(startDate), LocalDate.parse(endDate));
+            results = transactionRepository.getTransactionCount(user.get().getId(), true, TransactionState.NA, daysInBetween.intValue());
+        } else {
+            throw new BadRequestAlertException("Could not find the user", ENTITY_NAME, "nouserfound");
         }
         return results;
         // return walletRepository.findAll();

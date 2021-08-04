@@ -1,6 +1,7 @@
 package com.moneyroomba.web.rest;
 
 import com.moneyroomba.service.ReportsService;
+import com.moneyroomba.service.dto.reports.TransactionCountReportDTO;
 import com.moneyroomba.service.dto.reports.TransactionsByCategoryDTO;
 import com.moneyroomba.service.dto.reports.WalletBalanceReportDTO;
 import java.time.LocalDate;
@@ -59,6 +60,15 @@ public class ReportsResource {
     @GetMapping("/wallet-balance/{id}")
     public ResponseEntity<List<WalletBalanceReportDTO>> walletBalanceByWallet(@PathVariable Long id) {
         List<WalletBalanceReportDTO> report = reportsService.getBalancebyWallet(id);
+        return ResponseEntity.ok().body(report);
+    }
+
+    /**
+     * GET transaction count
+     */
+    @GetMapping("/transaction-count")
+    public ResponseEntity<List<TransactionCountReportDTO>> transactionCount(@RequestParam String startDate, @RequestParam String endDate) {
+        List<TransactionCountReportDTO> report = reportsService.getTransactionCount(startDate, endDate);
         return ResponseEntity.ok().body(report);
     }
 

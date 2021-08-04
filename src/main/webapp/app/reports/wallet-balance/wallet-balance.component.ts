@@ -4,7 +4,6 @@ import { IWalletBalance } from './wallet-balance.model';
 import { WalletBalanceService } from './service/wallet-balance.service';
 import { MovementType } from '../../entities/enumerations/movement-type.model';
 import { Wallet } from '../../entities/wallet/wallet.model';
-import { CurrencyPipe } from '@angular/common';
 
 @Component({
   selector: 'jhi-wallet-balance',
@@ -51,10 +50,16 @@ export class WalletBalanceComponent implements OnInit {
       } else if (reportData[1].movementType == MovementType.INCOME && reportData[0].movementType == MovementType.EXPENSE) {
         this.income = reportData[1];
         this.expense = reportData[0];
-      } else {
-        this.income = { total: 0, movementType: MovementType.INCOME };
-        this.expense = { total: 0, movementType: MovementType.EXPENSE };
       }
+    } else if (reportData.length == 1) {
+      if (reportData[0].movementType == MovementType.INCOME) {
+        this.income = reportData[0];
+      } else {
+        this.expense = reportData[0];
+      }
+    } else {
+      this.income = { total: 0, movementType: MovementType.INCOME };
+      this.expense = { total: 0, movementType: MovementType.EXPENSE };
     }
   }
 }

@@ -4,6 +4,11 @@
       "balance-report": {
         "title": "Reporte de balance de cartera"
       },
+      "transaction-count": {
+        "totalMoneyRoombaTransactions": "Total de transacciones en Money Roomba",
+        "incomeTransactions": "Total de ingresos",
+        "expenseTransactions": "Total de egresos"
+      },
       "noData": "Sin datos",
       "income": "Ingresos",
       "expense": "Gastos"

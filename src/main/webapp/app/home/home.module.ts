@@ -18,9 +18,16 @@ import { InvestmentComponent } from '../template/elements/dashboard/spendings/in
 import { PropertyComponent } from '../template/elements/dashboard/spendings/property/property.component';
 import { RestaurantComponent } from '../template/elements/dashboard/spendings/restaurant/restaurant.component';
 import { WalletBalanceModule } from '../reports/wallet-balance/wallet-balance.module';
+import { TransactionCountModule } from '../reports/transaction-count/transaction-count.module';
 
 @NgModule({
-  imports: [SharedModule, NgApexchartsModule, RouterModule.forChild([HOME_ROUTE, DASHBOARD_ROUTE]), WalletBalanceModule],
+  imports: [
+    SharedModule,
+    NgApexchartsModule,
+    RouterModule.forChild([HOME_ROUTE, DASHBOARD_ROUTE]),
+    WalletBalanceModule,
+    TransactionCountModule,
+  ],
   declarations: [
     HomeComponent,
     DashboardComponent,
