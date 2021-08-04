@@ -17,6 +17,7 @@
       "detail": {
         "title": "Transacciones"
       },
+      "upload": "La factura ha sido importada",
       "id": "ID",
       "name": "Nombre",
       "description": "Descripción",

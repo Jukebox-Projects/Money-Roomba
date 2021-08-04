@@ -25,6 +25,17 @@
         <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
         <span jhiTranslate="moneyRoombaApp.wallet.home.refreshListLabel">Refresh List</span>
       </button>
+
+      <button
+        *ngIf="!this.adminUser"
+        id="jh-create-entity"
+        data-cy="entityCreateButton"
+        class="btn btn-primary jh-create-entity create-wallet mr-2"
+        [routerLink]="['/wallet/new']"
+      >
+        <fa-icon icon="plus"></fa-icon>
+        <span jhiTranslate="moneyRoombaApp.wallet.home.createLabel"> Create a new Wallet </span>
+      </button>
     </div>
   </h2>
 
@@ -122,16 +133,30 @@
   <div class="d-sm-flex d-block justify-content-between align-items-center mb-4">
     <h2 class="text-black font-w600 mb-sm-0 mb-2">Wallet center</h2>
     <!--(click)="open(examplenewcard)"-->
-    <button
-      *ngIf="!this.adminUser"
-      id="jh-create-entity"
-      data-cy="entityCreateButton"
-      class="btn btn-primary jh-create-entity create-wallet"
-      [routerLink]="['/wallet/new']"
-    >
-      <fa-icon icon="plus"></fa-icon>
-      <span jhiTranslate="moneyRoombaApp.wallet.home.createLabel"> Create a new Wallet </span>
-    </button>
+    <div>
+      <button
+        *ngIf="!this.adminUser"
+        id="jh-create-entity"
+        data-cy="entityCreateButton"
+        class="btn btn-primary jh-create-entity create-wallet"
+        [routerLink]="['/wallet/new']"
+      >
+        <fa-icon icon="plus"></fa-icon>
+        <span jhiTranslate="moneyRoombaApp.wallet.home.createLabel"> Create a new Wallet </span>
+      </button>
+      <input type="file" class="file-input" (change)="onFileSelected($event)" #fileUpload hidden />
+
+      <button
+        *ngIf="!this.adminUser"
+        id="jh-upload-entity"
+        data-cy="entityUploadButton"
+        class="btn btn-success jh-upload-entity upload-transaction"
+        (click)="fileUpload.click()"
+      >
+        <fa-icon icon="upload"></fa-icon>
+        <span jhiTranslate="moneyRoombaApp.wallet.home.upload"> Upload a transaction </span>
+      </button>
+    </div>
     <!-- Modal -->
     <ng-template #examplenewcard let-modal>
       <div class="modal-header">

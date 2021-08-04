@@ -17,6 +17,7 @@
       "detail": {
         "title": "Transaction"
       },
+      "upload": "Invoice has been imported",
       "id": "ID",
       "name": "Name",
       "description": "Description",
