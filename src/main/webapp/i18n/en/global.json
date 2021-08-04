@@ -18,7 +18,7 @@
         "license": "License",
         "currency": "Currency",
         "notification": "Notification",
-        "event": "Event",
+        "event": "Events",
         "systemSetting": "System Setting",
         "currency-converter": "Currency converter",
         "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)"

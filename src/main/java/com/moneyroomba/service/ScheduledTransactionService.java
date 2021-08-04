@@ -1,15 +1,16 @@
 package com.moneyroomba.service;
 
-import com.moneyroomba.domain.ScheduledTransaction;
-import com.moneyroomba.domain.User;
-import com.moneyroomba.domain.UserDetails;
-import com.moneyroomba.domain.Wallet;
+import com.moneyroomba.domain.*;
+import com.moneyroomba.domain.enumeration.EventType;
+import com.moneyroomba.domain.enumeration.SourceEntity;
+import com.moneyroomba.repository.EventRepository;
 import com.moneyroomba.repository.ScheduledTransactionRepository;
 import com.moneyroomba.repository.UserDetailsRepository;
 import com.moneyroomba.repository.UserRepository;
 import com.moneyroomba.security.AuthoritiesConstants;
 import com.moneyroomba.security.SecurityUtils;
 import com.moneyroomba.web.rest.errors.BadRequestAlertException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -35,14 +36,18 @@ public class ScheduledTransactionService {
 
     private final UserDetailsRepository userDetailsRepository;
 
+    private final EventRepository eventRepository;
+
     public ScheduledTransactionService(
         ScheduledTransactionRepository scheduledTransactionRepository,
         UserRepository userRepository,
-        UserDetailsRepository userDetailsRepository
+        UserDetailsRepository userDetailsRepository,
+        EventRepository eventRepository
     ) {
         this.scheduledTransactionRepository = scheduledTransactionRepository;
         this.userRepository = userRepository;
         this.userDetailsRepository = userDetailsRepository;
+        this.eventRepository = eventRepository;
     }
 
     /**
@@ -67,6 +72,7 @@ public class ScheduledTransactionService {
         );
         Optional<UserDetails> userDetails = userDetailsRepository.findOneByInternalUser(user.get());
         scheduledTransaction.setSourceUser(userDetails.get());
+        createEvent(EventType.CREATE);
         return scheduledTransactionRepository.save(scheduledTransaction);
     }
 
@@ -125,7 +131,7 @@ public class ScheduledTransactionService {
                     if (scheduledTransaction.getMonthOfYear() != null) {
                         existingScheduledTransaction.setMonthOfYear(scheduledTransaction.getMonthOfYear());
                     }
-
+                    createEvent(EventType.UPDATE);
                     return existingScheduledTransaction;
                 }
             )
@@ -192,6 +198,30 @@ public class ScheduledTransactionService {
      */
     public void delete(Long id) {
         log.debug("Request to delete ScheduledTransaction : {}", id);
+        createEvent(EventType.DELETE);
         scheduledTransactionRepository.deleteById(id);
+    }
+
+    /**
+     * Create event.
+     *
+     * @param eventType of the entity.
+     */
+    public void createEvent(EventType eventType) {
+        Optional<User> user = userRepository.findOneByLogin(
+            SecurityUtils
+                .getCurrentUserLogin()
+                .orElseThrow(() -> new BadRequestAlertException("Current user login not found", ENTITY_NAME, ""))
+        );
+
+        Event event = new Event();
+        event.setEventType(eventType);
+        event.setDateAdded(LocalDate.now());
+        event.setSourceId(user.get().getId());
+        event.setSourceEntity(SourceEntity.SCHEDULEDTRANSACTION);
+        event.setUserName(user.get().getFirstName());
+        event.setUserLastName(user.get().getLastName());
+        System.out.println(event);
+        eventRepository.save(event);
     }
 }
