@@ -1,8 +1,16 @@
 package com.moneyroomba.service;
 
+import com.moneyroomba.domain.Event;
 import com.moneyroomba.domain.License;
+import com.moneyroomba.domain.User;
+import com.moneyroomba.domain.enumeration.EventType;
+import com.moneyroomba.domain.enumeration.SourceEntity;
+import com.moneyroomba.repository.EventRepository;
 import com.moneyroomba.repository.LicenseRepository;
 import com.moneyroomba.repository.UserRepository;
+import com.moneyroomba.security.SecurityUtils;
+import com.moneyroomba.web.rest.errors.BadRequestAlertException;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -24,9 +32,22 @@ public class LicenseService {
 
     private final UserService userService;
 
-    public LicenseService(LicenseRepository licenseRepository, UserService userService) {
+    private static final String ENTITY_NAME = "license";
+
+    private final EventRepository eventRepository;
+
+    private final UserRepository userRepository;
+
+    public LicenseService(
+        LicenseRepository licenseRepository,
+        UserService userService,
+        EventRepository eventRepository,
+        UserRepository userRepository
+    ) {
         this.licenseRepository = licenseRepository;
         this.userService = userService;
+        this.eventRepository = eventRepository;
+        this.userRepository = userRepository;
     }
 
     /**
@@ -37,6 +58,7 @@ public class LicenseService {
      */
     public License save(License license) {
         log.debug("Request to save License : {}", license);
+        createEvent(EventType.CREATE);
         return licenseRepository.save(license);
     }
 
@@ -48,7 +70,7 @@ public class LicenseService {
      */
     public Optional<License> partialUpdate(License license) {
         log.debug("Request to partially update License : {}", license);
-
+        createEvent(EventType.UPDATE);
         return licenseRepository
             .findById(license.getId())
             .map(
@@ -119,8 +141,32 @@ public class LicenseService {
         if (license.get() != null) {
             if (!license.get().getIsAssigned()) {
                 log.debug("Request to delete License : {}", id);
+                createEvent(EventType.DELETE);
                 licenseRepository.deleteById(id);
             }
         }
+    }
+
+    /**
+     * Create event.
+     *
+     * @param eventType of the entity.
+     */
+    public void createEvent(EventType eventType) {
+        Optional<User> user = userRepository.findOneByLogin(
+            SecurityUtils
+                .getCurrentUserLogin()
+                .orElseThrow(() -> new BadRequestAlertException("Current user login not found", ENTITY_NAME, ""))
+        );
+
+        Event event = new Event();
+        event.setEventType(eventType);
+        event.setDateAdded(LocalDate.now());
+        event.setSourceId(user.get().getId());
+        event.setSourceEntity(SourceEntity.LICENSE);
+        event.setUserName(user.get().getFirstName());
+        event.setUserLastName(user.get().getLastName());
+        System.out.println(event);
+        eventRepository.save(event);
     }
 }

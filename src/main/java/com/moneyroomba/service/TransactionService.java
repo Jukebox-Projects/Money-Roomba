@@ -1,9 +1,7 @@
 package com.moneyroomba.service;
 
 import com.moneyroomba.domain.*;
-import com.moneyroomba.domain.enumeration.MovementType;
-import com.moneyroomba.domain.enumeration.TransactionState;
-import com.moneyroomba.domain.enumeration.TransactionType;
+import com.moneyroomba.domain.enumeration.*;
 import com.moneyroomba.repository.*;
 import com.moneyroomba.security.AuthoritiesConstants;
 import com.moneyroomba.security.SecurityUtils;
@@ -13,6 +11,7 @@ import com.moneyroomba.service.dto.factura.ResumenFactura;
 import com.moneyroomba.service.dto.factura.TiqueteElectronico;
 import com.moneyroomba.web.rest.errors.BadRequestAlertException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.temporal.TemporalAdjusters;
 import java.util.List;
@@ -50,18 +49,22 @@ public class TransactionService {
 
     private final CurrencyRepository currencyRepository;
 
+    private final EventRepository eventRepository;
+
     public TransactionService(
         TransactionRepository transactionRepository,
         UserRepository userRepository,
         UserDetailsRepository userDetailsRepository,
         WalletRepository walletRepository,
-        CurrencyRepository currencyRepository
+        CurrencyRepository currencyRepository,
+        EventRepository eventRepository
     ) {
         this.transactionRepository = transactionRepository;
         this.userRepository = userRepository;
         this.userDetailsRepository = userDetailsRepository;
         this.walletRepository = walletRepository;
         this.currencyRepository = currencyRepository;
+        this.eventRepository = eventRepository;
     }
 
     /**
@@ -83,6 +86,7 @@ public class TransactionService {
                     .orElseThrow(() -> new BadRequestAlertException("Current user login not found", ENTITY_NAME, ""))
             );
             if (transaction.getId() != null) {
+                createEvent(EventType.UPDATE);
                 Optional<Transaction> existingTransaction = transactionRepository.findById(transaction.getId());
                 Optional<Wallet> registeredWallet = walletRepository.findById(existingTransaction.get().getWallet().getId());
                 if (
@@ -112,9 +116,13 @@ public class TransactionService {
                         } else {
                             registeredWallet.get().setBalance(registeredWallet.get().getBalance() - existingTransaction.get().getAmount());
                         }
+
                         walletRepository.save(registeredWallet.get());
                     }
                 }
+            } else {
+                createEvent(EventType.CREATE);
+            }
 
                 if (transaction.getTransactionType() == TransactionType.API || transaction.getTransactionType() == TransactionType.EMAIL) {
                     Optional<Wallet> walletSelected = walletRepository.findById(transaction.getWallet().getId());
@@ -353,6 +361,7 @@ public class TransactionService {
                                     );
                                 }
                             }
+                            createEvent(EventType.UPDATE);
                             walletRepository.save(wallet);
                         }
                     }
@@ -509,9 +518,33 @@ public class TransactionService {
             wallet.setBalance(wallet.getBalance() - existingTransaction.get().getAmount());
         }
         walletRepository.save(wallet);
+        createEvent(EventType.DELETE);
         transactionRepository.deleteById(id);
     }
 
+
+    /**
+     * Create event.
+     *
+     * @param eventType of the entity.
+     */
+    public void createEvent(EventType eventType) {
+        Optional<User> user = userRepository.findOneByLogin(
+            SecurityUtils
+                .getCurrentUserLogin()
+                .orElseThrow(() -> new BadRequestAlertException("Current user login not found", ENTITY_NAME, ""))
+        );
+
+        Event event = new Event();
+        event.setEventType(eventType);
+        event.setDateAdded(LocalDate.now());
+        event.setSourceId(user.get().getId());
+        event.setSourceEntity(SourceEntity.TRANSACTION);
+        event.setUserName(user.get().getFirstName());
+        event.setUserLastName(user.get().getLastName());
+        System.out.println(event);
+        eventRepository.save(event);
+    }
     public boolean canAddMoreImportedTransactions() {
         LocalDate startOfMonth = LocalDate.now().with(TemporalAdjusters.firstDayOfMonth());
         LocalDate endOfMonth = LocalDate.now().with(TemporalAdjusters.lastDayOfMonth());
