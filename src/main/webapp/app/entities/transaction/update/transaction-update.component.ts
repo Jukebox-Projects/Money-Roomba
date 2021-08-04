@@ -171,7 +171,7 @@ export class TransactionUpdateComponent implements OnInit {
   }
 
   isIncoming(): boolean {
-    return this.editForm.get(['incomingtransaction'])!.value;
+    return this.editForm.get(['incomingTransaction'])!.value;
   }
 
   protected loadRelationshipsOptions(): void {
