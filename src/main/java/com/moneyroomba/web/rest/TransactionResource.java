@@ -87,7 +87,7 @@ public class TransactionResource {
             if (transaction.getRecievingUser() != null) {
                 result = transactionService.saveOutgoingTransaction(transaction);
             } else {
-                result = transactionService.save(transaction);
+                result = transactionService.create(transaction);
             }
 
             return ResponseEntity
@@ -126,7 +126,7 @@ public class TransactionResource {
             throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
         }
 
-        Transaction result = transactionService.save(transaction);
+        Transaction result = transactionService.update(transaction);
         return ResponseEntity
             .ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, transaction.getId().toString()))

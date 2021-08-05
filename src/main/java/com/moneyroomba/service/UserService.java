@@ -2,17 +2,18 @@ package com.moneyroomba.service;
 
 import com.moneyroomba.config.Constants;
 import com.moneyroomba.domain.Authority;
+import com.moneyroomba.domain.Event;
 import com.moneyroomba.domain.User;
 import com.moneyroomba.domain.UserDetails;
-import com.moneyroomba.repository.AuthorityRepository;
-import com.moneyroomba.repository.PersistentTokenRepository;
-import com.moneyroomba.repository.UserDetailsRepository;
-import com.moneyroomba.repository.UserRepository;
+import com.moneyroomba.domain.enumeration.EventType;
+import com.moneyroomba.domain.enumeration.SourceEntity;
+import com.moneyroomba.repository.*;
 import com.moneyroomba.security.AuthoritiesConstants;
 import com.moneyroomba.security.SecurityUtils;
 import com.moneyroomba.service.dto.AdminUserDTO;
 import com.moneyroomba.service.dto.UserDTO;
 import com.moneyroomba.service.exception.NoSuchElementFoundException;
+import com.moneyroomba.web.rest.errors.BadRequestAlertException;
 import java.security.SecureRandom;
 import java.time.Instant;
 import java.time.LocalDate;
@@ -37,6 +38,8 @@ import tech.jhipster.security.RandomUtil;
 @Transactional
 public class UserService {
 
+    private static final String ENTITY_NAME = "user";
+
     private final Logger log = LoggerFactory.getLogger(UserService.class);
 
     private final UserRepository userRepository;
@@ -51,13 +54,16 @@ public class UserService {
 
     private final CacheManager cacheManager;
 
+    private final EventRepository eventRepository;
+
     public UserService(
         UserRepository userRepository,
         UserDetailsRepository userDetailsRepository,
         PasswordEncoder passwordEncoder,
         PersistentTokenRepository persistentTokenRepository,
         AuthorityRepository authorityRepository,
-        CacheManager cacheManager
+        CacheManager cacheManager,
+        EventRepository eventRepository
     ) {
         this.userRepository = userRepository;
         this.userDetailsRepository = userDetailsRepository;
@@ -65,6 +71,7 @@ public class UserService {
         this.persistentTokenRepository = persistentTokenRepository;
         this.authorityRepository = authorityRepository;
         this.cacheManager = cacheManager;
+        this.eventRepository = eventRepository;
     }
 
     public Optional<User> activateRegistration(String key) {
@@ -250,6 +257,7 @@ public class UserService {
         userDetails.setIsTemporaryPassword(false);
         userDetails.setNotifications(userDTO.getNotifications());
         userDetailsRepository.save(userDetails);
+        createEvent(EventType.CREATE);
         return user;
     }
 
@@ -346,6 +354,7 @@ public class UserService {
                         .forEach(managedAuthorities::add);
                     this.clearUserCaches(user);
                     log.debug("Changed Information for User: {}", user);
+                    createEvent(EventType.UPDATE);
                     return user;
                 }
             )
@@ -379,6 +388,7 @@ public class UserService {
                     //userRepository.save(user);
                     this.clearUserCaches(user);
                     log.debug("Deleted User: {}", user);
+                    createEvent(EventType.DELETE);
                 }
             );
     }
@@ -656,5 +666,28 @@ public class UserService {
     @Transactional(readOnly = true)
     public Optional<AdminUserDTO> getAdminUserDTOFromUser(User user) {
         return userRepository.findOneByLogin(user.getLogin()).map(AdminUserDTO::new);
+    }
+
+    /**
+     * Create event.
+     *
+     * @param eventType of the entity.
+     */
+    public void createEvent(EventType eventType) {
+        Optional<User> user = userRepository.findOneByLogin(
+            SecurityUtils
+                .getCurrentUserLogin()
+                .orElseThrow(() -> new BadRequestAlertException("Current user login not found", ENTITY_NAME, ""))
+        );
+
+        Event event = new Event();
+        event.setEventType(eventType);
+        event.setDateAdded(LocalDate.now());
+        event.setSourceId(user.get().getId());
+        event.setSourceEntity(SourceEntity.USER);
+        event.setUserName(user.get().getFirstName());
+        event.setUserLastName(user.get().getLastName());
+        System.out.println(event);
+        eventRepository.save(event);
     }
 }

@@ -1,12 +1,20 @@
 package com.moneyroomba.service;
 
 import com.moneyroomba.domain.Category;
+import com.moneyroomba.domain.Event;
 import com.moneyroomba.domain.Transaction;
+import com.moneyroomba.domain.User;
+import com.moneyroomba.domain.enumeration.EventType;
+import com.moneyroomba.domain.enumeration.SourceEntity;
 import com.moneyroomba.repository.CategoryRepository;
+import com.moneyroomba.repository.EventRepository;
 import com.moneyroomba.repository.TransactionRepository;
+import com.moneyroomba.repository.UserRepository;
+import com.moneyroomba.security.SecurityUtils;
 import com.moneyroomba.service.exception.Category.CategoryDepthException;
 import com.moneyroomba.service.exception.Category.ParentCategoryIsSameCategory;
 import com.moneyroomba.web.rest.errors.BadRequestAlertException;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import org.slf4j.Logger;
@@ -31,10 +39,22 @@ public class CategoryService {
 
     private final TransactionRepository transactionRepository;
 
-    public CategoryService(CategoryRepository categoryRepository, UserService userService, TransactionRepository transactionRepository) {
+    private final EventRepository eventRepository;
+
+    private final UserRepository userRepository;
+
+    public CategoryService(
+        CategoryRepository categoryRepository,
+        UserService userService,
+        TransactionRepository transactionRepository,
+        EventRepository eventRepository,
+        UserRepository userRepository
+    ) {
         this.categoryRepository = categoryRepository;
         this.userService = userService;
         this.transactionRepository = transactionRepository;
+        this.eventRepository = eventRepository;
+        this.userRepository = userRepository;
     }
 
     /**
@@ -53,7 +73,11 @@ public class CategoryService {
                 throw new CategoryDepthException("Child category cannot be a parent category");
             }
         }
-
+        if (category.getId() != null) {
+            createEvent(EventType.UPDATE);
+        } else {
+            createEvent(EventType.CREATE);
+        }
         return categoryRepository.save(category);
     }
 
@@ -65,7 +89,7 @@ public class CategoryService {
      */
     public Optional<Category> partialUpdate(Category category) {
         log.debug("Request to partially update Category : {}", category);
-
+        createEvent(EventType.UPDATE);
         return categoryRepository
             .findById(category.getId())
             .map(
@@ -97,7 +121,7 @@ public class CategoryService {
      */
     public Optional<Category> statusCategoryUpdate(Long id) {
         log.debug("Request to update Category status : {}", id);
-
+        createEvent(EventType.UPDATE);
         return categoryRepository
             .findById(id)
             .map(
@@ -161,7 +185,30 @@ public class CategoryService {
                 );
             }
         }
-
+        createEvent(EventType.DELETE);
         categoryRepository.deleteById(id);
+    }
+
+    /**
+     * Create event.
+     *
+     * @param eventType of the entity.
+     */
+    public void createEvent(EventType eventType) {
+        Optional<User> user = userRepository.findOneByLogin(
+            SecurityUtils
+                .getCurrentUserLogin()
+                .orElseThrow(() -> new BadRequestAlertException("Current user login not found", ENTITY_NAME, ""))
+        );
+
+        Event event = new Event();
+        event.setEventType(eventType);
+        event.setDateAdded(LocalDate.now());
+        event.setSourceId(user.get().getId());
+        event.setSourceEntity(SourceEntity.CATEGORY);
+        event.setUserName(user.get().getFirstName());
+        event.setUserLastName(user.get().getLastName());
+        System.out.println(event);
+        eventRepository.save(event);
     }
 }

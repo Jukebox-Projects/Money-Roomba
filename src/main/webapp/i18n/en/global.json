@@ -18,7 +18,7 @@
         "license": "License",
         "currency": "Currency",
         "notification": "Notification",
-        "event": "Event",
+        "event": "Events",
         "systemSetting": "System Setting",
         "currency-converter": "Currency converter",
         "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)"
@@ -202,7 +202,10 @@
     "categorydeleteerror": "Cannot delete category because there are transactions associated to it",
     "file": {
       "could.not.extract": "Could not extract file",
-      "not.image": "File was expected to be an image but was found to be \"{{ fileType }}\""
+      "not.image": "File was expected to be an image but was found to be \"{{ fileType }}\"",
+      "noFileSelected": "No file was selected",
+      "wrongFileType": "File type not supported, File type must be XML",
+      "reachedMaximumTransactions": "You have reached the maximum amount of imported transactions"
     }
   },
   "footer": "© 2021 Money Roomba"
