@@ -11,7 +11,6 @@ import com.moneyroomba.service.dto.factura.ResumenFactura;
 import com.moneyroomba.service.dto.factura.TiqueteElectronico;
 import com.moneyroomba.web.rest.errors.BadRequestAlertException;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.temporal.TemporalAdjusters;
 import java.util.List;
@@ -120,10 +119,6 @@ public class TransactionService {
                         walletRepository.save(registeredWallet.get());
                     }
                 }
-            } else {
-                createEvent(EventType.CREATE);
-            }
-
                 if (transaction.getTransactionType() == TransactionType.API || transaction.getTransactionType() == TransactionType.EMAIL) {
                     Optional<Wallet> walletSelected = walletRepository.findById(transaction.getWallet().getId());
                     if (transaction.getOriginalAmount() != existingTransaction.get().getOriginalAmount()) {
@@ -176,6 +171,8 @@ public class TransactionService {
                     transaction.setState(TransactionState.NA);
                     return transactionRepository.save(transaction);
                 }
+            } else {
+                createEvent(EventType.CREATE);
             }
             Optional<UserDetails> userDetails = userDetailsRepository.findOneByInternalUser(user.get());
             transaction.setSourceUser(userDetails.get());
@@ -522,7 +519,6 @@ public class TransactionService {
         transactionRepository.deleteById(id);
     }
 
-
     /**
      * Create event.
      *
@@ -545,6 +541,7 @@ public class TransactionService {
         System.out.println(event);
         eventRepository.save(event);
     }
+
     public boolean canAddMoreImportedTransactions() {
         LocalDate startOfMonth = LocalDate.now().with(TemporalAdjusters.firstDayOfMonth());
         LocalDate endOfMonth = LocalDate.now().with(TemporalAdjusters.lastDayOfMonth());
