@@ -1,5 +1,7 @@
+import { Authority } from './../../../config/authority.constants';
+import { AccountService } from './../../../core/auth/account.service';
 import { Component, OnInit } from '@angular/core';
-import { HttpResponse } from '@angular/common/http';
+import { HttpResponse, HttpClient } from '@angular/common/http';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { ITransaction } from '../transaction.model';
@@ -23,13 +25,21 @@ export class TransactionComponent implements OnInit {
   slctDataType: string;
   collectionSize: any;
   selcetedValue: string;
+  adminUser = false;
+  fileName = '';
 
   range = new FormGroup({
     start: new FormControl(),
     end: new FormControl(),
   });
 
-  constructor(protected transactionService: TransactionService, protected modalService: NgbModal, protected iconService: IconService) {}
+  constructor(
+    protected http: HttpClient,
+    protected accountService: AccountService,
+    protected transactionService: TransactionService,
+    protected modalService: NgbModal,
+    protected iconService: IconService
+  ) {}
 
   loadAll(): void {
     /* eslint-disable no-console */
@@ -48,7 +58,30 @@ export class TransactionComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.isAdmin();
     this.loadAll();
+  }
+
+  onFileSelected(event) {
+    const file: File = event.target.files[0];
+
+    if (file) {
+      this.fileName = file.name;
+
+      const formData = new FormData();
+
+      formData.append('file', file);
+
+      const upload$ = this.http.post('/api/invoicexml/upload', formData);
+
+      upload$.subscribe(() => {
+        this.loadAll();
+      });
+    }
+  }
+
+  isAdmin(): void {
+    this.adminUser = this.accountService.hasAnyAuthority(Authority.ADMIN);
   }
 
   filterTransactions(): void {

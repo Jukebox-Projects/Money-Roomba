@@ -21,10 +21,8 @@ export class WalletComponent implements OnInit {
   inputText = '';
   adminUser = false;
   filterType: string = 'name';
-  fileName = '';
 
   constructor(
-    protected http: HttpClient,
     protected walletService: WalletService,
     protected accountService: AccountService,
     protected modalService: NgbModal,
@@ -53,22 +51,6 @@ export class WalletComponent implements OnInit {
 
   trackId(index: number, item: IWallet): number {
     return item.id!;
-  }
-
-  onFileSelected(event) {
-    const file: File = event.target.files[0];
-
-    if (file) {
-      this.fileName = file.name;
-
-      const formData = new FormData();
-
-      formData.append('file', file);
-
-      const upload$ = this.http.post('/api/invoicexml/upload', formData);
-
-      upload$.subscribe();
-    }
   }
 
   filterWalletsByName(): void {
