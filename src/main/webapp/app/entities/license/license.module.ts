@@ -8,9 +8,10 @@ import { LicenseUpdateComponent } from './update/license-update.component';
 import { LicenseDeleteDialogComponent } from './delete/license-delete-dialog.component';
 import { LicenseRoutingModule } from './route/license-routing.module';
 import { LicenseViewComponent } from './license-view/license-view.component';
+import { NgxPayPalModule } from 'ngx-paypal';
 
 @NgModule({
-  imports: [SharedModule, LicenseRoutingModule],
+  imports: [NgxPayPalModule, SharedModule, LicenseRoutingModule],
   declarations: [
     LicenseComponent,
     LicenseDetailComponent,

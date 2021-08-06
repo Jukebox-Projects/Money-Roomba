@@ -7,7 +7,7 @@
         "createLabel": "Crear nueva Cartera",
         "createOrEditLabel": "Crear o editar Cartera",
         "searchbar": "Buscar",
-        "upload": "Subir una transacción",
+        "upload": "Importar factura XML",
         "notFound": "Ninguna Cartera encontrada"
       },
       "created": "Una nueva Cartera ha sido creada.",

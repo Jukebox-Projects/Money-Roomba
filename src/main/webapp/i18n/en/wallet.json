@@ -7,7 +7,7 @@
         "createLabel": "Create a new Wallet",
         "createOrEditLabel": "Create or edit a Wallet",
         "searchbar": "Search",
-        "upload": "Upload a transaction",
+        "upload": "Import an invoice XML",
         "notFound": "No Wallets found"
       },
       "created": "A new Wallet has been created.",

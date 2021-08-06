@@ -32,6 +32,8 @@
       "deactivated": "Deactivated",
       "created": "A new License is created with identifier {{ param }}",
       "createdBulk": "{{ param }} licenses have been generated",
+      "bought": "Bought premium successfully",
+      "gift": "Bought premium gift successfully",
       "activate": "License has been activated",
       "updated": "A License is updated with identifier {{ param }}",
       "deleted": "A License is deleted with identifier {{ param }}",
@@ -46,11 +48,17 @@
         "quantity": "Quantity"
       },
       "buyOrActivate": {
-        "title": "Buy or activate a licence",
-        "activateLicenseText": "Please enter your licence code"
+        "title": "Buy or activate a license",
+        "activateLicenseText": "Please enter your license code",
+        "giftText": "Please enter the email to send the license code",
+        "send": "Send",
+        "activateText": "Activate",
+        "buyForMe": "Buy for me",
+        "gift": "Gift"
       },
       "id": "ID",
       "code": "Code",
+      "email": "Email",
       "isAssigned": "Redeemed",
       "isActive": "Is Active",
       "createMethod": "Create Method",

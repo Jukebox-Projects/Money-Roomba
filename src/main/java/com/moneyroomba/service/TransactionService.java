@@ -42,6 +42,8 @@ public class TransactionService {
 
     private final UserRepository userRepository;
 
+    private final UserService userService;
+
     private final UserDetailsRepository userDetailsRepository;
 
     private final WalletRepository walletRepository;
@@ -53,6 +55,7 @@ public class TransactionService {
     public TransactionService(
         TransactionRepository transactionRepository,
         UserRepository userRepository,
+        UserService userService,
         UserDetailsRepository userDetailsRepository,
         WalletRepository walletRepository,
         CurrencyRepository currencyRepository,
@@ -60,6 +63,7 @@ public class TransactionService {
     ) {
         this.transactionRepository = transactionRepository;
         this.userRepository = userRepository;
+        this.userService = userService;
         this.userDetailsRepository = userDetailsRepository;
         this.walletRepository = walletRepository;
         this.currencyRepository = currencyRepository;
@@ -72,113 +76,21 @@ public class TransactionService {
      * @param transaction the entity to save.
      * @return the persisted entity.
      */
+
     @Transactional
-    public Transaction save(Transaction transaction) {
+    public Transaction create(Transaction transaction) {
         double currentBalance;
         Wallet wallet = transaction.getWallet();
         Optional<Wallet> targetWallet = walletRepository.findById(wallet.getId());
-        log.debug("Request to save Transaction : {}", transaction);
+        log.debug("Request to create Transaction : {}", transaction);
         if (!SecurityUtils.hasCurrentUserThisAuthority(AuthoritiesConstants.ADMIN)) {
-            Optional<User> user = userRepository.findOneByLogin(
-                SecurityUtils
-                    .getCurrentUserLogin()
-                    .orElseThrow(() -> new BadRequestAlertException("Current user login not found", ENTITY_NAME, ""))
-            );
-            if (transaction.getId() != null) {
-                createEvent(EventType.UPDATE);
-                Optional<Transaction> existingTransaction = transactionRepository.findById(transaction.getId());
-                Optional<Wallet> registeredWallet = walletRepository.findById(existingTransaction.get().getWallet().getId());
-                if (
-                    existingTransaction.get().getState() != null &&
-                    existingTransaction.get().getState() != TransactionState.NA &&
-                    existingTransaction.get().getState().equals(TransactionState.PENDING_APPROVAL) &&
-                    (transaction.getState().equals(TransactionState.ACCEPTED) || transaction.getState().equals(TransactionState.DENIED))
-                ) {
-                    if (transaction.getState().equals(TransactionState.DENIED)) {
-                        transactionRepository.delete(transaction);
-                        return null;
-                    }
-                    transaction.setIncomingTransaction(false);
-                    transaction.setState(TransactionState.NA);
-                } else {
-                    if (registeredWallet.get().equals(targetWallet)) {
-                        //si no cambia el wallet
-                        if (existingTransaction.get().getMovementType().equals(MovementType.EXPENSE)) {
-                            targetWallet.get().setBalance(wallet.getBalance() + existingTransaction.get().getAmount());
-                        } else {
-                            targetWallet.get().setBalance(wallet.getBalance() - existingTransaction.get().getAmount());
-                        }
-                    } else {
-                        //si cambia el wallet
-                        if (existingTransaction.get().getMovementType().equals(MovementType.EXPENSE)) {
-                            registeredWallet.get().setBalance(registeredWallet.get().getBalance() + existingTransaction.get().getAmount());
-                        } else {
-                            registeredWallet.get().setBalance(registeredWallet.get().getBalance() - existingTransaction.get().getAmount());
-                        }
-
-                        walletRepository.save(registeredWallet.get());
-                    }
-                }
-                if (transaction.getTransactionType() == TransactionType.API || transaction.getTransactionType() == TransactionType.EMAIL) {
-                    Optional<Wallet> walletSelected = walletRepository.findById(transaction.getWallet().getId());
-                    if (transaction.getOriginalAmount() != existingTransaction.get().getOriginalAmount()) {
-                        if (transaction.getCurrency().equals(walletSelected.get().getCurrency())) {
-                            transaction.setAmount(transaction.getOriginalAmount());
-                        } else {
-                            Optional<Currency> colon = this.currencyRepository.findOneByCode("CRC");
-                            double tipoCambioColonDolar = 0.0;
-                            if (colon.isPresent()) {
-                                tipoCambioColonDolar = colon.get().getConversionRate();
-                            } else {
-                                throw new BadRequestAlertException("Currency 'CRC' was not found", ENTITY_NAME, "");
-                            }
-
-                            double rate = existingTransaction.get().getAmount() / existingTransaction.get().getOriginalAmount();
-                            double transactionAmount = transaction.getOriginalAmount();
-                            transaction.setAmount(transactionAmount * rate);
-                        }
-                    }
-
-                    if (transaction.getMovementType().equals(MovementType.EXPENSE)) {
-                        if (targetWallet.get().getBalance() > 0 && targetWallet.get().getBalance() >= transaction.getAmount()) {
-                            currentBalance = targetWallet.get().getBalance();
-                            currentBalance = currentBalance - transaction.getAmount();
-                            targetWallet.get().setBalance(currentBalance);
-                            walletRepository.save(targetWallet.get());
-                        } else {
-                            //throw insufficient funds exception
-                            throw new BadRequestAlertException(
-                                "You cannot register this transaction because of insufficient balance.",
-                                ENTITY_NAME,
-                                "insufficientfunds"
-                            );
-                        }
-                    } else {
-                        if (transaction.getAmount() > 0) {
-                            currentBalance = targetWallet.get().getBalance();
-                            currentBalance = currentBalance + transaction.getAmount();
-                            targetWallet.get().setBalance(currentBalance);
-                            walletRepository.save(targetWallet.get());
-                        } else {
-                            //throw cannot register negative transaction exception.
-                            throw new BadRequestAlertException(
-                                "You cannot register a transaction with an income lower than 0.",
-                                ENTITY_NAME,
-                                "negativeincome"
-                            );
-                        }
-                    }
-                    transaction.setState(TransactionState.NA);
-                    return transactionRepository.save(transaction);
-                }
-            } else {
-                createEvent(EventType.CREATE);
-            }
+            Optional<User> user = userService.getUser();
             Optional<UserDetails> userDetails = userDetailsRepository.findOneByInternalUser(user.get());
             transaction.setSourceUser(userDetails.get());
-            transaction.setIncomingTransaction(false);
-            transaction.setScheduled(false);
-            transaction.setTransactionType(TransactionType.MANUAL);
+            transaction.setTransactionType(
+                transaction.getTransactionType() != TransactionType.MANUAL ? transaction.getTransactionType() : TransactionType.MANUAL
+            );
+            transaction.setState(transaction.getState() == null ? TransactionState.NA : transaction.getState());
             if (transaction.getCurrency().equals(targetWallet.get().getCurrency())) {
                 transaction.setAmount(transaction.getOriginalAmount());
             } else {
@@ -186,40 +98,130 @@ public class TransactionService {
                 transaction.setAmount(transactionInDollars * targetWallet.get().getCurrency().getConversionRate());
             }
 
-            if (transaction.getMovementType().equals(MovementType.EXPENSE)) {
-                if (targetWallet.get().getBalance() > 0 && targetWallet.get().getBalance() >= transaction.getAmount()) {
+            if (transaction.getState() == TransactionState.NA || transaction.getState() == TransactionState.ACCEPTED) {
+                if (transaction.getMovementType().equals(MovementType.EXPENSE)) {
                     currentBalance = targetWallet.get().getBalance();
                     currentBalance = currentBalance - transaction.getAmount();
                     targetWallet.get().setBalance(currentBalance);
                     walletRepository.save(targetWallet.get());
                 } else {
-                    //throw insufficient funds exception
-                    throw new BadRequestAlertException(
-                        "You cannot register this transaction because of insufficient balance.",
-                        ENTITY_NAME,
-                        "insufficientfunds"
-                    );
+                    if (transaction.getAmount() > 0) {
+                        currentBalance = targetWallet.get().getBalance();
+                        currentBalance = currentBalance + transaction.getAmount();
+                        targetWallet.get().setBalance(currentBalance);
+                        walletRepository.save(targetWallet.get());
+                    } else {
+                        //throw cannot register negative transaction exception.
+                        throw new BadRequestAlertException(
+                            "You cannot register a transaction with an income lower than 0.",
+                            ENTITY_NAME,
+                            "negativeincome"
+                        );
+                    }
+                }
+            }
+        } else {
+            throw new BadRequestAlertException("Los administradores no pueden crear transacciones", ENTITY_NAME, "nopermission");
+        }
+        createEvent(EventType.CREATE);
+        return transactionRepository.save(transaction);
+    }
+
+    @Transactional
+    public Transaction update(Transaction transaction) {
+        double currentBalance;
+        Wallet wallet = transaction.getWallet();
+        Optional<Wallet> targetWallet = walletRepository.findById(wallet.getId());
+        log.debug("Request to create Transaction : {}", transaction);
+        if (!SecurityUtils.hasCurrentUserThisAuthority(AuthoritiesConstants.ADMIN)) {
+            Optional<User> user = userService.getUser();
+            Optional<UserDetails> userDetails = userDetailsRepository.findOneByInternalUser(user.get());
+            Optional<Transaction> existingTransaction = transactionRepository.findById(transaction.getId());
+            Optional<Wallet> oldWallet = walletRepository.findById(existingTransaction.get().getWallet().getId());
+
+            transaction.setTransactionType(
+                transaction.getTransactionType() == null ? existingTransaction.get().getTransactionType() : transaction.getTransactionType()
+            );
+            transaction.setState(transaction.getState() == null ? existingTransaction.get().getState() : transaction.getState());
+
+            //nuevo
+            if (
+                existingTransaction.get().getState() != null &&
+                existingTransaction.get().getState().equals(TransactionState.PENDING_APPROVAL) &&
+                (transaction.getState().equals(TransactionState.ACCEPTED) || transaction.getState().equals(TransactionState.DENIED))
+            ) {
+                if (transaction.getState().equals(TransactionState.DENIED)) {
+                    transactionRepository.delete(transaction);
+                    return null;
+                }
+                transaction.setState(TransactionState.ACCEPTED);
+            }
+
+            if (
+                existingTransaction.get().getState() == TransactionState.NA ||
+                existingTransaction.get().getState() == TransactionState.ACCEPTED
+            ) {
+                if (oldWallet.get().equals(targetWallet.get())) {
+                    //si no cambia el wallet
+                    if (existingTransaction.get().getMovementType().equals(MovementType.EXPENSE)) {
+                        targetWallet.get().setBalance(wallet.getBalance() + existingTransaction.get().getAmount());
+                    } else {
+                        targetWallet.get().setBalance(wallet.getBalance() - existingTransaction.get().getAmount());
+                    }
+                    walletRepository.save(targetWallet.get());
+                } else {
+                    //si cambia el wallet
+                    if (existingTransaction.get().getMovementType().equals(MovementType.EXPENSE)) {
+                        oldWallet.get().setBalance(oldWallet.get().getBalance() + existingTransaction.get().getAmount());
+                    } else {
+                        oldWallet.get().setBalance(oldWallet.get().getBalance() - existingTransaction.get().getAmount());
+                    }
+                    walletRepository.save(oldWallet.get());
+                }
+            }
+
+            //nuevo
+
+            //Misma moneda
+            if (transaction.getCurrency().getCode().equals(existingTransaction.get().getCurrency().getCode())) {
+                if (transaction.getOriginalAmount() != existingTransaction.get().getOriginalAmount()) {
+                    if (transaction.getCurrency().equals(targetWallet.get().getCurrency())) {
+                        transaction.setAmount(transaction.getOriginalAmount());
+                    } else {
+                        if (existingTransaction.get().getAmount() != 0) {
+                            double rate = existingTransaction.get().getAmount() / existingTransaction.get().getOriginalAmount();
+                            double transactionAmount = transaction.getOriginalAmount();
+                            transaction.setAmount(transactionAmount * rate);
+                        } else {
+                            double transactionInDollars = transaction.getOriginalAmount() / transaction.getCurrency().getConversionRate();
+                            transaction.setAmount(transactionInDollars * targetWallet.get().getCurrency().getConversionRate());
+                        }
+                    }
                 }
             } else {
-                if (transaction.getAmount() > 0) {
+                //Diferente moneda
+                double transactionInDollars = transaction.getOriginalAmount() / transaction.getCurrency().getConversionRate();
+                transaction.setAmount(transactionInDollars * targetWallet.get().getCurrency().getConversionRate());
+            }
+
+            if (transaction.getState() == TransactionState.NA || transaction.getState() == TransactionState.ACCEPTED) {
+                if (transaction.getMovementType().equals(MovementType.EXPENSE)) {
+                    currentBalance = targetWallet.get().getBalance();
+                    currentBalance = currentBalance - transaction.getAmount();
+                    targetWallet.get().setBalance(currentBalance);
+                    walletRepository.save(targetWallet.get());
+                } else {
                     currentBalance = targetWallet.get().getBalance();
                     currentBalance = currentBalance + transaction.getAmount();
                     targetWallet.get().setBalance(currentBalance);
                     walletRepository.save(targetWallet.get());
-                } else {
-                    //throw cannot register negative transaction exception.
-                    throw new BadRequestAlertException(
-                        "You cannot register a transaction with an income lower than 0.",
-                        ENTITY_NAME,
-                        "negativeincome"
-                    );
                 }
             }
-            transaction.setState(TransactionState.NA);
-            return transactionRepository.save(transaction);
         } else {
             throw new BadRequestAlertException("Los administradores no pueden crear transacciones", ENTITY_NAME, "nopermission");
         }
+        createEvent(EventType.UPDATE);
+        return transactionRepository.save(transaction);
     }
 
     @Transactional
@@ -262,7 +264,7 @@ public class TransactionService {
             }
             System.out.println(incomingTransaction.toString());
             transactionRepository.save(incomingTransaction);
-            return save(transaction);
+            return create(transaction);
         } else {
             throw new BadRequestAlertException("Los administradores no pueden crear transacciones", ENTITY_NAME, "nopermission");
         }
@@ -504,8 +506,19 @@ public class TransactionService {
     public void delete(Long id) {
         log.debug("Request to delete Transaction : {}", id);
         Optional<Transaction> existingTransaction = transactionRepository.findById(id);
-        Wallet wallet = existingTransaction.get().getWallet();
-        if (existingTransaction.get().getState().equals(TransactionState.PENDING_APPROVAL)) {
+        if (existingTransaction.isPresent() && existingTransaction.get().getState() == null) {
+            transactionRepository.deleteById(id);
+            createEvent(EventType.DELETE);
+            return;
+        }
+        if (existingTransaction.isPresent() && existingTransaction.get().getState() == TransactionState.PENDING_APPROVAL) {
+            transactionRepository.deleteById(id);
+            createEvent(EventType.DELETE);
+            return;
+        }
+        Wallet wallet = existingTransaction.isPresent() ? existingTransaction.get().getWallet() : null;
+        if (wallet == null) {
+            createEvent(EventType.DELETE);
             transactionRepository.deleteById(id);
             return;
         }

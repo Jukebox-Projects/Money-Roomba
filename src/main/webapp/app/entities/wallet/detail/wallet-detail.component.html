@@ -60,7 +60,7 @@
               </div>
             </div>
 
-            <div class="card-body">
+            <div class="card-body pb-2">
               <div class="p-3 bgl-dark rounded fs-14 d-flex">
                 <svg class="mr-3 min-w24" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path
@@ -82,15 +82,16 @@
                 </p>
               </div>
             </div>
-
-            <div class="card-body m-0 pb-1">
-              <!--
+            <div class="card-body m-0 pb-1 pt-2">
+              <div class="col-xl-12">
+                <jhi-wallet-balance [wallet]="wallet"></jhi-wallet-balance>
+                <!--
               <div class="progress mb-4" style="height: 18px">
                 <div class="progress-bar bg-inverse progress-animated" style="width: 100%; height: 18px" role="progressbar">
                   <span class="sr-only">100% Complete</span>
                 </div>
               </div>-->
-              <!--
+                <!--
               <div class="row align-items-center">
                 <div class="col-xl-3 mb-3 col-xxl-6 col-sm-6">
                   <app-wallet-installment></app-wallet-installment>
@@ -126,11 +127,12 @@
                   </ng-template>
                 </div>
               </div>-->
+              </div>
             </div>
           </div>
-        </div>
-        <div class="col-xl-12">
-          <app-user-transactions [walletID]="wallet.id"></app-user-transactions>
+          <div class="col-xl-12">
+            <app-user-transactions [walletID]="wallet.id"></app-user-transactions>
+          </div>
         </div>
       </div>
     </div>
@@ -192,9 +194,8 @@
       </div>
     </div>
   </div>
-</div>
 
-<!--
+  <!--
 <div class="row justify-content-center">
   <div class="col-8">
     <div *ngIf="wallet">
@@ -259,3 +260,4 @@
     </div>
   </div>
 </div>-->
+</div>
