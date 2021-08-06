@@ -87,8 +87,6 @@ public class TransactionService {
             Optional<User> user = userService.getUser();
             Optional<UserDetails> userDetails = userDetailsRepository.findOneByInternalUser(user.get());
             transaction.setSourceUser(userDetails.get());
-            transaction.setIncomingTransaction(transaction.getIncomingTransaction() ? true : false);
-            transaction.setScheduled(transaction.getScheduled() ? true : false);
             transaction.setTransactionType(
                 transaction.getTransactionType() != TransactionType.MANUAL ? transaction.getTransactionType() : TransactionType.MANUAL
             );
@@ -156,7 +154,6 @@ public class TransactionService {
                     transactionRepository.delete(transaction);
                     return null;
                 }
-                transaction.setIncomingTransaction(false);
                 transaction.setState(TransactionState.ACCEPTED);
             }
 
@@ -191,9 +188,14 @@ public class TransactionService {
                     if (transaction.getCurrency().equals(targetWallet.get().getCurrency())) {
                         transaction.setAmount(transaction.getOriginalAmount());
                     } else {
-                        double rate = existingTransaction.get().getAmount() / existingTransaction.get().getOriginalAmount();
-                        double transactionAmount = transaction.getOriginalAmount();
-                        transaction.setAmount(transactionAmount * rate);
+                        if (existingTransaction.get().getAmount() != 0) {
+                            double rate = existingTransaction.get().getAmount() / existingTransaction.get().getOriginalAmount();
+                            double transactionAmount = transaction.getOriginalAmount();
+                            transaction.setAmount(transactionAmount * rate);
+                        } else {
+                            double transactionInDollars = transaction.getOriginalAmount() / transaction.getCurrency().getConversionRate();
+                            transaction.setAmount(transactionInDollars * targetWallet.get().getCurrency().getConversionRate());
+                        }
                     }
                 }
             } else {
@@ -267,7 +269,7 @@ public class TransactionService {
             }
             System.out.println(incomingTransaction.toString());
             transactionRepository.save(incomingTransaction);
-            return save(transaction);
+            return create(transaction);
         } else {
             throw new BadRequestAlertException("Los administradores no pueden crear transacciones", ENTITY_NAME, "nopermission");
         }
