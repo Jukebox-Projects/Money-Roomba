@@ -39,7 +39,7 @@ export class GraphIncomeComponent implements OnInit {
       series: [
         {
           name: 'Sales Stats',
-          data: [10, 15, 11, 16, 13, 19, 8, 14, 10, 20, 15, 17, 9, 16],
+          data: [10, 15, 11, 16, 13, 19, 8, 14, 10, 20, 15, 17, 9, 30],
         },
       ],
       chart: {

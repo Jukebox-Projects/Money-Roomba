@@ -1,5 +1,5 @@
 export enum MovementType {
-  INCOME = 'Ingreso',
+  INCOME = 'INCOME',
 
-  EXPENSE = 'Egreso',
+  EXPENSE = 'EXPENSE',
 }

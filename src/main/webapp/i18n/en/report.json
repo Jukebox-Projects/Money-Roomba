@@ -1,0 +1,17 @@
+{
+  "moneyRoombaApp": {
+    "report": {
+      "balance-report": {
+        "title": "Wallet balance report"
+      },
+      "transaction-count": {
+        "totalMoneyRoombaTransactions": "Total Money Roomba transactions",
+        "incomeTransactions": "Total incomes",
+        "expenseTransactions": "Total expenses"
+      },
+      "noData": "No data found",
+      "income": "Income",
+      "expense": "Expense"
+    }
+  }
+}

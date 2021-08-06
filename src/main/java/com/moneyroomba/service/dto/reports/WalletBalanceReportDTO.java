@@ -24,6 +24,13 @@ public class WalletBalanceReportDTO {
         this.currency = currency;
     }
 
+    public WalletBalanceReportDTO(Double total, MovementType movementType, Currency currency) {
+        this.total = total;
+        this.movementType = movementType;
+        this.wallet = null;
+        this.currency = currency;
+    }
+
     public Double getTotal() {
         return total;
     }
