@@ -1,13 +1,18 @@
 package com.moneyroomba.service;
 
 import com.moneyroomba.domain.*;
-import com.moneyroomba.domain.enumeration.MovementType;
-import com.moneyroomba.domain.enumeration.TransactionState;
-import com.moneyroomba.domain.enumeration.TransactionType;
+import com.moneyroomba.domain.enumeration.*;
 import com.moneyroomba.repository.*;
 import com.moneyroomba.security.AuthoritiesConstants;
 import com.moneyroomba.security.SecurityUtils;
+import com.moneyroomba.service.dto.factura.CodigoTipoMoneda;
+import com.moneyroomba.service.dto.factura.LineaDetalle;
+import com.moneyroomba.service.dto.factura.ResumenFactura;
+import com.moneyroomba.service.dto.factura.TiqueteElectronico;
 import com.moneyroomba.web.rest.errors.BadRequestAlertException;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.temporal.TemporalAdjusters;
 import java.util.List;
 import java.util.Optional;
 import org.slf4j.Logger;
@@ -43,18 +48,22 @@ public class TransactionService {
 
     private final CurrencyRepository currencyRepository;
 
+    private final EventRepository eventRepository;
+
     public TransactionService(
         TransactionRepository transactionRepository,
         UserRepository userRepository,
         UserDetailsRepository userDetailsRepository,
         WalletRepository walletRepository,
-        CurrencyRepository currencyRepository
+        CurrencyRepository currencyRepository,
+        EventRepository eventRepository
     ) {
         this.transactionRepository = transactionRepository;
         this.userRepository = userRepository;
         this.userDetailsRepository = userDetailsRepository;
         this.walletRepository = walletRepository;
         this.currencyRepository = currencyRepository;
+        this.eventRepository = eventRepository;
     }
 
     /**
@@ -76,11 +85,12 @@ public class TransactionService {
                     .orElseThrow(() -> new BadRequestAlertException("Current user login not found", ENTITY_NAME, ""))
             );
             if (transaction.getId() != null) {
+                createEvent(EventType.UPDATE);
                 Optional<Transaction> existingTransaction = transactionRepository.findById(transaction.getId());
                 Optional<Wallet> registeredWallet = walletRepository.findById(existingTransaction.get().getWallet().getId());
                 if (
-                    existingTransaction.get().getState() != TransactionState.NA &&
                     existingTransaction.get().getState() != null &&
+                    existingTransaction.get().getState() != TransactionState.NA &&
                     existingTransaction.get().getState().equals(TransactionState.PENDING_APPROVAL) &&
                     (transaction.getState().equals(TransactionState.ACCEPTED) || transaction.getState().equals(TransactionState.DENIED))
                 ) {
@@ -105,22 +115,77 @@ public class TransactionService {
                         } else {
                             registeredWallet.get().setBalance(registeredWallet.get().getBalance() - existingTransaction.get().getAmount());
                         }
+
                         walletRepository.save(registeredWallet.get());
                     }
                 }
+                if (transaction.getTransactionType() == TransactionType.API || transaction.getTransactionType() == TransactionType.EMAIL) {
+                    Optional<Wallet> walletSelected = walletRepository.findById(transaction.getWallet().getId());
+                    if (transaction.getOriginalAmount() != existingTransaction.get().getOriginalAmount()) {
+                        if (transaction.getCurrency().equals(walletSelected.get().getCurrency())) {
+                            transaction.setAmount(transaction.getOriginalAmount());
+                        } else {
+                            Optional<Currency> colon = this.currencyRepository.findOneByCode("CRC");
+                            double tipoCambioColonDolar = 0.0;
+                            if (colon.isPresent()) {
+                                tipoCambioColonDolar = colon.get().getConversionRate();
+                            } else {
+                                throw new BadRequestAlertException("Currency 'CRC' was not found", ENTITY_NAME, "");
+                            }
+
+                            double rate = existingTransaction.get().getAmount() / existingTransaction.get().getOriginalAmount();
+                            double transactionAmount = transaction.getOriginalAmount();
+                            transaction.setAmount(transactionAmount * rate);
+                        }
+                    }
+
+                    if (transaction.getMovementType().equals(MovementType.EXPENSE)) {
+                        if (targetWallet.get().getBalance() > 0 && targetWallet.get().getBalance() >= transaction.getAmount()) {
+                            currentBalance = targetWallet.get().getBalance();
+                            currentBalance = currentBalance - transaction.getAmount();
+                            targetWallet.get().setBalance(currentBalance);
+                            walletRepository.save(targetWallet.get());
+                        } else {
+                            //throw insufficient funds exception
+                            throw new BadRequestAlertException(
+                                "You cannot register this transaction because of insufficient balance.",
+                                ENTITY_NAME,
+                                "insufficientfunds"
+                            );
+                        }
+                    } else {
+                        if (transaction.getAmount() > 0) {
+                            currentBalance = targetWallet.get().getBalance();
+                            currentBalance = currentBalance + transaction.getAmount();
+                            targetWallet.get().setBalance(currentBalance);
+                            walletRepository.save(targetWallet.get());
+                        } else {
+                            //throw cannot register negative transaction exception.
+                            throw new BadRequestAlertException(
+                                "You cannot register a transaction with an income lower than 0.",
+                                ENTITY_NAME,
+                                "negativeincome"
+                            );
+                        }
+                    }
+                    transaction.setState(TransactionState.NA);
+                    return transactionRepository.save(transaction);
+                }
+            } else {
+                createEvent(EventType.CREATE);
             }
             Optional<UserDetails> userDetails = userDetailsRepository.findOneByInternalUser(user.get());
             transaction.setSourceUser(userDetails.get());
-            transaction.setTransactionType(TransactionType.MANUAL);
             transaction.setIncomingTransaction(false);
             transaction.setScheduled(false);
-
+            transaction.setTransactionType(TransactionType.MANUAL);
             if (transaction.getCurrency().equals(targetWallet.get().getCurrency())) {
                 transaction.setAmount(transaction.getOriginalAmount());
             } else {
                 double transactionInDollars = transaction.getOriginalAmount() / transaction.getCurrency().getConversionRate();
                 transaction.setAmount(transactionInDollars * targetWallet.get().getCurrency().getConversionRate());
             }
+
             if (transaction.getMovementType().equals(MovementType.EXPENSE)) {
                 if (targetWallet.get().getBalance() > 0 && targetWallet.get().getBalance() >= transaction.getAmount()) {
                     currentBalance = targetWallet.get().getBalance();
@@ -238,12 +303,39 @@ public class TransactionService {
                             } else {
                                 wallet.setBalance(wallet.getBalance() - existingTransaction.getAmount());
                             }
-                            if (transaction.getCurrency().equals(wallet.getCurrency())) {
-                                existingTransaction.setAmount(transaction.getOriginalAmount());
+
+                            if (
+                                transaction.getTransactionType() == TransactionType.API ||
+                                transaction.getTransactionType() == TransactionType.EMAIL
+                            ) {
+                                if (transaction.getOriginalAmount() == existingTransaction.getOriginalAmount()) {
+                                    existingTransaction.setOriginalAmount(transaction.getOriginalAmount());
+                                    existingTransaction.setAmount(transaction.getAmount());
+                                } else {
+                                    if (transaction.getCurrency().equals(wallet.getCurrency())) {
+                                        existingTransaction.setAmount(transaction.getOriginalAmount());
+                                    } else {
+                                        Optional<Currency> colon = this.currencyRepository.findOneByCode("CRC");
+                                        double tipoCambioColonDolar = 0.0;
+                                        if (colon.isPresent()) {
+                                            tipoCambioColonDolar = colon.get().getConversionRate();
+                                        } else {
+                                            throw new BadRequestAlertException("Currency 'CRC' was not found", ENTITY_NAME, "");
+                                        }
+
+                                        double transactionInColones = transaction.getAmount() / transaction.getOriginalAmount();
+                                        double transactionInDollars = transactionInColones / tipoCambioColonDolar * transaction.getAmount();
+                                        transaction.setAmount(transactionInDollars * wallet.getCurrency().getConversionRate());
+                                    }
+                                }
                             } else {
-                                double transactionInDollars =
-                                    transaction.getOriginalAmount() / transaction.getCurrency().getConversionRate();
-                                existingTransaction.setAmount(transactionInDollars * wallet.getCurrency().getConversionRate());
+                                if (transaction.getCurrency().equals(wallet.getCurrency())) {
+                                    existingTransaction.setAmount(transaction.getOriginalAmount());
+                                } else {
+                                    double transactionInDollars =
+                                        transaction.getOriginalAmount() / transaction.getCurrency().getConversionRate();
+                                    existingTransaction.setAmount(transactionInDollars * wallet.getCurrency().getConversionRate());
+                                }
                             }
                             double currentBalance;
                             if (transaction.getMovementType().equals(MovementType.EXPENSE)) {
@@ -266,6 +358,7 @@ public class TransactionService {
                                     );
                                 }
                             }
+                            createEvent(EventType.UPDATE);
                             walletRepository.save(wallet);
                         }
                     }
@@ -291,6 +384,80 @@ public class TransactionService {
                 }
             )
             .map(transactionRepository::save);
+    }
+
+    @Transactional
+    public Transaction saveXML(TiqueteElectronico tiqueteElectronico, String login, TransactionType transactionType) {
+        double currentBalance;
+        Transaction transaction = new Transaction();
+        Optional<User> user = userRepository.findOneByLogin(login);
+
+        if (user.isEmpty()) return null;
+
+        Optional<UserDetails> userDetails = userDetailsRepository.findOneByInternalUser(user.get());
+        if (userDetails.isEmpty()) return null;
+        log.debug("Request to save Transaction : {}", transaction);
+        if (!SecurityUtils.hasCurrentUserThisAuthority(AuthoritiesConstants.ADMIN)) {
+            List<Wallet> wallets = walletRepository.findAllByUser(userDetails.get());
+            transaction.setSourceUser(userDetails.get());
+            transaction.setTransactionType(transactionType);
+            transaction.setIncomingTransaction(false);
+            transaction.setScheduled(false);
+            transaction.setWallet(wallets.get(0));
+            transaction.setDateAdded(tiqueteElectronico.getFechaEmision().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
+            transaction.setOriginalAmount(tiqueteElectronico.getResumenFactura().getTotalComprobante());
+            ResumenFactura resumenFactura = tiqueteElectronico.getResumenFactura();
+            CodigoTipoMoneda codigoTipoMoneda = resumenFactura.getCodigoTipoMoneda();
+            String currencyCode = codigoTipoMoneda.getCodigoMoneda();
+            Optional<Currency> currency = this.currencyRepository.findOneByCode(currencyCode);
+            Optional<Currency> colon = this.currencyRepository.findOneByCode("CRC");
+            transaction.setAddToReports(true);
+            if (currency.isPresent()) {
+                transaction.setCurrency(currency.get());
+            } else {
+                transaction.setCurrency(null);
+            }
+
+            double tipoCambioColonDolar = 0.0;
+            if (colon.isPresent()) {
+                tipoCambioColonDolar = colon.get().getConversionRate();
+            } else {
+                throw new BadRequestAlertException("Currency 'CRC' was not found", ENTITY_NAME, "");
+            }
+
+            if (
+                wallets
+                    .get(0)
+                    .getCurrency()
+                    .getCode()
+                    .equals(tiqueteElectronico.getResumenFactura().getCodigoTipoMoneda().getCodigoMoneda())
+            ) {
+                transaction.setAmount(transaction.getOriginalAmount());
+            } else {
+                double transactionInColones =
+                    transaction.getOriginalAmount() * tiqueteElectronico.getResumenFactura().getCodigoTipoMoneda().getTipoCambio();
+                double transactionInDollars = transactionInColones / tipoCambioColonDolar;
+                transaction.setAmount(transactionInDollars * wallets.get(0).getCurrency().getConversionRate());
+            }
+            transaction.setMovementType(MovementType.EXPENSE);
+            transaction.setState(TransactionState.PENDING_APPROVAL);
+            String nombreComercio = tiqueteElectronico.getEmisor().getNombreComercial().equals("")
+                ? tiqueteElectronico.getEmisor().getNombre()
+                : tiqueteElectronico.getEmisor().getNombreComercial();
+            transaction.setName("Compra a " + nombreComercio);
+
+            String detalleResumen = "";
+
+            for (LineaDetalle linea : tiqueteElectronico.getDetalleServicio().getLineasDetalles()) {
+                detalleResumen += linea.getDetalle() + " | x" + linea.getCantidad() + " \n";
+            }
+            if (detalleResumen.length() >= 255) detalleResumen = detalleResumen.substring(0, 254);
+            transaction.setDescription(detalleResumen);
+
+            return transactionRepository.save(transaction);
+        } else {
+            throw new BadRequestAlertException("Los administradores no pueden crear transacciones", ENTITY_NAME, "nopermission");
+        }
     }
 
     /**
@@ -338,12 +505,57 @@ public class TransactionService {
         log.debug("Request to delete Transaction : {}", id);
         Optional<Transaction> existingTransaction = transactionRepository.findById(id);
         Wallet wallet = existingTransaction.get().getWallet();
+        if (existingTransaction.get().getState().equals(TransactionState.PENDING_APPROVAL)) {
+            transactionRepository.deleteById(id);
+            return;
+        }
         if (existingTransaction.get().getMovementType().equals(MovementType.EXPENSE)) {
             wallet.setBalance(wallet.getBalance() + existingTransaction.get().getAmount());
         } else {
             wallet.setBalance(wallet.getBalance() - existingTransaction.get().getAmount());
         }
         walletRepository.save(wallet);
+        createEvent(EventType.DELETE);
         transactionRepository.deleteById(id);
+    }
+
+    /**
+     * Create event.
+     *
+     * @param eventType of the entity.
+     */
+    public void createEvent(EventType eventType) {
+        Optional<User> user = userRepository.findOneByLogin(
+            SecurityUtils
+                .getCurrentUserLogin()
+                .orElseThrow(() -> new BadRequestAlertException("Current user login not found", ENTITY_NAME, ""))
+        );
+
+        Event event = new Event();
+        event.setEventType(eventType);
+        event.setDateAdded(LocalDate.now());
+        event.setSourceId(user.get().getId());
+        event.setSourceEntity(SourceEntity.TRANSACTION);
+        event.setUserName(user.get().getFirstName());
+        event.setUserLastName(user.get().getLastName());
+        System.out.println(event);
+        eventRepository.save(event);
+    }
+
+    public boolean canAddMoreImportedTransactions(String login) {
+        LocalDate startOfMonth = LocalDate.now().with(TemporalAdjusters.firstDayOfMonth());
+        LocalDate endOfMonth = LocalDate.now().with(TemporalAdjusters.lastDayOfMonth());
+
+        if (!SecurityUtils.hasCurrentUserThisAuthority(AuthoritiesConstants.PREMIUM_USER)) {
+            Optional<User> user = userRepository.findOneByLogin(login);
+            if (user.isEmpty()) return false;
+            Optional<UserDetails> userDetails = userDetailsRepository.findOneByInternalUser(user.get());
+            if (userDetails.isEmpty()) return false;
+
+            int quantity = transactionRepository.countImportedTransactions(userDetails.get().getId(), startOfMonth, endOfMonth);
+            return quantity < 10;
+        } else {
+            return true;
+        }
     }
 }

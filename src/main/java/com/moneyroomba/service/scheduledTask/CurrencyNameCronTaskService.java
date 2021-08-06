@@ -43,7 +43,7 @@ public class CurrencyNameCronTaskService {
         return new ObjectMapper().readValue(result, ObjectNode.class);
     }
 
-    @Scheduled(cron = "0 0 0 1 * *")
+    @Scheduled(cron = "0 0 1 * * *")
     public void populateCurrencyData() throws Exception {
         ObjectNode requestString = this.sendAPIRequest();
         String symbols = requestString.get("symbols").toString();
