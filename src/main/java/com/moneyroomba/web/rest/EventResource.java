@@ -149,6 +149,18 @@ public class EventResource {
     }
 
     /**
+     * {@code GET  /events-notifications} : get all the events with notification unopened.
+     *
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of events in body.
+     */
+    @GetMapping("/events-notifications")
+    public ResponseEntity<List<Event>> getEventsWithNotificationsNotOpened() {
+        log.debug("REST request to get Events with notifications unopened");
+        List<Event> entityList = eventService.findAllNotificationsNotOpened();
+        return ResponseEntity.ok().body(entityList);
+    }
+
+    /**
      * {@code GET  /events/count} : count all the events.
      *
      * @param criteria the criteria which the requested entities should match.

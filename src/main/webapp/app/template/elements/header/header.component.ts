@@ -10,6 +10,9 @@ import { Account } from 'app/core/auth/account.model';
 import { AccountService } from 'app/core/auth/account.service';
 import { LoginService } from 'app/login/login.service';
 import { ProfileService } from 'app/layouts/profiles/profile.service';
+import { EventService } from '../../../entities/event/service/event.service';
+import { IEvent } from '../../../entities/event/event.model';
+import { HttpResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-header',
@@ -25,6 +28,7 @@ export class HeaderComponent implements OnInit {
   version = '';
   account: Account | null = null;
   date = new Date();
+  notifications?: IEvent[];
 
   constructor(
     private loginService: LoginService,
@@ -32,7 +36,8 @@ export class HeaderComponent implements OnInit {
     private sessionStorageService: SessionStorageService,
     private accountService: AccountService,
     private profileService: ProfileService,
-    private router: Router
+    private router: Router,
+    private eventService: EventService
   ) {
     if (VERSION) {
       this.version = VERSION.toLowerCase().startsWith('v') ? VERSION : 'v' + VERSION;
@@ -45,6 +50,13 @@ export class HeaderComponent implements OnInit {
       this.openAPIEnabled = profileInfo.openAPIEnabled;
     });
     this.accountService.getAuthenticationState().subscribe(account => (this.account = account));
+
+    this.eventService.queryNotifications().subscribe(
+      (res: HttpResponse<IEvent[]>) => {
+        this.notifications = res.body ?? [];
+      },
+      () => {}
+    );
   }
 
   isPremium(): boolean {

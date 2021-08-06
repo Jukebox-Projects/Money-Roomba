@@ -1,6 +1,7 @@
 package com.moneyroomba.service;
 
 import com.moneyroomba.domain.Event;
+import com.moneyroomba.domain.UserDetails;
 import com.moneyroomba.repository.EventRepository;
 import java.util.List;
 import java.util.Optional;
@@ -20,8 +21,13 @@ public class EventService {
 
     private final EventRepository eventRepository;
 
-    public EventService(EventRepository eventRepository) {
+    private final UserService userService;
+
+    private final Boolean UNOPENED_STATUS = false;
+
+    public EventService(EventRepository eventRepository, UserService userService) {
         this.eventRepository = eventRepository;
+        this.userService = userService;
     }
 
     /**
@@ -82,6 +88,18 @@ public class EventService {
     public List<Event> findAll() {
         log.debug("Request to get all Events");
         return eventRepository.findAll();
+    }
+
+    /**
+     * Get all the events join notifications where notifications are not opened.
+     *
+     * @return the list of entities.
+     */
+    @Transactional(readOnly = true)
+    public List<Event> findAllNotificationsNotOpened() {
+        log.debug("Request to get all unopened notifications");
+        Optional<UserDetails> user = userService.getUserDetailsByLogin();
+        return eventRepository.findAllByNotificationStatus(user.get().getId(), UNOPENED_STATUS);
     }
 
     /**
