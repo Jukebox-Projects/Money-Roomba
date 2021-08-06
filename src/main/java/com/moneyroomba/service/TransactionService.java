@@ -387,20 +387,20 @@ public class TransactionService {
     }
 
     @Transactional
-    public Transaction saveXML(TiqueteElectronico tiqueteElectronico) {
+    public Transaction saveXML(TiqueteElectronico tiqueteElectronico, String login, TransactionType transactionType) {
         double currentBalance;
         Transaction transaction = new Transaction();
-        Optional<User> user = userRepository.findOneByLogin(
-            SecurityUtils
-                .getCurrentUserLogin()
-                .orElseThrow(() -> new BadRequestAlertException("Current user login not found", ENTITY_NAME, ""))
-        );
+        Optional<User> user = userRepository.findOneByLogin(login);
+
+        if (user.isEmpty()) return null;
+
         Optional<UserDetails> userDetails = userDetailsRepository.findOneByInternalUser(user.get());
+        if (userDetails.isEmpty()) return null;
         log.debug("Request to save Transaction : {}", transaction);
         if (!SecurityUtils.hasCurrentUserThisAuthority(AuthoritiesConstants.ADMIN)) {
             List<Wallet> wallets = walletRepository.findAllByUser(userDetails.get());
             transaction.setSourceUser(userDetails.get());
-            transaction.setTransactionType(TransactionType.API);
+            transaction.setTransactionType(transactionType);
             transaction.setIncomingTransaction(false);
             transaction.setScheduled(false);
             transaction.setWallet(wallets.get(0));
@@ -542,20 +542,18 @@ public class TransactionService {
         eventRepository.save(event);
     }
 
-    public boolean canAddMoreImportedTransactions() {
+    public boolean canAddMoreImportedTransactions(String login) {
         LocalDate startOfMonth = LocalDate.now().with(TemporalAdjusters.firstDayOfMonth());
         LocalDate endOfMonth = LocalDate.now().with(TemporalAdjusters.lastDayOfMonth());
 
         if (!SecurityUtils.hasCurrentUserThisAuthority(AuthoritiesConstants.PREMIUM_USER)) {
-            Optional<User> user = userRepository.findOneByLogin(
-                SecurityUtils
-                    .getCurrentUserLogin()
-                    .orElseThrow(() -> new BadRequestAlertException("Current user login not found", ENTITY_NAME, ""))
-            );
+            Optional<User> user = userRepository.findOneByLogin(login);
+            if (user.isEmpty()) return false;
             Optional<UserDetails> userDetails = userDetailsRepository.findOneByInternalUser(user.get());
+            if (userDetails.isEmpty()) return false;
 
             int quantity = transactionRepository.countImportedTransactions(userDetails.get().getId(), startOfMonth, endOfMonth);
-            return quantity > 10;
+            return quantity < 10;
         } else {
             return true;
         }

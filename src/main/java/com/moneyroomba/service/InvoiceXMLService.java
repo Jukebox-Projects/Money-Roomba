@@ -94,7 +94,7 @@ public class InvoiceXMLService {
                 }
             }
 
-            log.debug("Tiquete electrónico : {}", deserializedData.toString());
+            //log.debug("Tiquete electrónico : {}", deserializedData.toString());
             return deserializedData;
         } catch (IOException e) {
             System.err.println(e.getMessage());
