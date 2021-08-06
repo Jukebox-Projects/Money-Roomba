@@ -7,7 +7,10 @@ public enum SourceEntity {
     TRANSACTION("Transacción"),
     CONTACT("Contacto favorito"),
     SCHEDULEDTRANSACTION("Transacción programada"),
-    LICENSE("Licencia");
+    LICENSE("Licencia"),
+    CATEGORY("Categoría"),
+    WALLET("Cartera"),
+    USER("Usuario");
 
     private final String value;
 

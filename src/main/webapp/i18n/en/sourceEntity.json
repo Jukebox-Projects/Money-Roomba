@@ -2,10 +2,13 @@
   "moneyRoombaApp": {
     "SourceEntity": {
       "null": "",
-      "TRANSACTION": "Transacción",
-      "CONTACT": "Contacto favorito",
-      "SCHEDULEDTRANSACTION": "Transacción programada",
-      "LICENSE": "Licencia"
+      "TRANSACTION": "Transaction",
+      "CONTACT": "Favorite contact",
+      "SCHEDULEDTRANSACTION": "Scheduled transaction",
+      "LICENSE": "License",
+      "CATEGORY": "Category",
+      "WALLET": "Wallet",
+      "USER": "User"
     }
   }
 }
