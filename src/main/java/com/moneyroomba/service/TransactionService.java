@@ -120,10 +120,10 @@ public class TransactionService {
                     }
                 }
             }
-            //createEvent(EventType.CREATE);
         } else {
             throw new BadRequestAlertException("Los administradores no pueden crear transacciones", ENTITY_NAME, "nopermission");
         }
+        createEvent(EventType.CREATE);
         return transactionRepository.save(transaction);
     }
 
@@ -217,10 +217,10 @@ public class TransactionService {
                     walletRepository.save(targetWallet.get());
                 }
             }
-            //createEvent(EventType.CREATE);
         } else {
             throw new BadRequestAlertException("Los administradores no pueden crear transacciones", ENTITY_NAME, "nopermission");
         }
+        createEvent(EventType.UPDATE);
         return transactionRepository.save(transaction);
     }
 
@@ -508,14 +508,17 @@ public class TransactionService {
         Optional<Transaction> existingTransaction = transactionRepository.findById(id);
         if (existingTransaction.isPresent() && existingTransaction.get().getState() == null) {
             transactionRepository.deleteById(id);
+            createEvent(EventType.DELETE);
             return;
         }
         if (existingTransaction.isPresent() && existingTransaction.get().getState() == TransactionState.PENDING_APPROVAL) {
             transactionRepository.deleteById(id);
+            createEvent(EventType.DELETE);
             return;
         }
         Wallet wallet = existingTransaction.isPresent() ? existingTransaction.get().getWallet() : null;
         if (wallet == null) {
+            createEvent(EventType.DELETE);
             transactionRepository.deleteById(id);
             return;
         }
@@ -525,7 +528,7 @@ public class TransactionService {
             wallet.setBalance(wallet.getBalance() - existingTransaction.get().getAmount());
         }
         walletRepository.save(wallet);
-        //createEvent(EventType.DELETE);
+        createEvent(EventType.DELETE);
         transactionRepository.deleteById(id);
     }
 
