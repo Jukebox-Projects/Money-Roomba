@@ -225,11 +225,6 @@ public class TransactionService {
     }
 
     @Transactional
-    public Transaction save(Transaction transaction) {
-        return null;
-    }
-
-    @Transactional
     public Transaction saveOutgoingTransaction(Transaction transaction) {
         log.debug("Request to save Transaction : {}", transaction);
         if (!SecurityUtils.hasCurrentUserThisAuthority(AuthoritiesConstants.ADMIN)) {

@@ -118,10 +118,11 @@ public class PayPalResource {
         transaction.setSourceUser(userService.getUserDetailsByLogin().get());
         transaction.setTransactionType(TransactionType.API);
         transaction.setScheduled(false);
+        transaction.setIncomingTransaction(false);
         List<Wallet> wallets = walletRepository.findAllByUser(userService.getUserDetailsByLogin().get());
         transaction.setWallet(wallets.get(0));
         transaction.setAttachment(null);
-        transactionService.save(transaction);
+        transactionService.create(transaction);
 
         mailService.sendInvoice(invoice, user, license);
 
