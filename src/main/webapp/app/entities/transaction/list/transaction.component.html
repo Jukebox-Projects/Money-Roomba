@@ -44,15 +44,29 @@
         <span jhiTranslate="moneyRoombaApp.transaction.home.refreshListLabel">Refresh List</span>
       </button>
 
-      <button
-        id="jh-create-entity"
-        data-cy="entityCreateButton"
-        class="btn btn-primary jh-create-entity create-transaction"
-        [routerLink]="['/transaction/new']"
-      >
-        <fa-icon icon="plus"></fa-icon>
-        <span jhiTranslate="moneyRoombaApp.transaction.home.createLabel"> Create a new Transaction </span>
-      </button>
+      <div>
+        <button
+          id="jh-create-entity"
+          data-cy="entityCreateButton"
+          class="btn btn-primary jh-create-entity create-transaction"
+          [routerLink]="['/transaction/new']"
+        >
+          <fa-icon icon="plus"></fa-icon>
+          <span jhiTranslate="moneyRoombaApp.transaction.home.createLabel"> Create a new Transaction </span>
+        </button>
+
+        <input type="file" class="file-input" (change)="onFileSelected($event)" #fileUpload hidden />
+        <button
+          *ngIf="!this.adminUser"
+          id="jh-upload-entity"
+          data-cy="entityUploadButton"
+          class="btn btn-success jh-upload-entity upload-transaction"
+          (click)="fileUpload.click()"
+        >
+          <fa-icon icon="upload"></fa-icon>
+          <span jhiTranslate="moneyRoombaApp.wallet.home.upload"> Upload a transaction </span>
+        </button>
+      </div>
     </div>
   </h2>
 

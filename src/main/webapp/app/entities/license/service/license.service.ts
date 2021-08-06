@@ -24,6 +24,10 @@ export class LicenseService {
     return this.http.post<ILicense>(`${this.resourceUrl}/activate`, license, { observe: 'response' });
   }
 
+  payPal(payPal: any): Observable<EntityResponseType> {
+    return this.http.post<any>(`api/paypal`, payPal, { observe: 'response' });
+  }
+
   update(license: ILicense): Observable<EntityResponseType> {
     return this.http.put<ILicense>(`${this.resourceUrl}/${getLicenseIdentifier(license) as number}`, license, { observe: 'response' });
   }

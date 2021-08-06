@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:lang="${#locale.language}" lang="en">
+  <style>
+    .small {
+      transform: scale(0.8, 0.8);
+    }
+  </style>
+
+  <div
+    class="small"
+    style="
+      font-size: 1.75vw;
+      background: #f8f8f8;
+      padding: 0px 0px;
+      font-family: arial;
+      line-height: 16px;
+      height: 100%;
+      width: 100%;
+      color: #514d6a;
+    "
+  >
+    <div style="max-width: 700px; padding: 0px 0; margin: 0px auto; font-size: 14px">
+      <div style="padding: 40px; background: #fff">
+        <table style="width: 100%" border="0" cellspacing="0" cellpadding="0">
+          <tbody>
+            <tr style="height: 143px">
+              <td style="width: 54.8145%; height: 143px">&nbsp;</td>
+              <td style="width: 41.1855%; height: 143px" align="right">
+                <h1><strong>Invoice </strong></h1>
+                <p style="padding-left: 0px"><strong th:text="${'ID: ' + invoice.getId()}"></strong></p>
+                <p style="padding-left: 0px"><strong th:text="${invoice.getDateCreated()}"></strong></p>
+                <p>&nbsp;</p>
+              </td>
+            </tr>
+            <tr style="height: 16px">
+              <td style="width: 54.8145%; padding-left: 30px; height: 16px">&nbsp;</td>
+              <td style="width: 41.1855%; height: 16px" align="right">&nbsp;</td>
+            </tr>
+            <tr style="height: 75px">
+              <td style="width: 54.8145%; padding-left: 30px; height: 75px">
+                <img style="border: none" src="https://i.imgur.com/Hzh590T.png" alt="logo" width="72" height="72" />
+              </td>
+              <td style="width: 41.1855%; height: 75px" align="right">&nbsp;</td>
+            </tr>
+            <tr style="height: 11.5333px">
+              <td style="width: 54.8145%; padding-left: 30px; height: 11.5333px">&nbsp;</td>
+              <td style="width: 41.1855%; height: 11.5333px" align="right">&nbsp;</td>
+            </tr>
+            <tr style="height: 90px">
+              <td style="width: 54.8145%; height: 90px">
+                <strong th:text="${invoice.getCompanyName()}"></strong>
+                <p th:text="${invoice.getUserName() + ' ' + invoice.getUserLastName()}"></p>
+              </td>
+              <td style="width: 41.1855%; height: 90px" align="right">&nbsp;</td>
+            </tr>
+            <tr style="height: 16px">
+              <td style="width: 54.8145%; height: 16px">&nbsp;</td>
+              <td style="width: 41.1855%; height: 16px" align="right">&nbsp;</td>
+            </tr>
+            <tr style="height: 198px">
+              <td style="padding: 20px 0px; border-top: 1px solid #f6f6f6; width: 96%; height: 198px" colspan="2">
+                <div>
+                  <table style="margin-left: auto; margin-right: auto" width="100%" cellspacing="0" cellpadding="0">
+                    <tbody>
+                      <tr style="height: 28px">
+                        <td
+                          style="
+                            font-family: 'arial';
+                            font-size: 14px;
+                            vertical-align: middle;
+                            margin: 0px;
+                            padding: 9px 0px;
+                            width: 60%;
+                            height: 28px;
+                            text-align: center;
+                            background-color: #ffffff;
+                          "
+                        >
+                          <span style="background-color: #ffffff; color: #000000"
+                            ><strong th:text="#{email.invoice.productDescription}">Product Description</strong></span
+                          >
+                        </td>
+                        <td
+                          style="
+                            font-family: 'arial';
+                            font-size: 14px;
+                            vertical-align: middle;
+                            margin: 0px;
+                            padding: 9px 0px;
+                            width: 13.33%;
+                            height: 28px;
+                            text-align: center;
+                            background-color: #ffffff;
+                          "
+                        >
+                          <span style="background-color: #ffffff; color: #000000"
+                            ><strong th:text="#{email.invoice.quantity}">Quantity</strong></span
+                          >
+                        </td>
+                        <td
+                          style="
+                            font-family: 'arial';
+                            font-size: 14px;
+                            vertical-align: middle;
+                            margin: 0px;
+                            padding: 9px 0px;
+                            width: 13.33%;
+                            height: 28px;
+                            text-align: center;
+                            background-color: #ffffff;
+                          "
+                        >
+                          <span style="background-color: #ffffff; color: #000000"
+                            ><strong th:text="#{email.invoice.price}">Price</strong></span
+                          >
+                        </td>
+                        <td
+                          style="
+                            font-family: 'arial';
+                            font-size: 14px;
+                            vertical-align: middle;
+                            margin: 0px;
+                            padding: 9px 0px;
+                            width: 13.33%;
+                            height: 28px;
+                            text-align: center;
+                            background-color: #ffffff;
+                          "
+                        >
+                          <span style="background-color: #ffffff; color: #000000"
+                            ><strong th:text="#{email.invoice.total}">Total</strong></span
+                          >
+                        </td>
+                      </tr>
+                      <tr style="height: 7.60001px">
+                        <td
+                          style="
+                            font-family: 'arial';
+                            font-size: 14px;
+                            vertical-align: middle;
+                            margin: 0px;
+                            padding: 9px 0px;
+                            width: 60%;
+                            height: 7.60001px;
+                          "
+                          th:text="${invoice.getPurchaseDescription()}"
+                        ></td>
+                        <td
+                          style="
+                            font-family: 'arial';
+                            font-size: 14px;
+                            vertical-align: middle;
+                            margin: 0px;
+                            padding: 9px 0px;
+                            width: 13.33%;
+                            height: 7.60001px;
+                          "
+                          th:text="${invoice.getItemQuantity()}"
+                        ></td>
+                        <td
+                          style="
+                            font-family: 'arial';
+                            font-size: 14px;
+                            vertical-align: middle;
+                            margin: 0px;
+                            padding: 9px 0px;
+                            width: 13.33%;
+                            height: 7.60001px;
+                          "
+                          th:text="${invoice.getItemPrice()}"
+                        ></td>
+                        <td
+                          style="
+                            font-family: 'arial';
+                            font-size: 14px;
+                            vertical-align: middle;
+                            margin: 0px;
+                            padding: 9px 0px;
+                            width: 13.33%;
+                            height: 7.60001px;
+                            text-align: center;
+                          "
+                          align="right"
+                          th:text="${'$ ' + invoice.getItemPrice()*invoice.getItemQuantity()}"
+                        ></td>
+                      </tr>
+                      <tr class="total" style="height: 35px">
+                        <td
+                          style="
+                            font-family: 'arial';
+                            font-size: 14px;
+                            vertical-align: middle;
+                            border-top: 1px solid #f6f6f6;
+                            margin: 0px;
+                            padding: 9px 0px;
+                            font-weight: bold;
+                            width: 60%;
+                            height: 35px;
+                          "
+                        >
+                          &nbsp;
+                        </td>
+                        <td
+                          style="
+                            font-family: 'arial';
+                            font-size: 14px;
+                            vertical-align: middle;
+                            border-top: 1px solid #f6f6f6;
+                            margin: 0px;
+                            padding: 9px 0px;
+                            font-weight: bold;
+                            width: 13.33%;
+                            height: 35px;
+                          "
+                        >
+                          &nbsp;
+                        </td>
+                        <td
+                          style="
+                            font-family: 'arial';
+                            font-size: 14px;
+                            vertical-align: middle;
+                            border-top: 1px solid #f6f6f6;
+                            margin: 0px;
+                            padding: 9px 0px;
+                            font-weight: bold;
+                            width: 13.33%;
+                            height: 35px;
+                            text-align: center;
+                          "
+                          th:text="#{email.invoice.subTotal}"
+                        >
+                          Sub Total
+                        </td>
+                        <td
+                          style="
+                            font-family: 'arial';
+                            font-size: 14px;
+                            vertical-align: middle;
+                            border-top: 1px solid #f6f6f6;
+                            margin: 0px;
+                            padding: 9px 0px;
+                            font-weight: bold;
+                            width: 13.33%;
+                            height: 35px;
+                            text-align: center;
+                          "
+                          align="right"
+                          th:text="${'$ ' + invoice.getSubTotal()}"
+                        ></td>
+                      </tr>
+                      <tr class="total" style="height: 35px">
+                        <td
+                          style="
+                            font-family: 'arial';
+                            font-size: 14px;
+                            vertical-align: middle;
+                            border-top: 1px solid #f6f6f6;
+                            margin: 0px;
+                            padding: 9px 0px;
+                            font-weight: bold;
+                            width: 60%;
+                            height: 35px;
+                          "
+                        >
+                          &nbsp;
+                        </td>
+                        <td
+                          style="
+                            font-family: 'arial';
+                            font-size: 14px;
+                            vertical-align: middle;
+                            border-top: 1px solid #f6f6f6;
+                            margin: 0px;
+                            padding: 9px 0px;
+                            font-weight: bold;
+                            width: 13.33%;
+                            height: 35px;
+                          "
+                        >
+                          &nbsp;
+                        </td>
+                        <td
+                          style="
+                            font-family: 'arial';
+                            font-size: 14px;
+                            vertical-align: middle;
+                            border-top: 1px solid #f6f6f6;
+                            margin: 0px;
+                            padding: 9px 0px;
+                            font-weight: bold;
+                            width: 13.33%;
+                            height: 35px;
+                            text-align: center;
+                          "
+                          th:text="#{email.invoice.tax}"
+                        >
+                          Tax
+                        </td>
+                        <td
+                          style="
+                            font-family: 'arial';
+                            font-size: 14px;
+                            vertical-align: middle;
+                            border-top: 1px solid #f6f6f6;
+                            margin: 0px;
+                            padding: 9px 0px;
+                            font-weight: bold;
+                            width: 13.33%;
+                            height: 35px;
+                            text-align: center;
+                          "
+                          align="right"
+                          th:text="${invoice.getTax() + ' %'}"
+                        ></td>
+                      </tr>
+                      <tr class="total" style="height: 56px">
+                        <td
+                          style="
+                            font-family: 'arial';
+                            font-size: 14px;
+                            vertical-align: middle;
+                            border-top: 1px solid #f6f6f6;
+                            margin: 0px;
+                            padding: 9px 0px;
+                            font-weight: bold;
+                            width: 60%;
+                            height: 56px;
+                          "
+                        >
+                          &nbsp;
+                        </td>
+                        <td
+                          style="
+                            font-family: 'arial';
+                            font-size: 14px;
+                            vertical-align: middle;
+                            border-top: 1px solid #f6f6f6;
+                            margin: 0px;
+                            padding: 9px 0px;
+                            font-weight: bold;
+                            width: 13.33%;
+                            height: 56px;
+                          "
+                        >
+                          &nbsp;
+                        </td>
+                        <td
+                          style="
+                            font-family: 'arial';
+                            font-size: 14px;
+                            vertical-align: middle;
+                            border-top: 1px solid #f6f6f6;
+                            margin: 0px;
+                            padding: 9px 0px;
+                            font-weight: bold;
+                            width: 13.33%;
+                            height: 56px;
+                            text-align: center;
+                          "
+                          th:text="#{email.invoice.total}"
+                        >
+                          Total
+                        </td>
+                        <td
+                          style="
+                            font-family: 'arial';
+                            font-size: 14px;
+                            vertical-align: middle;
+                            border-top: 1px solid #f6f6f6;
+                            margin: 0px;
+                            padding: 9px 0px;
+                            font-weight: bold;
+                            width: 13.33%;
+                            height: 56px;
+                            text-align: center;
+                          "
+                          align="right"
+                          th:text="${'$ ' +invoice.getTotal()}"
+                        ></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </td>
+            </tr>
+            <tr style="height: 134px">
+              <td style="width: 96%; height: 134px" colspan="2">
+                <center></center>
+                <p th:text="#{email.invoice.licenseCode}">License code:</p>
+                <p><strong th:text="${license.getCode().toString()}"></strong></p>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</html>

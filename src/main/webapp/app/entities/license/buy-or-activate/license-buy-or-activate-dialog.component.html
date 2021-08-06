@@ -12,6 +12,55 @@
     <jhi-alert></jhi-alert>
 
     <div class="form-group">
+      <div *ngIf="isBuying == false">
+        <button type="button" class="btn btn-success" data-dismiss="modal" [disabled]="isPremium()" (click)="toggle('buy')">
+          <span jhiTranslate="moneyRoombaApp.license.buyOrActivate.buyForMe">Buy for me</span>
+        </button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="toggle('gift')">
+          <span jhiTranslate="moneyRoombaApp.license.buyOrActivate.gift">Gift</span>
+        </button>
+      </div>
+
+      <form name="giftForm" *ngIf="isGift && isBuying == false" (ngSubmit)="sendEmailGift()" role="form" [formGroup]="giftForm">
+        <label class="form-control-label" jhiTranslate="moneyRoombaApp.license.buyOrActivate.giftText" for="field_email"
+          >Please enter the email to send the license code</label
+        >
+
+        <div class="input-group input-group-sm mb-3">
+          <div class="input-group-prepend">
+            <span class="input-group-text" jhiTranslate="moneyRoombaApp.license.email">Email</span>
+          </div>
+          <input type="email" class="form-control" name="email" formControlName="email" id="field_email" required />
+          <div class="input-group-append">
+            <button
+              class="btn btn-primary"
+              type="submit"
+              jhiTranslate="moneyRoombaApp.license.buyOrActivate.send"
+              [disabled]="!giftForm.valid"
+            >
+              Send
+            </button>
+          </div>
+        </div>
+        <div *ngIf="giftForm.get('email')!.invalid && (giftForm.get('email')!.dirty || giftForm.get('email')!.touched)">
+          <small class="form-text text-danger" *ngIf="giftForm.get('email')?.errors?.required" jhiTranslate="entity.validation.required">
+            This field is required.
+          </small>
+
+          <small
+            class="form-text text-danger"
+            *ngIf="giftForm.get('email')?.errors?.email"
+            jhiTranslate="global.messages.validate.email.invalid"
+          >
+            Your email is invalid.
+          </small>
+        </div>
+      </form>
+
+      <ngx-paypal *ngIf="isBuying" [config]="payPalConfig"></ngx-paypal>
+
+      <hr />
+
       <label class="form-control-label" jhiTranslate="moneyRoombaApp.license.buyOrActivate.activateLicenseText" for="field_code"
         >Please enter your licence code</label
       >
@@ -22,7 +71,14 @@
         </div>
         <input type="text" class="form-control" name="code" id="field_code" data-cy="code" formControlName="code" />
         <div class="input-group-append">
-          <button class="btn btn-primary" type="submit" jhiTranslate="moneyRoombaApp.license.buyOrActivate.activateText">Activar</button>
+          <button
+            class="btn btn-primary"
+            type="submit"
+            jhiTranslate="moneyRoombaApp.license.buyOrActivate.activateText"
+            [disabled]="isPremium()"
+          >
+            Activar
+          </button>
         </div>
       </div>
       <div *ngIf="creationForm.get('code')!.invalid && (creationForm.get('code')!.dirty || creationForm.get('code')!.touched)">
