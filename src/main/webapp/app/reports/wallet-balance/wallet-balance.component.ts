@@ -58,8 +58,8 @@ export class WalletBalanceComponent implements OnInit {
         this.expense = reportData[0];
       }
     } else {
-      this.income = { total: 0, movementType: MovementType.INCOME };
-      this.expense = { total: 0, movementType: MovementType.EXPENSE };
+      this.income = { total: 0, movementType: MovementType.INCOME, currency: { code: '' } };
+      this.expense = { total: 0, movementType: MovementType.EXPENSE, currency: { code: '' } };
     }
   }
 }

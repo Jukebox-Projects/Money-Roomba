@@ -4,7 +4,8 @@
       <div class="card-body">
         <div class="media align-items-center">
           <div class="media-body">
-            <h2 class="fs-38 text-black font-w600">{{ income.count + expense.count }}</h2>
+            <h2 *ngIf="income && expense" class="fs-38 text-black font-w600">{{ income.count + expense.count }}</h2>
+            <h2 *ngIf="!income && !expense" class="fs-38 text-black font-w600">0</h2>
             <span class="fs-18" jhiTranslate="moneyRoombaApp.report.transaction-count.totalMoneyRoombaTransactions"
               >Total Money Roomba transactions</span
             >
@@ -28,7 +29,8 @@
       <div class="card-body">
         <div class="media align-items-center">
           <div class="media-body">
-            <h2 class="fs-38 text-black font-w600">{{ income.count }}</h2>
+            <h2 *ngIf="income" class="fs-38 text-black font-w600">{{ income.count }}</h2>
+            <h2 *ngIf="!income" class="fs-38 text-black font-w600">0</h2>
             <span class="fs-18" jhiTranslate="moneyRoombaApp.report.transaction-count.incomeTransactions">Total income transactions</span>
           </div>
           <svg width="63" height="63" viewBox="0 0 63 63" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -58,7 +60,8 @@
       <div class="card-body">
         <div class="media align-items-center">
           <div class="media-body">
-            <h2 class="fs-38 text-black font-w600">{{ expense.count }}</h2>
+            <h2 *ngIf="income" class="fs-38 text-black font-w600">{{ expense.count }}</h2>
+            <h2 *ngIf="!income" class="fs-38 text-black font-w600">0</h2>
             <span class="fs-18" jhiTranslate="moneyRoombaApp.report.transaction-count.expenseTransactions">Total expense transactions</span>
           </div>
           <svg width="63" height="63" viewBox="0 0 63 63" fill="none" xmlns="http://www.w3.org/2000/svg">
