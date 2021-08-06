@@ -2,6 +2,8 @@ package com.moneyroomba.web.rest;
 
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.moneyroomba.domain.Transaction;
+import com.moneyroomba.domain.enumeration.TransactionType;
+import com.moneyroomba.security.SecurityUtils;
 import com.moneyroomba.service.InvoiceXMLService;
 import com.moneyroomba.service.TransactionService;
 import com.moneyroomba.service.dto.factura.TiqueteElectronico;
@@ -46,11 +48,13 @@ public class InvoiceXMLResource {
         }
 
         try {
-            // Get the file and save it somewhere
-            byte[] bytes = file.getBytes();
             String contenido = new String(file.getBytes());
 
-            if (!transactionService.canAddMoreImportedTransactions()) {
+            String login = SecurityUtils
+                .getCurrentUserLogin()
+                .orElseThrow(() -> new BadRequestAlertException("Current user login not found", ENTITY_NAME, ""));
+
+            if (!transactionService.canAddMoreImportedTransactions(login)) {
                 throw new BadRequestAlertException(
                     "You have reached the maximum amount of imported transactions",
                     ENTITY_NAME,
@@ -60,10 +64,7 @@ public class InvoiceXMLResource {
 
             if (
                 file.getContentType().equals("text/xml") &&
-                file
-                    .getOriginalFilename()
-                    .substring(file.getOriginalFilename().length() - 3, file.getOriginalFilename().length())
-                    .equalsIgnoreCase("xml")
+                file.getOriginalFilename().substring(file.getOriginalFilename().length() - 3).equalsIgnoreCase("xml")
             ) {
                 TiqueteElectronico deserializedData = invoiceXMLService.save(contenido);
                 if (deserializedData == null) throw new BadRequestAlertException(
@@ -72,7 +73,7 @@ public class InvoiceXMLResource {
                     "file.could.not.extract"
                 );
 
-                Transaction transaction = transactionService.saveXML(deserializedData);
+                Transaction transaction = transactionService.saveXML(deserializedData, login, TransactionType.API);
 
                 return ResponseEntity
                     .created(new URI("/api/transactions/" + transaction.getId()))

@@ -330,7 +330,7 @@
           </select>
         </div>
 
-        <div class="form-group" *ngIf="isIncoming() || editForm.get('transactionType').value == 'API'">
+        <div class="form-group" *ngIf="isIncoming() || isAPIorEmail()">
           <label class="form-control-label" jhiTranslate="moneyRoombaApp.transaction.transactionState" for="field_transactionState"
             >Transaction State</label
           >
