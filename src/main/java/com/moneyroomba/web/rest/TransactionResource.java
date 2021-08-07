@@ -4,6 +4,7 @@ import com.moneyroomba.domain.Category;
 import com.moneyroomba.domain.Transaction;
 import com.moneyroomba.domain.User;
 import com.moneyroomba.domain.UserDetails;
+import com.moneyroomba.domain.enumeration.TransactionType;
 import com.moneyroomba.repository.TransactionRepository;
 import com.moneyroomba.repository.UserDetailsRepository;
 import com.moneyroomba.repository.UserRepository;

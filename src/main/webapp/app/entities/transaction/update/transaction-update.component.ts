@@ -239,7 +239,7 @@ export class TransactionUpdateComponent implements OnInit {
       scheduled: false,
       addToReports: this.editForm.get(['addToReports'])!.value,
       incomingTransaction: false,
-      transactionType: this.editForm.get(['transactionType'])!.value,
+      transactionType: this.editForm.get(['transactionType'])!.value == null ? 'MANUAL' : this.editForm.get(['transactionType'])!.value,
       attachment: this.editForm.get(['attachment'])!.value,
       wallet: this.editForm.get(['wallet'])!.value,
       currency: this.editForm.get(['currency'])!.value,
