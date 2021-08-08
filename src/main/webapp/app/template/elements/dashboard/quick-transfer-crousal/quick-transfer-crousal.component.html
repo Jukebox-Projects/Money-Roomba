@@ -1,10 +1,10 @@
 <div class="card">
   <div class="card-header d-sm-flex d-block border-0 pb-0">
     <div class="pr-3 mb-sm-0 mb-3 mr-auto">
-      <h4 class="fs-20 text-black mb-1">Quick Transfer</h4>
-      <span class="fs-12">Lorem ipsum dolor sit amet, consectetur</span>
+      <h4 class="fs-20 text-black mb-1">Contactos favoritos</h4>
+      <span class="fs-12">Lista de contactos favoritos</span>
     </div>
-    <span class="fs-24 text-black font-w600">$56,772.38</span>
+    <!--<span class="fs-24 text-black font-w600">$56,772.38</span>-->
   </div>
   <div class="card-body">
     <!-- <div class="owl-carousel testimonial-one mb-5"> -->
@@ -12,8 +12,9 @@
       <ng-template carouselSlide *ngFor="let items of data">
         <div class="item">
           <div class="image-bx mb-3">
-            <img src="{{ items.image }}" alt="" />
-            <i class="las la-check-circle"></i>
+            <!--<img src="{{ items.image }}" alt="" />-->
+            <ngx-avatar size="50" name="{{ items.name }}"></ngx-avatar>
+            <!-- <i class="las la-check-circle"></i>-->
           </div>
           <h6 class="fs-16 mb-0">
             <a routerLink="/{{ items.url }}" class="text-black">{{ items.name }}</a>

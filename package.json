@@ -95,6 +95,7 @@
     "dayjs": "1.10.5",
     "ng-apexcharts": "^1.5.12",
     "ng2-charts": "^2.4.2",
+    "ngx-avatar": "^4.1.0",
     "ngx-dropzone": "^3.0.0",
     "ngx-infinite-scroll": "10.0.1",
     "ngx-lightbox": "^2.4.1",

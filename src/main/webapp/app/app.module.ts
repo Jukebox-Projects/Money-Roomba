@@ -56,7 +56,6 @@ import { PERFECT_SCROLLBAR_CONFIG } from 'ngx-perfect-scrollbar';
 import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar';
 
 import { NgxDropzoneModule } from 'ngx-dropzone';
-import { CarouselModule } from 'ngx-owl-carousel-o';
 
 import { MatListModule } from '@angular/material/list';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
@@ -116,7 +115,6 @@ import { NgApexchartsModule } from 'ng-apexcharts';
     MetismenuAngularModule,
     PerfectScrollbarModule,
     NgxDropzoneModule,
-    CarouselModule,
 
     MatListModule,
     MatAutocompleteModule,

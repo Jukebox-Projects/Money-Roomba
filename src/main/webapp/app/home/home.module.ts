@@ -19,6 +19,9 @@ import { PropertyComponent } from '../template/elements/dashboard/spendings/prop
 import { RestaurantComponent } from '../template/elements/dashboard/spendings/restaurant/restaurant.component';
 import { WalletBalanceModule } from '../reports/wallet-balance/wallet-balance.module';
 import { TransactionCountModule } from '../reports/transaction-count/transaction-count.module';
+import { QuickTransferCrousalComponent } from '../template/elements/dashboard/quick-transfer-crousal/quick-transfer-crousal.component';
+import { CarouselModule } from 'ngx-owl-carousel-o';
+import { AvatarModule } from 'ngx-avatar';
 
 @NgModule({
   imports: [
@@ -27,6 +30,8 @@ import { TransactionCountModule } from '../reports/transaction-count/transaction
     RouterModule.forChild([HOME_ROUTE, DASHBOARD_ROUTE]),
     WalletBalanceModule,
     TransactionCountModule,
+    CarouselModule,
+    AvatarModule,
   ],
   declarations: [
     HomeComponent,
@@ -41,6 +46,7 @@ import { TransactionCountModule } from '../reports/transaction-count/transaction
     InvestmentComponent,
     PropertyComponent,
     RestaurantComponent, // End spendings components
+    QuickTransferCrousalComponent,
   ],
 })
 export class HomeModule {}
