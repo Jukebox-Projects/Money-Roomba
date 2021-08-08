@@ -2,6 +2,7 @@ package com.moneyroomba.service;
 
 import com.moneyroomba.domain.Event;
 import com.moneyroomba.domain.UserDetails;
+import com.moneyroomba.domain.enumeration.SourceEntity;
 import com.moneyroomba.repository.EventRepository;
 import java.util.List;
 import java.util.Optional;
@@ -99,7 +100,27 @@ public class EventService {
     public List<Event> findAllNotificationsNotOpened() {
         log.debug("Request to get all unopened notifications");
         Optional<UserDetails> user = userService.getUserDetailsByLogin();
-        return eventRepository.findAllByNotificationStatus(user.get().getId(), UNOPENED_STATUS);
+        List<Event> results = eventRepository.findAllByNotificationStatus(user.get().getId(), UNOPENED_STATUS);
+        if (!results.isEmpty()) {
+            addDestinationPath(results);
+        }
+        return results;
+    }
+
+    /**
+     * Get all the events join notifications
+     *
+     * @return the list of entities.
+     */
+    @Transactional(readOnly = true)
+    public List<Event> findAllNotificationsByUser() {
+        log.debug("Request to get all unopened notifications");
+        Optional<UserDetails> user = userService.getUserDetailsByLogin();
+        List<Event> results = eventRepository.findAllByUserOrderByDateAddedDesc(user.get());
+        if (!results.isEmpty()) {
+            addDestinationPath(results);
+        }
+        return results;
     }
 
     /**
@@ -122,5 +143,26 @@ public class EventService {
     public void delete(Long id) {
         log.debug("Request to delete Event : {}", id);
         eventRepository.deleteById(id);
+    }
+
+    private void addDestinationPath(List<Event> events) {
+        events.forEach(this::appendNotificationEntityData);
+    }
+
+    private void appendNotificationEntityData(Event event) {
+        String destinationPath = "/";
+        String message = "";
+        if (event.getSourceEntity().equals(SourceEntity.TRANSACTION)) {
+            destinationPath = String.format("transaction/%d/%s", event.getSourceId(), "view");
+            message = "incomingTransaction";
+        } else if (event.getSourceEntity().equals(SourceEntity.GIFTED_LICENSE)) {
+            destinationPath = "license/view";
+            message = "giftedLicense";
+        } else if (event.getSourceEntity().equals(SourceEntity.LICENSE)) {
+            destinationPath = "license/view";
+            message = "purchasedLicense";
+        }
+        event.setDestinationPath(destinationPath);
+        event.setMessage(message);
     }
 }

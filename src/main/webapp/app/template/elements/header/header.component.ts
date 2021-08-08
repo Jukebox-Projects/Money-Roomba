@@ -11,8 +11,13 @@ import { AccountService } from 'app/core/auth/account.service';
 import { LoginService } from 'app/login/login.service';
 import { ProfileService } from 'app/layouts/profiles/profile.service';
 import { EventService } from '../../../entities/event/service/event.service';
+import { NotificationService } from '../../../entities/notification/service/notification.service';
 import { IEvent } from '../../../entities/event/event.model';
 import { HttpResponse } from '@angular/common/http';
+import { INotification } from '../../../entities/notification/notification.model';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { CategoryStatusDialogComponent } from '../../../entities/category/status/category-status-dialog.component';
+import { NotificationsDialogComponent } from '../../../layouts/notifications-dialog/notifications-dialog.component';
 
 @Component({
   selector: 'app-header',
@@ -28,7 +33,7 @@ export class HeaderComponent implements OnInit {
   version = '';
   account: Account | null = null;
   date = new Date();
-  notifications?: IEvent[];
+  eventsNotifications?: IEvent[];
 
   constructor(
     private loginService: LoginService,
@@ -37,7 +42,9 @@ export class HeaderComponent implements OnInit {
     private accountService: AccountService,
     private profileService: ProfileService,
     private router: Router,
-    private eventService: EventService
+    private eventService: EventService,
+    private notificationService: NotificationService,
+    private modalService: NgbModal
   ) {
     if (VERSION) {
       this.version = VERSION.toLowerCase().startsWith('v') ? VERSION : 'v' + VERSION;
@@ -49,14 +56,10 @@ export class HeaderComponent implements OnInit {
       this.inProduction = profileInfo.inProduction;
       this.openAPIEnabled = profileInfo.openAPIEnabled;
     });
-    this.accountService.getAuthenticationState().subscribe(account => (this.account = account));
 
-    this.eventService.queryNotifications().subscribe(
-      (res: HttpResponse<IEvent[]>) => {
-        this.notifications = res.body ?? [];
-      },
-      () => {}
-    );
+    this.accountService.getAuthenticationState().subscribe(async account => (this.account = account));
+
+    this.getNotifications();
   }
 
   isPremium(): boolean {
@@ -80,6 +83,25 @@ export class HeaderComponent implements OnInit {
     this.loginService.logout();
     this.router.navigateByUrl('/landing', { skipLocationChange: true }).then(() => {
       this.router.navigate(['landing']);
+    });
+  }
+
+  getNotifications(): void {
+    this.eventService.queryUserNotificationsUnopened().subscribe((res: HttpResponse<IEvent[]>) => {
+      this.eventsNotifications = res.body ?? [];
+    });
+  }
+
+  updateNotification(notification: INotification): void {
+    this.notificationService.seenUpdate(notification).subscribe(() => {
+      this.getNotifications();
+    });
+  }
+
+  openAllNotificationsModal(): void {
+    this.eventService.queryUserAllNotifications().subscribe((res: HttpResponse<IEvent[]>) => {
+      const modalRef = this.modalService.open(NotificationsDialogComponent, { size: 'lg', backdrop: 'static' });
+      modalRef.componentInstance.eventsNotifications = res.body ?? [];
     });
   }
 }

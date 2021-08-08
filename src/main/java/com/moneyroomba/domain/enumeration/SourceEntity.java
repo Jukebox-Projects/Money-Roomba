@@ -10,7 +10,8 @@ public enum SourceEntity {
     LICENSE("Licencia"),
     CATEGORY("Categoría"),
     WALLET("Cartera"),
-    USER("Usuario");
+    USER("Usuario"),
+    GIFTED_LICENSE("Licencia regalada");
 
     private final String value;
 

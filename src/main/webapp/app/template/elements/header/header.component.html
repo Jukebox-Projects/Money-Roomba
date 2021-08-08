@@ -23,76 +23,38 @@
                   fill="#3E4954"
                 />
               </svg>
-              <span class="badge light text-white bg-primary rounded-circle">12</span>
+              <span *ngIf="eventsNotifications.length > 0" class="badge light text-white bg-primary rounded-circle">{{
+                eventsNotifications.length
+              }}</span>
             </a>
             <div class="dropdown-menu dropdown-menu-right" ngbDropdownMenu>
-              <div id="DZ_W_Notification1" class="widget-media dz-scroll p-3 height380" [perfectScrollbar]>
+              <div id="DZ_W_Notification1" class="widget-media dz-scroll p-3" [perfectScrollbar]>
                 <ul class="timeline">
-                  <li>
-                    <div class="timeline-panel">
-                      <div class="media mr-2">
-                        <img alt="image" width="50" src="assets/images/avatar/1.jpg" />
+                  <li *ngIf="eventsNotifications.length <= 0" class="text-center" jhiTranslate="moneyRoombaApp.event.noNotifications"></li>
+                  <li *ngFor="let event of eventsNotifications">
+                    <a
+                      routerLink="{{ event.destinationPath }}"
+                      (click)="updateNotification(event.notification)"
+                      role="button"
+                      data-toggle="dropdown"
+                      ngbDropdownToggle
+                    >
+                      <div class="timeline-panel">
+                        <div class="media mr-2 media-info">MR</div>
+                        <div class="media-body">
+                          <div class="media-body">
+                            <p class="mb-1" jhiTranslate="moneyRoombaApp.event.messages.{{ event.message }}">New notification</p>
+                            <small class="d-block">{{ event.dateAdded | formatMediumDate }}</small>
+                          </div>
+                        </div>
                       </div>
-                      <div class="media-body">
-                        <h6 class="mb-1">Dr sultads Send you Photo</h6>
-                        <small class="d-block">29 July 2020 - 02:26 PM</small>
-                      </div>
-                    </div>
-                  </li>
-                  <li>
-                    <div class="timeline-panel">
-                      <div class="media mr-2 media-info">KG</div>
-                      <div class="media-body">
-                        <h6 class="mb-1">Resport created successfully</h6>
-                        <small class="d-block">29 July 2020 - 02:26 PM</small>
-                      </div>
-                    </div>
-                  </li>
-                  <li>
-                    <div class="timeline-panel">
-                      <div class="media mr-2 media-success">
-                        <i class="fa fa-home"></i>
-                      </div>
-                      <div class="media-body">
-                        <h6 class="mb-1">Reminder : Treatment Time!</h6>
-                        <small class="d-block">29 July 2020 - 02:26 PM</small>
-                      </div>
-                    </div>
-                  </li>
-                  <li>
-                    <div class="timeline-panel">
-                      <div class="media mr-2">
-                        <img alt="image" width="50" src="assets/images/avatar/1.jpg" />
-                      </div>
-                      <div class="media-body">
-                        <h6 class="mb-1">Dr sultads Send you Photo</h6>
-                        <small class="d-block">29 July 2020 - 02:26 PM</small>
-                      </div>
-                    </div>
-                  </li>
-                  <li>
-                    <div class="timeline-panel">
-                      <div class="media mr-2 media-danger">KG</div>
-                      <div class="media-body">
-                        <h6 class="mb-1">Resport created successfully</h6>
-                        <small class="d-block">29 July 2020 - 02:26 PM</small>
-                      </div>
-                    </div>
-                  </li>
-                  <li>
-                    <div class="timeline-panel">
-                      <div class="media mr-2 media-primary">
-                        <i class="fa fa-home"></i>
-                      </div>
-                      <div class="media-body">
-                        <h6 class="mb-1">Reminder : Treatment Time!</h6>
-                        <small class="d-block">29 July 2020 - 02:26 PM</small>
-                      </div>
-                    </div>
+                    </a>
                   </li>
                 </ul>
               </div>
-              <a class="all-notification" href="javascript:void(0)">See all notifications <i class="ti-arrow-right"></i></a>
+              <a class="all-notification" (click)="openAllNotificationsModal()" jhiTranslate="moneyRoombaApp.event.viewAllNotifications"
+                >See all notifications <i class="ti-arrow-right"></i
+              ></a>
             </div>
           </li>
           <li class="nav-item dropdown header-profile dropdown-no-icon" ngbDropdown>

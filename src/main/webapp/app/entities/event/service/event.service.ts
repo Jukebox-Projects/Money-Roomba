@@ -53,7 +53,14 @@ export class EventService {
       .pipe(map((res: EntityArrayResponseType) => this.convertDateArrayFromServer(res)));
   }
 
-  queryNotifications(req?: any): Observable<EntityArrayResponseType> {
+  queryUserNotificationsUnopened(req?: any): Observable<EntityArrayResponseType> {
+    const options = createRequestOption(req);
+    return this.http
+      .get<IEvent[]>(`${this.resourceUrl}-notifications-unopened`, { params: options, observe: 'response' })
+      .pipe(map((res: EntityArrayResponseType) => this.convertDateArrayFromServer(res)));
+  }
+
+  queryUserAllNotifications(req?: any): Observable<EntityArrayResponseType> {
     const options = createRequestOption(req);
     return this.http
       .get<IEvent[]>(`${this.resourceUrl}-notifications`, { params: options, observe: 'response' })
