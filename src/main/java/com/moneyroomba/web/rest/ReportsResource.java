@@ -4,6 +4,7 @@ import com.moneyroomba.service.ReportsService;
 import com.moneyroomba.service.dto.reports.TransactionCountReportDTO;
 import com.moneyroomba.service.dto.reports.TransactionsByCategoryDTO;
 import com.moneyroomba.service.dto.reports.WalletBalanceReportDTO;
+import com.moneyroomba.service.dto.reports.WalletTotalBalanceReportDTO;
 import java.time.LocalDate;
 import java.util.List;
 import org.slf4j.Logger;
@@ -86,5 +87,14 @@ public class ReportsResource {
     @GetMapping("/wallet-performance/{id}")
     public String walletPerformanceByWallet(@PathVariable Long id) {
         return "walletPerformance";
+    }
+
+    /**
+     * GET totalBalance
+     */
+    @GetMapping("/wallet-balance/totalBalance")
+    public ResponseEntity<List<WalletTotalBalanceReportDTO>> getTotalBalance() {
+        List<WalletTotalBalanceReportDTO> report = reportsService.getTotalBalance();
+        return ResponseEntity.ok().body(report);
     }
 }

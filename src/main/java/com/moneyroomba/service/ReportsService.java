@@ -12,6 +12,7 @@ import com.moneyroomba.repository.TransactionRepository;
 import com.moneyroomba.repository.WalletRepository;
 import com.moneyroomba.service.dto.reports.TransactionCountReportDTO;
 import com.moneyroomba.service.dto.reports.WalletBalanceReportDTO;
+import com.moneyroomba.service.dto.reports.WalletTotalBalanceReportDTO;
 import com.moneyroomba.web.rest.errors.BadRequestAlertException;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -183,5 +184,56 @@ public class ReportsService {
 
     private Double convertAmount(Currency sourceCurrency, Currency targetCurrency, Double amount) {
         return (amount * targetCurrency.getConversionRate()) / sourceCurrency.getConversionRate();
+    }
+
+    /**
+     * Get report with expenses and income total from all wallets
+     *
+     * @return the report data needed in the front end graph.
+     */
+    @Transactional(readOnly = true)
+    public List<WalletTotalBalanceReportDTO> getTotalBalance() {
+        log.debug("Request to get total balance report for all wallets");
+        Optional<UserDetails> user = userService.getUserDetailsByLogin();
+        List<WalletTotalBalanceReportDTO> results = null;
+        if (user.isPresent()) {
+            results = walletRepository.getTotalBalance(user.get().getId(), true);
+
+            if (!results.isEmpty()) {
+                if (!sameCurrencyTotalBalance(results)) {
+                    Currency defaultCurrency = getDefaultCurrency();
+                    results = convertConversionTotalBalance(results, defaultCurrency);
+                }
+            }
+        } else {
+            throw new BadRequestAlertException("Could not find the user", ENTITY_NAME, "nouserfound");
+        }
+        return results;
+        // return walletRepository.findAll();
+    }
+
+    private Boolean sameCurrencyTotalBalance(List<WalletTotalBalanceReportDTO> results) {
+        String previousCurrencyCode = null;
+        for (int i = 0; i < results.size(); i++) {
+            if (results.get(i).getCurrency().getCode().equals(previousCurrencyCode) || i == 0) {
+                previousCurrencyCode = results.get(i).getCurrency().getCode();
+            } else {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private List<WalletTotalBalanceReportDTO> convertConversionTotalBalance(
+        List<WalletTotalBalanceReportDTO> results,
+        Currency targetCurrency
+    ) {
+        ArrayList<WalletTotalBalanceReportDTO> formatedResults = new ArrayList<>();
+        results.forEach(
+            currentItem -> {
+                currentItem.setTotal(convertAmount(currentItem.getCurrency(), targetCurrency, currentItem.getTotal()));
+            }
+        );
+        return formatedResults;
     }
 }

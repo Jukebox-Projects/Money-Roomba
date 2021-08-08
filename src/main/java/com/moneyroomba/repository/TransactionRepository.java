@@ -6,6 +6,7 @@ import com.moneyroomba.domain.enumeration.TransactionState;
 import com.moneyroomba.service.dto.reports.TransactionCountReportDTO;
 import com.moneyroomba.service.dto.reports.TransactionsByCategoryDTO;
 import com.moneyroomba.service.dto.reports.WalletBalanceReportDTO;
+import com.moneyroomba.service.dto.reports.WalletTotalBalanceReportDTO;
 import java.time.LocalDate;
 import java.util.List;
 import org.springframework.data.jpa.repository.*;

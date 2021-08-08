@@ -19,6 +19,7 @@ import { PropertyComponent } from '../template/elements/dashboard/spendings/prop
 import { RestaurantComponent } from '../template/elements/dashboard/spendings/restaurant/restaurant.component';
 import { WalletBalanceModule } from '../reports/wallet-balance/wallet-balance.module';
 import { TransactionCountModule } from '../reports/transaction-count/transaction-count.module';
+import { TotalBalanceModule } from '../reports/total-balance/total-balance.module';
 
 @NgModule({
   imports: [
@@ -27,6 +28,7 @@ import { TransactionCountModule } from '../reports/transaction-count/transaction
     RouterModule.forChild([HOME_ROUTE, DASHBOARD_ROUTE]),
     WalletBalanceModule,
     TransactionCountModule,
+    TotalBalanceModule,
   ],
   declarations: [
     HomeComponent,

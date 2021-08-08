@@ -1,4 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import { WalletBalanceService } from '../../reports/wallet-balance/service/wallet-balance.service';
+import { HttpResponse } from '@angular/common/http';
+import { IWalletBalance } from '../../reports/wallet-balance/wallet-balance.model';
+import { ITotalBalance } from '../../reports/total-balance/total-balance.model';
+import { TotalBalanceService } from '../../reports/total-balance/Service/total-balance.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -6,9 +11,26 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./dashboard.component.css'],
 })
 export class DashboardComponent implements OnInit {
-  constructor() {}
+  reportData: ITotalBalance[];
+  constructor(protected totalBalanceService: TotalBalanceService) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.loadAll();
+  }
+
+  loadAll(): void {
+    /* eslint-disable no-console */
+    this.totalBalanceService.queryAll().subscribe(
+      (res: HttpResponse<ITotalBalance[]>) => {
+        this.reportData = res.body ?? [];
+        this.resolveData(this.reportData);
+      },
+      error => {}
+    );
+  }
+  protected resolveData(reportData: ITotalBalance[]): void {
+    /* eslint-disable no-console */
+  }
 
   quickTransfer = [
     {
