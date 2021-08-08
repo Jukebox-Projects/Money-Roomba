@@ -22,6 +22,28 @@ public class Event implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    public Event(
+        EventType eventType,
+        LocalDate dateAdded,
+        Long sourceId,
+        SourceEntity sourceEntity,
+        String userName,
+        String userLastName,
+        Notification notification,
+        UserDetails user
+    ) {
+        this.eventType = eventType;
+        this.dateAdded = dateAdded;
+        this.sourceId = sourceId;
+        this.sourceEntity = sourceEntity;
+        this.userName = userName;
+        this.userLastName = userLastName;
+        this.notification = notification;
+        this.user = user;
+    }
+
+    public Event() {}
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

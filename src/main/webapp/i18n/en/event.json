@@ -29,7 +29,8 @@
       "messages": {
         "incomingTransaction": "Just received a new transaction.",
         "giftedLicense": "Sheeesh, someone gifted you Money Roomba Premium!",
-        "purchasedLicense": "Thanks for purchasing Money Roomba Premium license!"
+        "purchasedLicense": "Thanks for purchasing Money Roomba Premium license!",
+        "emailTransaction": "A new transaction was created from an email."
       },
       "allNotifications": "All your notifications",
       "viewAllNotifications": "View all notifications",

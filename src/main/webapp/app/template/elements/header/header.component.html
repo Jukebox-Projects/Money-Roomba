@@ -23,14 +23,18 @@
                   fill="#3E4954"
                 />
               </svg>
-              <span *ngIf="eventsNotifications.length > 0" class="badge light text-white bg-primary rounded-circle">{{
+              <span *ngIf="eventsNotifications" class="badge light text-white bg-primary rounded-circle">{{
                 eventsNotifications.length
               }}</span>
             </a>
             <div class="dropdown-menu dropdown-menu-right" ngbDropdownMenu>
               <div id="DZ_W_Notification1" class="widget-media dz-scroll p-3" [perfectScrollbar]>
                 <ul class="timeline">
-                  <li *ngIf="eventsNotifications.length <= 0" class="text-center" jhiTranslate="moneyRoombaApp.event.noNotifications"></li>
+                  <li
+                    *ngIf="eventsNotifications && eventsNotifications.length <= 0"
+                    class="text-center"
+                    jhiTranslate="moneyRoombaApp.event.noNotifications"
+                  ></li>
                   <li *ngFor="let event of eventsNotifications">
                     <a
                       routerLink="{{ event.destinationPath }}"

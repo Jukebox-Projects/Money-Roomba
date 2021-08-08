@@ -1,9 +1,13 @@
 package com.moneyroomba.service;
 
 import com.moneyroomba.domain.Event;
+import com.moneyroomba.domain.Notification;
 import com.moneyroomba.domain.UserDetails;
+import com.moneyroomba.domain.enumeration.EventType;
 import com.moneyroomba.domain.enumeration.SourceEntity;
 import com.moneyroomba.repository.EventRepository;
+import com.moneyroomba.repository.NotificationRepository;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import org.slf4j.Logger;
@@ -24,11 +28,14 @@ public class EventService {
 
     private final UserService userService;
 
+    private final NotificationRepository notificationRepository;
+
     private final Boolean UNOPENED_STATUS = false;
 
-    public EventService(EventRepository eventRepository, UserService userService) {
+    public EventService(EventRepository eventRepository, UserService userService, NotificationRepository notificationRepository) {
         this.eventRepository = eventRepository;
         this.userService = userService;
+        this.notificationRepository = notificationRepository;
     }
 
     /**
@@ -145,6 +152,31 @@ public class EventService {
         eventRepository.deleteById(id);
     }
 
+    /**
+     * Save a event conected with a notification.
+     *
+     * @param eventType the type of action done.
+     * @param sourceEntity the source entity of the event.
+     * @param userDetails data of the user performing the action.
+     */
+    public Event createEventAndNotification(EventType eventType, Long sourceId, SourceEntity sourceEntity, UserDetails userDetails) {
+        log.debug("Request to save a Notification and an Event");
+        Notification notification = new Notification(LocalDate.now(), false);
+        Notification savedNotification = notificationRepository.save(notification);
+
+        Event event = new Event(
+            eventType,
+            LocalDate.now(),
+            sourceId,
+            sourceEntity,
+            userDetails.getInternalUser().getFirstName(),
+            userDetails.getInternalUser().getLastName(),
+            savedNotification,
+            userDetails
+        );
+        return eventRepository.save(event);
+    }
+
     private void addDestinationPath(List<Event> events) {
         events.forEach(this::appendNotificationEntityData);
     }
@@ -152,13 +184,16 @@ public class EventService {
     private void appendNotificationEntityData(Event event) {
         String destinationPath = "/";
         String message = "";
-        if (event.getSourceEntity().equals(SourceEntity.TRANSACTION)) {
+        if (event.getEventType().equals(EventType.TRANSCTION_RECEIVED)) {
             destinationPath = String.format("transaction/%d/%s", event.getSourceId(), "view");
             message = "incomingTransaction";
-        } else if (event.getSourceEntity().equals(SourceEntity.GIFTED_LICENSE)) {
+        } else if (event.getEventType().equals(EventType.POSSIBLE_TRANSACTION_ADDED_EMAIL)) {
+            destinationPath = String.format("transaction/%d/%s", event.getSourceId(), "view");
+            message = "emailTransaction";
+        } else if (event.getEventType().equals(EventType.LICENSE_GIFTED)) {
             destinationPath = "license/view";
             message = "giftedLicense";
-        } else if (event.getSourceEntity().equals(SourceEntity.LICENSE)) {
+        } else if (event.getEventType().equals(EventType.LICENSE_PURCHASED)) {
             destinationPath = "license/view";
             message = "purchasedLicense";
         }
