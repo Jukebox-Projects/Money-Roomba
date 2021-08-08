@@ -3,6 +3,7 @@ import { HttpResponse } from '@angular/common/http';
 import { ITotalBalance } from './total-balance.model';
 import { TotalBalanceService } from './Service/total-balance.service';
 import { WalletBalanceService } from '../wallet-balance/service/wallet-balance.service';
+import { MovementType } from '../../entities/enumerations/movement-type.model';
 
 @Component({
   selector: 'jhi-total-balance',
@@ -11,6 +12,7 @@ import { WalletBalanceService } from '../wallet-balance/service/wallet-balance.s
 })
 export class TotalBalanceComponent implements OnInit {
   reportData: ITotalBalance[];
+  totalBalance: ITotalBalance[];
   constructor(protected totalBalanceService: TotalBalanceService) {}
 
   ngOnInit(): void {
@@ -30,8 +32,7 @@ export class TotalBalanceComponent implements OnInit {
 
   protected resolveData(reportData: ITotalBalance[]): void {
     /* eslint-disable no-console */
-    console.log('WEBOS');
-    console.log(this.reportData);
-    console.log('WEBOS');
+
+    this.totalBalance = reportData;
   }
 }

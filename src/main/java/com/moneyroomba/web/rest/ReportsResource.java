@@ -92,7 +92,7 @@ public class ReportsResource {
     /**
      * GET totalBalance
      */
-    @GetMapping("/wallet-balance/totalBalance")
+    @GetMapping("/wallet-balance/total-balance")
     public ResponseEntity<List<WalletTotalBalanceReportDTO>> getTotalBalance() {
         List<WalletTotalBalanceReportDTO> report = reportsService.getTotalBalance();
         return ResponseEntity.ok().body(report);

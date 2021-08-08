@@ -14,7 +14,7 @@ export type EntityArrayResponseType = HttpResponse<ITotalBalance[]>;
   providedIn: 'root',
 })
 export class TotalBalanceService {
-  protected resourceUrl = this.applicationConfigService.getEndpointFor('api/reports/wallet-balance/totalBalance');
+  protected resourceUrl = this.applicationConfigService.getEndpointFor('api/reports/wallet-balance/total-balance');
 
   constructor(protected http: HttpClient, protected applicationConfigService: ApplicationConfigService, protected datePipe: DatePipe) {}
 

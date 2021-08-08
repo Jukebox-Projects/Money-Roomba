@@ -17,7 +17,7 @@ public interface WalletRepository extends JpaRepository<Wallet, Long>, JpaSpecif
     public List<Wallet> findAllByUser(UserDetails user);
 
     @Query(
-        value = "SELECT new com.moneyroomba.service.dto.reports.WalletTotalBalanceReportDTO(SUM(tr.balance), tr.currency) " +
+        value = "SELECT new com.moneyroomba.service.dto.reports.WalletTotalBalanceReportDTO(tr.balance, tr.currency) " +
         "FROM Wallet tr " +
         "WHERE tr.user.id = ?1 AND " +
         "tr.inReports = ?2 AND " +
