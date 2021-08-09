@@ -3,7 +3,7 @@
     <ng-template carouselSlide *ngFor="let wallet of walletsCarousel; let i = index">
       <div class="items">
         <div class="card-bx mb-0">
-          <img *ngIf="i % 5 === 0" src="../../../../../assets/images/card/card1.png" alt="" />
+          <img *ngIf="i % 5 === 0" src="../../../../../assets/images/card/card.png" alt="" />
           <img *ngIf="i % 5 === 1" src="../../../../../assets/images/card/card2.png" alt="" />
           <img *ngIf="i % 5 === 2" src="../../../../../assets/images/card/card3.png" alt="" />
           <img *ngIf="i % 5 === 3" src="../../../../../assets/images/card/card4.png" alt="" />
@@ -40,7 +40,7 @@
     <ng-template carouselSlide *ngFor="let wallet of walletsCarousel; let i = index">
       <div class="items">
         <div class="card-bx mb-0">
-          <img *ngIf="i % 0 === 0" src="../../../../../assets/images/card/card1.png" alt="" />
+          <img *ngIf="i === 0" src="../../../../../assets/images/card/card1.png" alt="" />
           <img *ngIf="i === 1" src="../../../../../assets/images/card/card2.png" alt="" />
           <div class="card-info text-white">
             <p class="mb-1" jhiTranslate="moneyRoombaApp.wallet.balance">Balance</p>

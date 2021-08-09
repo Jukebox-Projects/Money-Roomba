@@ -12,7 +12,7 @@ import { MovementType } from '../../entities/enumerations/movement-type.model';
 })
 export class TotalBalanceComponent implements OnInit {
   reportData: ITotalBalance[];
-  totalBalance: ITotalBalance[];
+  totalBalance: number;
   constructor(protected totalBalanceService: TotalBalanceService) {}
 
   ngOnInit(): void {
@@ -32,7 +32,9 @@ export class TotalBalanceComponent implements OnInit {
 
   protected resolveData(reportData: ITotalBalance[]): void {
     /* eslint-disable no-console */
-
-    this.totalBalance = reportData;
+    this.totalBalance = 0;
+    for (let i in reportData) {
+      this.totalBalance = this.totalBalance + reportData[i].total;
+    }
   }
 }

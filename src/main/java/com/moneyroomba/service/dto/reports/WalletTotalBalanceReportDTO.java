@@ -8,8 +8,6 @@ public class WalletTotalBalanceReportDTO {
 
     private Currency currency;
 
-    public WalletTotalBalanceReportDTO() {}
-
     public WalletTotalBalanceReportDTO(Double total, Currency currency) {
         this.total = total;
         this.currency = currency;

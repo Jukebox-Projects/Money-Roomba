@@ -21,9 +21,7 @@ public interface WalletRepository extends JpaRepository<Wallet, Long>, JpaSpecif
         "FROM Wallet tr " +
         "WHERE tr.user.id = ?1 AND " +
         "tr.inReports = ?2 AND " +
-        "tr.isActive = ?3 " +
-        "GROUP BY tr.currency " +
-        "ORDER BY tr.balance"
+        "tr.isActive = ?3 "
     )
-    public List<WalletTotalBalanceReportDTO> getTotalBalance(Long userId, Boolean addToReports);
+    public List<WalletTotalBalanceReportDTO> getTotalBalance(Long userId, Boolean addToReports, Boolean isActive);
 }

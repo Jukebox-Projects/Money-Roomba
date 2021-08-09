@@ -20,6 +20,8 @@ import { RestaurantComponent } from '../template/elements/dashboard/spendings/re
 import { WalletBalanceModule } from '../reports/wallet-balance/wallet-balance.module';
 import { TransactionCountModule } from '../reports/transaction-count/transaction-count.module';
 import { TotalBalanceModule } from '../reports/total-balance/total-balance.module';
+import { TransactionsCategoryModule } from '../reports/transactions-category/transactions-category.module';
+import { TransactionsCategoryComponent } from '../reports/transactions-category/transactions-category.component';
 
 @NgModule({
   imports: [
@@ -29,6 +31,7 @@ import { TotalBalanceModule } from '../reports/total-balance/total-balance.modul
     WalletBalanceModule,
     TransactionCountModule,
     TotalBalanceModule,
+    TransactionsCategoryModule,
   ],
   declarations: [
     HomeComponent,
@@ -38,7 +41,7 @@ import { TotalBalanceModule } from '../reports/total-balance/total-balance.modul
     GraphLimitComponent,
     GraphTransactionOverviewComponent,
     GraphWeeklyWalletUsageComponent,
-    SpendingsComponent, //Begin spendings components
+    TransactionsCategoryComponent, //Begin spendings components
     InstallmentComponent,
     InvestmentComponent,
     PropertyComponent,

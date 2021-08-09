@@ -12,18 +12,13 @@ public class TransactionsByCategoryDTO {
 
     private Category category;
 
-    private Wallet wallet;
-
     private MovementType movementType;
 
     private Currency currency;
 
-    public TransactionsByCategoryDTO() {}
-
-    public TransactionsByCategoryDTO(Double total, Category category, Wallet wallet, MovementType movementType, Currency currency) {
+    public TransactionsByCategoryDTO(Double total, Category category, MovementType movementType, Currency currency) {
         this.total = total;
         this.category = category;
-        this.wallet = wallet;
         this.movementType = movementType;
         this.currency = currency;
     }
@@ -42,14 +37,6 @@ public class TransactionsByCategoryDTO {
 
     public void setCategory(Category category) {
         this.category = category;
-    }
-
-    public Wallet getWallet() {
-        return wallet;
-    }
-
-    public void setWallet(Wallet wallet) {
-        this.wallet = wallet;
     }
 
     public MovementType getMovementType() {

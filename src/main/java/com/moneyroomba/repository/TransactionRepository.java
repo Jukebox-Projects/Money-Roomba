@@ -73,12 +73,21 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long>,
         TransactionState state,
         Integer daysInBetween
     );
-    /*
-    //Agregar query - Reporte de Javier
+
+    @Query(
+        value = "SELECT new com.moneyroomba.service.dto.reports.TransactionsByCategoryDTO(tr.amount, tr.category, tr.movementType, tr.currency ) " +
+        "FROM Transaction tr " +
+        "WHERE tr.sourceUser.id = ?1 AND " +
+        "tr.addToReports = ?2 AND " +
+        "tr.state = ?3 AND " +
+        "ABS(DATEDIFF(tr.dateAdded, CURRENT_TIMESTAMP)) BETWEEN 0 AND ?4" +
+        "GROUP BY tr.movementType " +
+        "ORDER BY tr.movementType DESC"
+    )
     public List<TransactionsByCategoryDTO> getTransactionByCategoryReport(
         Long userId,
-        Long walletId,
         Boolean addToReports,
-        TransactionState state
-    );*/
+        TransactionState state,
+        Integer daysInBetween
+    );
 }

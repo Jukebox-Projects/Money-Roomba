@@ -99,6 +99,7 @@ import { IconPickerComponent } from './shared/icon-picker/icon-picker.component'
 import { LandingPageComponent } from './landing/landing-page/landing-page.component';
 import { NgApexchartsModule } from 'ng-apexcharts';
 import { TotalBalanceComponent } from './reports/total-balance/total-balance.component';
+import { TransactionsCategoryComponent } from './reports/transactions-category/transactions-category.component';
 //import { ChartComponent} from "ng-apexcharts";
 
 @NgModule({
@@ -196,6 +197,7 @@ import { TotalBalanceComponent } from './reports/total-balance/total-balance.com
     //   ChartComponent
   ],
   bootstrap: [MainComponent],
+  exports: [],
 })
 export class AppModule {
   constructor(

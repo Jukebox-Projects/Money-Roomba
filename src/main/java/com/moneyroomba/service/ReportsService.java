@@ -11,6 +11,7 @@ import com.moneyroomba.repository.CurrencyRepository;
 import com.moneyroomba.repository.TransactionRepository;
 import com.moneyroomba.repository.WalletRepository;
 import com.moneyroomba.service.dto.reports.TransactionCountReportDTO;
+import com.moneyroomba.service.dto.reports.TransactionsByCategoryDTO;
 import com.moneyroomba.service.dto.reports.WalletBalanceReportDTO;
 import com.moneyroomba.service.dto.reports.WalletTotalBalanceReportDTO;
 import com.moneyroomba.web.rest.errors.BadRequestAlertException;
@@ -87,7 +88,6 @@ public class ReportsService {
             Long daysInBetween = DAYS.between(LocalDate.parse(startDate), LocalDate.parse(endDate));
             results =
                 transactionRepository.getAllWalletBalanceReport(user.get().getId(), true, TransactionState.NA, daysInBetween.intValue());
-
             if (!results.isEmpty()) {
                 if (!sameCurrencyForAllWallets(results)) {
                     Currency defaultCurrency = getDefaultCurrency();
@@ -139,14 +139,26 @@ public class ReportsService {
      *
      * @return the report data needed in the front end graph.
      */
-    /*
+
     @Transactional(readOnly = true)
-    public List<TransactionsByCategoryDTO> getTransactionsByCategory() {
+    public List<TransactionsByCategoryDTO> getTransactionsByCategory(String startDate, String endDate) {
         log.debug("Request to get a transaction by category balance report for all wallets");
         Optional<UserDetails> user = userService.getUserDetailsByLogin();
-        // Se debe modificar para no recibir un ID de wallet y hacerlo por todos los wallets
-        return transactionRepository.getTransactionByCategoryReport(user.get().getId(), 0L, false, TransactionState.NA);
-    }*/
+        List<TransactionsByCategoryDTO> results = null;
+        if (user.isPresent()) {
+            Long daysInBetween = DAYS.between(LocalDate.parse(startDate), LocalDate.parse(endDate));
+            results =
+                transactionRepository.getTransactionByCategoryReport(
+                    user.get().getId(),
+                    true,
+                    TransactionState.NA,
+                    daysInBetween.intValue()
+                );
+        } else {
+            throw new BadRequestAlertException("Could not find the user", ENTITY_NAME, "nouserfound");
+        }
+        return results;
+    }
 
     private Boolean sameCurrencyForAllWallets(List<WalletBalanceReportDTO> results) {
         String previousCurrencyCode = null;
@@ -197,7 +209,7 @@ public class ReportsService {
         Optional<UserDetails> user = userService.getUserDetailsByLogin();
         List<WalletTotalBalanceReportDTO> results = null;
         if (user.isPresent()) {
-            results = walletRepository.getTotalBalance(user.get().getId(), true);
+            results = walletRepository.getTotalBalance(user.get().getId(), true, true);
 
             if (!results.isEmpty()) {
                 if (!sameCurrencyTotalBalance(results)) {
@@ -229,9 +241,12 @@ public class ReportsService {
         Currency targetCurrency
     ) {
         ArrayList<WalletTotalBalanceReportDTO> formatedResults = new ArrayList<>();
+        formatedResults.add(0, new WalletTotalBalanceReportDTO(0D, targetCurrency));
+
         results.forEach(
             currentItem -> {
                 currentItem.setTotal(convertAmount(currentItem.getCurrency(), targetCurrency, currentItem.getTotal()));
+                formatedResults.get(0).setTotal(formatedResults.get(0).getTotal() + currentItem.getTotal());
             }
         );
         return formatedResults;
