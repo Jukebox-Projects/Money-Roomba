@@ -45,17 +45,12 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long>,
         "FROM Transaction tr " +
         "WHERE tr.sourceUser.id = ?1 AND " +
         "tr.addToReports = ?2 AND " +
-        "tr.state = ?3 AND " +
+        "tr.state = 'NA' OR tr.state = 'ACCEPTED' AND " +
         "ABS(DATEDIFF(tr.dateAdded, CURRENT_TIMESTAMP)) BETWEEN 0 AND ?4 " +
         "GROUP BY tr.movementType, tr.wallet, tr.currency " +
         "ORDER BY tr.wallet, tr.movementType DESC, tr.currency"
     )
-    public List<WalletBalanceReportDTO> getAllWalletBalanceReport(
-        Long userId,
-        Boolean addToReports,
-        TransactionState state,
-        Integer daysInBetween
-    );
+    public List<WalletBalanceReportDTO> getAllWalletBalanceReport(Long userId, Boolean addToReports, Integer daysInBetween);
 
     @Query(
         value = "SELECT new com.moneyroomba.service.dto.reports.TransactionCountReportDTO(COUNT(tr.id), tr.movementType) " +
@@ -75,6 +70,18 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long>,
     );
 
     @Query(
+        value = "SELECT new com.moneyroomba.service.dto.reports.TransactionsByCategoryDTO( SUM(tr.amount), COUNT(tr.id),tr.category, tr.movementType, tr.currency ) " +
+        "FROM Transaction tr " +
+        "WHERE tr.sourceUser.id = ?1 AND " +
+        "tr.addToReports = ?2 AND " +
+        "tr.state = ?3 AND " +
+        "ABS(DATEDIFF(tr.dateAdded, CURRENT_TIMESTAMP)) BETWEEN 0 AND 365 " +
+        "GROUP BY tr.movementType, tr.category, tr.currency " +
+        "ORDER BY tr.movementType DESC"
+    )
+    public List<TransactionsByCategoryDTO> getTransactionByCategoryReport(Long userId, Boolean addToReports, TransactionState state);
+    /*
+    @Query(
         value = "SELECT new com.moneyroomba.service.dto.reports.TransactionsByCategoryDTO(tr.amount, tr.category, tr.movementType, tr.currency ) " +
         "FROM Transaction tr " +
         "WHERE tr.sourceUser.id = ?1 AND " +
@@ -89,5 +96,6 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long>,
         Boolean addToReports,
         TransactionState state,
         Integer daysInBetween
-    );
+    );*/
+
 }

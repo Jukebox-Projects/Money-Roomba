@@ -2,6 +2,7 @@ package com.moneyroomba.service;
 
 import static java.time.temporal.ChronoUnit.DAYS;
 
+import com.moneyroomba.domain.Category;
 import com.moneyroomba.domain.Currency;
 import com.moneyroomba.domain.UserDetails;
 import com.moneyroomba.domain.Wallet;
@@ -86,8 +87,7 @@ public class ReportsService {
         List<WalletBalanceReportDTO> results = null;
         if (user.isPresent()) {
             Long daysInBetween = DAYS.between(LocalDate.parse(startDate), LocalDate.parse(endDate));
-            results =
-                transactionRepository.getAllWalletBalanceReport(user.get().getId(), true, TransactionState.NA, daysInBetween.intValue());
+            results = transactionRepository.getAllWalletBalanceReport(user.get().getId(), true, daysInBetween.intValue());
             if (!results.isEmpty()) {
                 if (!sameCurrencyForAllWallets(results)) {
                     Currency defaultCurrency = getDefaultCurrency();
@@ -133,32 +133,6 @@ public class ReportsService {
         Optional<UserDetails> user = userService.getUserDetailsByLogin();
         return transactionRepository.getTransactionByCategoryReport(user.get().getId(), id, false, TransactionState.NA);
     }*/
-
-    /**
-     * Get report with expenses and income by category from all wallets
-     *
-     * @return the report data needed in the front end graph.
-     */
-
-    @Transactional(readOnly = true)
-    public List<TransactionsByCategoryDTO> getTransactionsByCategory(String startDate, String endDate) {
-        log.debug("Request to get a transaction by category balance report for all wallets");
-        Optional<UserDetails> user = userService.getUserDetailsByLogin();
-        List<TransactionsByCategoryDTO> results = null;
-        if (user.isPresent()) {
-            Long daysInBetween = DAYS.between(LocalDate.parse(startDate), LocalDate.parse(endDate));
-            results =
-                transactionRepository.getTransactionByCategoryReport(
-                    user.get().getId(),
-                    true,
-                    TransactionState.NA,
-                    daysInBetween.intValue()
-                );
-        } else {
-            throw new BadRequestAlertException("Could not find the user", ENTITY_NAME, "nouserfound");
-        }
-        return results;
-    }
 
     private Boolean sameCurrencyForAllWallets(List<WalletBalanceReportDTO> results) {
         String previousCurrencyCode = null;
@@ -249,6 +223,96 @@ public class ReportsService {
                 formatedResults.get(0).setTotal(formatedResults.get(0).getTotal() + currentItem.getTotal());
             }
         );
+        return formatedResults;
+    }
+
+    /**
+     * Get report with expenses and income by category from all wallets
+     *
+     * @return the report data needed in the front end graph.
+     */
+    @Transactional(readOnly = true)
+    public List<TransactionsByCategoryDTO> getTransactionsByCategory() {
+        log.debug("Request to get a transaction by category balance report for all wallets");
+        Optional<UserDetails> user = userService.getUserDetailsByLogin();
+        List<TransactionsByCategoryDTO> results = null;
+        if (user.isPresent()) {
+            results = transactionRepository.getTransactionByCategoryReport(user.get().getId(), true, TransactionState.NA);
+            if (!results.isEmpty()) {
+                if (!sameCurrencyTransactionsByCategory(results)) {
+                    Currency defaultCurrency = getDefaultCurrency();
+                    results = convertConversionTransactionsByCategory(results, defaultCurrency);
+                }
+            }
+        } else {
+            throw new BadRequestAlertException("Could not find the user", ENTITY_NAME, "nouserfound");
+        }
+        return results;
+    }
+
+    /*
+    @Transactional(readOnly = true)
+    public List<TransactionsByCategoryDTO> getTransactionsByCategory(String startDate, String endDate) {
+        log.debug("Request to get a transaction by category balance report for all wallets");
+        Optional<UserDetails> user = userService.getUserDetailsByLogin();
+        List<TransactionsByCategoryDTO> results = null;
+        if (user.isPresent()) {
+            Long daysInBetween = DAYS.between(LocalDate.parse(startDate), LocalDate.parse(endDate));
+            results =
+                transactionRepository.getTransactionByCategoryReport(
+                    user.get().getId(),
+                    true,
+                    TransactionState.NA,
+                    daysInBetween.intValue());
+            System.out.println("GET TRANSACTIONS BY CATEGORY");
+            System.out.println(results);
+            System.out.println("GET TRANSACTIONS BY CATEGORY");
+            if (!results.isEmpty()) {
+                if (!sameCurrencyTransactionsByCategory(results)) {
+                    Currency defaultCurrency = getDefaultCurrency();
+                    results = convertConversionTransactionsByCategory(results, defaultCurrency);
+                }
+            }
+        } else {
+            throw new BadRequestAlertException("Could not find the user", ENTITY_NAME, "nouserfound");
+        }
+        System.out.println("GET TRANSACTIONS BY CATEGORY WITH FORMATED");
+        System.out.println(results);
+        System.out.println("GET TRANSACTIONS BY CATEGORY WITH FORMATED");
+        return results;
+    }
+*/
+    private Boolean sameCurrencyTransactionsByCategory(List<TransactionsByCategoryDTO> results) {
+        String previousCurrencyCode = null;
+        for (int i = 0; i < results.size(); i++) {
+            if (results.get(i).getCurrency().getCode().equals(previousCurrencyCode) || i == 0) {
+                previousCurrencyCode = results.get(i).getCurrency().getCode();
+            } else {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private List<TransactionsByCategoryDTO> convertConversionTransactionsByCategory(
+        List<TransactionsByCategoryDTO> results,
+        Currency targetCurrency
+    ) {
+        ArrayList<TransactionsByCategoryDTO> formatedResults = new ArrayList<>();
+        for (int i = 0; i < results.size(); i++) {
+            formatedResults.add(
+                i,
+                new TransactionsByCategoryDTO(
+                    0D,
+                    results.get(i).getCounter(),
+                    results.get(i).getCategory(),
+                    results.get(i).getMovementType(),
+                    targetCurrency
+                )
+            );
+            results.get(i).setTotal(convertAmount(results.get(i).getCurrency(), targetCurrency, results.get(i).getTotal()));
+            formatedResults.get(i).setTotal(formatedResults.get(0).getTotal() + results.get(i).getTotal());
+        }
         return formatedResults;
     }
 }

@@ -10,14 +10,17 @@ public class TransactionsByCategoryDTO {
 
     private Double total;
 
+    private Long count;
+
     private Category category;
 
     private MovementType movementType;
 
     private Currency currency;
 
-    public TransactionsByCategoryDTO(Double total, Category category, MovementType movementType, Currency currency) {
+    public TransactionsByCategoryDTO(Double total, Long count, Category category, MovementType movementType, Currency currency) {
         this.total = total;
+        this.count = count;
         this.category = category;
         this.movementType = movementType;
         this.currency = currency;
@@ -29,6 +32,14 @@ public class TransactionsByCategoryDTO {
 
     public void setTotal(Double total) {
         this.total = total;
+    }
+
+    public Long getCounter() {
+        return count;
+    }
+
+    public void setCounter(Long count) {
+        this.count = count;
     }
 
     public Category getCategory() {

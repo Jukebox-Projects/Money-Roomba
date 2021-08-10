@@ -3,8 +3,8 @@ import { ICategory } from '../../entities/category/category.model';
 
 export interface ITransactionsByCategory {
   total?: number;
+  count?: number;
   category?: ICategory;
-  wallet?: number;
   movementType?: string;
   currency?: ICurrency;
 }
@@ -12,8 +12,8 @@ export interface ITransactionsByCategory {
 export class TransactionsByCategoryModel implements ITransactionsByCategory {
   constructor(
     public total?: number,
+    public count?: number,
     public category?: ICategory,
-    public wallet?: number,
     public movementType?: string,
     public currency?: ICurrency
   ) {}
