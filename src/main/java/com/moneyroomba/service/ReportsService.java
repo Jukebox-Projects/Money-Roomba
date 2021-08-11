@@ -60,16 +60,19 @@ public class ReportsService {
     @Transactional(readOnly = true)
     public List<WalletBalanceReportDTO> getBalancebyWallet(Long id) {
         log.debug("Request to get balance by wallet report");
-        Optional<UserDetails> user = userService.getUserDetailsByLogin();
         Optional<Wallet> wallet = walletRepository.findById(id);
-        if (wallet.isPresent() && user.isPresent()) {
-            if (wallet.get().getInReports()) {
-                return transactionRepository.getWalletBalanceReport(user.get().getId(), id, true, TransactionState.NA);
+
+        List<WalletBalanceReportDTO> results = null;
+        if (wallet.isPresent() && wallet.get().getInReports()) {
+            results = transactionRepository.getWalletBalanceReport(wallet.get().getUser().getId(), id, true, TransactionState.NA);
+
+            if (!results.isEmpty() && !sameCurrencyForAllWallets(results)) {
+                Currency defaultCurrency = getDefaultCurrency();
+                results = exchangeForReportResults(results, defaultCurrency);
             }
-        } else {
-            throw new BadRequestAlertException("Could not find the user", ENTITY_NAME, "nouserfound");
         }
-        return null;
+
+        return results;
     }
 
     /**
@@ -84,13 +87,12 @@ public class ReportsService {
         List<WalletBalanceReportDTO> results = null;
         if (user.isPresent()) {
             Long daysInBetween = DAYS.between(LocalDate.parse(startDate), LocalDate.parse(endDate));
-            results =
-                transactionRepository.getAllWalletBalanceReport(user.get().getId(), true, TransactionState.NA, daysInBetween.intValue());
+            results = transactionRepository.getAllWalletBalanceReport(user.get().getId(), true, daysInBetween.intValue());
 
             if (!results.isEmpty()) {
                 if (!sameCurrencyForAllWallets(results)) {
                     Currency defaultCurrency = getDefaultCurrency();
-                    results = convertConversionForAllWallets(results, defaultCurrency);
+                    results = exchangeForReportResults(results, defaultCurrency);
                 }
             }
         } else {
@@ -112,7 +114,7 @@ public class ReportsService {
         List<TransactionCountReportDTO> results = null;
         if (user.isPresent()) {
             Long daysInBetween = DAYS.between(LocalDate.parse(startDate), LocalDate.parse(endDate));
-            results = transactionRepository.getTransactionCount(user.get().getId(), true, TransactionState.NA, daysInBetween.intValue());
+            results = transactionRepository.getTransactionCount(user.get().getId(), true, daysInBetween.intValue());
         } else {
             throw new BadRequestAlertException("Could not find the user", ENTITY_NAME, "nouserfound");
         }
@@ -163,7 +165,7 @@ public class ReportsService {
         return currencyRepository.findOneByCode(DEFAULT_CURRENCY_CODE).orElse(null);
     }
 
-    private List<WalletBalanceReportDTO> convertConversionForAllWallets(List<WalletBalanceReportDTO> results, Currency targetCurrency) {
+    private List<WalletBalanceReportDTO> exchangeForReportResults(List<WalletBalanceReportDTO> results, Currency targetCurrency) {
         ArrayList<WalletBalanceReportDTO> formatedResults = new ArrayList<>();
         formatedResults.add(0, new WalletBalanceReportDTO(0D, MovementType.INCOME, targetCurrency));
         formatedResults.add(1, new WalletBalanceReportDTO(0D, MovementType.EXPENSE, targetCurrency));
