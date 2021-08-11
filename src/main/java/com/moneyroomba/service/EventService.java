@@ -1,7 +1,13 @@
 package com.moneyroomba.service;
 
 import com.moneyroomba.domain.Event;
+import com.moneyroomba.domain.Notification;
+import com.moneyroomba.domain.UserDetails;
+import com.moneyroomba.domain.enumeration.EventType;
+import com.moneyroomba.domain.enumeration.SourceEntity;
 import com.moneyroomba.repository.EventRepository;
+import com.moneyroomba.repository.NotificationRepository;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import org.slf4j.Logger;
@@ -20,8 +26,16 @@ public class EventService {
 
     private final EventRepository eventRepository;
 
-    public EventService(EventRepository eventRepository) {
+    private final UserService userService;
+
+    private final NotificationRepository notificationRepository;
+
+    private final Boolean UNOPENED_STATUS = false;
+
+    public EventService(EventRepository eventRepository, UserService userService, NotificationRepository notificationRepository) {
         this.eventRepository = eventRepository;
+        this.userService = userService;
+        this.notificationRepository = notificationRepository;
     }
 
     /**
@@ -85,6 +99,38 @@ public class EventService {
     }
 
     /**
+     * Get all the events join notifications where notifications are not opened.
+     *
+     * @return the list of entities.
+     */
+    @Transactional(readOnly = true)
+    public List<Event> findAllNotificationsNotOpened() {
+        log.debug("Request to get all unopened notifications");
+        Optional<UserDetails> user = userService.getUserDetailsByLogin();
+        List<Event> results = eventRepository.findAllByNotificationStatus(user.get().getId(), UNOPENED_STATUS);
+        if (!results.isEmpty()) {
+            addDestinationPath(results);
+        }
+        return results;
+    }
+
+    /**
+     * Get all the events join notifications
+     *
+     * @return the list of entities.
+     */
+    @Transactional(readOnly = true)
+    public List<Event> findAllNotificationsByUser() {
+        log.debug("Request to get all unopened notifications");
+        Optional<UserDetails> user = userService.getUserDetailsByLogin();
+        List<Event> results = eventRepository.findAllByUserOrderByDateAddedDesc(user.get());
+        if (!results.isEmpty()) {
+            addDestinationPath(results);
+        }
+        return results;
+    }
+
+    /**
      * Get one event by id.
      *
      * @param id the id of the entity.
@@ -104,5 +150,54 @@ public class EventService {
     public void delete(Long id) {
         log.debug("Request to delete Event : {}", id);
         eventRepository.deleteById(id);
+    }
+
+    /**
+     * Save a event conected with a notification.
+     *
+     * @param eventType the type of action done.
+     * @param sourceEntity the source entity of the event.
+     * @param userDetails data of the user performing the action.
+     */
+    public Event createEventAndNotification(EventType eventType, Long sourceId, SourceEntity sourceEntity, UserDetails userDetails) {
+        log.debug("Request to save a Notification and an Event");
+        Notification notification = new Notification(LocalDate.now(), false);
+        Notification savedNotification = notificationRepository.save(notification);
+
+        Event event = new Event(
+            eventType,
+            LocalDate.now(),
+            sourceId,
+            sourceEntity,
+            userDetails.getInternalUser().getFirstName(),
+            userDetails.getInternalUser().getLastName(),
+            savedNotification,
+            userDetails
+        );
+        return eventRepository.save(event);
+    }
+
+    private void addDestinationPath(List<Event> events) {
+        events.forEach(this::appendNotificationEntityData);
+    }
+
+    private void appendNotificationEntityData(Event event) {
+        String destinationPath = "/";
+        String message = "";
+        if (event.getEventType().equals(EventType.TRANSCTION_RECEIVED)) {
+            destinationPath = String.format("transaction/%d/%s", event.getSourceId(), "view");
+            message = "incomingTransaction";
+        } else if (event.getEventType().equals(EventType.POSSIBLE_TRANSACTION_ADDED_EMAIL)) {
+            destinationPath = String.format("transaction/%d/%s", event.getSourceId(), "view");
+            message = "emailTransaction";
+        } else if (event.getEventType().equals(EventType.LICENSE_GIFTED)) {
+            destinationPath = "license/view";
+            message = "giftedLicense";
+        } else if (event.getEventType().equals(EventType.LICENSE_PURCHASED)) {
+            destinationPath = "license/view";
+            message = "purchasedLicense";
+        }
+        event.setDestinationPath(destinationPath);
+        event.setMessage(message);
     }
 }
