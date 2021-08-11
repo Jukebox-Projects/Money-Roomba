@@ -7,6 +7,7 @@ export interface ITransactionsByCategory {
   category?: ICategory;
   movementType?: string;
   currency?: ICurrency;
+  percentage?: number;
 }
 
 export class TransactionsByCategoryModel implements ITransactionsByCategory {
@@ -15,6 +16,7 @@ export class TransactionsByCategoryModel implements ITransactionsByCategory {
     public count?: number,
     public category?: ICategory,
     public movementType?: string,
-    public currency?: ICurrency
+    public currency?: ICurrency,
+    public percentage?: number
   ) {}
 }

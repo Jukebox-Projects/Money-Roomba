@@ -18,13 +18,13 @@ export class TransactionsCategoryService {
 
   constructor(protected http: HttpClient, protected applicationConfigService: ApplicationConfigService, protected datePipe: DatePipe) {}
 
-  queryAll(): Observable<EntityArrayResponseType> {
+  queryAll(mType: number): Observable<EntityArrayResponseType> {
     var endDate = new Date();
     var startDate = new Date(new Date().setDate(endDate.getDate() - 30));
     const options = createRequestOption({
       startDate: this.datePipe.transform(startDate, 'yyyy-MM-dd'),
       endDate: this.datePipe.transform(endDate, 'yyyy-MM-dd'),
     });
-    return this.http.get<TransactionsByCategoryModel[]>(this.resourceUrl, { params: options, observe: 'response' });
+    return this.http.get<TransactionsByCategoryModel[]>(this.resourceUrl + '/' + mType, { observe: 'response' });
   }
 }

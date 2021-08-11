@@ -6,7 +6,7 @@ import com.moneyroomba.domain.Wallet;
 import com.moneyroomba.domain.enumeration.MovementType;
 import java.time.LocalDate;
 
-public class TransactionsByCategoryDTO {
+public class TransactionsByCategoryDTO implements Comparable<TransactionsByCategoryDTO> {
 
     private Double total;
 
@@ -17,6 +17,8 @@ public class TransactionsByCategoryDTO {
     private MovementType movementType;
 
     private Currency currency;
+
+    private double percentage;
 
     public TransactionsByCategoryDTO(Double total, Long count, Category category, MovementType movementType, Currency currency) {
         this.total = total;
@@ -64,5 +66,22 @@ public class TransactionsByCategoryDTO {
 
     public void setCurrency(Currency currency) {
         this.currency = currency;
+    }
+
+    public double getPercentage() {
+        return percentage;
+    }
+
+    public void setPercentage(double percentage) {
+        this.percentage = percentage;
+    }
+
+    @Override
+    public int compareTo(TransactionsByCategoryDTO o) {
+        if (getTotal() == null || o.getTotal() == null) {
+            return 0;
+        } else {
+            return getTotal().compareTo(o.getTotal());
+        }
     }
 }

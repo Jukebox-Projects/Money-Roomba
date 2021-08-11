@@ -1,5 +1,6 @@
 package com.moneyroomba.web.rest;
 
+import com.moneyroomba.domain.enumeration.MovementType;
 import com.moneyroomba.service.ReportsService;
 import com.moneyroomba.service.dto.reports.TransactionCountReportDTO;
 import com.moneyroomba.service.dto.reports.TransactionsByCategoryDTO;
@@ -25,15 +26,6 @@ public class ReportsResource {
 
     public ReportsResource(ReportsService reportsService) {
         this.reportsService = reportsService;
-    }
-
-    /**
-     * GET transactionsByCategory
-     */
-    @GetMapping("/transactions-by-category/{id}")
-    public ResponseEntity<List<TransactionsByCategoryDTO>> transactionsByCategoryByWallet(@PathVariable Long id) {
-        //List<TransactionsByCategoryDTO> report = reportsService.getTransactionsByCategoryByWallet(id);
-        return ResponseEntity.ok().body(null);
     }
 
     /**
@@ -92,9 +84,9 @@ public class ReportsResource {
      * GET transactionsByCategory
      */
 
-    @GetMapping("/transactions-by-category")
-    public ResponseEntity<List<TransactionsByCategoryDTO>> transactionsByCategory() {
-        List<TransactionsByCategoryDTO> report = reportsService.getTransactionsByCategory();
+    @GetMapping("/transactions-by-category/{movementType}")
+    public ResponseEntity<List<TransactionsByCategoryDTO>> transactionsByCategory(@PathVariable int movementType) {
+        List<TransactionsByCategoryDTO> report = reportsService.getTransactionsByCategory(movementType);
         return ResponseEntity.ok().body(report);
     }
 }

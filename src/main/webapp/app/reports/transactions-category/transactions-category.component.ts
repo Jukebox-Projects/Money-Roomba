@@ -9,16 +9,17 @@ import { TransactionsCategoryService } from './service/transactions-category.ser
   styleUrls: ['./transactions-category.component.scss'],
 })
 export class TransactionsCategoryComponent implements OnInit {
-  reportData: ITransactionsByCategory[];
-  totalBalance: number = 0;
-  transactionCategory1: ITransactionsByCategory[];
-  transactionCategory2: ITransactionsByCategory[];
-  transactionCategory3: ITransactionsByCategory[];
-  transactionCategory4: ITransactionsByCategory[];
-  category1Percentage: number = 0;
-  category2Percentage: number = 0;
-  category3Percentage: number = 0;
-  category4Percentage: number = 0;
+  reportDataIncome: ITransactionsByCategory[];
+  reportDataExpense: ITransactionsByCategory[];
+  categoryExpense0: ITransactionsByCategory;
+  categoryExpense1: ITransactionsByCategory;
+  categoryExpense2: ITransactionsByCategory;
+  categoryExpense3: ITransactionsByCategory;
+  categoryIncome0: ITransactionsByCategory;
+  categoryIncome1: ITransactionsByCategory;
+  categoryIncome2: ITransactionsByCategory;
+  categoryIncome3: ITransactionsByCategory;
+
   constructor(protected transactionsCategoryService: TransactionsCategoryService) {}
 
   ngOnInit(): void {
@@ -27,30 +28,35 @@ export class TransactionsCategoryComponent implements OnInit {
 
   loadAll(): void {
     /* eslint-disable no-console */
-    this.transactionsCategoryService.queryAll().subscribe(
+    this.transactionsCategoryService.queryAll(1).subscribe(
       (res: HttpResponse<ITransactionsByCategory[]>) => {
-        this.reportData = res.body ?? [];
-        this.resolveData(this.reportData);
+        this.reportDataExpense = res.body ?? [];
+        this.resolveDataExpense(this.reportDataExpense);
+      },
+      error => {}
+    );
+    this.transactionsCategoryService.queryAll(2).subscribe(
+      (res: HttpResponse<ITransactionsByCategory[]>) => {
+        this.reportDataIncome = res.body ?? [];
+        this.resolveDataIncome(this.reportDataIncome);
       },
       error => {}
     );
   }
 
-  protected resolveData(reportData: ITransactionsByCategory[]): void {
+  protected resolveDataExpense(reportDataExpense: ITransactionsByCategory[]): void {
     /* eslint-disable no-console */
-    let current = null;
-    let counter = 0;
-    for (let i in reportData) {
-      if (reportData[i].movementType.toString().toLowerCase().includes('expense')) {
-        this.totalBalance = this.totalBalance + reportData[i].total;
-      }
-    }
-
-    this.calculatePercentage(this.totalBalance, this.reportData);
+    this.categoryExpense0 = reportDataExpense[0];
+    this.categoryExpense1 = reportDataExpense[1];
+    this.categoryExpense2 = reportDataExpense[2];
+    this.categoryExpense3 = reportDataExpense[3];
   }
 
-  protected calculatePercentage(totalBalance: number, reportData: ITransactionsByCategory[]): void {
-    for (let i in reportData) {
-    }
+  protected resolveDataIncome(reportDataIncome: ITransactionsByCategory[]): void {
+    /* eslint-disable no-console */
+    this.categoryIncome0 = reportDataIncome[0];
+    this.categoryIncome1 = reportDataIncome[1];
+    this.categoryIncome2 = reportDataIncome[2];
+    this.categoryIncome3 = reportDataIncome[3];
   }
 }

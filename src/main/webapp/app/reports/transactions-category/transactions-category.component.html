@@ -1,60 +1,202 @@
 <div class="card">
   <div class="card-body">
+    <div *ngIf="reportDataExpense?.length === 0" class="card-body text-center ai-icon text-primary">
+      <svg
+        id="rocket-icon"
+        class="my-2"
+        viewBox="0 0 24 24"
+        width="80"
+        height="80"
+        stroke="currentColor"
+        stroke-width="1"
+        fill="none"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+        <line x1="3" y1="6" x2="21" y2="6"></line>
+        <path d="M16 10a4 4 0 0 1-8 0"></path>
+      </svg>
+      <h4 class="my-2">No tiene egresos</h4>
+      <a
+        class="btn my-2 btn-primary btn-lg px-4"
+        [routerLink]="['/transaction/new']"
+        jhiTranslate="moneyRoombaApp.transaction.home.createLabel"
+      >
+        <i class="fa fa-usd"></i> Create a new Transaction</a
+      >
+    </div>
     <div class="row">
       <div class="col-xl-5 col-xxl-12 col-md-5">
-        <h4 class="fs-20 text-black mb-4">Spendings</h4>
+        <h4
+          *ngIf="reportDataExpense.length > 1"
+          class="fs-20 text-black mb-4"
+          jhiTranslate="{{ 'moneyRoombaApp.MovementType.EXPENSE' }}"
+        ></h4>
+
         <div class="row">
-          <div class="d-flex col-xl-12 col-xxl-6 col-md-12 col-sm-6 mb-4">
+          <div *ngIf="reportDataExpense.length > 1" class="d-flex col-xl-12 col-xxl-6 col-md-12 col-sm-6 mb-4">
             <svg class="mr-3" width="14" height="54" viewBox="0 0 14 54" fill="none" xmlns="http://www.w3.org/2000/svg">
               <rect x="-6.10352e-05" width="14" height="54" rx="7" fill="#AC39D4" />
             </svg>
             <div>
-              <p class="fs-14 mb-2">Investment</p>
-              <span class="fs-18 font-w500"><span class="text-black mr-2">$1,415</span>/$2,000</span>
+              <p class="fs-14 mb-2">{{ categoryExpense0.category.name }}</p>
+              <span class="fs-18 font-w500"
+                ><span class="text-black mr-2">{{ categoryExpense0.total | currency: categoryExpense0.currency.code:'symbol' }}</span></span
+              >
             </div>
           </div>
-          <div class="d-flex col-xl-12 col-xxl-6 col-md-12 col-sm-6 mb-4">
+          <div *ngIf="reportDataExpense.length > 2" class="d-flex col-xl-12 col-xxl-6 col-md-12 col-sm-6 mb-4">
             <svg class="mr-3" width="14" height="54" viewBox="0 0 14 54" fill="none" xmlns="http://www.w3.org/2000/svg">
               <rect x="-6.10352e-05" width="14" height="54" rx="7" fill="#40D4A8" />
             </svg>
             <div>
-              <p class="fs-14 mb-2">Installment</p>
-              <span class="fs-18 font-w500"><span class="text-black mr-2">$1,567</span>/$5,000</span>
+              <p class="fs-14 mb-2">{{ categoryExpense1.category.name }}</p>
+              <span class="fs-18 font-w500"
+                ><span class="text-black mr-2">{{ categoryExpense1.total | currency: categoryExpense1.currency.code:'symbol' }}</span></span
+              >
             </div>
           </div>
-          <div class="d-flex col-xl-12 col-xxl-6 col-md-12 col-sm-6 mb-4">
-            <svg class="mr-3" width="14" height="54" viewBox="0 0 14 54" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <rect x="-6.10352e-05" width="14" height="54" rx="7" fill="#1EB6E7" />
-            </svg>
-            <div>
-              <p class="fs-14 mb-2">Restaurant</p>
-              <span class="fs-18 font-w500"><span class="text-black mr-2">$487</span>{{ totalBalance }}</span>
-            </div>
-          </div>
-          <div class="d-flex col-xl-12 col-xxl-6 col-md-12 col-sm-6 mb-4">
+          <div *ngIf="reportDataExpense.length > 3" class="d-flex col-xl-12 col-xxl-6 col-md-12 col-sm-6 mb-4">
             <svg class="mr-3" width="14" height="54" viewBox="0 0 14 54" fill="none" xmlns="http://www.w3.org/2000/svg">
               <rect x="-6.10352e-05" width="14" height="54" rx="7" fill="#461EE7" />
             </svg>
             <div>
-              <p class="fs-14 mb-2">Property</p>
-              <span class="fs-18 font-w500"><span class="text-black mr-2">$3,890</span>/$4,000</span>
+              <p class="fs-14 mb-2">{{ categoryExpense2.category.name }}</p>
+              <span class="fs-18 font-w500"
+                ><span class="text-black mr-2">{{ categoryExpense2.total | currency: categoryExpense2.currency.code:'symbol' }}</span></span
+              >
+            </div>
+          </div>
+          <div *ngIf="reportDataExpense.length == 4" class="d-flex col-xl-12 col-xxl-6 col-md-12 col-sm-6 mb-4">
+            <svg class="mr-3" width="14" height="54" viewBox="0 0 14 54" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect x="-6.10352e-05" width="14" height="54" rx="7" fill="#1EB6E7" />
+            </svg>
+            <div>
+              <p class="fs-14 mb-2">Other</p>
+              <span class="fs-18 font-w500"
+                ><span class="text-black mr-2">{{ categoryExpense3.total | currency: categoryExpense3.currency.code:'symbol' }}</span></span
+              >
             </div>
           </div>
         </div>
       </div>
       <div class="col-xl-7 col-xxl-12 col-md-7">
         <div class="row">
-          <div class="col-6 mb-4">
-            <app-investment></app-investment>
+          <div *ngIf="reportDataExpense.length > 1" class="col-6 mb-4">
+            <app-investment [transactionsByCategories]="reportDataExpense[0]"></app-investment>
           </div>
-          <div class="col-6 mb-4">
-            <app-installment></app-installment>
+          <div *ngIf="reportDataExpense.length > 2" class="col-6 mb-4">
+            <app-installment [transactionsByCategories]="reportDataExpense[1]"></app-installment>
           </div>
-          <div class="col-6 mb-sm-0 mb-4">
-            <app-restaurant></app-restaurant>
+          <div *ngIf="reportDataExpense.length > 3" class="col-6 mb-sm-0 mb-4">
+            <app-property [transactionsByCategories]="reportDataExpense[2]"></app-property>
           </div>
-          <div class="col-6 mb-sm-0 mb-4">
-            <app-property></app-property>
+          <div *ngIf="reportDataExpense.length === 4" class="col-6 mb-sm-0 mb-4">
+            <app-restaurant [transactionsByCategories]="reportDataExpense[3]"></app-restaurant>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-body">
+    <div *ngIf="reportDataIncome?.length === 0" class="card-body text-center ai-icon text-primary">
+      <svg
+        id="rocket-icon"
+        class="my-2"
+        viewBox="0 0 24 24"
+        width="80"
+        height="80"
+        stroke="currentColor"
+        stroke-width="1"
+        fill="none"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+        <line x1="3" y1="6" x2="21" y2="6"></line>
+        <path d="M16 10a4 4 0 0 1-8 0"></path>
+      </svg>
+      <h4 class="my-2">No tiene ingresos</h4>
+      <a
+        class="btn my-2 btn-primary btn-lg px-4"
+        [routerLink]="['/transaction/new']"
+        jhiTranslate="moneyRoombaApp.transaction.home.createLabel"
+      >
+        <i class="fa fa-usd"></i> Create a new Transaction</a
+      >
+    </div>
+    <div class="row">
+      <div class="col-xl-5 col-xxl-12 col-md-5">
+        <h4
+          *ngIf="reportDataIncome.length > 0"
+          class="fs-20 text-black mb-4"
+          jhiTranslate="{{ 'moneyRoombaApp.MovementType.INCOME' }}"
+        ></h4>
+
+        <div class="row">
+          <div *ngIf="reportDataIncome.length > 0" class="d-flex col-xl-12 col-xxl-6 col-md-12 col-sm-6 mb-4">
+            <svg class="mr-3" width="14" height="54" viewBox="0 0 14 54" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect x="-6.10352e-05" width="14" height="54" rx="7" fill="#AC39D4" />
+            </svg>
+            <div>
+              <p class="fs-14 mb-2">{{ categoryIncome0.category.name }}</p>
+              <span class="fs-18 font-w500"
+                ><span class="text-black mr-2">{{ categoryIncome0.total | currency: categoryIncome0.currency.code:'symbol' }}</span></span
+              >
+            </div>
+          </div>
+          <div *ngIf="reportDataIncome.length > 2" class="d-flex col-xl-12 col-xxl-6 col-md-12 col-sm-6 mb-4">
+            <svg class="mr-3" width="14" height="54" viewBox="0 0 14 54" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect x="-6.10352e-05" width="14" height="54" rx="7" fill="#40D4A8" />
+            </svg>
+            <div>
+              <p class="fs-14 mb-2">{{ categoryIncome1.category.name }}</p>
+              <span class="fs-18 font-w500"
+                ><span class="text-black mr-2">{{ categoryIncome1.total | currency: categoryIncome1.currency.code:'symbol' }}</span></span
+              >
+            </div>
+          </div>
+          <div *ngIf="reportDataIncome.length > 3" class="d-flex col-xl-12 col-xxl-6 col-md-12 col-sm-6 mb-4">
+            <svg class="mr-3" width="14" height="54" viewBox="0 0 14 54" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect x="-6.10352e-05" width="14" height="54" rx="7" fill="#461EE7" />
+            </svg>
+            <div>
+              <p class="fs-14 mb-2">{{ categoryIncome2.category.name }}</p>
+              <span class="fs-18 font-w500"
+                ><span class="text-black mr-2">{{ categoryIncome2.total | currency: categoryIncome2.currency.code:'symbol' }}</span></span
+              >
+            </div>
+          </div>
+          <div *ngIf="reportDataIncome.length == 4" class="d-flex col-xl-12 col-xxl-6 col-md-12 col-sm-6 mb-4">
+            <svg class="mr-3" width="14" height="54" viewBox="0 0 14 54" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect x="-6.10352e-05" width="14" height="54" rx="7" fill="#1EB6E7" />
+            </svg>
+            <div>
+              <p class="fs-14 mb-2">Other</p>
+              <span class="fs-18 font-w500"
+                ><span class="text-black mr-2">{{ categoryIncome3.total | currency: categoryIncome3.currency.code:'symbol' }}</span></span
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-xl-7 col-xxl-12 col-md-7">
+        <div class="row">
+          <div *ngIf="reportDataIncome.length != 0" class="col-6 mb-4">
+            <app-investment [transactionsByCategories]="reportDataIncome[0]"></app-investment>
+          </div>
+          <div *ngIf="reportDataIncome.length > 2" class="col-6 mb-4">
+            <app-installment [transactionsByCategories]="reportDataIncome[1]"></app-installment>
+          </div>
+          <div *ngIf="reportDataIncome.length > 3" class="col-6 mb-sm-0 mb-4">
+            <app-property [transactionsByCategories]="reportDataIncome[2]"></app-property>
+          </div>
+          <div *ngIf="reportDataIncome.length === 4" class="col-6 mb-sm-0 mb-4">
+            <app-restaurant [transactionsByCategories]="reportDataIncome[3]"></app-restaurant>
           </div>
         </div>
       </div>

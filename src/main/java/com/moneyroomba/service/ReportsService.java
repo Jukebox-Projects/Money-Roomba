@@ -17,9 +17,7 @@ import com.moneyroomba.service.dto.reports.WalletBalanceReportDTO;
 import com.moneyroomba.service.dto.reports.WalletTotalBalanceReportDTO;
 import com.moneyroomba.web.rest.errors.BadRequestAlertException;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -248,35 +246,78 @@ public class ReportsService {
      * @return the report data needed in the front end graph.
      */
     @Transactional(readOnly = true)
-    public List<TransactionsByCategoryDTO> getTransactionsByCategory() {
+    public List<TransactionsByCategoryDTO> getTransactionsByCategory(int movementType) {
         log.debug("Request to get a transaction by category balance report for all wallets");
         Optional<UserDetails> user = userService.getUserDetailsByLogin();
         List<TransactionsByCategoryDTO> results = null;
+
+        MovementType mType;
+
+        if (movementType == 1) {
+            mType = MovementType.EXPENSE;
+        } else {
+            mType = MovementType.INCOME;
+        }
+
         if (user.isPresent()) {
-            results = transactionRepository.getTransactionByCategoryReport(user.get().getId(), true, TransactionState.NA);
+            results = transactionRepository.getTransactionByCategoryReport(user.get().getId(), true, TransactionState.NA, mType);
             if (!results.isEmpty()) {
                 if (!sameCurrencyTransactionsByCategory(results)) {
                     Currency defaultCurrency = getDefaultCurrency();
                     results = convertConversionTransactionsByCategory(results, defaultCurrency);
                 }
+                results = orderTransactionsByCategory(results);
             }
         } else {
             throw new BadRequestAlertException("Could not find the user", ENTITY_NAME, "nouserfound");
         }
-        orderTransactionsByCategory(results);
+
         return results;
     }
 
-    public List<TransactionsByCategoryDTO> orderTransactionsByCategory(List<TransactionsByCategoryDTO> results) {
-        List<TransactionsByCategoryDTO> formatedResults = null;
-        int n = results.size();
-        for (int i = 0; i < n - 1; i++) {
-            for (int j = 0; j < n - i - 1; j++) {
-                if (results.get(j).getCategory() == results.get(j + 1).getCategory()) {}
+    public List<TransactionsByCategoryDTO> orderTransactionsByCategory(List<TransactionsByCategoryDTO> allTransactions) {
+        List<TransactionsByCategoryDTO> formatedResults = new ArrayList<TransactionsByCategoryDTO>();
+        List<TransactionsByCategoryDTO> finalResults = new ArrayList<TransactionsByCategoryDTO>();
+        double total = 0;
+        TransactionsByCategoryDTO other = new TransactionsByCategoryDTO(0.0, 0L, null, null, currencyRepository.findOneByCode("USD").get());
+        for (TransactionsByCategoryDTO categoryGroup : allTransactions) {
+            if (formatedResults.isEmpty()) {
+                formatedResults.add(categoryGroup);
+                total += categoryGroup.getTotal();
+            } else {
+                for (TransactionsByCategoryDTO transactionsWithBalance : formatedResults) {
+                    if (
+                        transactionsWithBalance.getCategory().equals(categoryGroup.getCategory()) &&
+                        !transactionsWithBalance.equals(categoryGroup)
+                    ) {
+                        transactionsWithBalance.setTotal(transactionsWithBalance.getTotal() + categoryGroup.getTotal());
+                        total += categoryGroup.getTotal();
+                    } else {
+                        formatedResults.add(categoryGroup);
+                        total += categoryGroup.getTotal();
+                        break;
+                    }
+                }
             }
         }
 
-        return results;
+        formatedResults.sort(Comparator.comparing(TransactionsByCategoryDTO::getTotal).reversed());
+
+        for (int i = 0; i < formatedResults.size(); i++) {
+            if (i < 3) {
+                finalResults.add(formatedResults.get(i));
+            } else {
+                other.setTotal(other.getTotal() + formatedResults.get(i).getTotal());
+                other.setCounter(other.getCounter() + formatedResults.get(i).getCounter());
+            }
+        }
+        finalResults.add(other);
+
+        for (TransactionsByCategoryDTO result : finalResults) {
+            double percentage = (result.getTotal() / total) * 100;
+            result.setPercentage(percentage);
+        }
+        return finalResults;
     }
 
     /*
