@@ -2,6 +2,7 @@ package com.moneyroomba.repository;
 
 import com.moneyroomba.domain.Transaction;
 import com.moneyroomba.domain.Wallet;
+import com.moneyroomba.domain.enumeration.MovementType;
 import com.moneyroomba.domain.enumeration.TransactionState;
 import com.moneyroomba.service.dto.reports.TransactionCountReportDTO;
 import com.moneyroomba.service.dto.reports.TransactionsByCategoryDTO;
@@ -62,12 +63,21 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long>,
         "ORDER BY tr.movementType DESC"
     )
     public List<TransactionCountReportDTO> getTransactionCount(Long userId, Boolean addToReports, Integer daysInBetween);
-    /*
-    //Agregar query - Reporte de Javier
+
+    @Query(
+        value = "SELECT new com.moneyroomba.service.dto.reports.TransactionsByCategoryDTO( SUM(tr.amount), COUNT(tr.id),tr.category, tr.movementType, tr.currency ) " +
+        "FROM Transaction tr " +
+        "WHERE tr.sourceUser.id = ?1 AND " +
+        "tr.addToReports = ?2 AND " +
+        "tr.state = ?3 AND " +
+        "tr.movementType = ?4 " +
+        "GROUP BY tr.movementType, tr.category, tr.currency " +
+        "ORDER BY tr.movementType DESC"
+    )
     public List<TransactionsByCategoryDTO> getTransactionByCategoryReport(
         Long userId,
-        Long walletId,
         Boolean addToReports,
-        TransactionState state
-    );*/
+        TransactionState state,
+        MovementType movementType
+    );
 }

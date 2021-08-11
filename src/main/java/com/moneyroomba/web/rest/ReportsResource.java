@@ -1,9 +1,11 @@
 package com.moneyroomba.web.rest;
 
+import com.moneyroomba.domain.enumeration.MovementType;
 import com.moneyroomba.service.ReportsService;
 import com.moneyroomba.service.dto.reports.TransactionCountReportDTO;
 import com.moneyroomba.service.dto.reports.TransactionsByCategoryDTO;
 import com.moneyroomba.service.dto.reports.WalletBalanceReportDTO;
+import com.moneyroomba.service.dto.reports.WalletTotalBalanceReportDTO;
 import java.time.LocalDate;
 import java.util.List;
 import org.slf4j.Logger;
@@ -24,25 +26,6 @@ public class ReportsResource {
 
     public ReportsResource(ReportsService reportsService) {
         this.reportsService = reportsService;
-    }
-
-    /**
-     * GET transactionsByCategory
-     */
-
-    @GetMapping("/transactions-by-category")
-    public ResponseEntity<List<TransactionsByCategoryDTO>> transactionsByCategory() {
-        // Se debe implementar el funcionamiento del metodo getTransactionsByCategory
-        return ResponseEntity.ok().body(null);
-    }
-
-    /**
-     * GET transactionsByCategory
-     */
-    @GetMapping("/transactions-by-category/{id}")
-    public ResponseEntity<List<TransactionsByCategoryDTO>> transactionsByCategoryByWallet(@PathVariable Long id) {
-        //List<TransactionsByCategoryDTO> report = reportsService.getTransactionsByCategoryByWallet(id);
-        return ResponseEntity.ok().body(null);
     }
 
     /**
@@ -86,5 +69,24 @@ public class ReportsResource {
     @GetMapping("/wallet-performance/{id}")
     public String walletPerformanceByWallet(@PathVariable Long id) {
         return "walletPerformance";
+    }
+
+    /**
+     * GET totalBalance
+     */
+    @GetMapping("/wallet-balance/total-balance")
+    public ResponseEntity<List<WalletTotalBalanceReportDTO>> getTotalBalance() {
+        List<WalletTotalBalanceReportDTO> report = reportsService.getTotalBalance();
+        return ResponseEntity.ok().body(report);
+    }
+
+    /**
+     * GET transactionsByCategory
+     */
+
+    @GetMapping("/transactions-by-category/{movementType}")
+    public ResponseEntity<List<TransactionsByCategoryDTO>> transactionsByCategory(@PathVariable int movementType) {
+        List<TransactionsByCategoryDTO> report = reportsService.getTransactionsByCategory(movementType);
+        return ResponseEntity.ok().body(report);
     }
 }
