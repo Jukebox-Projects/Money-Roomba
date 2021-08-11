@@ -18,6 +18,48 @@
         </div>
 
         <div class="form-group">
+          <label class="form-control-label" jhiTranslate="moneyRoombaApp.transaction.outgoingTransaction" for="field_outgoingTransaction"
+            >Outgoing Transaction</label
+          >
+          <input
+            type="checkbox"
+            class="form-check"
+            name="outgoingTransaction"
+            id="field_outgoingTransaction"
+            data-cy="outgoingTransaction"
+            [(ngModel)]="isOutgoing"
+            (click)="this.toggleOutgoing()"
+          />
+        </div>
+        <div class="form-group" *ngIf="this.isOutgoing">
+          <button type="button" id="add-contact" data-cy="addContactButton" class="btn btn-primary" (click)="this.open()">
+            <fa-icon icon="plus"></fa-icon>&nbsp;<span>Add new contact</span>
+          </button>
+        </div>
+
+        <div class="form-group" *ngIf="this.isOutgoing">
+          <label class="form-control-label" jhiTranslate="moneyRoombaApp.transaction.recievingUser" for="field_recievingUser"
+            >Receiving User</label
+          >
+          <select
+            class="form-control"
+            id="field_recievingUser"
+            data-cy="recievingUser"
+            name="recievingUser"
+            formControlName="recievingUser"
+          >
+            <option
+              [ngValue]="
+                contactOption.id === editForm.get('recievingUser')!.value?.id ? editForm.get('recievingUser')!.value : contactOption
+              "
+              *ngFor="let contactOption of contactSharedCollection; trackBy: trackContactById"
+            >
+              {{ contactOption.name }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
           <label class="form-control-label" jhiTranslate="moneyRoombaApp.transaction.name" for="field_name">Name</label>
           <input type="text" class="form-control" name="name" id="field_name" data-cy="name" formControlName="name" />
           <div *ngIf="editForm.get('name')!.invalid && (editForm.get('name')!.dirty || editForm.get('name')!.touched)">
@@ -74,24 +116,6 @@
             </small>
           </div>
         </div>
-
-        <!-- <div class="form-group">
-          <label class="form-control-label" jhiTranslate="moneyRoombaApp.transaction.amount" for="field_amount">Amount</label>
-          <input type="number" class="form-control" name="amount" id="field_amount" data-cy="amount" formControlName="amount" />
-          <div *ngIf="editForm.get('amount')!.invalid && (editForm.get('amount')!.dirty || editForm.get('amount')!.touched)">
-            <small
-              class="form-text text-danger"
-              *ngIf="editForm.get('amount')?.errors?.min"
-              jhiTranslate="entity.validation.min"
-              [translateValues]="{ min: 0 }"
-            >
-              This field should be at least 0.
-            </small>
-            <small class="form-text text-danger" [hidden]="!editForm.get('amount')?.errors?.number" jhiTranslate="entity.validation.number">
-              This field should be a number.
-            </small>
-          </div>
-        </div> -->
 
         <div class="form-group">
           <label class="form-control-label" jhiTranslate="moneyRoombaApp.transaction.amount" for="field_originalAmount">Amount</label>
@@ -176,20 +200,6 @@
           </div>
         </div>
 
-        <!-- <div class="form-group">
-          <label class="form-control-label" jhiTranslate="moneyRoombaApp.transaction.scheduled" for="field_scheduled">Scheduled</label>
-          <input type="checkbox" class="form-check" name="scheduled" id="field_scheduled" data-cy="scheduled" formControlName="scheduled" />
-          <div *ngIf="editForm.get('scheduled')!.invalid && (editForm.get('scheduled')!.dirty || editForm.get('scheduled')!.touched)">
-            <small
-              class="form-text text-danger"
-              *ngIf="editForm.get('scheduled')?.errors?.required"
-              jhiTranslate="entity.validation.required"
-            >
-              This field is required.
-            </small>
-          </div>
-        </div> -->
-
         <div class="form-group">
           <label class="form-control-label" jhiTranslate="moneyRoombaApp.transaction.addToReports" for="field_addToReports"
             >Add To Reports</label
@@ -215,7 +225,7 @@
           </div>
         </div>
 
-        <div class="form-group">
+        <div class="form-group" hidden>
           <label class="form-control-label" jhiTranslate="moneyRoombaApp.transaction.transactionType" for="field_transactionType"
             >Transaction Type</label
           >
@@ -227,7 +237,6 @@
             data-cy="transactionType"
           >
             <option value="MANUAL">{{ 'moneyRoombaApp.TransactionType.MANUAL' | translate }}</option>
-            <option value="SCHEDULED">{{ 'moneyRoombaApp.TransactionType.SCHEDULED' | translate }}</option>
           </select>
           <div
             *ngIf="
@@ -289,43 +298,6 @@
               *ngFor="let categoryOption of categoriesSharedCollection; trackBy: trackCategoryById"
             >
               {{ categoryOption.name }}
-            </option>
-          </select>
-        </div>
-
-        <div class="form-group">
-          <label class="form-control-label" jhiTranslate="moneyRoombaApp.transaction.outgoingTransaction" for="field_outgoingTransaction"
-            >Outgoing Transaction</label
-          >
-          <input
-            type="checkbox"
-            class="form-check"
-            name="outgoingTransaction"
-            id="field_outgoingTransaction"
-            data-cy="outgoingTransaction"
-            [(ngModel)]="isOutgoing"
-            (click)="this.toggleOutgoing()"
-          />
-        </div>
-
-        <div class="form-group" *ngIf="this.isOutgoing">
-          <label class="form-control-label" jhiTranslate="moneyRoombaApp.transaction.recievingUser" for="field_recievingUser"
-            >Receiving User</label
-          >
-          <select
-            class="form-control"
-            id="field_recievingUser"
-            data-cy="recievingUser"
-            name="recievingUser"
-            formControlName="recievingUser"
-          >
-            <option
-              [ngValue]="
-                userDetailsOption.id === editForm.get('recievingUser')!.value?.id ? editForm.get('recievingUser')!.value : userDetailsOption
-              "
-              *ngFor="let userDetailsOption of userDetailsSharedCollection; trackBy: trackUserDetailsById"
-            >
-              {{ userDetailsOption.phone }}
             </option>
           </select>
         </div>

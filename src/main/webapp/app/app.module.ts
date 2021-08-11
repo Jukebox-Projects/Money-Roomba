@@ -98,6 +98,7 @@ import { MatTreeModule } from '@angular/material/tree';
 import { IconPickerComponent } from './shared/icon-picker/icon-picker.component';
 import { LandingPageComponent } from './landing/landing-page/landing-page.component';
 import { NgApexchartsModule } from 'ng-apexcharts';
+import { AddContactModalComponent } from './entities/contact/add-contact-modal/add-contact-modal/add-contact-modal.component';
 //import { ChartComponent} from "ng-apexcharts";
 
 @NgModule({
@@ -192,6 +193,7 @@ import { NgApexchartsModule } from 'ng-apexcharts';
     NavigationComponent,
     IconPickerComponent,
     LandingPageComponent,
+    AddContactModalComponent,
     //   ChartComponent
   ],
   bootstrap: [MainComponent],
