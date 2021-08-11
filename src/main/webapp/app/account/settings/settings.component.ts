@@ -64,10 +64,12 @@ export class SettingsComponent implements OnInit {
         notifications: userDetails.notifications,
         apiKey: userDetails.apiKey,
       });
-      this.userDetails.country = userDetails.country;
-      this.userDetails.phone = userDetails.phone;
-      this.userDetails.notifications = userDetails.notifications;
-      this.userDetails.apiKey = userDetails.apiKey;
+      this.userDetails = {
+        country: userDetails?.country,
+        phone: userDetails?.phone,
+        notifications: userDetails?.notifications,
+        apiKey: userDetails?.apiKey,
+      };
     });
   }
 

@@ -1,3 +1,4 @@
+import { AvatarModule } from 'ngx-avatar';
 import { NavHeaderComponent } from './template/elements/nav-header/nav-header.component';
 import { NgModule, LOCALE_ID } from '@angular/core';
 import { registerLocaleData } from '@angular/common';
@@ -118,6 +119,7 @@ import { NotificationsDialogComponent } from './layouts/notifications-dialog/not
     PerfectScrollbarModule,
     NgxDropzoneModule,
     CarouselModule,
+    AvatarModule,
 
     MatListModule,
     MatAutocompleteModule,

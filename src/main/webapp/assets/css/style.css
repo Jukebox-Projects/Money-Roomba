@@ -29684,7 +29684,7 @@ Fixing Order => Base + Typography >> General Layout + Grid >> Page Layout + Comp
   position: relative;
 }
 .photo-content .cover-photo {
-  background: url(../images/profile/cover.jpg);
+  background: url(../images/profile/cover.gif);
   background-size: cover;
   background-position: center;
   min-height: 250px;

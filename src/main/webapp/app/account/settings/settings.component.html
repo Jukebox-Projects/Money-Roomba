@@ -1,232 +1,334 @@
-<div>
-  <div class="row justify-content-center">
-    <div class="col-md-8">
-      <h2 jhiTranslate="settings.title" [translateValues]="{ username: account.login }" *ngIf="account">
-        User settings for [<strong>{{ account.login }}</strong
-        >]
-      </h2>
-
-      <div class="alert alert-success" *ngIf="success" jhiTranslate="settings.messages.success">
-        <strong>Settings saved!</strong>
+<jhi-alert-error></jhi-alert-error>
+<div class="alert alert-success" *ngIf="success" jhiTranslate="settings.messages.success">
+  <strong>Settings saved!</strong>
+</div>
+<div class="card pt-0" style="background-color: transparent">
+  <div class="container-fluid pt-0">
+    <div class="row page-titles mx-0 pt-0">
+      <div class="col-xl">
+        <div class="welcome-text">
+          <h4 jhiTranslate="global.menu.account.greetings" [translateValues]="{ param: account.firstName }">
+            Hello, {{ account.firstName }}>
+          </h4>
+        </div>
       </div>
-
-      <jhi-alert-error></jhi-alert-error>
-
-      <form name="form" role="form" (ngSubmit)="save()" [formGroup]="settingsForm" *ngIf="account" novalidate>
-        <div class="form-group">
-          <label class="form-control-label" for="firstName" jhiTranslate="settings.form.firstname">First Name</label>
-          <input
-            type="text"
-            class="form-control"
-            id="firstName"
-            name="firstName"
-            placeholder="{{ 'settings.form.firstname.placeholder' | translate }}"
-            formControlName="firstName"
-            data-cy="firstname"
-          />
-
-          <div
-            *ngIf="
-              settingsForm.get('firstName')!.invalid && (settingsForm.get('firstName')!.dirty || settingsForm.get('firstName')!.touched)
-            "
-          >
-            <small
-              class="form-text text-danger"
-              *ngIf="settingsForm.get('firstName')?.errors?.required"
-              jhiTranslate="settings.messages.validate.firstname.required"
-            >
-              Your first name is required.
-            </small>
-
-            <small
-              class="form-text text-danger"
-              *ngIf="settingsForm.get('firstName')?.errors?.minlength"
-              jhiTranslate="settings.messages.validate.firstname.minlength"
-            >
-              Your first name is required to be at least 1 character.
-            </small>
-
-            <small
-              class="form-text text-danger"
-              *ngIf="settingsForm.get('firstName')?.errors?.maxlength"
-              jhiTranslate="settings.messages.validate.firstname.maxlength"
-            >
-              Your first name cannot be longer than 50 characters.
-            </small>
+      <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="/">App</a></li>
+          <li class="breadcrumb-item active"><a href="javascript:void(0)">Profile</a></li>
+        </ol>
+      </div>
+    </div>
+    <!-- row -->
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="profile card card-body px-3 pt-3 pb-0">
+          <div class="profile-head">
+            <div class="photo-content">
+              <div class="cover-photo"></div>
+            </div>
+            <div class="profile-info">
+              <div class="profile-photo">
+                <ngx-avatar size="100" name="{{ account.firstName + ' ' + account.lastName }}"></ngx-avatar>
+              </div>
+              <div class="profile-details">
+                <div class="profile-name px-3 pt-2">
+                  <h4 class="text-primary mb-0">{{ account.firstName + ' ' + account.lastName }}</h4>
+                  <p>{{ account['createdDate'] | date: 'dd-MMMM-yyyy' }}</p>
+                </div>
+                <div class="profile-email px-2 pt-2">
+                  <h4 class="text-muted mb-0">{{ account.email }}</h4>
+                  <p>Email</p>
+                </div>
+                <div class="dropdown dropdown-no-icon ml-auto" ngbDropdown>
+                  <!-- <a href="javascript:void(0);" class="btn btn-primary light sharp" ngbDropdownToggle aria-expanded="true"
+                    ><svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      xmlns:xlink="http://www.w3.org/1999/xlink"
+                      width="18px"
+                      height="18px"
+                      viewBox="0 0 24 24"
+                      version="1.1"
+                    >
+                      <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                        <rect x="0" y="0" width="24" height="24"></rect>
+                        <circle fill="#000000" cx="5" cy="12" r="2"></circle>
+                        <circle fill="#000000" cx="12" cy="12" r="2"></circle>
+                        <circle fill="#000000" cx="19" cy="12" r="2"></circle>
+                      </g></svg></a> -->
+                  <ul class="dropdown-menu dropdown-menu-right" ngbDropdownMenu>
+                    <li class="dropdown-item"><i class="fa fa-user-circle text-primary mr-2"></i> View profile</li>
+                    <li class="dropdown-item"><i class="fa fa-users text-primary mr-2"></i> Add to close friends</li>
+                    <li class="dropdown-item"><i class="fa fa-plus text-primary mr-2"></i> Add to group</li>
+                    <li class="dropdown-item"><i class="fa fa-ban text-primary mr-2"></i> Block</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-xl">
+        <div class="card">
+          <div class="card-body">
+            <div class="profile-tab">
+              <ul ngbNav #nav="ngbNav" class="nav-tabs">
+                <li [ngbNavItem]="1">
+                  <a ngbNavLink><span jhiTranslate="global.menu.account.password">Information</span></a>
+                  <ng-template ngbNavContent>
+                    <p>
+                      Exercitation +1 labore velit, blog sartorial PBR leggings next level wes anderson artisan four loko farm-to-table
+                      craft beer twee. Qui photo booth letterpress, commodo enim craft beer mlkshk aliquip jean shorts ullamco ad vinyl
+                      cillum PBR. Homo nostrud organic, assumenda labore aesthetic magna delectus mollit. Keytar helvetica VHS salvia yr,
+                      vero magna velit sapiente labore stumptown. Vegan fanny pack odio cillum wes anderson 8-bit, sustainable jean shorts
+                      beard ut DIY ethical culpa terry richardson biodiesel. Art party scenester stumptown, tumblr butcher vero sint qui
+                      sapiente accusamus tattooed echo park.
+                    </p>
+                  </ng-template>
+                </li>
+                <li [ngbNavItem]="2">
+                  <a ngbNavLink><span jhiTranslate="global.menu.account.settings">Settings</span></a>
+                  <ng-template ngbNavContent>
+                    <form name="form" role="form" (ngSubmit)="save()" [formGroup]="settingsForm" *ngIf="account" novalidate>
+                      <div class="form-group">
+                        <label class="form-control-label" for="firstName" jhiTranslate="settings.form.firstname">First Name</label>
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="firstName"
+                          name="firstName"
+                          placeholder="{{ 'settings.form.firstname.placeholder' | translate }}"
+                          formControlName="firstName"
+                          data-cy="firstname"
+                        />
 
-        <div class="form-group">
-          <label class="form-control-label" for="lastName" jhiTranslate="settings.form.lastname">Last Name</label>
-          <input
-            type="text"
-            class="form-control"
-            id="lastName"
-            name="lastName"
-            placeholder="{{ 'settings.form.lastname.placeholder' | translate }}"
-            formControlName="lastName"
-            data-cy="lastname"
-          />
+                        <div
+                          *ngIf="
+                            settingsForm.get('firstName')!.invalid &&
+                            (settingsForm.get('firstName')!.dirty || settingsForm.get('firstName')!.touched)
+                          "
+                        >
+                          <small
+                            class="form-text text-danger"
+                            *ngIf="settingsForm.get('firstName')?.errors?.required"
+                            jhiTranslate="settings.messages.validate.firstname.required"
+                          >
+                            Your first name is required.
+                          </small>
 
-          <div
-            *ngIf="settingsForm.get('lastName')!.invalid && (settingsForm.get('lastName')!.dirty || settingsForm.get('lastName')!.touched)"
-          >
-            <small
-              class="form-text text-danger"
-              *ngIf="settingsForm.get('lastName')?.errors?.required"
-              jhiTranslate="settings.messages.validate.lastname.required"
-            >
-              Your last name is required.
-            </small>
+                          <small
+                            class="form-text text-danger"
+                            *ngIf="settingsForm.get('firstName')?.errors?.minlength"
+                            jhiTranslate="settings.messages.validate.firstname.minlength"
+                          >
+                            Your first name is required to be at least 1 character.
+                          </small>
 
-            <small
-              class="form-text text-danger"
-              *ngIf="settingsForm.get('lastName')?.errors?.minlength"
-              jhiTranslate="settings.messages.validate.lastname.minlength"
-            >
-              Your last name is required to be at least 1 character.
-            </small>
+                          <small
+                            class="form-text text-danger"
+                            *ngIf="settingsForm.get('firstName')?.errors?.maxlength"
+                            jhiTranslate="settings.messages.validate.firstname.maxlength"
+                          >
+                            Your first name cannot be longer than 50 characters.
+                          </small>
+                        </div>
+                      </div>
 
-            <small
-              class="form-text text-danger"
-              *ngIf="settingsForm.get('lastName')?.errors?.maxlength"
-              jhiTranslate="settings.messages.validate.lastname.maxlength"
-            >
-              Your last name cannot be longer than 50 characters.
-            </small>
+                      <div class="form-group">
+                        <label class="form-control-label" for="lastName" jhiTranslate="settings.form.lastname">Last Name</label>
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="lastName"
+                          name="lastName"
+                          placeholder="{{ 'settings.form.lastname.placeholder' | translate }}"
+                          formControlName="lastName"
+                          data-cy="lastname"
+                        />
+
+                        <div
+                          *ngIf="
+                            settingsForm.get('lastName')!.invalid &&
+                            (settingsForm.get('lastName')!.dirty || settingsForm.get('lastName')!.touched)
+                          "
+                        >
+                          <small
+                            class="form-text text-danger"
+                            *ngIf="settingsForm.get('lastName')?.errors?.required"
+                            jhiTranslate="settings.messages.validate.lastname.required"
+                          >
+                            Your last name is required.
+                          </small>
+
+                          <small
+                            class="form-text text-danger"
+                            *ngIf="settingsForm.get('lastName')?.errors?.minlength"
+                            jhiTranslate="settings.messages.validate.lastname.minlength"
+                          >
+                            Your last name is required to be at least 1 character.
+                          </small>
+
+                          <small
+                            class="form-text text-danger"
+                            *ngIf="settingsForm.get('lastName')?.errors?.maxlength"
+                            jhiTranslate="settings.messages.validate.lastname.maxlength"
+                          >
+                            Your last name cannot be longer than 50 characters.
+                          </small>
+                        </div>
+                      </div>
+
+                      <div class="form-group">
+                        <label class="form-control-label" for="email" jhiTranslate="global.form.email.label">Email</label>
+                        <input
+                          type="email"
+                          class="form-control"
+                          id="email"
+                          name="email"
+                          placeholder="{{ 'global.form.email.placeholder' | translate }}"
+                          formControlName="email"
+                          data-cy="email"
+                        />
+
+                        <div
+                          *ngIf="
+                            settingsForm.get('email')!.invalid && (settingsForm.get('email')!.dirty || settingsForm.get('email')!.touched)
+                          "
+                        >
+                          <small
+                            class="form-text text-danger"
+                            *ngIf="settingsForm.get('email')?.errors?.required"
+                            jhiTranslate="global.messages.validate.email.required"
+                          >
+                            Your email is required.
+                          </small>
+
+                          <small
+                            class="form-text text-danger"
+                            *ngIf="settingsForm.get('email')?.errors?.email"
+                            jhiTranslate="global.messages.validate.email.invalid"
+                          >
+                            Your email is invalid.
+                          </small>
+
+                          <small
+                            class="form-text text-danger"
+                            *ngIf="settingsForm.get('email')?.errors?.minlength"
+                            jhiTranslate="global.messages.validate.email.minlength"
+                          >
+                            Your email is required to be at least 5 characters.
+                          </small>
+
+                          <small
+                            class="form-text text-danger"
+                            *ngIf="settingsForm.get('email')?.errors?.maxlength"
+                            jhiTranslate="global.messages.validate.email.maxlength"
+                          >
+                            Your email cannot be longer than 100 characters.
+                          </small>
+                        </div>
+                      </div>
+
+                      <div class="form-group">
+                        <label class="form-control-label" jhiTranslate="global.form.country.label" for="field_country">Country</label>
+
+                        <select class="form-control" id="field_country" data-cy="country" name="country" formControlName="country">
+                          <option *ngFor="let country of countryList" [ngValue]="country.value">
+                            {{ country.name }}
+                          </option>
+                        </select>
+                      </div>
+                      <div class="form-group">
+                        <label class="form-control-label" for="phone" jhiTranslate="global.form.phone.label">phone</label>
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="phone"
+                          name="phone"
+                          placeholder="(XXX) XXXX XXXX"
+                          formControlName="phone"
+                          data-cy="phone"
+                        />
+                        <div>
+                          <small
+                            class="form-text text-danger"
+                            *ngIf="settingsForm.get('phone')?.errors?.pattern"
+                            jhiTranslate="global.messages.validate.phone.required"
+                          >
+                            Your phone is required. Format (XXX) XXXX XXXX.
+                          </small>
+                        </div>
+                      </div>
+
+                      <div class="form-group">
+                        <label class="form-control-label" for="apiKey" jhiTranslate="global.form.apiKey.label">apiKey</label>
+                        <input
+                          type="text"
+                          [disabled]="true"
+                          class="form-control"
+                          id="apiKey"
+                          name="apiKey"
+                          placeholder="{{ 'global.form.apiKey.placeholder' | translate }}"
+                          formControlName="apiKey"
+                        />
+                        <button type="button" (click)="generateApiKey()" class="btn btn-secondary btn-sm" *ngIf="isApiKeyEmpty()">
+                          <span class="d-none d-md-inline" jhiTranslate="entity.action.generateApiKey">Generate API key</span>
+                        </button>
+
+                        <button type="button" (click)="deleteApiKey()" class="btn btn-danger btn-sm" *ngIf="!isApiKeyEmpty()">
+                          <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete API key</span>
+                        </button>
+                      </div>
+
+                      <div class="form-check custom-control custom-checkbox mb-3 check-xs">
+                        <label class="form-check-label" for="notifications">
+                          <input
+                            class="custom-control-input"
+                            type="checkbox"
+                            id="notifications"
+                            name="notifications"
+                            formControlName="notifications"
+                          />
+                          <label class="custom-control-label" for="notifications"></label>
+                          <span jhiTranslate="userManagement.notifications">Notifications</span>
+                        </label>
+                      </div>
+
+                      <div class="form-group" *ngIf="languages && languages.length > 0">
+                        <label for="langKey" jhiTranslate="settings.form.language">Language</label>
+                        <select class="form-control" id="langKey" name="langKey" formControlName="langKey" data-cy="langKey">
+                          <option *ngFor="let language of languages" [value]="language">{{ language | findLanguageFromKey }}</option>
+                        </select>
+                      </div>
+
+                      <button
+                        type="submit"
+                        [disabled]="settingsForm.invalid"
+                        class="btn btn-primary"
+                        jhiTranslate="settings.form.button"
+                        data-cy="submit"
+                      >
+                        Save
+                      </button>
+
+                      <div class="btn-group">
+                        <button type="button" (click)="delete()" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
+                          <fa-icon icon="times"></fa-icon>
+                          <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
+                        </button>
+                      </div>
+                    </form>
+                  </ng-template>
+                </li>
+              </ul>
+
+              <div [ngbNavOutlet]="nav" class="mt-2"></div>
+            </div>
           </div>
         </div>
-
-        <div class="form-group">
-          <label class="form-control-label" for="email" jhiTranslate="global.form.email.label">Email</label>
-          <input
-            type="email"
-            class="form-control"
-            id="email"
-            name="email"
-            placeholder="{{ 'global.form.email.placeholder' | translate }}"
-            formControlName="email"
-            data-cy="email"
-          />
-
-          <div *ngIf="settingsForm.get('email')!.invalid && (settingsForm.get('email')!.dirty || settingsForm.get('email')!.touched)">
-            <small
-              class="form-text text-danger"
-              *ngIf="settingsForm.get('email')?.errors?.required"
-              jhiTranslate="global.messages.validate.email.required"
-            >
-              Your email is required.
-            </small>
-
-            <small
-              class="form-text text-danger"
-              *ngIf="settingsForm.get('email')?.errors?.email"
-              jhiTranslate="global.messages.validate.email.invalid"
-            >
-              Your email is invalid.
-            </small>
-
-            <small
-              class="form-text text-danger"
-              *ngIf="settingsForm.get('email')?.errors?.minlength"
-              jhiTranslate="global.messages.validate.email.minlength"
-            >
-              Your email is required to be at least 5 characters.
-            </small>
-
-            <small
-              class="form-text text-danger"
-              *ngIf="settingsForm.get('email')?.errors?.maxlength"
-              jhiTranslate="global.messages.validate.email.maxlength"
-            >
-              Your email cannot be longer than 100 characters.
-            </small>
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label class="form-control-label" jhiTranslate="global.form.country.label" for="field_country">Country</label>
-
-          <select class="form-control" id="field_country" data-cy="country" name="country" formControlName="country">
-            <option *ngFor="let country of countryList" [ngValue]="country.value">
-              {{ country.name }}
-            </option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label class="form-control-label" for="phone" jhiTranslate="global.form.phone.label">phone</label>
-          <input
-            type="text"
-            class="form-control"
-            id="phone"
-            name="phone"
-            placeholder="(XXX) XXXX XXXX"
-            formControlName="phone"
-            data-cy="phone"
-          />
-          <div>
-            <small
-              class="form-text text-danger"
-              *ngIf="settingsForm.get('phone')?.errors?.pattern"
-              jhiTranslate="global.messages.validate.phone.required"
-            >
-              Your phone is required. Format (XXX) XXXX XXXX.
-            </small>
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label class="form-control-label" for="apiKey" jhiTranslate="global.form.apiKey.label">apiKey</label>
-          <input
-            type="text"
-            [disabled]="true"
-            class="form-control"
-            id="apiKey"
-            name="apiKey"
-            placeholder="{{ 'global.form.apiKey.placeholder' | translate }}"
-            formControlName="apiKey"
-          />
-          <button type="button" (click)="generateApiKey()" class="btn btn-secondary btn-sm" *ngIf="isApiKeyEmpty()">
-            <span class="d-none d-md-inline" jhiTranslate="entity.action.generateApiKey">Generate API key</span>
-          </button>
-
-          <button type="button" (click)="deleteApiKey()" class="btn btn-danger btn-sm" *ngIf="!isApiKeyEmpty()">
-            <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete API key</span>
-          </button>
-        </div>
-
-        <div class="form-check custom-control custom-checkbox mb-3 check-xs">
-          <label class="form-check-label" for="notifications">
-            <input class="custom-control-input" type="checkbox" id="notifications" name="notifications" formControlName="notifications" />
-            <label class="custom-control-label" for="notifications"></label>
-            <span jhiTranslate="userManagement.notifications">Notifications</span>
-          </label>
-        </div>
-
-        <div class="form-group" *ngIf="languages && languages.length > 0">
-          <label for="langKey" jhiTranslate="settings.form.language">Language</label>
-          <select class="form-control" id="langKey" name="langKey" formControlName="langKey" data-cy="langKey">
-            <option *ngFor="let language of languages" [value]="language">{{ language | findLanguageFromKey }}</option>
-          </select>
-        </div>
-
-        <button
-          type="submit"
-          [disabled]="settingsForm.invalid"
-          class="btn btn-primary"
-          jhiTranslate="settings.form.button"
-          data-cy="submit"
-        >
-          Save
-        </button>
-
-        <div class="btn-group">
-          <button type="button" (click)="delete()" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
-            <fa-icon icon="times"></fa-icon>
-            <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
-          </button>
-        </div>
-      </form>
+      </div>
     </div>
   </div>
 </div>
