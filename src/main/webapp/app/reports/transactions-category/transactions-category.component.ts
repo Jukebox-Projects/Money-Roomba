@@ -59,4 +59,12 @@ export class TransactionsCategoryComponent implements OnInit {
     this.categoryIncome2 = reportDataIncome[2];
     this.categoryIncome3 = reportDataIncome[3];
   }
+
+  public isEmpty(obj) {
+    if (Object.keys(this.categoryIncome0).length === 0) {
+      return false;
+    } else {
+      return true;
+    }
+  }
 }
