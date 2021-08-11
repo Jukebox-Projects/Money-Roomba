@@ -14,6 +14,8 @@ export interface IEvent {
   userLastName?: string;
   notification?: INotification | null;
   user?: IUserDetails | null;
+  destinationPath?: string | null;
+  message?: string | null;
 }
 
 export class Event implements IEvent {
@@ -26,7 +28,9 @@ export class Event implements IEvent {
     public userName?: string,
     public userLastName?: string,
     public notification?: INotification | null,
-    public user?: IUserDetails | null
+    public user?: IUserDetails | null,
+    public destinationPath?: string | null,
+    public message?: string | null
   ) {}
 }
 

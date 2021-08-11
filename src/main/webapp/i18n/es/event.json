@@ -25,7 +25,16 @@
       "userName": "Nombre",
       "userLastName": "Apellido",
       "notification": "Notificación",
-      "user": "Usuario"
+      "user": "Usuario",
+      "messages": {
+        "incomingTransaction": "Te compartieron una nueva transacción",
+        "giftedLicense": "¡Te han regalado una licencia Premium de Money Roomba!",
+        "purchasedLicense": "¡Gracias por adquirir tu licencia Premium de Money Roomba!",
+        "emailTransaction": "Nueva transacción creada a partir de un correo."
+      },
+      "allNotifications": "Todas las notificaciones",
+      "viewAllNotifications": "Ver todas las notificaciones",
+      "noNotifications": "Sin notificaciones"
     }
   }
 }
