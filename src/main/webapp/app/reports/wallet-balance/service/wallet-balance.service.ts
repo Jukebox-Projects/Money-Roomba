@@ -29,6 +29,6 @@ export class WalletBalanceService {
       endDate: this.datePipe.transform(endDate, 'yyyy-MM-dd'),
     });
 
-    return this.http.get<IWalletBalance[]>(this.resourceUrl, { observe: 'response' });
+    return this.http.get<IWalletBalance[]>(this.resourceUrl, { params: options, observe: 'response' });
   }
 }

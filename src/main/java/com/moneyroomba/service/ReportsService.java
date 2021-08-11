@@ -87,7 +87,9 @@ public class ReportsService {
         List<WalletBalanceReportDTO> results = null;
         if (user.isPresent()) {
             Long daysInBetween = DAYS.between(LocalDate.parse(startDate), LocalDate.parse(endDate));
-            results = transactionRepository.getAllWalletBalanceReport(user.get().getId(), true, daysInBetween.intValue());
+            results =
+                transactionRepository.getAllWalletBalanceReport(user.get().getId(), true, TransactionState.NA, daysInBetween.intValue());
+
             if (!results.isEmpty()) {
                 if (!sameCurrencyForAllWallets(results)) {
                     Currency defaultCurrency = getDefaultCurrency();
@@ -132,6 +134,20 @@ public class ReportsService {
         log.debug("Request to get a transaction by category balance report per wallet");
         Optional<UserDetails> user = userService.getUserDetailsByLogin();
         return transactionRepository.getTransactionByCategoryReport(user.get().getId(), id, false, TransactionState.NA);
+    }*/
+
+    /**
+     * Get report with expenses and income by category from all wallets
+     *
+     * @return the report data needed in the front end graph.
+     */
+    /*
+    @Transactional(readOnly = true)
+    public List<TransactionsByCategoryDTO> getTransactionsByCategory() {
+        log.debug("Request to get a transaction by category balance report for all wallets");
+        Optional<UserDetails> user = userService.getUserDetailsByLogin();
+        // Se debe modificar para no recibir un ID de wallet y hacerlo por todos los wallets
+        return transactionRepository.getTransactionByCategoryReport(user.get().getId(), 0L, false, TransactionState.NA);
     }*/
 
     private Boolean sameCurrencyForAllWallets(List<WalletBalanceReportDTO> results) {
@@ -247,6 +263,19 @@ public class ReportsService {
         } else {
             throw new BadRequestAlertException("Could not find the user", ENTITY_NAME, "nouserfound");
         }
+        orderTransactionsByCategory(results);
+        return results;
+    }
+
+    public List<TransactionsByCategoryDTO> orderTransactionsByCategory(List<TransactionsByCategoryDTO> results) {
+        List<TransactionsByCategoryDTO> formatedResults = null;
+        int n = results.size();
+        for (int i = 0; i < n - 1; i++) {
+            for (int j = 0; j < n - i - 1; j++) {
+                if (results.get(j).getCategory() == results.get(j + 1).getCategory()) {}
+            }
+        }
+
         return results;
     }
 

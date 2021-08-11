@@ -10,7 +10,7 @@ import { TransactionsCategoryService } from './service/transactions-category.ser
 })
 export class TransactionsCategoryComponent implements OnInit {
   reportData: ITransactionsByCategory[];
-  transactionCount: number = 0;
+  totalBalance: number = 0;
   transactionCategory1: ITransactionsByCategory[];
   transactionCategory2: ITransactionsByCategory[];
   transactionCategory3: ITransactionsByCategory[];
@@ -41,13 +41,15 @@ export class TransactionsCategoryComponent implements OnInit {
     let current = null;
     let counter = 0;
     for (let i in reportData) {
-      this.transactionCount = this.transactionCount + reportData[i].count;
+      if (reportData[i].movementType.toString().toLowerCase().includes('expense')) {
+        this.totalBalance = this.totalBalance + reportData[i].total;
+      }
     }
 
-    this.calculatePercentage(this.transactionCount, this.reportData);
+    this.calculatePercentage(this.totalBalance, this.reportData);
   }
 
-  protected calculatePercentage(transactionCount: number, reportData: ITransactionsByCategory[]): void {
+  protected calculatePercentage(totalBalance: number, reportData: ITransactionsByCategory[]): void {
     for (let i in reportData) {
     }
   }
