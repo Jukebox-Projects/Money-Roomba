@@ -1,3 +1,5 @@
+import { Router } from '@angular/router';
+import { COUNTRYLIST } from './../../shared/country';
 import { Component, AfterViewInit, ElementRef, ViewChild } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { FormBuilder, Validators } from '@angular/forms';
@@ -19,12 +21,13 @@ export class RegisterComponent implements AfterViewInit {
   errorEmailExists = false;
   errorUserExists = false;
   success = false;
+  countryList = COUNTRYLIST;
 
   registerForm = this.fb.group({
     firstName: ['', [Validators.required]],
     lastName: ['', [Validators.required]],
     phone: [null, [Validators.required, Validators.pattern(/\(?([0-9]{3})\)?([ .-]?)([0-9]{4})\2([0-9]{4})/)]],
-    country: ['', [Validators.required]],
+    country: [this.countryList[0].value, [Validators.required]],
     email: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(254), Validators.email]],
     password: ['', [Validators.required, Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[.$@$!%*?&])[A-Za-z\d$@$!%*?&]{8,25}/)]],
     confirmPassword: [
@@ -33,7 +36,12 @@ export class RegisterComponent implements AfterViewInit {
     ],
   });
 
-  constructor(private translateService: TranslateService, private registerService: RegisterService, private fb: FormBuilder) {}
+  constructor(
+    private router: Router,
+    private translateService: TranslateService,
+    private registerService: RegisterService,
+    private fb: FormBuilder
+  ) {}
 
   ngAfterViewInit(): void {
     if (this.login) {
@@ -60,7 +68,12 @@ export class RegisterComponent implements AfterViewInit {
       this.registerService
         .save({ login, email, password, firstName, lastName, country, phone, langKey: this.translateService.currentLang })
         .subscribe(
-          () => (this.success = true),
+          () => {
+            this.success = true;
+            setTimeout(() => {
+              this.router.navigate(['/login']);
+            }, 2500);
+          },
           response => this.processError(response)
         );
     }

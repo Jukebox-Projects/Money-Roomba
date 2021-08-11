@@ -1,3 +1,4 @@
+import { COUNTRYLIST } from './../../shared/country';
 import { AccountDeleteDialogComponent } from './delete/delete-dialog.component';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { UserDetails } from './../../entities/user-details/user-details.model';
@@ -18,12 +19,13 @@ export class SettingsComponent implements OnInit {
   userDetails!: UserDetails;
   success = false;
   languages = LANGUAGES;
+  countryList = COUNTRYLIST;
   settingsForm = this.fb.group({
     firstName: [undefined, [Validators.required, Validators.minLength(1), Validators.maxLength(50)]],
     lastName: [undefined, [Validators.required, Validators.minLength(1), Validators.maxLength(50)]],
     email: [undefined, [Validators.required, Validators.minLength(5), Validators.maxLength(254), Validators.email]],
     phone: [undefined, [Validators.required, Validators.pattern(/\(?([0-9]{3})\)?([ .-]?)([0-9]{4})\2([0-9]{4})/)]],
-    country: [undefined, [Validators.required]],
+    country: [this.countryList[0].value, [Validators.required]],
     apiKey: [
       {
         value: '',
