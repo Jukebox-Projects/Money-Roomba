@@ -100,6 +100,7 @@ import { LandingPageComponent } from './landing/landing-page/landing-page.compon
 import { NgApexchartsModule } from 'ng-apexcharts';
 import { TotalBalanceComponent } from './reports/total-balance/total-balance.component';
 import { TransactionsCategoryComponent } from './reports/transactions-category/transactions-category.component';
+import { NotificationsDialogComponent } from './layouts/notifications-dialog/notifications-dialog.component';
 //import { ChartComponent} from "ng-apexcharts";
 
 @NgModule({
@@ -194,8 +195,10 @@ import { TransactionsCategoryComponent } from './reports/transactions-category/t
     NavigationComponent,
     IconPickerComponent,
     LandingPageComponent,
+    NotificationsDialogComponent,
     //   ChartComponent
   ],
+  entryComponents: [NotificationsDialogComponent],
   bootstrap: [MainComponent],
   exports: [],
 })

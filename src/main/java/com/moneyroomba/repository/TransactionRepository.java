@@ -23,7 +23,7 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long>,
     //SELECT count(*) FROM bzavahbosdx1rt1p.t_transaction WHERE MONTH(date_added) = MONTH(CURRENT_DATE())
     //AND YEAR(date_added) = YEAR(CURRENT_DATE()) and (transaction_type = 'EMAIL' OR transaction_type = 'API') and source_user_id = 11;
     @Query(
-        "SELECT count(id) FROM Transaction t WHERE (date_added between ?2 AND ?3) AND (transaction_type = 'EMAIL' OR transaction_type = 'API') and source_user_id = ?1"
+        "SELECT count(t.id) FROM Transaction t WHERE (t.dateAdded between ?2 AND ?3) AND (t.transactionType = 'EMAIL' OR t.transactionType = 'API') and t.sourceUser.id = ?1"
     )
     int countImportedTransactions(Long source_user_id, LocalDate startOfMonth, LocalDate endOfMonth);
 
@@ -33,7 +33,7 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long>,
         "WHERE tr.sourceUser.id = ?1 AND" +
         " tr.wallet.id = ?2 AND" +
         " tr.addToReports = ?3 AND" +
-        " tr.state = ?4 AND" +
+        " tr.state = 'NA' OR tr.state = 'ACCEPTED' AND" +
         " ABS(datediff(tr.dateAdded, CURRENT_DATE)) BETWEEN 0 AND 30" +
         " GROUP BY tr.movementType, tr.wallet, tr.currency " +
         " ORDER BY tr.wallet, tr.movementType DESC"
@@ -45,34 +45,24 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long>,
         "FROM Transaction tr " +
         "WHERE tr.sourceUser.id = ?1 AND " +
         "tr.addToReports = ?2 AND " +
-        "tr.state = ?3 AND " +
-        "ABS(DATEDIFF(tr.dateAdded, CURRENT_TIMESTAMP)) BETWEEN 0 AND ?4 " +
+        "tr.state = 'NA' OR tr.state = 'ACCEPTED' AND " +
+        "ABS(DATEDIFF(tr.dateAdded, CURRENT_TIMESTAMP)) BETWEEN 0 AND ?3 " +
         "GROUP BY tr.movementType, tr.wallet, tr.currency " +
         "ORDER BY tr.wallet, tr.movementType DESC, tr.currency"
     )
-    public List<WalletBalanceReportDTO> getAllWalletBalanceReport(
-        Long userId,
-        Boolean addToReports,
-        TransactionState state,
-        Integer daysInBetween
-    );
+    public List<WalletBalanceReportDTO> getAllWalletBalanceReport(Long userId, Boolean addToReports, Integer daysInBetween);
 
     @Query(
         value = "SELECT new com.moneyroomba.service.dto.reports.TransactionCountReportDTO(COUNT(tr.id), tr.movementType) " +
         "FROM Transaction tr " +
         "WHERE tr.sourceUser.id = ?1 AND " +
         "tr.addToReports = ?2 AND " +
-        "tr.state = ?3 AND " +
-        "ABS(DATEDIFF(tr.dateAdded, CURRENT_TIMESTAMP)) BETWEEN 0 AND ?4 " +
+        "tr.state = 'NA' OR tr.state = 'ACCEPTED' AND " +
+        "ABS(DATEDIFF(tr.dateAdded, CURRENT_TIMESTAMP)) BETWEEN 0 AND ?3 " +
         "GROUP BY tr.movementType " +
         "ORDER BY tr.movementType DESC"
     )
-    public List<TransactionCountReportDTO> getTransactionCount(
-        Long userId,
-        Boolean addToReports,
-        TransactionState state,
-        Integer daysInBetween
-    );
+    public List<TransactionCountReportDTO> getTransactionCount(Long userId, Boolean addToReports, Integer daysInBetween);
 
     @Query(
         value = "SELECT new com.moneyroomba.service.dto.reports.TransactionsByCategoryDTO( SUM(tr.amount), COUNT(tr.id),tr.category, tr.movementType, tr.currency ) " +
@@ -90,22 +80,4 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long>,
         TransactionState state,
         MovementType movementType
     );
-    /*
-    @Query(
-        value = "SELECT new com.moneyroomba.service.dto.reports.TransactionsByCategoryDTO(tr.amount, tr.category, tr.movementType, tr.currency ) " +
-        "FROM Transaction tr " +
-        "WHERE tr.sourceUser.id = ?1 AND " +
-        "tr.addToReports = ?2 AND " +
-        "tr.state = ?3 AND " +
-        "ABS(DATEDIFF(tr.dateAdded, CURRENT_TIMESTAMP)) BETWEEN 0 AND ?4" +
-        "GROUP BY tr.movementType " +
-        "ORDER BY tr.movementType DESC"
-    )
-    public List<TransactionsByCategoryDTO> getTransactionByCategoryReport(
-        Long userId,
-        Boolean addToReports,
-        TransactionState state,
-        Integer daysInBetween
-    );*/
-
 }
