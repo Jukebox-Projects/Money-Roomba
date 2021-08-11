@@ -9,6 +9,7 @@ import { DATE_FORMAT } from 'app/config/input.constants';
 import { ApplicationConfigService } from 'app/core/config/application-config.service';
 import { createRequestOption } from 'app/core/request/request-util';
 import { INotification, getNotificationIdentifier } from '../notification.model';
+import { ICategory } from '../../category/category.model';
 
 export type EntityResponseType = HttpResponse<INotification>;
 export type EntityArrayResponseType = HttpResponse<INotification[]>;
@@ -31,6 +32,12 @@ export class NotificationService {
     return this.http
       .put<INotification>(`${this.resourceUrl}/${getNotificationIdentifier(notification) as number}`, copy, { observe: 'response' })
       .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
+  }
+
+  seenUpdate(notification: INotification): Observable<EntityResponseType> {
+    return this.http.patch<INotification>(`${this.resourceUrl}/status/${getNotificationIdentifier(notification) as number}`, notification, {
+      observe: 'response',
+    });
   }
 
   partialUpdate(notification: INotification): Observable<EntityResponseType> {

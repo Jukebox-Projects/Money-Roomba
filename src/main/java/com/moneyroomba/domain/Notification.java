@@ -18,6 +18,13 @@ public class Notification implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    public Notification(LocalDate dateOpened, Boolean opened) {
+        this.dateOpened = dateOpened;
+        this.opened = opened;
+    }
+
+    public Notification() {}
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
