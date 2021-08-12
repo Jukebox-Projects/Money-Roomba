@@ -11,14 +11,9 @@ import { TransactionsCategoryService } from './service/transactions-category.ser
 export class TransactionsCategoryComponent implements OnInit {
   reportDataIncome: ITransactionsByCategory[];
   reportDataExpense: ITransactionsByCategory[];
-  categoryExpense0: ITransactionsByCategory;
-  categoryExpense1: ITransactionsByCategory;
-  categoryExpense2: ITransactionsByCategory;
-  categoryExpense3: ITransactionsByCategory;
-  categoryIncome0: ITransactionsByCategory;
-  categoryIncome1: ITransactionsByCategory;
-  categoryIncome2: ITransactionsByCategory;
-  categoryIncome3: ITransactionsByCategory;
+  categoryExpense: ITransactionsByCategory[];
+  categoryIncome: ITransactionsByCategory[];
+  colorsLabel = ['#AC39D4', '#40D4A8', '#461EE7', '#1EB6E7'];
 
   constructor(protected transactionsCategoryService: TransactionsCategoryService) {}
 
@@ -46,22 +41,16 @@ export class TransactionsCategoryComponent implements OnInit {
 
   protected resolveDataExpense(reportDataExpense: ITransactionsByCategory[]): void {
     /* eslint-disable no-console */
-    this.categoryExpense0 = reportDataExpense[0];
-    this.categoryExpense1 = reportDataExpense[1];
-    this.categoryExpense2 = reportDataExpense[2];
-    this.categoryExpense3 = reportDataExpense[3];
+    this.categoryExpense = reportDataExpense;
   }
 
   protected resolveDataIncome(reportDataIncome: ITransactionsByCategory[]): void {
     /* eslint-disable no-console */
-    this.categoryIncome0 = reportDataIncome[0];
-    this.categoryIncome1 = reportDataIncome[1];
-    this.categoryIncome2 = reportDataIncome[2];
-    this.categoryIncome3 = reportDataIncome[3];
+    this.categoryIncome = reportDataIncome;
   }
 
   public isEmpty(obj) {
-    if (Object.keys(this.categoryIncome0).length === 0) {
+    if (Object.keys(this.categoryIncome[0]).length === 0) {
       return false;
     } else {
       return true;

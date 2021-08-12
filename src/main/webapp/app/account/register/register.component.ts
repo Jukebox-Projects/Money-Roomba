@@ -1,5 +1,5 @@
-import { Router } from '@angular/router';
 import { COUNTRYLIST } from './../../shared/country';
+import { Router } from '@angular/router';
 import { Component, AfterViewInit, ElementRef, ViewChild } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { FormBuilder, Validators } from '@angular/forms';

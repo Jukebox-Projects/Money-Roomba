@@ -33,7 +33,7 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long>,
         "WHERE tr.sourceUser.id = ?1 AND" +
         " tr.wallet.id = ?2 AND" +
         " tr.addToReports = ?3 AND" +
-        " tr.state = 'NA' OR tr.state = 'ACCEPTED' AND" +
+        "(tr.state = 'NA' OR tr.state = 'ACCEPTED') AND " +
         " ABS(datediff(tr.dateAdded, CURRENT_DATE)) BETWEEN 0 AND 30" +
         " GROUP BY tr.movementType, tr.wallet, tr.currency " +
         " ORDER BY tr.wallet, tr.movementType DESC"
@@ -45,7 +45,7 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long>,
         "FROM Transaction tr " +
         "WHERE tr.sourceUser.id = ?1 AND " +
         "tr.addToReports = ?2 AND " +
-        "tr.state = 'NA' OR tr.state = 'ACCEPTED' AND " +
+        "(tr.state = 'NA' OR tr.state = 'ACCEPTED') AND " +
         "ABS(DATEDIFF(tr.dateAdded, CURRENT_TIMESTAMP)) BETWEEN 0 AND ?3 " +
         "GROUP BY tr.movementType, tr.wallet, tr.currency " +
         "ORDER BY tr.wallet, tr.movementType DESC, tr.currency"
@@ -57,7 +57,7 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long>,
         "FROM Transaction tr " +
         "WHERE tr.sourceUser.id = ?1 AND " +
         "tr.addToReports = ?2 AND " +
-        "tr.state = 'NA' OR tr.state = 'ACCEPTED' AND " +
+        "(tr.state = 'NA' OR tr.state = 'ACCEPTED') AND " +
         "ABS(DATEDIFF(tr.dateAdded, CURRENT_TIMESTAMP)) BETWEEN 0 AND ?3 " +
         "GROUP BY tr.movementType " +
         "ORDER BY tr.movementType DESC"
@@ -69,15 +69,11 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long>,
         "FROM Transaction tr " +
         "WHERE tr.sourceUser.id = ?1 AND " +
         "tr.addToReports = ?2 AND " +
-        "tr.state = ?3 AND " +
-        "tr.movementType = ?4 " +
+        "(tr.state = 'NA' OR tr.state = 'ACCEPTED') AND " +
+        "tr.movementType = ?3 AND " +
+        "ABS(datediff(tr.dateAdded, CURRENT_DATE)) BETWEEN 0 AND 30" +
         "GROUP BY tr.movementType, tr.category, tr.currency " +
         "ORDER BY tr.movementType DESC"
     )
-    public List<TransactionsByCategoryDTO> getTransactionByCategoryReport(
-        Long userId,
-        Boolean addToReports,
-        TransactionState state,
-        MovementType movementType
-    );
+    public List<TransactionsByCategoryDTO> getTransactionByCategoryReport(Long userId, Boolean addToReports, MovementType movementType);
 }

@@ -262,7 +262,7 @@ public class ReportsService {
         }
 
         if (user.isPresent()) {
-            results = transactionRepository.getTransactionByCategoryReport(user.get().getId(), true, TransactionState.NA, mType);
+            results = transactionRepository.getTransactionByCategoryReport(user.get().getId(), true, mType);
             if (!results.isEmpty()) {
                 if (!sameCurrencyTransactionsByCategory(results)) {
                     Currency defaultCurrency = getDefaultCurrency();
