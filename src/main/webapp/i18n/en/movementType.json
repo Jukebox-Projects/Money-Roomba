@@ -2,8 +2,8 @@
   "moneyRoombaApp": {
     "MovementType": {
       "null": "",
-      "INCOME": "Ingreso",
-      "EXPENSE": "Egreso"
+      "INCOME": "Income",
+      "EXPENSE": "Expense"
     }
   }
 }

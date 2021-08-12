@@ -1,6 +1,8 @@
 package com.moneyroomba.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.moneyroomba.domain.enumeration.EventType;
 import com.moneyroomba.domain.enumeration.SourceEntity;
 import java.io.Serializable;
@@ -19,6 +21,28 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 public class Event implements Serializable {
 
     private static final long serialVersionUID = 1L;
+
+    public Event(
+        EventType eventType,
+        LocalDate dateAdded,
+        Long sourceId,
+        SourceEntity sourceEntity,
+        String userName,
+        String userLastName,
+        Notification notification,
+        UserDetails user
+    ) {
+        this.eventType = eventType;
+        this.dateAdded = dateAdded;
+        this.sourceId = sourceId;
+        this.sourceEntity = sourceEntity;
+        this.userName = userName;
+        this.userLastName = userLastName;
+        this.notification = notification;
+        this.user = user;
+    }
+
+    public Event() {}
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -68,10 +92,24 @@ public class Event implements Serializable {
             "targetContacts",
             "contact",
             "sourceContacts",
+            "apiKey",
+            "isTemporaryPassword",
+            "scheduledTransactions",
+            "recievedTransactions",
         },
         allowSetters = true
     )
     private UserDetails user;
+
+    @JsonSerialize
+    @JsonDeserialize
+    @Transient
+    private String destinationPath;
+
+    @JsonSerialize
+    @JsonDeserialize
+    @Transient
+    private String message;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
     public Long getId() {
@@ -191,6 +229,14 @@ public class Event implements Serializable {
         this.user = userDetails;
     }
 
+    public String getDestinationPath() {
+        return destinationPath;
+    }
+
+    public void setDestinationPath(String destinationPath) {
+        this.destinationPath = destinationPath;
+    }
+
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
     @Override
@@ -202,6 +248,14 @@ public class Event implements Serializable {
             return false;
         }
         return id != null && id.equals(((Event) o).id);
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
     }
 
     @Override

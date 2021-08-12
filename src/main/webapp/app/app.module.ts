@@ -1,3 +1,4 @@
+import { AvatarModule } from 'ngx-avatar';
 import { NavHeaderComponent } from './template/elements/nav-header/nav-header.component';
 import { NgModule, LOCALE_ID } from '@angular/core';
 import { registerLocaleData } from '@angular/common';
@@ -99,6 +100,9 @@ import { IconPickerComponent } from './shared/icon-picker/icon-picker.component'
 import { LandingPageComponent } from './landing/landing-page/landing-page.component';
 import { NgApexchartsModule } from 'ng-apexcharts';
 import { AddContactModalComponent } from './entities/contact/add-contact-modal/add-contact-modal/add-contact-modal.component';
+import { TotalBalanceComponent } from './reports/total-balance/total-balance.component';
+import { TransactionsCategoryComponent } from './reports/transactions-category/transactions-category.component';
+import { NotificationsDialogComponent } from './layouts/notifications-dialog/notifications-dialog.component';
 //import { ChartComponent} from "ng-apexcharts";
 
 @NgModule({
@@ -118,6 +122,7 @@ import { AddContactModalComponent } from './entities/contact/add-contact-modal/a
     PerfectScrollbarModule,
     NgxDropzoneModule,
     CarouselModule,
+    AvatarModule,
 
     MatListModule,
     MatAutocompleteModule,
@@ -194,9 +199,12 @@ import { AddContactModalComponent } from './entities/contact/add-contact-modal/a
     IconPickerComponent,
     LandingPageComponent,
     AddContactModalComponent,
+    NotificationsDialogComponent,
     //   ChartComponent
   ],
+  entryComponents: [NotificationsDialogComponent],
   bootstrap: [MainComponent],
+  exports: [],
 })
 export class AppModule {
   constructor(
