@@ -8,7 +8,8 @@
         "createOrEditLabel": "Create or edit a Wallet",
         "searchbar": "Search",
         "upload": "Import an invoice XML",
-        "notFound": "No Wallets found"
+        "notFound": "No Wallets found",
+        "mainBalance": "Main balance"
       },
       "created": "A new Wallet has been created.",
       "updated": "A Wallet has been updated.",

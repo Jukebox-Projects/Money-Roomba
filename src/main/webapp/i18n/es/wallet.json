@@ -8,7 +8,8 @@
         "createOrEditLabel": "Crear o editar Cartera",
         "searchbar": "Buscar",
         "upload": "Importar factura XML",
-        "notFound": "Ninguna Cartera encontrada"
+        "notFound": "Ninguna Cartera encontrada",
+        "mainBalance": "Balance total"
       },
       "created": "Una nueva Cartera ha sido creada.",
       "updated": "Una Cartera ha sido actualizada.",
