@@ -1,3 +1,4 @@
+import { COUNTRYLIST } from './../../../shared/country';
 import { AccountService } from './../../../core/auth/account.service';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
@@ -16,13 +17,14 @@ export class UserManagementUpdateComponent implements OnInit {
   languages = LANGUAGES;
   authorities: string[] = [];
   isSaving = false;
+  countryList = COUNTRYLIST;
 
   editForm = this.fb.group({
     id: [],
     firstName: ['', [Validators.maxLength(50)]],
     lastName: ['', [Validators.maxLength(50)]],
     phone: [null, [Validators.required, Validators.pattern(/\(?([0-9]{3})\)?([ .-]?)([0-9]{4})\2([0-9]{4})/)]],
-    country: ['', [Validators.required]],
+    country: [this.countryList[0].value, [Validators.required]],
     email: ['', [Validators.minLength(5), Validators.maxLength(254), Validators.email]],
     notifications: [],
     activated: [],

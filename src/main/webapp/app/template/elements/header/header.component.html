@@ -72,6 +72,9 @@
               <span *ngIf="account?.imageUrl">
                 <img [src]="account!.imageUrl" width="20" alt="" alt="Avatar" />
               </span>
+              <span *ngIf="!account?.imageUrl">
+                <ngx-avatar size="50" name="{{ account?.firstName + ' ' + account?.lastName }} "></ngx-avatar>
+              </span>
             </a>
             <div class="dropdown-menu dropdown-menu-right" ngbDropdownMenu>
               <a routerLink="account/settings" class="dropdown-item ai-icon">

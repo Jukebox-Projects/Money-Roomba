@@ -31,6 +31,10 @@ export class TotalBalanceComponent implements OnInit {
     );
   }
 
+  getSymbol() {
+    return this.data && this.data.length > 0 ? this.data[0]?.currency?.code || '' : '';
+  }
+
   protected resolveData(reportData: ITotalBalance[]): void {
     /* eslint-disable no-console */
     this.totalBalance = 0;

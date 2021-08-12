@@ -41,8 +41,10 @@ export class TransactionCountComponent implements OnInit {
     } else if (reportData.length == 1) {
       if (reportData[0].movementType == MovementType.INCOME) {
         this.income = reportData[0];
+        this.expense = { count: 0, movementType: MovementType.EXPENSE };
       } else {
         this.expense = reportData[0];
+        this.income = { count: 0, movementType: MovementType.INCOME };
       }
     } else {
       this.income = { count: 0, movementType: MovementType.INCOME };
