@@ -1,6 +1,8 @@
 <form name="creationForm" (ngSubmit)="addContact()" role="form" novalidate [formGroup]="creationForm">
   <div class="modal-header">
-    <h4 class="modal-title" data-cy="licenseCreateDialogHeading">Add new favorite contact</h4>
+    <h4 class="modal-title" data-cy="licenseCreateDialogHeading" jhiTranslate="moneyRoombaApp.transaction.contactModalHeader">
+      Add new favorite contact
+    </h4>
 
     <button type="button" class="close" data-dismiss="modal" aria-hidden="true" (click)="cancel()">&times;</button>
   </div>
@@ -10,12 +12,14 @@
     <jhi-alert></jhi-alert>
 
     <div class="form-group">
-      <label class="form-control-label" for="field_identifier">Please enter a valid Email or Phone Number</label>
+      <label class="form-control-label" for="field_identifier" jhiTranslate="moneyRoombaApp.transaction.contactModalTitle"
+        >Please enter a valid Email or Phone Number</label
+      >
 
       <div class="input-group input-group-sm mb-3">
         <input type="text" class="form-control" name="identifier" id="field_identifier" data-cy="identifier" formControlName="identifier" />
         <div class="input-group-append">
-          <button class="btn btn-primary" type="submit">Add Contact</button>
+          <button class="btn btn-primary" type="submit" jhiTranslate="moneyRoombaApp.transaction.addContact">Add Contact</button>
         </div>
       </div>
       <div
