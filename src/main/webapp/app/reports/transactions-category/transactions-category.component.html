@@ -1,0 +1,123 @@
+<div class="d-flex">
+  <div class="card col-xl-6">
+    <div class="card-body">
+      <div *ngIf="reportDataExpense?.length === 0" class="card-body text-center ai-icon text-primary">
+        <svg
+          id="rocket-icon"
+          class="my-2"
+          viewBox="0 0 24 24"
+          width="80"
+          height="80"
+          stroke="currentColor"
+          stroke-width="1"
+          fill="none"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+          <line x1="3" y1="6" x2="21" y2="6"></line>
+          <path d="M16 10a4 4 0 0 1-8 0"></path>
+        </svg>
+        <h4 class="my-2" jhiTranslate="moneyRoombaApp.transaction.home.noExpenseTransactions">No expense found</h4>
+        <a
+          class="btn my-2 btn-primary btn-lg px-4"
+          [routerLink]="['/transaction/new']"
+          jhiTranslate="moneyRoombaApp.transaction.home.createLabel"
+        >
+          <i class="fa fa-usd"></i> Create a new Transaction</a
+        >
+      </div>
+      <div class="row" *ngIf="reportDataExpense?.length > 0">
+        <div class="col-xl-5 col-xxl-12 col-md-5">
+          <h4 class="fs-20 text-black mb-4" jhiTranslate="{{ 'moneyRoombaApp.MovementType.EXPENSE' }}"></h4>
+
+          <div class="row">
+            <div *ngFor="let item of reportDataExpense; let i = index" class="d-flex col-xl-12 col-xxl-6 col-md-12 col-sm-6 mb-4">
+              <svg class="mr-3" width="14" height="54" viewBox="0 0 14 54" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect x="-6.10352e-05" width="14" height="54" rx="7" attr.fill="{{ colorsLabel[i] }}" />
+              </svg>
+
+              <div>
+                <p class="fs-14 mb-2">{{ i == 3 ? 'Other' : item.category.name }}</p>
+                <span class="fs-18 font-w500"
+                  ><span class="text-black mr-2">{{ item.total | currency: item.currency.code:'symbol' }}</span></span
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-xl-6 col-xxl-12 col-md-7">
+          <div class="row">
+            <div *ngFor="let item of reportDataExpense; let i = index" [ngClass]="{ 'mb-sm-0': i >= 2 }" class="col-6 mb-4">
+              <app-investment *ngIf="i == 0" [transactionsByCategories]="item"></app-investment>
+              <app-installment *ngIf="i == 1" [transactionsByCategories]="item"></app-installment>
+              <app-property *ngIf="i == 2" [transactionsByCategories]="item"></app-property>
+              <app-restaurant *ngIf="i == 3" [transactionsByCategories]="item"></app-restaurant>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card col-xl-6">
+    <div class="card-body">
+      <div *ngIf="reportDataIncome?.length === 0" class="card-body text-center ai-icon text-primary">
+        <svg
+          id="rocket-icon"
+          class="my-2"
+          viewBox="0 0 24 24"
+          width="80"
+          height="80"
+          stroke="currentColor"
+          stroke-width="1"
+          fill="none"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+          <line x1="3" y1="6" x2="21" y2="6"></line>
+          <path d="M16 10a4 4 0 0 1-8 0"></path>
+        </svg>
+        <h4 class="my-2" jhiTranslate="moneyRoombaApp.transaction.home.noIncomeTransactions">No income found</h4>
+        <a
+          class="btn my-2 btn-primary btn-lg px-4"
+          [routerLink]="['/transaction/new']"
+          jhiTranslate="moneyRoombaApp.transaction.home.createLabel"
+        >
+          <i class="fa fa-usd"></i> Create a new Transaction</a
+        >
+      </div>
+      <div class="row" *ngIf="reportDataIncome?.length > 0">
+        <div class="col-xl-5 col-xxl-12 col-md-5">
+          <h4 class="fs-20 text-black mb-4" jhiTranslate="{{ 'moneyRoombaApp.MovementType.INCOME' }}"></h4>
+
+          <div class="row">
+            <div *ngFor="let item of reportDataIncome; let i = index" class="d-flex col-xl-12 col-xxl-6 col-md-12 col-sm-6 mb-4">
+              <svg class="mr-3" width="14" height="54" viewBox="0 0 14 54" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect x="-6.10352e-05" width="14" height="54" rx="7" attr.fill="{{ colorsLabel[i] }}" />
+              </svg>
+
+              <div>
+                <p class="fs-14 mb-2">{{ i == 3 ? 'Other' : item.category.name }}</p>
+                <span class="fs-18 font-w500"
+                  ><span class="text-black mr-2">{{ item.total | currency: item.currency.code:'symbol' }}</span></span
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-xl-6 col-xxl-12 col-md-7">
+          <div class="row">
+            <div *ngFor="let item of reportDataIncome; let i = index" [ngClass]="{ 'mb-sm-0': i >= 2 }" class="col-6 mb-4">
+              <app-investment *ngIf="i == 0" [transactionsByCategories]="item"></app-investment>
+              <app-installment *ngIf="i == 1" [transactionsByCategories]="item"></app-installment>
+              <app-property *ngIf="i == 2" [transactionsByCategories]="item"></app-property>
+              <app-restaurant *ngIf="i == 3" [transactionsByCategories]="item"></app-restaurant>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

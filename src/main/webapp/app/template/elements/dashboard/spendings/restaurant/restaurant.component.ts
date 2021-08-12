@@ -1,6 +1,7 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 
 import { ChartComponent, ApexNonAxisChartSeries, ApexPlotOptions, ApexChart, ApexFill, ApexStroke, ApexResponsive } from 'ng-apexcharts';
+import { ITransactionsByCategory } from '../../../../../reports/transactions-category/transactions-category.model';
 
 export type ChartOptions = {
   series: ApexNonAxisChartSeries;
@@ -18,12 +19,17 @@ export type ChartOptions = {
   styleUrls: ['./restaurant.component.css'],
 })
 export class RestaurantComponent implements OnInit {
+  @Input() transactionsByCategories: ITransactionsByCategory;
   @ViewChild('chart') chart: ChartComponent;
   public chartOptions: Partial<ChartOptions>;
+  percentage: number;
+  constructor() {}
 
-  constructor() {
+  ngOnInit(): void {
+    this.percentage = this.transactionsByCategories.percentage;
+    this.percentage = Math.round(this.percentage);
     this.chartOptions = {
-      series: [5],
+      series: [this.percentage],
       chart: {
         height: 140,
         type: 'radialBar',
@@ -84,6 +90,4 @@ export class RestaurantComponent implements OnInit {
       ],
     };
   }
-
-  ngOnInit(): void {}
 }

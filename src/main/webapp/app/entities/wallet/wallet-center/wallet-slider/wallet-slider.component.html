@@ -1,12 +1,47 @@
 <div *ngIf="customOptions">
-  <owl-carousel-o [options]="customOptions" class="cards owl-carousel-1 mb-sm-5 mb-3">
+  <owl-carousel-o *ngIf="walletsCarousel.length > 2" [options]="customOptions" class="cards owl-carousel-1 mb-sm-5 mb-3">
+    <ng-template carouselSlide *ngFor="let wallet of walletsCarousel; let i = index">
+      <div class="items">
+        <div class="card-bx mb-0">
+          <img *ngIf="i % 5 === 0" src="../../../../../assets/images/card/card.png" alt="" />
+          <img *ngIf="i % 5 === 1" src="../../../../../assets/images/card/card2.png" alt="" />
+          <img *ngIf="i % 5 === 2" src="../../../../../assets/images/card/card3.png" alt="" />
+          <img *ngIf="i % 5 === 3" src="../../../../../assets/images/card/card4.png" alt="" />
+          <img *ngIf="i % 5 === 4" src="../../../../../assets/images/card/card5.png" alt="" />
+          <div class="card-info text-white">
+            <p class="mb-1" jhiTranslate="moneyRoombaApp.wallet.balance">Balance</p>
+            <!--<h2 class="fs-36 text-white mb-sm-4 mb-3">{{'hello'}}</h2>-->
+            <h2 class="fs-36 text-white mb-sm-4 mb-3">{{ wallet?.balance | currency: wallet.currency?.code:'symbol':'1.2-2' }}</h2>
+
+            <div class="d-flex align-items-center justify-content-between mb-sm-5 mb-3">
+              <img src="assets/images/dual-dot.png" alt="" class="dot-img" />
+              <img
+                style="width: 60px; height: 60px"
+                class="icon"
+                src="{{ getIcon(wallet.icon).path }}"
+                alt="{{ getIcon(wallet.icon).name }}"
+              />
+            </div>
+            <div class="d-flex">
+              <div class="mr-5">
+                <p class="fs-14 mb-1 op6" jhiTranslate="moneyRoombaApp.wallet.name">Name</p>
+                <span>{{ wallet.name }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-template>
+  </owl-carousel-o>
+</div>
+
+<div *ngIf="customOptionsSingleWallet">
+  <owl-carousel-o *ngIf="walletsCarousel.length < 3" [options]="customOptionsSingleWallet" class="cards owl-carousel-1 mb-sm-5 mb-3">
     <ng-template carouselSlide *ngFor="let wallet of walletsCarousel; let i = index">
       <div class="items">
         <div class="card-bx mb-0">
           <img *ngIf="i === 0" src="../../../../../assets/images/card/card1.png" alt="" />
           <img *ngIf="i === 1" src="../../../../../assets/images/card/card2.png" alt="" />
-          <img *ngIf="i === 2" src="../../../../../assets/images/card/card3.png" alt="" />
-          <img *ngIf="i === 3" src="../../../../../assets/images/card/card4.png" alt="" />
           <div class="card-info text-white">
             <p class="mb-1" jhiTranslate="moneyRoombaApp.wallet.balance">Balance</p>
             <!--<h2 class="fs-36 text-white mb-sm-4 mb-3">{{'hello'}}</h2>-->

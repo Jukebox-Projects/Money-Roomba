@@ -6,7 +6,9 @@
         "refreshListLabel": "Refrescar lista",
         "createLabel": "Crear nueva transacción",
         "createOrEditLabel": "Crear o editar una transacción",
-        "notFound": "Ningúna transacción encontrada"
+        "notFound": "Ningúna transacción encontrada",
+        "noIncomeTransactions": "No tiene ingresos",
+        "noExpenseTransactions": "No tiene egresos"
       },
       "created": "Una nueva transacción ha sido creada con el identificador {{ param }}",
       "updated": "Una transacción ha sido actualizada con el identificador {{ param }}",
@@ -38,6 +40,10 @@
       "recievingUser": "Receptor",
       "outgoingTransaction": "Transaccion saliente",
       "transactionState": "Estado",
+      "addNewContact": "Agregar nuevo contacto",
+      "addContact": "Agregar contacto",
+      "contactModalTitle": "Ingrese un correo electrónico o teléfono válido",
+      "contactModalHeader": "Agregar nuevo contacto favorito",
       "active": "Activo",
       "inactive": "Inactivo"
     }

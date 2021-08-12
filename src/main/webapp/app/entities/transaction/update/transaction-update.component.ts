@@ -4,7 +4,7 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { finalize, map } from 'rxjs/operators';
-
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ITransaction, Transaction } from '../transaction.model';
 import { TransactionService } from '../service/transaction.service';
 import { IAttachment } from 'app/entities/attachment/attachment.model';
@@ -19,6 +19,9 @@ import { IUserDetails } from 'app/entities/user-details/user-details.model';
 import { UserDetailsService } from 'app/entities/user-details/service/user-details.service';
 import { TransactionType } from 'app/entities/enumerations/transaction-type.model';
 import { TransactionState } from 'app/entities/enumerations/transaction-state.model';
+import { AddContactModalComponent } from 'app/entities/contact/add-contact-modal/add-contact-modal/add-contact-modal.component';
+import { IContact } from 'app/entities/contact/contact.model';
+import { ContactService } from 'app/entities/contact/service/contact.service';
 
 @Component({
   selector: 'jhi-transaction-update',
@@ -32,6 +35,7 @@ export class TransactionUpdateComponent implements OnInit {
   currenciesSharedCollection: ICurrency[] = [];
   categoriesSharedCollection: ICategory[] = [];
   userDetailsSharedCollection: IUserDetails[] = [];
+  contactSharedCollection: IContact[] = [];
 
   editForm = this.fb.group({
     id: [],
@@ -62,7 +66,9 @@ export class TransactionUpdateComponent implements OnInit {
     protected categoryService: CategoryService,
     protected userDetailsService: UserDetailsService,
     protected activatedRoute: ActivatedRoute,
-    protected fb: FormBuilder
+    protected fb: FormBuilder,
+    protected modalService: NgbModal,
+    protected contactService: ContactService
   ) {}
 
   toggleOutgoing(): void {
@@ -109,6 +115,10 @@ export class TransactionUpdateComponent implements OnInit {
 
   trackUserDetailsById(index: number, item: IUserDetails): number {
     return item.id!;
+  }
+
+  trackContactById(index: number, item: IContact): number {
+    return item.id;
   }
 
   protected subscribeToSaveResponse(result: Observable<HttpResponse<ITransaction>>): void {
@@ -168,6 +178,10 @@ export class TransactionUpdateComponent implements OnInit {
       this.userDetailsSharedCollection,
       transaction.recievingUser
     );
+    this.contactSharedCollection = this.contactService.addContactToCollectionIfMissing(
+      this.contactSharedCollection,
+      transaction.recievingUser
+    );
   }
 
   isIncoming(): boolean {
@@ -224,6 +238,16 @@ export class TransactionUpdateComponent implements OnInit {
         )
       )
       .subscribe((userDetails: IUserDetails[]) => (this.userDetailsSharedCollection = userDetails));
+
+    this.contactService
+      .query()
+      .pipe(map((res: HttpResponse<IContact[]>) => res.body ?? []))
+      .pipe(
+        map((contact: IContact[]) =>
+          this.contactService.addContactToCollectionIfMissing(contact, this.editForm.get('recievingUser')!.value)
+        )
+      )
+      .subscribe((contact: IContact[]) => (this.contactSharedCollection = contact));
   }
 
   protected createFromForm(): ITransaction {
@@ -239,7 +263,7 @@ export class TransactionUpdateComponent implements OnInit {
       scheduled: false,
       addToReports: this.editForm.get(['addToReports'])!.value,
       incomingTransaction: false,
-      transactionType: this.editForm.get(['transactionType'])!.value,
+      transactionType: this.editForm.get(['transactionType'])!.value == null ? 'MANUAL' : this.editForm.get(['transactionType'])!.value,
       attachment: this.editForm.get(['attachment'])!.value,
       wallet: this.editForm.get(['wallet'])!.value,
       currency: this.editForm.get(['currency'])!.value,
@@ -258,5 +282,16 @@ export class TransactionUpdateComponent implements OnInit {
     } else {
       return false;
     }
+  }
+
+  open(): void {
+    const modalRef = this.modalService.open(AddContactModalComponent, { size: 'lg', backdrop: 'static' });
+    modalRef.closed.subscribe(reason => {
+      if (reason === 'activated') {
+        setTimeout(() => {
+          window.location.reload();
+        }, 3500);
+      }
+    });
   }
 }

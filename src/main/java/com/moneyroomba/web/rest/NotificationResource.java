@@ -5,6 +5,8 @@ import com.moneyroomba.repository.NotificationRepository;
 import com.moneyroomba.web.rest.errors.BadRequestAlertException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -133,6 +135,56 @@ public class NotificationResource {
                     }
                     if (notification.getOpened() != null) {
                         existingNotification.setOpened(notification.getOpened());
+                    }
+
+                    return existingNotification;
+                }
+            )
+            .map(notificationRepository::save);
+
+        return ResponseUtil.wrapOrNotFound(
+            result,
+            HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, notification.getId().toString())
+        );
+    }
+
+    /**
+     * {@code PATCH  /notifications/status/:id} : Partial updates date and notification status
+     *
+     * @param id the id of the notification to save.
+     * @param notification the notification to update.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated notification,
+     * or with status {@code 400 (Bad Request)} if the notification is not valid,
+     * or with status {@code 404 (Not Found)} if the notification is not found,
+     * or with status {@code 500 (Internal Server Error)} if the notification couldn't be updated.
+     * @throws URISyntaxException if the Location URI syntax is incorrect.
+     */
+    @PatchMapping(value = "/notifications/status/{id}")
+    public ResponseEntity<Notification> updateNotificationStatus(
+        @PathVariable(value = "id", required = false) final Long id,
+        @NotNull @RequestBody Notification notification
+    ) throws URISyntaxException {
+        log.debug("REST request to partial update Notification status and date : {}, {}", id, notification);
+        if (notification.getId() == null) {
+            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
+        }
+        if (!Objects.equals(id, notification.getId())) {
+            throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
+        }
+
+        if (!notificationRepository.existsById(id)) {
+            throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
+        }
+
+        Optional<Notification> result = notificationRepository
+            .findById(notification.getId())
+            .map(
+                existingNotification -> {
+                    if (notification.getDateOpened() != null) {
+                        existingNotification.setDateOpened(LocalDate.now());
+                    }
+                    if (notification.getOpened() != null) {
+                        existingNotification.setOpened(true);
                     }
 
                     return existingNotification;

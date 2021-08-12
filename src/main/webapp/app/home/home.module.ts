@@ -22,6 +22,9 @@ import { TransactionCountModule } from '../reports/transaction-count/transaction
 import { QuickTransferCrousalComponent } from '../template/elements/dashboard/quick-transfer-crousal/quick-transfer-crousal.component';
 import { CarouselModule } from 'ngx-owl-carousel-o';
 import { AvatarModule } from 'ngx-avatar';
+import { TotalBalanceModule } from '../reports/total-balance/total-balance.module';
+import { TransactionsCategoryModule } from '../reports/transactions-category/transactions-category.module';
+import { TransactionsCategoryComponent } from '../reports/transactions-category/transactions-category.component';
 
 @NgModule({
   imports: [
@@ -32,6 +35,8 @@ import { AvatarModule } from 'ngx-avatar';
     TransactionCountModule,
     CarouselModule,
     AvatarModule,
+    TotalBalanceModule,
+    TransactionsCategoryModule,
   ],
   declarations: [
     HomeComponent,
@@ -41,7 +46,7 @@ import { AvatarModule } from 'ngx-avatar';
     GraphLimitComponent,
     GraphTransactionOverviewComponent,
     GraphWeeklyWalletUsageComponent,
-    SpendingsComponent, //Begin spendings components
+    TransactionsCategoryComponent, //Begin spendings components
     InstallmentComponent,
     InvestmentComponent,
     PropertyComponent,

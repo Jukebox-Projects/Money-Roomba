@@ -12,10 +12,13 @@ export class WalletSliderComponent implements OnInit {
   @Input() walletsCarousel: IWallet[];
 
   customOptions: OwlOptions;
+  customOptionsSingleWallet: OwlOptions;
+  counter: number;
 
   constructor(protected iconService: IconService) {}
 
   ngOnInit() {
+    this.counter = 0;
     setTimeout(() => {
       this.customOptions = {
         loop: true,
@@ -29,9 +32,25 @@ export class WalletSliderComponent implements OnInit {
         autoWidth: true,
         // items:3
       };
+      this.customOptionsSingleWallet = {
+        loop: false,
+        margin: 30,
+        nav: true,
+        center: false,
+        autoplay: false,
+        dots: false,
+        navText: ['', ''],
+        responsiveRefreshRate: 100,
+        autoWidth: true,
+        // items:3
+      };
     }, 1);
   }
   getIcon(iconId: number): IICon {
     return this.iconService.getIcon(iconId);
+  }
+  carouselCounter(): boolean {
+    this.counter = 0;
+    return true;
   }
 }
