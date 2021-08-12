@@ -1,3 +1,4 @@
+import { Authority } from 'app/config/authority.constants';
 import { COUNTRYLIST } from './../../shared/country';
 import { AccountDeleteDialogComponent } from './delete/delete-dialog.component';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -20,6 +21,7 @@ export class SettingsComponent implements OnInit {
   success = false;
   languages = LANGUAGES;
   countryList = COUNTRYLIST;
+  authorities = Authority;
   settingsForm = this.fb.group({
     firstName: [undefined, [Validators.required, Validators.minLength(1), Validators.maxLength(50)]],
     lastName: [undefined, [Validators.required, Validators.minLength(1), Validators.maxLength(50)]],
@@ -71,6 +73,20 @@ export class SettingsComponent implements OnInit {
         apiKey: userDetails?.apiKey,
       };
     });
+  }
+
+  getCountry(): string {
+    if (this.userDetails && this.userDetails?.country) {
+      return this.countryList.find(x => x.value === this.userDetails.country)?.name;
+    } else {
+      return '';
+    }
+  }
+
+  enumAuthorities(rol: string): string {
+    return Object.keys(this.authorities)
+      .find(key => this.authorities[key] === rol)
+      .replace('_', ' ');
   }
 
   generateApiKey(): void {

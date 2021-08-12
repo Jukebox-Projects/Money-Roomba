@@ -71,7 +71,7 @@
       <tbody>
         <tr *ngFor="let scheduledTransaction of scheduledTransactions; trackBy: trackId" data-cy="entityTable">
           <td>{{ scheduledTransaction.name }}</td>
-          <td>{{ scheduledTransaction.currency?.code }}{{ scheduledTransaction.originalAmount }}</td>
+          <td>{{ scheduledTransaction.originalAmount | currency: scheduledTransaction.currency?.code:'symbol':'1.2-2' }}</td>
           <td>
             <div class="text-black">
               <span *ngIf="scheduledTransaction.movementType.toLowerCase().includes('expense')" class="mr-2 oi-icon {{ 'bgl-danger' }}">

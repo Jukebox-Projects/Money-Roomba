@@ -4,9 +4,11 @@
     "browsehappy": "Está usando un navegador <strong>no actualizado</strong>. Por favor, <a href=\"http://browsehappy.com/?locale=es\">actualice su navegador</a> para mejorar su experiencia.",
     "menu": {
       "home": "Inicio",
+      "profile": "Perfil",
       "jhipster-needle-menu-add-element": "JHipster will add additional menu entries here (do not translate!)",
       "entities": {
         "main": "Entidades",
+        "details": "Detalles",
         "userDetails": "Detalles de usuarios",
         "wallet": "Carteras",
         "transaction": "Transacciones",
@@ -49,6 +51,23 @@
       },
       "language": "Idioma"
     },
+    "time": {
+      "format": "Hace {{quantity}} {{time}}",
+      "year": "Año",
+      "yearPlural": "Años",
+      "month": "Mes",
+      "monthPlural": "Meses",
+      "week": "Semana",
+      "weekPlural": "Semanas",
+      "day": "Día",
+      "dayPlural": "Días",
+      "hour": "Hora",
+      "hourPlural": "Horas",
+      "minute": "Minuto",
+      "minutePlural": "Minutos",
+      "second": "Segundo",
+      "secondPlural": "Segundos"
+    },
     "form": {
       "username.label": "Correo electrónico",
       "username.placeholder": "Correo electrónico",
@@ -69,7 +88,8 @@
       "phone.label": "Teléfono",
       "phone.placeholder": "Su teléfono",
       "apiKey.label": "Llave API",
-      "apiKey.placeholder": "Llave API"
+      "apiKey.placeholder": "Llave API",
+      "joinDate": "Fecha de Registro"
     },
     "messages": {
       "info": {

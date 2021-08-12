@@ -75,7 +75,7 @@
             <span *ngIf="wallet.isActive" class="badge badge-success" jhiTranslate="moneyRoombaApp.wallet.active"> Active </span>
             <span *ngIf="!wallet.isActive" class="badge badge-danger" jhiTranslate="moneyRoombaApp.wallet.inactive"> Inactive </span>
           </td>
-          <td>{{ wallet.currency?.code }} {{ wallet.balance | number: '1.2-2' }}</td>
+          <td>{{ wallet.balance | currency: wallet.currency?.code:'symbol':'1.2-2' }}</td>
           <td class="table-icon-cell">
             <img class="icon" src="{{ getIcon(wallet.icon).path }}" alt="{{ getIcon(wallet.icon).name }}" />
           </td>
@@ -220,7 +220,7 @@
                 </div>
                 <div class="mr-3 pb-3">
                   <p class="fs-14 mb-1" jhiTranslate="moneyRoombaApp.wallet.balance">Balance</p>
-                  <span class="text-black font-w500">{{ wallet.currency?.code }} {{ wallet.balance | number: '1.2-2' }}</span>
+                  <span class="text-black font-w500">{{ wallet.balance | currency: wallet.currency?.code:'symbol':'1.2-2' }}</span>
                 </div>
                 <div class="dropdown pb-3 dropdown-no-icon" ngbDropdown>
                   <div class="btn-link" role="button" data-toggle="dropdown" aria-expanded="false" ngbDropdownToggle>

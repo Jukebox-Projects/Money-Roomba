@@ -21,6 +21,7 @@
       "name": "Name",
       "description": "Description",
       "originalAmount": "Original Amount",
+      "wallet": "Wallet",
       "movementType": "Movement Type",
       "startDate": "Start Date",
       "endDate": "End Date",
