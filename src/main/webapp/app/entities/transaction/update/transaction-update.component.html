@@ -128,6 +128,14 @@
                   </div>
                 </div>
                 <div class="form-group" *ngIf="this.isOutgoing">
+                  <button type="button" id="add-contact" data-cy="addContactButton" class="btn btn-primary" (click)="this.open()">
+                    <fa-icon icon="plus"></fa-icon>&nbsp;<span jhiTranslate="moneyRoombaApp.transaction.addNewContact"
+                      >Add new contact</span
+                    >
+                  </button>
+                </div>
+
+                <div class="form-group" *ngIf="this.isOutgoing">
                   <label class="form-control-label" jhiTranslate="moneyRoombaApp.transaction.recievingUser" for="field_recievingUser"
                     >Receiving User</label
                   >
@@ -140,13 +148,11 @@
                   >
                     <option
                       [ngValue]="
-                        userDetailsOption.id === editForm.get('recievingUser')!.value?.id
-                          ? editForm.get('recievingUser')!.value
-                          : userDetailsOption
+                        contactOption.id === editForm.get('recievingUser')!.value?.id ? editForm.get('recievingUser')!.value : contactOption
                       "
-                      *ngFor="let userDetailsOption of userDetailsSharedCollection; trackBy: trackUserDetailsById"
+                      *ngFor="let contactOption of contactSharedCollection; trackBy: trackContactById"
                     >
-                      {{ userDetailsOption.phone }}
+                      {{ contactOption.name }}
                     </option>
                   </select>
                 </div>
@@ -444,3 +450,5 @@
     </div>
   </div>
 </form>
+
+© 2021 GitHub, Inc. Terms Privacy Security Status Docs Contact GitHub Pricing API Training Blog About

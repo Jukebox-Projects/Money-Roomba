@@ -259,8 +259,9 @@ public class TransactionService {
             incomingTransaction.setSourceUser(receivingUser);
             incomingTransaction.setScheduled(false);
             incomingTransaction.setTransactionType(TransactionType.SHARED);
+            incomingTransaction.setCategory(transaction.getCategory());
             List<Wallet> wallets = walletRepository.findAllByUser(receivingUser);
-            if (wallets.get(0) != null) {
+            if (!wallets.isEmpty()) {
                 incomingTransaction.setWallet(wallets.get(0));
             } else {
                 throw new BadRequestAlertException("User has no wallets", ENTITY_NAME, "nowallets");
