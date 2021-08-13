@@ -18,6 +18,7 @@
         "title": "Transacción Programada"
       },
       "id": "ID",
+      "wallet": "Cartera",
       "name": "Nombre",
       "description": "Descripción",
       "originalAmount": "Monto",

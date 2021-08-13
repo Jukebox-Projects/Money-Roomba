@@ -25,7 +25,7 @@
       "movementType": "Movement Type",
       "startDate": "Start Date",
       "endDate": "End Date",
-      "addToReports": "Add To Reports",
+      "addToReports": "In Reports",
       "recurringType": "Recurring Type",
       "separationCount": "Separation Count",
       "maxNumberOfOcurrences": "Max Number Of Ocurrences",
@@ -35,7 +35,8 @@
       "monthOfYear": "Month Of Year",
       "currency": "Currency",
       "sourceUser": "Source User",
-      "category": "Category"
+      "category": "Category",
+      "wallet": "Wallet"
     }
   }
 }
