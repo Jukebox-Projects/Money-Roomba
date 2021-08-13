@@ -1,5 +1,13 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { OwlOptions } from 'ngx-owl-carousel-o';
+import { ContactService } from '../../../../entities/contact/service/contact.service';
+import { map } from 'rxjs/operators';
+import { HttpResponse } from '@angular/common/http';
+import { IContact } from '../../../../entities/contact/contact.model';
+import { AddContactModalComponent } from '../../../../entities/contact/add-contact-modal/add-contact-modal/add-contact-modal.component';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { faCaretLeft } from '@fortawesome/free-solid-svg-icons';
+import { faCaretRight } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-quick-transfer-crousal',
@@ -8,10 +16,32 @@ import { OwlOptions } from 'ngx-owl-carousel-o';
 })
 export class QuickTransferCrousalComponent implements OnInit {
   @Input() data: any;
+  contacts?: IContact[];
+  faCaretLeft = faCaretLeft;
+  faCaretRight = faCaretRight;
 
-  constructor() {}
+  constructor(protected contactService: ContactService, protected modalService: NgbModal) {}
 
-  ngOnInit(): void {}
+  loadAll(): void {
+    this.contactService.query().subscribe((res: HttpResponse<IContact[]>) => {
+      this.contacts = res.body ?? [];
+    });
+  }
+
+  ngOnInit(): void {
+    this.loadAll();
+  }
+
+  open(): void {
+    const modalRef = this.modalService.open(AddContactModalComponent, { size: 'lg', backdrop: 'static' });
+    modalRef.closed.subscribe(reason => {
+      if (reason === 'activated') {
+        setTimeout(() => {
+          window.location.reload();
+        }, 3500);
+      }
+    });
+  }
 
   customOptions: OwlOptions = {
     loop: true,
@@ -20,7 +50,7 @@ export class QuickTransferCrousalComponent implements OnInit {
     nav: false,
     center: true,
     dots: false,
-    navText: ['<i class="fa fa-caret-left"></i>', '<i class="fa fa-caret-right"></i>'],
+    navText: ['<', '>'],
     responsive: {
       0: {
         items: 2,

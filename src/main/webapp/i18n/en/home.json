@@ -1,6 +1,8 @@
 {
   "home": {
     "title": "Welcome, Java Hipster!",
+    "contactTitle": "Favorite contacts",
+    "contactDescription": "List of all favorite contacts",
     "subtitle": "This is your homepage",
     "logged": {
       "message": "You are logged in as user \"{{username}}\"."

@@ -42,6 +42,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NestableModule } from 'ngx-nestable';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { LightboxModule } from 'ngx-lightbox';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 import { FullCalendarModule } from '@fullcalendar/angular';
 import dayGridPlugin from '@fullcalendar/daygrid';
@@ -159,6 +160,7 @@ import { NotificationsDialogComponent } from './layouts/notifications-dialog/not
     MatTooltipModule,
     MatTreeModule,
     NgApexchartsModule,
+    FontAwesomeModule,
 
     // Set this to true to enable service worker (PWA)
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: false }),
