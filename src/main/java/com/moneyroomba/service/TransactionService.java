@@ -604,19 +604,23 @@ public class TransactionService {
     }
 
     public boolean canAddMoreImportedTransactions(String login) {
+        return importedTransactionsCount(login) < 10;
+    }
+
+    public int importedTransactionsCount(String login) {
         LocalDate startOfMonth = LocalDate.now().with(TemporalAdjusters.firstDayOfMonth());
         LocalDate endOfMonth = LocalDate.now().with(TemporalAdjusters.lastDayOfMonth());
 
         if (!SecurityUtils.hasCurrentUserThisAuthority(AuthoritiesConstants.PREMIUM_USER)) {
             Optional<User> user = userRepository.findOneByLogin(login);
-            if (user.isEmpty()) return false;
+            if (user.isEmpty()) return 10;
             Optional<UserDetails> userDetails = userDetailsRepository.findOneByInternalUser(user.get());
-            if (userDetails.isEmpty()) return false;
+            if (userDetails.isEmpty()) return 10;
 
             int quantity = transactionRepository.countImportedTransactions(userDetails.get().getId(), startOfMonth, endOfMonth);
-            return quantity < 10;
+            return quantity;
         } else {
-            return true;
+            return -1;
         }
     }
 }

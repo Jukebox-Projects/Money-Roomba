@@ -2,10 +2,7 @@ package com.moneyroomba.web.rest;
 
 import com.moneyroomba.domain.enumeration.MovementType;
 import com.moneyroomba.service.ReportsService;
-import com.moneyroomba.service.dto.reports.TransactionCountReportDTO;
-import com.moneyroomba.service.dto.reports.TransactionsByCategoryDTO;
-import com.moneyroomba.service.dto.reports.WalletBalanceReportDTO;
-import com.moneyroomba.service.dto.reports.WalletTotalBalanceReportDTO;
+import com.moneyroomba.service.dto.reports.*;
 import java.time.LocalDate;
 import java.util.List;
 import org.slf4j.Logger;
@@ -87,6 +84,12 @@ public class ReportsResource {
     @GetMapping("/transactions-by-category/{movementType}")
     public ResponseEntity<List<TransactionsByCategoryDTO>> transactionsByCategory(@PathVariable int movementType) {
         List<TransactionsByCategoryDTO> report = reportsService.getTransactionsByCategory(movementType);
+        return ResponseEntity.ok().body(report);
+    }
+
+    @GetMapping("/imported-transactions-count")
+    public ResponseEntity<ImportedTransactionCountReportDTO> importedTransactionsCount() {
+        ImportedTransactionCountReportDTO report = reportsService.getImportedTransactionsCount();
         return ResponseEntity.ok().body(report);
     }
 }

@@ -9,6 +9,9 @@
         "incomeTransactions": "Total incomes",
         "expenseTransactions": "Total expenses"
       },
+      "imported-transaction-count": {
+        "totalMoneyRoombaImportedTransactionsThisMonth": "Imported transactions of this month"
+      },
       "noData": "No data found",
       "income": "Income",
       "expense": "Expense"

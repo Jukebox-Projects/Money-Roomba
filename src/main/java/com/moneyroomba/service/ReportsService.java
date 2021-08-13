@@ -2,19 +2,15 @@ package com.moneyroomba.service;
 
 import static java.time.temporal.ChronoUnit.DAYS;
 
-import com.moneyroomba.domain.Category;
+import com.moneyroomba.domain.*;
 import com.moneyroomba.domain.Currency;
-import com.moneyroomba.domain.UserDetails;
-import com.moneyroomba.domain.Wallet;
 import com.moneyroomba.domain.enumeration.MovementType;
 import com.moneyroomba.domain.enumeration.TransactionState;
 import com.moneyroomba.repository.CurrencyRepository;
 import com.moneyroomba.repository.TransactionRepository;
 import com.moneyroomba.repository.WalletRepository;
-import com.moneyroomba.service.dto.reports.TransactionCountReportDTO;
-import com.moneyroomba.service.dto.reports.TransactionsByCategoryDTO;
-import com.moneyroomba.service.dto.reports.WalletBalanceReportDTO;
-import com.moneyroomba.service.dto.reports.WalletTotalBalanceReportDTO;
+import com.moneyroomba.security.SecurityUtils;
+import com.moneyroomba.service.dto.reports.*;
 import com.moneyroomba.web.rest.errors.BadRequestAlertException;
 import java.time.LocalDate;
 import java.util.*;
@@ -39,18 +35,33 @@ public class ReportsService {
 
     private final UserService userService;
 
+    private final TransactionService transactionService;
+
     private final String DEFAULT_CURRENCY_CODE = "USD";
 
     public ReportsService(
         WalletRepository walletRepository,
         TransactionRepository transactionRepository,
         CurrencyRepository currencyRepository,
-        UserService userService
+        UserService userService,
+        TransactionService transactionService
     ) {
         this.walletRepository = walletRepository;
         this.transactionRepository = transactionRepository;
         this.currencyRepository = currencyRepository;
         this.userService = userService;
+        this.transactionService = transactionService;
+    }
+
+    @Transactional(readOnly = true)
+    public ImportedTransactionCountReportDTO getImportedTransactionsCount() {
+        return new ImportedTransactionCountReportDTO(
+            transactionService.importedTransactionsCount(
+                SecurityUtils
+                    .getCurrentUserLogin()
+                    .orElseThrow(() -> new BadRequestAlertException("Current user login not found", ENTITY_NAME, ""))
+            )
+        );
     }
 
     /**

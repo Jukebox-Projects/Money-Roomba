@@ -80,7 +80,7 @@ public class MailReceiver {
         openFolder();
     }
 
-    @Scheduled(cron = "0 */2 * * * *")
+    @Scheduled(cron = "0 */5 * * * *")
     public void openFolder() throws MessagingException, IOException {
         IMAPFolder folder = (IMAPFolder) store.getFolder("INBOX");
         String subject = null;
