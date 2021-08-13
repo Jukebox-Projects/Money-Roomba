@@ -42,6 +42,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NestableModule } from 'ngx-nestable';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { LightboxModule } from 'ngx-lightbox';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 import { FullCalendarModule } from '@fullcalendar/angular';
 import dayGridPlugin from '@fullcalendar/daygrid';
@@ -57,7 +58,6 @@ import { PERFECT_SCROLLBAR_CONFIG } from 'ngx-perfect-scrollbar';
 import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar';
 
 import { NgxDropzoneModule } from 'ngx-dropzone';
-import { CarouselModule } from 'ngx-owl-carousel-o';
 
 import { MatListModule } from '@angular/material/list';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
@@ -121,9 +121,7 @@ import { NotificationsDialogComponent } from './layouts/notifications-dialog/not
     MetismenuAngularModule,
     PerfectScrollbarModule,
     NgxDropzoneModule,
-    CarouselModule,
     AvatarModule,
-
     MatListModule,
     MatAutocompleteModule,
     MatFormFieldModule,
@@ -162,6 +160,7 @@ import { NotificationsDialogComponent } from './layouts/notifications-dialog/not
     MatTooltipModule,
     MatTreeModule,
     NgApexchartsModule,
+    FontAwesomeModule,
 
     // Set this to true to enable service worker (PWA)
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: false }),
