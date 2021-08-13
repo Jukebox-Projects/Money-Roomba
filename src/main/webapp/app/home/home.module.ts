@@ -19,6 +19,9 @@ import { PropertyComponent } from '../template/elements/dashboard/spendings/prop
 import { RestaurantComponent } from '../template/elements/dashboard/spendings/restaurant/restaurant.component';
 import { WalletBalanceModule } from '../reports/wallet-balance/wallet-balance.module';
 import { TransactionCountModule } from '../reports/transaction-count/transaction-count.module';
+import { QuickTransferCrousalComponent } from '../template/elements/dashboard/quick-transfer-crousal/quick-transfer-crousal.component';
+import { CarouselModule } from 'ngx-owl-carousel-o';
+import { AvatarModule } from 'ngx-avatar';
 import { TotalBalanceModule } from '../reports/total-balance/total-balance.module';
 import { TransactionsCategoryModule } from '../reports/transactions-category/transactions-category.module';
 import { TransactionsCategoryComponent } from '../reports/transactions-category/transactions-category.component';
@@ -30,6 +33,8 @@ import { TransactionsCategoryComponent } from '../reports/transactions-category/
     RouterModule.forChild([HOME_ROUTE, DASHBOARD_ROUTE]),
     WalletBalanceModule,
     TransactionCountModule,
+    CarouselModule,
+    AvatarModule,
     TotalBalanceModule,
     TransactionsCategoryModule,
   ],
@@ -46,6 +51,7 @@ import { TransactionsCategoryComponent } from '../reports/transactions-category/
     InvestmentComponent,
     PropertyComponent,
     RestaurantComponent, // End spendings components
+    QuickTransferCrousalComponent,
   ],
 })
 export class HomeModule {}

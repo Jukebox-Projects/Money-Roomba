@@ -12,7 +12,7 @@
         </div>
 
         <div class="form-group">
-          <label class="form-control-label" jhiTranslate="userManagement.firstName">First Name</label>
+          <label class="form-control-label required-input" jhiTranslate="userManagement.firstName">First Name</label>
           <input type="text" class="form-control" name="firstName" formControlName="firstName" />
 
           <div *ngIf="editForm.get('firstName')!.invalid && (editForm.get('firstName')!.dirty || editForm.get('firstName')!.touched)">
@@ -28,7 +28,7 @@
         </div>
 
         <div class="form-group">
-          <label jhiTranslate="userManagement.lastName">Last Name</label>
+          <label jhiTranslate="userManagement.lastName" class="required-input">Last Name</label>
           <input type="text" class="form-control" name="lastName" formControlName="lastName" />
 
           <div *ngIf="editForm.get('lastName')!.invalid && (editForm.get('lastName')!.dirty || editForm.get('lastName')!.touched)">
@@ -44,7 +44,7 @@
         </div>
 
         <div class="form-group">
-          <label jhiTranslate="userManagement.country">Country</label>
+          <label jhiTranslate="userManagement.country" class="required-input">Country</label>
           <select class="form-control" id="field_country" data-cy="country" name="country" formControlName="country">
             <option *ngFor="let country of countryList" [ngValue]="country.value">
               {{ country.name }}
@@ -53,7 +53,7 @@
         </div>
 
         <div class="form-group">
-          <label jhiTranslate="userManagement.phone">Phone</label>
+          <label jhiTranslate="userManagement.phone" class="required-input">Phone</label>
           <input type="text" class="form-control" placeholder="(XXX) XXXX XXXX" name="phone" formControlName="phone" />
 
           <div>
@@ -74,7 +74,7 @@
         </div>
 
         <div class="form-group">
-          <label class="form-control-label" jhiTranslate="userManagement.email">Email</label>
+          <label class="form-control-label required-input" jhiTranslate="userManagement.email">Email</label>
           <input type="email" class="form-control" name="email" formControlName="email" />
 
           <div *ngIf="editForm.get('email')!.invalid && (editForm.get('email')!.dirty || editForm.get('email')!.touched)">
@@ -124,7 +124,7 @@
         </div>
 
         <div class="form-group" *ngIf="languages && languages.length > 0">
-          <label jhiTranslate="userManagement.langKey">Lang Key</label>
+          <label jhiTranslate="userManagement.langKey" class="required-input">Lang Key</label>
           <select class="form-control" id="langKey" name="langKey" formControlName="langKey">
             <option *ngFor="let language of languages" [value]="language">{{ language | findLanguageFromKey }}</option>
           </select>

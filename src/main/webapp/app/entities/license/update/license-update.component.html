@@ -14,7 +14,7 @@
         </div>
 
         <div class="form-group">
-          <label class="form-control-label" jhiTranslate="moneyRoombaApp.license.code" for="field_code">Code</label>
+          <label class="form-control-label required-input" jhiTranslate="moneyRoombaApp.license.code" for="field_code">Code</label>
           <input type="text" class="form-control" name="code" id="field_code" data-cy="code" formControlName="code" />
           <div *ngIf="editForm.get('code')!.invalid && (editForm.get('code')!.dirty || editForm.get('code')!.touched)">
             <small class="form-text text-danger" *ngIf="editForm.get('code')?.errors?.required" jhiTranslate="entity.validation.required">
@@ -59,7 +59,7 @@
         </div>
 
         <div class="form-group">
-          <label class="form-control-label" jhiTranslate="moneyRoombaApp.license.createMethod" for="field_createMethod"
+          <label class="form-control-label required-input" jhiTranslate="moneyRoombaApp.license.createMethod" for="field_createMethod"
             >Create Method</label
           >
           <select class="form-control" name="createMethod" formControlName="createMethod" id="field_createMethod" data-cy="createMethod">

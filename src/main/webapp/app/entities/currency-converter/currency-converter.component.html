@@ -10,7 +10,10 @@
 
         <div class="form-row">
           <div class="form-group col-md-6">
-            <label class="form-control-label" jhiTranslate="moneyRoombaApp.currencyConverter.sourceCurrency" for="field_source_currency"
+            <label
+              class="form-control-label required-input"
+              jhiTranslate="moneyRoombaApp.currencyConverter.sourceCurrency"
+              for="field_source_currency"
               >Source Currency</label
             >
             <select
@@ -36,7 +39,10 @@
 
         <div class="form-row">
           <div class="form-group col-md-6">
-            <label class="form-control-label" jhiTranslate="moneyRoombaApp.currencyConverter.targetCurrency" for="field_source_currency"
+            <label
+              class="form-control-label required-input"
+              jhiTranslate="moneyRoombaApp.currencyConverter.targetCurrency"
+              for="field_source_currency"
               >Target Currency</label
             >
             <select
@@ -87,7 +93,7 @@
         </div>
 
         <div class="form-group">
-          <label class="form-control-label" jhiTranslate="moneyRoombaApp.currencyConverter.amount" for="field_amount"
+          <label class="form-control-label required-input" jhiTranslate="moneyRoombaApp.currencyConverter.amount" for="field_amount"
             >Conversion Rate</label
           >
           <input type="number" class="form-control" name="amount" id="field_amount" data-cy="amount" formControlName="amount" />
