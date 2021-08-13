@@ -41,7 +41,9 @@
       "outgoingTransaction": "Outgoing Transaction",
       "transactionState": "Approval State",
       "active": "Active",
-      "inactive": "Inactive"
+      "inactive": "Inactive",
+      "accepted": "Accepted",
+      "denied": "Denied"
     }
   }
 }
