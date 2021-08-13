@@ -13,6 +13,7 @@ import { PasswordResetFinishComponent } from './password-reset/finish/password-r
 import { SettingsComponent } from './settings/settings.component';
 import { accountState } from './account.route';
 import { AvatarModule } from 'ngx-avatar';
+import { DateAgoPipe } from 'app/shared/pipes/DateAgo';
 
 @NgModule({
   imports: [SharedModule, AvatarModule, RouterModule.forChild(accountState)],
@@ -26,6 +27,7 @@ import { AvatarModule } from 'ngx-avatar';
     SessionsComponent,
     SettingsComponent,
     AccountDeleteDialogComponent,
+    DateAgoPipe,
   ],
 })
 export class AccountModule {}

@@ -4,9 +4,11 @@
     "browsehappy": "You are using an <strong>outdated</strong> browser. Please <a href=\"http://browsehappy.com/?locale=en\">upgrade your browser</a> to improve your experience.",
     "menu": {
       "home": "Home",
+      "profile": "Profile",
       "jhipster-needle-menu-add-element": "JHipster will add additional menu entries here (do not translate!)",
       "entities": {
         "main": "Entities",
+        "details": "Details",
         "userDetails": "User Details",
         "wallet": "Wallets",
         "transaction": "Transactions",
@@ -49,6 +51,23 @@
       },
       "language": "Language"
     },
+    "time": {
+      "format": "{{quantity}} {{time}} ago",
+      "year": "Year",
+      "yearPlural": "Years",
+      "month": "Month",
+      "monthPlural": "Months",
+      "week": "Week",
+      "weekPlural": "Weeks",
+      "day": "Day",
+      "dayPlural": "Days",
+      "hour": "Hour",
+      "hourPlural": "Hours",
+      "minute": "Minute",
+      "minutePlural": "Minutes",
+      "second": "Second",
+      "secondPlural": "Seconds"
+    },
     "form": {
       "username.label": "Email",
       "username.placeholder": "Your email",
@@ -69,7 +88,8 @@
       "phone.label": "Phone",
       "phone.placeholder": "Your phone",
       "apiKey.label": "API key",
-      "apiKey.placeholder": "API key"
+      "apiKey.placeholder": "API key",
+      "joinDate": "Join Date"
     },
     "messages": {
       "info": {
@@ -202,6 +222,7 @@
     "categorydeleteerror": "Cannot delete category because there are transactions associated to it",
     "notvalidcontact": "There were no registered users associated to the provided information.",
     "nowallets": "The receiving user currently has no wallets registered.",
+    "nowalletsCurrentUser": "You do not currently have registered wallets.",
     "file": {
       "could.not.extract": "Could not extract file",
       "not.image": "File was expected to be an image but was found to be \"{{ fileType }}\"",

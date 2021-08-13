@@ -109,7 +109,9 @@
                 </div>
               </td>
               <td>
-                <span class="text-black fs-20 font-w600">{{ transaction.currency?.code }}{{ ' ' }}{{ transaction.originalAmount }} </span>
+                <span class="text-black fs-20 font-w600">{{
+                  transaction.originalAmount | currency: transaction.currency?.code:'symbol':'1.2-2'
+                }}</span>
               </td>
 
               <td>
