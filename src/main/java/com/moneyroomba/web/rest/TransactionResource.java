@@ -14,6 +14,7 @@ import com.moneyroomba.service.TransactionQueryService;
 import com.moneyroomba.service.TransactionService;
 import com.moneyroomba.service.UserService;
 import com.moneyroomba.service.criteria.TransactionCriteria;
+import com.moneyroomba.service.dto.TransactionDTO;
 import com.moneyroomba.service.exception.NoSuchElementFoundException;
 import com.moneyroomba.web.rest.errors.BadRequestAlertException;
 import java.net.URI;
@@ -70,6 +71,34 @@ public class TransactionResource {
         this.userDetailsRepository = userDetailsRepository;
     }
 
+    public Transaction getTransactionFromDTO(TransactionDTO dto) {
+        Transaction transaction = new Transaction();
+        UserDetails receivingUser = null;
+        if (dto.getRecievingUser() != null) {
+            receivingUser = userDetailsRepository.findOneByPhone(dto.getRecievingUser().getPhone()).get();
+        }
+
+        transaction.setId(dto.getId());
+        transaction.setName(dto.getName());
+        transaction.setDescription(dto.getDescription());
+        transaction.setDateAdded(dto.getDateAdded());
+        transaction.setAmount(dto.getAmount());
+        transaction.setOriginalAmount(dto.getOriginalAmount());
+        transaction.setMovementType(dto.getMovementType());
+        transaction.setScheduled(dto.getScheduled());
+        transaction.setAddToReports(dto.getAddToReports());
+        transaction.setIncomingTransaction(dto.getIncomingTransaction());
+        transaction.setTransactionType(dto.getTransactionType());
+        transaction.setState(dto.getState());
+        transaction.setAttachment(dto.getAttachment());
+        transaction.setWallet(dto.getWallet());
+        transaction.setCurrency(dto.getCurrency());
+        transaction.setCategory(dto.getCategory());
+        transaction.setSourceUser(dto.getSourceUser());
+        transaction.setRecievingUser(receivingUser);
+        return transaction;
+    }
+
     /**
      * {@code POST  /transactions} : Create a new transaction.
      *
@@ -78,12 +107,14 @@ public class TransactionResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/transactions")
-    public ResponseEntity<Transaction> createTransaction(@Valid @RequestBody Transaction transaction) throws URISyntaxException {
-        log.debug("REST request to save Transaction : {}", transaction);
+    public ResponseEntity<Transaction> createTransaction(@Valid @RequestBody TransactionDTO transactionDTO) throws URISyntaxException {
+        log.debug("REST request to save Transaction : {}", transactionDTO);
+        Transaction transaction = getTransactionFromDTO(transactionDTO);
         Transaction result;
         if (transaction.getId() != null) {
             throw new BadRequestAlertException("A new transaction cannot already have an ID", ENTITY_NAME, "idexists");
         }
+
         if (!SecurityUtils.hasCurrentUserThisAuthority(AuthoritiesConstants.ADMIN)) {
             if (transaction.getRecievingUser() != null) {
                 result = transactionService.saveOutgoingTransaction(transaction);

@@ -1,0 +1,46 @@
+<form name="creationForm" (ngSubmit)="addContact()" role="form" novalidate [formGroup]="creationForm">
+  <div class="modal-header">
+    <h4 class="modal-title" data-cy="licenseCreateDialogHeading" jhiTranslate="moneyRoombaApp.transaction.contactModalHeader">
+      Add new favorite contact
+    </h4>
+
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true" (click)="cancel()">&times;</button>
+  </div>
+
+  <div class="modal-body">
+    <jhi-alert-error></jhi-alert-error>
+    <jhi-alert></jhi-alert>
+
+    <div class="form-group">
+      <label class="form-control-label" for="field_identifier" jhiTranslate="moneyRoombaApp.transaction.contactModalTitle"
+        >Please enter a valid Email or Phone Number</label
+      >
+
+      <div class="input-group input-group-sm mb-3">
+        <input type="text" class="form-control" name="identifier" id="field_identifier" data-cy="identifier" formControlName="identifier" />
+        <div class="input-group-append">
+          <button class="btn btn-primary" type="submit" jhiTranslate="moneyRoombaApp.transaction.addContact">Add Contact</button>
+        </div>
+      </div>
+      <div
+        *ngIf="
+          creationForm.get('identifier')!.invalid && (creationForm.get('identifier')!.dirty || creationForm.get('identifier')!.touched)
+        "
+      >
+        <small
+          class="form-text text-danger"
+          *ngIf="creationForm.get('identifier')?.errors?.required"
+          jhiTranslate="entity.validation.required"
+        >
+          This field is required.
+        </small>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="cancel()">
+      <fa-icon icon="ban"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
+    </button>
+  </div>
+</form>
