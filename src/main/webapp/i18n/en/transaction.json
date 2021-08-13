@@ -17,7 +17,8 @@
         "question": "Are you sure you want to delete Transaction {{ id }}?"
       },
       "detail": {
-        "title": "Transaction"
+        "title": "Transaction",
+        "nameId": "Transaction ID"
       },
       "upload": "Invoice has been imported",
       "id": "ID",

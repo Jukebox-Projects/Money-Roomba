@@ -243,6 +243,15 @@ public class UserService {
                 .map(Optional::get)
                 .collect(Collectors.toSet());
             user.setAuthorities(authorities);
+        } else {
+            Set<Authority> authorities = Collections
+                .singleton(AuthoritiesConstants.USER)
+                .stream()
+                .map(authorityRepository::findById)
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .collect(Collectors.toSet());
+            user.setAuthorities(authorities);
         }
         userRepository.save(user);
         this.clearUserCaches(user);
@@ -285,6 +294,15 @@ public class UserService {
         if (userDTO.getAuthorities() != null) {
             Set<Authority> authorities = userDTO
                 .getAuthorities()
+                .stream()
+                .map(authorityRepository::findById)
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .collect(Collectors.toSet());
+            user.setAuthorities(authorities);
+        } else {
+            Set<Authority> authorities = Collections
+                .singleton(AuthoritiesConstants.USER)
                 .stream()
                 .map(authorityRepository::findById)
                 .filter(Optional::isPresent)
@@ -344,13 +362,25 @@ public class UserService {
                             }
                         );
 
-                    userDTO
-                        .getAuthorities()
-                        .stream()
-                        .map(authorityRepository::findById)
-                        .filter(Optional::isPresent)
-                        .map(Optional::get)
-                        .forEach(managedAuthorities::add);
+                    if (userDTO.getAuthorities() != null && userDTO.getAuthorities().size() > 0) {
+                        userDTO
+                            .getAuthorities()
+                            .stream()
+                            .map(authorityRepository::findById)
+                            .filter(Optional::isPresent)
+                            .map(Optional::get)
+                            .forEach(managedAuthorities::add);
+                    } else {
+                        Set<Authority> authorities = Collections
+                            .singleton(AuthoritiesConstants.USER)
+                            .stream()
+                            .map(authorityRepository::findById)
+                            .filter(Optional::isPresent)
+                            .map(Optional::get)
+                            .collect(Collectors.toSet());
+                        user.setAuthorities(authorities);
+                    }
+
                     this.clearUserCaches(user);
                     log.debug("Changed Information for User: {}", user);
                     createEvent(EventType.UPDATE);
