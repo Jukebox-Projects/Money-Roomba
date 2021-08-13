@@ -15,12 +15,14 @@
         "question": "Are you sure you want to delete Scheduled Transaction {{ id }}?"
       },
       "detail": {
-        "title": "Scheduled Transaction"
+        "title": "Scheduled Transaction",
+        "nameId": "Scheduled Transaction ID"
       },
       "id": "ID",
       "name": "Name",
       "description": "Description",
       "originalAmount": "Original Amount",
+      "amount": "Amount",
       "wallet": "Wallet",
       "movementType": "Movement Type",
       "startDate": "Start Date",
@@ -35,8 +37,7 @@
       "monthOfYear": "Month Of Year",
       "currency": "Currency",
       "sourceUser": "Source User",
-      "category": "Category",
-      "wallet": "Wallet"
+      "category": "Category"
     }
   }
 }

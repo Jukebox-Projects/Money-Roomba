@@ -30,7 +30,9 @@
         "incomingTransaction": "Te compartieron una nueva transacción",
         "giftedLicense": "¡Te han regalado una licencia Premium de Money Roomba!",
         "purchasedLicense": "¡Gracias por adquirir tu licencia Premium de Money Roomba!",
-        "emailTransaction": "Nueva transacción creada a partir de un correo."
+        "emailTransaction": "Nueva transacción creada a partir de un correo.",
+        "invalidAttachment": "Transacción importada con uno o más archivos adjuntos no válidos",
+        "importLimitReached": "Se alcanzó el límite mensual de transacciones importadas. Cambia a premium para desbloquear transacciones importadas ilimitadas."
       },
       "allNotifications": "Todas las notificaciones",
       "viewAllNotifications": "Ver todas las notificaciones",

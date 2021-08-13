@@ -17,7 +17,8 @@
         "question": "¿Seguro que quiere eliminar la transacción {{ id }}?"
       },
       "detail": {
-        "title": "Transacciones"
+        "title": "Transacciones",
+        "nameId": "ID Transacción"
       },
       "upload": "La factura ha sido importada",
       "id": "ID",

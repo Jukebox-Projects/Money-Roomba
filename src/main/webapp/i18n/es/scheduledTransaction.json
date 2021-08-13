@@ -15,14 +15,15 @@
         "question": "¿Seguro que quiere eliminar la transacción programada {{ id }}?"
       },
       "detail": {
-        "title": "Transacción Programada"
+        "title": "Transacción Programada",
+        "nameId": "ID Transacción Programada"
       },
       "id": "ID",
       "wallet": "Cartera",
       "name": "Nombre",
       "description": "Descripción",
       "originalAmount": "Monto",
-      "wallet": "Cartera",
+      "amount": "Monto",
       "movementType": "Tipo de Movimiento",
       "startDate": "Fecha de Inicio",
       "endDate": "Fecha límite",

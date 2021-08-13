@@ -30,7 +30,9 @@
         "incomingTransaction": "Just received a new transaction.",
         "giftedLicense": "Sheeesh, someone gifted you Money Roomba Premium!",
         "purchasedLicense": "Thanks for purchasing Money Roomba Premium license!",
-        "emailTransaction": "A new transaction was created from an email."
+        "emailTransaction": "A new transaction was created from an email.",
+        "invalidAttachment": "Imported transaction with one or more invalid attachments",
+        "importLimitReached": "Monthly imported transaction limit reached. Upgrade to premium to unlock unlimited imported transactions."
       },
       "allNotifications": "All your notifications",
       "viewAllNotifications": "View all notifications",

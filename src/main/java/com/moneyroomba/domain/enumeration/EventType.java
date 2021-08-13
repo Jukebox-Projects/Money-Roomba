@@ -11,6 +11,8 @@ public enum EventType {
     LICENSE_GIFTED("Licencia regalada"),
     ADDED_AS_FAVORITE("Añadido como contacto favorito"),
     POSSIBLE_TRANSACTION_ADDED_EMAIL("Transacción potencial añadida"),
+    INVALID_ATTACHMENT("Archivo adjunto inválido"),
+    IMPORT_LIMIT_REACHED("Se alcanzó el límite de transacciones importadas"),
     CREATE("Creación"),
     UPDATE("Actualización"),
     DELETE("Eliminación"),

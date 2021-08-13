@@ -1,3 +1,4 @@
+import { ImportedTransactionCountModule } from './../reports/imported-transaction-count/imported-transaction-count.module';
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
@@ -33,6 +34,7 @@ import { TransactionsCategoryComponent } from '../reports/transactions-category/
     RouterModule.forChild([HOME_ROUTE, DASHBOARD_ROUTE]),
     WalletBalanceModule,
     TransactionCountModule,
+    ImportedTransactionCountModule,
     CarouselModule,
     AvatarModule,
     TotalBalanceModule,

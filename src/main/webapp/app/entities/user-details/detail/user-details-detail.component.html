@@ -1,75 +1,284 @@
-<div class="row justify-content-center">
-  <div class="col-8">
-    <div *ngIf="userDetails">
-      <h2 data-cy="userDetailsDetailsHeading"><span jhiTranslate="moneyRoombaApp.userDetails.detail.title">User Details</span></h2>
+<div class="card pt-0" style="background-color: transparent">
+  <div class="container-fluid pt-0 mb-2">
+    <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+      <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
+    </button>
 
-      <hr />
-
-      <jhi-alert-error></jhi-alert-error>
-
-      <jhi-alert></jhi-alert>
-
-      <dl class="row-md jh-entity-details">
-        <dt><span jhiTranslate="global.field.id">ID</span></dt>
-        <dd>
-          <span>{{ userDetails.id }}</span>
-        </dd>
-        <dt><span jhiTranslate="moneyRoombaApp.userDetails.country">Country</span></dt>
-        <dd>
-          <span>{{ userDetails.country }}</span>
-        </dd>
-        <dt><span jhiTranslate="moneyRoombaApp.userDetails.phone">Phone</span></dt>
-        <dd>
-          <span>{{ userDetails.phone }}</span>
-        </dd>
-        <dt><span jhiTranslate="moneyRoombaApp.userDetails.apiKey">Api Key</span></dt>
-        <dd>
-          <span>{{ userDetails.apiKey }}</span>
-        </dd>
-        <dt><span jhiTranslate="moneyRoombaApp.userDetails.notifications">Notifications</span></dt>
-        <dd>
-          <span>{{ userDetails.notifications }}</span>
-        </dd>
-        <dt><span jhiTranslate="moneyRoombaApp.userDetails.isActive">Is Active</span></dt>
-        <dd>
-          <span>{{ userDetails.isActive }}</span>
-        </dd>
-        <dt><span jhiTranslate="moneyRoombaApp.userDetails.isTemporaryPassword">Is Temporary Password</span></dt>
-        <dd>
-          <span>{{ userDetails.isTemporaryPassword }}</span>
-        </dd>
-        <dt><span jhiTranslate="moneyRoombaApp.userDetails.internalUser">Internal User</span></dt>
-        <dd>
-          <span>{{ userDetails.internalUser?.id }}</span>
-        </dd>
-        <dt><span jhiTranslate="moneyRoombaApp.userDetails.license">License</span></dt>
-        <dd>
-          <div *ngIf="userDetails.license">
-            <a [routerLink]="['/license', userDetails.license?.id, 'view']">{{ userDetails.license?.id }}</a>
+    <!-- row -->
+    <div class="row mt-2">
+      <div class="col-lg-12">
+        <div class="profile card card-body px-3 pt-3 pb-0">
+          <div class="profile-head">
+            <div class="photo-content">
+              <div class="cover-photo"></div>
+            </div>
+            <div class="profile-info">
+              <div class="profile-photo">
+                <ngx-avatar size="100" name="{{ account.firstName + ' ' + account.lastName }}"></ngx-avatar>
+              </div>
+              <div class="profile-details">
+                <div class="profile-name px-3 pt-2">
+                  <h4 class="text-primary mb-0">{{ account.firstName + ' ' + account.lastName }}</h4>
+                  <p>{{ account['createdDate'] | date: 'dd-MMMM-yyyy' }}</p>
+                </div>
+                <div class="profile-email px-2 pt-2">
+                  <h4 class="text-muted mb-0">{{ account.email }}</h4>
+                  <p>Email</p>
+                </div>
+              </div>
+            </div>
           </div>
-        </dd>
-        <dt><span jhiTranslate="moneyRoombaApp.userDetails.targetContact">Target Contact</span></dt>
-        <dd>
-          <span *ngFor="let targetContact of userDetails.targetContacts; let last = last">
-            <a [routerLink]="['/user-details', targetContact?.id, 'view']">{{ targetContact.id }}</a
-            >{{ last ? '' : ', ' }}
-          </span>
-        </dd>
-        <dt><span jhiTranslate="moneyRoombaApp.userDetails.contact">Contact</span></dt>
-        <dd>
-          <div *ngIf="userDetails.contact">
-            <a [routerLink]="['/user-details', userDetails.contact?.id, 'view']">{{ userDetails.contact?.id }}</a>
+        </div>
+      </div>
+    </div>
+
+    <jhi-alert-error></jhi-alert-error>
+    <div class="alert alert-success" *ngIf="success" jhiTranslate="settings.messages.success">
+      <strong>Settings saved!</strong>
+    </div>
+
+    <div class="row">
+      <div class="col-xl">
+        <div class="card">
+          <div class="card-body">
+            <div class="profile-tab">
+              <ul ngbNav #nav="ngbNav" class="nav-tabs" [(activeId)]="active">
+                <li [ngbNavItem]="1">
+                  <a ngbNavLink><span jhiTranslate="global.menu.entities.details">Details</span></a>
+                  <ng-template ngbNavContent>
+                    <div id="about-me" class="tab-pane">
+                      <div class="profile-skills mb-5 mt-3">
+                        <h4 class="text-primary mb-2">Roles</h4>
+                        <a class="btn btn-primary light btn-xs mb-1 mr-1" *ngFor="let rol of account.authorities">{{
+                          enumAuthorities(rol)
+                        }}</a>
+                      </div>
+                      <div class="profile-lang mb-5">
+                        <h4 class="text-primary mb-2" jhiTranslate="settings.form.language">Language</h4>
+                        <a class="text-muted pr-3 f-s-16"
+                          ><i class="flag-icon flag-icon-us"></i> {{ account.langKey | findLanguageFromKey }}</a
+                        >
+                      </div>
+                      <div class="profile-personal-info">
+                        <h4 class="text-primary mb-4"><span jhiTranslate="global.menu.personalInformation">Details</span></h4>
+                        <div class="row mb-2">
+                          <div class="col-sm-3 col-5">
+                            <h5 class="f-w-500" jhiTranslate="settings.form.firstname">Name <span class="pull-right">:</span></h5>
+                          </div>
+                          <div class="col-sm-9 col-7">
+                            <span>{{ account.firstName + ' ' + account.lastName }}</span>
+                          </div>
+                        </div>
+                        <div class="row mb-2">
+                          <div class="col-sm-3 col-5">
+                            <h5 class="f-w-500" jhiTranslate="global.form.email.label">Email <span class="pull-right">:</span></h5>
+                          </div>
+                          <div class="col-sm-9 col-7">
+                            <span>{{ account.email }}</span>
+                          </div>
+                        </div>
+                        <div class="row mb-2">
+                          <div class="col-sm-3 col-5">
+                            <h5 class="f-w-500" jhiTranslate="global.form.joinDate">Join Date <span class="pull-right">:</span></h5>
+                          </div>
+                          <div class="col-sm-9 col-7">
+                            <span>{{ account['createdDate'] | dateAgo }}</span>
+                          </div>
+                        </div>
+                        <div class="row mb-2">
+                          <div class="col-sm-3 col-5">
+                            <h5 class="f-w-500" jhiTranslate="global.form.country.label">Country <span class="pull-right">:</span></h5>
+                          </div>
+                          <div class="col-sm-9 col-7">
+                            <span>{{ getCountry() }}</span>
+                          </div>
+                        </div>
+                        <div class="row mb-2">
+                          <div class="col-sm-3 col-5">
+                            <h5 class="f-w-500" jhiTranslate="global.form.phone.label">Phone <span class="pull-right">:</span></h5>
+                          </div>
+                          <div class="col-sm-9 col-7">{{ account.phone }}</div>
+                        </div>
+                      </div>
+                    </div>
+                  </ng-template>
+                </li>
+                <li [ngbNavItem]="2">
+                  <a ngbNavLink><span jhiTranslate="global.menu.account.settings">Settings</span></a>
+                  <ng-template ngbNavContent>
+                    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+                      <h2 id="myUserLabel" jhiTranslate="userManagement.home.createOrEditLabel">Create or edit a User</h2>
+
+                      <div *ngIf="user">
+                        <div class="form-group" [hidden]="!user.id">
+                          <label jhiTranslate="global.field.id">ID</label>
+                          <input type="text" class="form-control" name="id" formControlName="id" readonly />
+                        </div>
+
+                        <div class="form-group">
+                          <label class="form-control-label" jhiTranslate="userManagement.firstName">First Name</label>
+                          <input type="text" class="form-control" name="firstName" formControlName="firstName" />
+
+                          <div
+                            *ngIf="
+                              editForm.get('firstName')!.invalid && (editForm.get('firstName')!.dirty || editForm.get('firstName')!.touched)
+                            "
+                          >
+                            <small
+                              class="form-text text-danger"
+                              *ngIf="editForm.get('firstName')?.errors?.maxlength"
+                              jhiTranslate="entity.validation.maxlength"
+                              [translateValues]="{ max: 50 }"
+                            >
+                              This field cannot be longer than 50 characters.
+                            </small>
+                          </div>
+                        </div>
+
+                        <div class="form-group">
+                          <label jhiTranslate="userManagement.lastName">Last Name</label>
+                          <input type="text" class="form-control" name="lastName" formControlName="lastName" />
+
+                          <div
+                            *ngIf="
+                              editForm.get('lastName')!.invalid && (editForm.get('lastName')!.dirty || editForm.get('lastName')!.touched)
+                            "
+                          >
+                            <small
+                              class="form-text text-danger"
+                              *ngIf="editForm.get('lastName')?.errors?.maxlength"
+                              jhiTranslate="entity.validation.maxlength"
+                              [translateValues]="{ max: 50 }"
+                            >
+                              This field cannot be longer than 50 characters.
+                            </small>
+                          </div>
+                        </div>
+
+                        <div class="form-group">
+                          <label jhiTranslate="userManagement.country">Country</label>
+                          <select class="form-control" id="field_country" data-cy="country" name="country" formControlName="country">
+                            <option *ngFor="let country of countryList" [ngValue]="country.value">
+                              {{ country.name }}
+                            </option>
+                          </select>
+                        </div>
+
+                        <div class="form-group">
+                          <label jhiTranslate="userManagement.phone">Phone</label>
+                          <input type="text" class="form-control" placeholder="(XXX) XXXX XXXX" name="phone" formControlName="phone" />
+
+                          <div>
+                            <small
+                              class="form-text text-danger"
+                              *ngIf="editForm.get('phone')?.errors?.pattern"
+                              jhiTranslate="global.messages.validate.phone.required"
+                            >
+                              Your phone is required. Format (XXX) XXXX XXXX.
+                            </small>
+                          </div>
+                        </div>
+
+                        <div class="form-check custom-control custom-checkbox mb-3 check-xs">
+                          <input
+                            class="custom-control-input"
+                            type="checkbox"
+                            id="notifications"
+                            name="notifications"
+                            formControlName="notifications"
+                          />
+                          <label class="custom-control-label" for="notifications"></label>
+                          <span jhiTranslate="userManagement.notifications">Notifications</span>
+                        </div>
+
+                        <div class="form-group">
+                          <label class="form-control-label" jhiTranslate="userManagement.email">Email</label>
+                          <input type="email" class="form-control" name="email" formControlName="email" />
+
+                          <div *ngIf="editForm.get('email')!.invalid && (editForm.get('email')!.dirty || editForm.get('email')!.touched)">
+                            <small
+                              class="form-text text-danger"
+                              *ngIf="editForm.get('email')?.errors?.required"
+                              jhiTranslate="entity.validation.required"
+                            >
+                              This field is required.
+                            </small>
+
+                            <small
+                              class="form-text text-danger"
+                              *ngIf="editForm.get('email')?.errors?.maxlength"
+                              jhiTranslate="entity.validation.maxlength"
+                              [translateValues]="{ max: 100 }"
+                            >
+                              This field cannot be longer than 100 characters.
+                            </small>
+
+                            <small
+                              class="form-text text-danger"
+                              *ngIf="editForm.get('email')?.errors?.minlength"
+                              jhiTranslate="entity.validation.minlength"
+                              [translateValues]="{ min: 5 }"
+                            >
+                              This field is required to be at least 5 characters.
+                            </small>
+
+                            <small
+                              class="form-text text-danger"
+                              *ngIf="editForm.get('email')?.errors?.email"
+                              jhiTranslate="global.messages.validate.email.invalid"
+                            >
+                              Your email is invalid.
+                            </small>
+                          </div>
+                        </div>
+
+                        <div class="form-check custom-control custom-checkbox mb-3 check-xs">
+                          <input
+                            class="custom-control-input"
+                            [attr.disabled]="user.id === undefined ? 'disabled' : null"
+                            type="checkbox"
+                            id="activated"
+                            name="activated"
+                            formControlName="activated"
+                          />
+                          <label class="custom-control-label" for="activated"></label>
+                          <span jhiTranslate="userManagement.activated">Activated</span>
+                        </div>
+
+                        <div class="form-group" *ngIf="languages && languages.length > 0">
+                          <label jhiTranslate="userManagement.langKey">Lang Key</label>
+                          <select class="form-control" id="langKey" name="langKey" formControlName="langKey">
+                            <option *ngFor="let language of languages" [value]="language">{{ language | findLanguageFromKey }}</option>
+                          </select>
+                        </div>
+
+                        <div class="form-group">
+                          <label jhiTranslate="userManagement.profiles">Profiles</label>
+                          <select class="form-control" multiple name="authority" formControlName="authorities">
+                            <option *ngFor="let authority of authorities" [value]="authority">{{ authority }}</option>
+                          </select>
+                        </div>
+                      </div>
+
+                      <div *ngIf="user">
+                        <button type="button" class="btn btn-secondary" (click)="previousState()">
+                          <fa-icon icon="ban"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
+                        </button>
+
+                        <button type="submit" [disabled]="editForm.invalid || isSaving" class="btn btn-primary">
+                          <fa-icon icon="save"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
+                        </button>
+                      </div>
+                    </form>
+                  </ng-template>
+                </li>
+              </ul>
+
+              <div [ngbNavOutlet]="nav" class="mt-2"></div>
+            </div>
           </div>
-        </dd>
-      </dl>
-
-      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
-        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
-      </button>
-
-      <button type="button" [routerLink]="['/user-details', userDetails.id, 'edit']" class="btn btn-primary">
-        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
-      </button>
+        </div>
+      </div>
     </div>
   </div>
 </div>

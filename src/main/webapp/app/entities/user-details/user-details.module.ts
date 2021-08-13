@@ -1,3 +1,4 @@
+import { AvatarModule } from 'ngx-avatar';
 import { NgModule } from '@angular/core';
 import { SharedModule } from 'app/shared/shared.module';
 import { UserDetailsComponent } from './list/user-details.component';
@@ -7,7 +8,7 @@ import { UserDetailsDeleteDialogComponent } from './delete/user-details-delete-d
 import { UserDetailsRoutingModule } from './route/user-details-routing.module';
 
 @NgModule({
-  imports: [SharedModule, UserDetailsRoutingModule],
+  imports: [SharedModule, AvatarModule, UserDetailsRoutingModule],
   declarations: [UserDetailsComponent, UserDetailsDetailComponent, UserDetailsUpdateComponent, UserDetailsDeleteDialogComponent],
   entryComponents: [UserDetailsDeleteDialogComponent],
 })
