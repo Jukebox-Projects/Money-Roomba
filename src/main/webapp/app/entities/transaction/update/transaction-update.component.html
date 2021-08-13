@@ -412,7 +412,10 @@
                 </div>
 
                 <div class="form-group" *ngIf="isIncoming() || isAPIorEmail()">
-                  <label class="form-control-label" jhiTranslate="moneyRoombaApp.transaction.transactionState" for="field_transactionState"
+                  <label
+                    class="form-control-label required-input"
+                    jhiTranslate="moneyRoombaApp.transaction.transactionState"
+                    for="field_transactionState"
                     >Transaction State</label
                   >
                   <select
