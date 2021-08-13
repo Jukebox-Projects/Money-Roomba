@@ -43,7 +43,7 @@
       <tbody *ngIf="users">
         <tr *ngFor="let user of users; trackBy: trackIdentity">
           <td>
-            <a [routerLink]="['./', user.login, 'view']">{{ user.id }}</a>
+            <a [routerLink]="['/user-details', user.id, 'view']">{{ user.id }}</a>
           </td>
           <td>{{ user.firstName }}</td>
           <td>{{ user.lastName }}</td>
@@ -122,8 +122,14 @@
                 </svg>
               </div>
               <div class="dropdown-menu dropdown-menu-right" ngbDropdownMenu>
-                <a class="dropdown-item" [routerLink]="['./', user.login, 'view']" jhiTranslate="entity.action.view">view</a>
-                <a class="dropdown-item" [routerLink]="['./', user.login, 'edit']" jhiTranslate="entity.action.edit">Edit</a>
+                <a class="dropdown-item" [routerLink]="['/user-details', user.id, 'view']" jhiTranslate="entity.action.view">view</a>
+                <a
+                  class="dropdown-item"
+                  [routerLink]="['/user-details', user.id, 'view']"
+                  [queryParams]="{ active: 2 }"
+                  jhiTranslate="entity.action.edit"
+                  >Edit</a
+                >
                 <a (click)="resetPassword(user)" class="dropdown-item" jhiTranslate="entity.action.resetPassword">Reset Password</a>
                 <a
                   *ngIf="!(currentAccount.login === user.login)"

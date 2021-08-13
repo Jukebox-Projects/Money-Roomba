@@ -17,7 +17,7 @@ const userDetailsRoute: Routes = [
     path: ':id/view',
     component: UserDetailsDetailComponent,
     resolve: {
-      userDetails: UserDetailsRoutingResolveService,
+      account: UserDetailsRoutingResolveService,
     },
     canActivate: [UserRouteAccessService],
   },

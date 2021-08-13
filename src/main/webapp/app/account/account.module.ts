@@ -1,3 +1,4 @@
+import { DateAgoPipe } from 'app/shared/pipes/DateAgo';
 import { AccountDeleteDialogComponent } from './settings/delete/delete-dialog.component';
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
@@ -13,7 +14,6 @@ import { PasswordResetFinishComponent } from './password-reset/finish/password-r
 import { SettingsComponent } from './settings/settings.component';
 import { accountState } from './account.route';
 import { AvatarModule } from 'ngx-avatar';
-import { DateAgoPipe } from 'app/shared/pipes/DateAgo';
 
 @NgModule({
   imports: [SharedModule, AvatarModule, RouterModule.forChild(accountState)],
@@ -27,7 +27,6 @@ import { DateAgoPipe } from 'app/shared/pipes/DateAgo';
     SessionsComponent,
     SettingsComponent,
     AccountDeleteDialogComponent,
-    DateAgoPipe,
   ],
 })
 export class AccountModule {}

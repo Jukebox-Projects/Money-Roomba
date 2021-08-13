@@ -14,7 +14,6 @@ import com.moneyroomba.service.dto.AdminUserDTO;
 import com.moneyroomba.service.dto.UserDTO;
 import com.moneyroomba.service.exception.NoSuchElementFoundException;
 import com.moneyroomba.web.rest.errors.BadRequestAlertException;
-import java.security.SecureRandom;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
@@ -620,6 +619,11 @@ public class UserService {
         Optional<User> user = userRepository.findOneByLogin(login);
 
         return userDetailsRepository.findOneByInternalUser(user.orElseThrow(() -> new NoSuchElementFoundException("No User found")));
+    }
+
+    @Transactional(readOnly = true)
+    public UserDetails getUserDetailsById(Long id) {
+        return userDetailsRepository.findOneByInternalUserId(id).orElseThrow(() -> new NoSuchElementFoundException("No User found"));
     }
 
     public void generateApiKey() {

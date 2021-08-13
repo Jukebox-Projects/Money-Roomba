@@ -2,6 +2,7 @@ package com.moneyroomba.web.rest;
 
 import com.moneyroomba.config.Constants;
 import com.moneyroomba.domain.User;
+import com.moneyroomba.domain.UserDetails;
 import com.moneyroomba.repository.UserRepository;
 import com.moneyroomba.security.AuthoritiesConstants;
 import com.moneyroomba.service.MailService;
@@ -26,6 +27,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import tech.jhipster.web.util.HeaderUtil;
@@ -59,6 +61,13 @@ import tech.jhipster.web.util.ResponseUtil;
 @RestController
 @RequestMapping("/api/admin")
 public class UserResource {
+
+    private static class UserResourceException extends RuntimeException {
+
+        private UserResourceException(String message) {
+            super(message);
+        }
+    }
 
     private static final List<String> ALLOWED_ORDERED_PROPERTIES = Collections.unmodifiableList(
         Arrays.asList(
@@ -201,6 +210,18 @@ public class UserResource {
     public ResponseEntity<AdminUserDTO> getUser(@PathVariable @Pattern(regexp = Constants.LOGIN_REGEX) String login) {
         log.debug("REST request to get User : {}", login);
         return ResponseUtil.wrapOrNotFound(userService.getUserWithAuthoritiesByLogin(login).map(AdminUserDTO::new));
+    }
+
+    @GetMapping("/users/userDetails/{id}")
+    @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\")")
+    public ResponseEntity<AdminUserDTO> getUser(@PathVariable int id) {
+        log.debug("REST request to get User : {}", id);
+
+        return ResponseUtil.wrapOrNotFound(
+            userService
+                .getUserWithAuthoritiesByLogin(userService.getUserDetailsById((long) id).getInternalUser().getLogin())
+                .map(AdminUserDTO::new)
+        );
     }
 
     /**

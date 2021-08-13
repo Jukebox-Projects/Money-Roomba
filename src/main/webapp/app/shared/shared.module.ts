@@ -1,3 +1,4 @@
+import { DateAgoPipe } from 'app/shared/pipes/DateAgo';
 import { NgModule } from '@angular/core';
 
 import { SharedLibsModule } from './shared-libs.module';
@@ -29,6 +30,7 @@ import { DatepickerRangePopupComponent } from '../template/bootstrap/datepicker/
     SortDirective,
     ItemCountComponent,
     DatepickerRangePopupComponent,
+    DateAgoPipe,
   ],
   exports: [
     SharedLibsModule,
@@ -44,6 +46,7 @@ import { DatepickerRangePopupComponent } from '../template/bootstrap/datepicker/
     SortDirective,
     ItemCountComponent,
     DatepickerRangePopupComponent,
+    DateAgoPipe,
   ],
 })
 export class SharedModule {}
