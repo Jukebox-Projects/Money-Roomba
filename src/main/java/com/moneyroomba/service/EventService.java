@@ -190,12 +190,21 @@ public class EventService {
         } else if (event.getEventType().equals(EventType.POSSIBLE_TRANSACTION_ADDED_EMAIL)) {
             destinationPath = String.format("transaction/%d/%s", event.getSourceId(), "view");
             message = "emailTransaction";
+        } else if (event.getEventType().equals(EventType.POSSIBLE_TRANSACTION_ADDED_EMAIL)) {
+            destinationPath = String.format("transaction/%d/%s", event.getSourceId(), "view");
+            message = "emailTransaction";
         } else if (event.getEventType().equals(EventType.LICENSE_GIFTED)) {
             destinationPath = "license/view";
             message = "giftedLicense";
         } else if (event.getEventType().equals(EventType.LICENSE_PURCHASED)) {
             destinationPath = "license/view";
             message = "purchasedLicense";
+        } else if (event.getEventType().equals(EventType.INVALID_ATTACHMENT)) {
+            destinationPath = "";
+            message = "invalidAttachment";
+        } else if (event.getEventType().equals(EventType.IMPORT_LIMIT_REACHED)) {
+            destinationPath = "license/view";
+            message = "importLimitReached";
         }
         event.setDestinationPath(destinationPath);
         event.setMessage(message);

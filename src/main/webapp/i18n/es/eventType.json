@@ -9,6 +9,8 @@
       "LICENSE_GIFTED": "Licencia regalada",
       "ADDED_AS_FAVORITE": "Añadido como contacto favorito",
       "POSSIBLE_TRANSACTION_ADDED_EMAIL": "Transacción potencial añadida",
+      "INVALID_ATTACHMENT": "Invalid attachment",
+      "IMPORT_LIMIT_REACHED": "Imported transaction limit",
       "CREATE": "Creación",
       "UPDATE": "Actualización",
       "DELETE": "Eliminación",

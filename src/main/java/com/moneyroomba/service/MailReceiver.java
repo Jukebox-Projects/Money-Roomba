@@ -1,11 +1,15 @@
 package com.moneyroomba.service;
 
 import com.moneyroomba.domain.Transaction;
+import com.moneyroomba.domain.UserDetails;
+import com.moneyroomba.domain.enumeration.EventType;
+import com.moneyroomba.domain.enumeration.SourceEntity;
 import com.moneyroomba.domain.enumeration.TransactionType;
 import com.moneyroomba.service.dto.factura.TiqueteElectronico;
 import com.sun.mail.imap.IMAPFolder;
 import com.sun.mail.imap.IMAPStore;
 import java.io.*;
+import java.util.Optional;
 import java.util.Properties;
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;
@@ -35,10 +39,19 @@ public class MailReceiver {
 
     private final InvoiceXMLService invoiceXMLService;
     private final TransactionService transactionService;
+    private final EventService eventService;
+    private final UserService userService;
 
-    public MailReceiver(InvoiceXMLService invoiceXMLService, TransactionService transactionService) {
+    public MailReceiver(
+        InvoiceXMLService invoiceXMLService,
+        TransactionService transactionService,
+        EventService eventService,
+        UserService userService
+    ) {
         this.invoiceXMLService = invoiceXMLService;
         this.transactionService = transactionService;
+        this.eventService = eventService;
+        this.userService = userService;
     }
 
     @EventListener(ApplicationReadyEvent.class)
@@ -67,7 +80,7 @@ public class MailReceiver {
         openFolder();
     }
 
-    @Scheduled(cron = "0 */5 * * * *")
+    @Scheduled(cron = "0 */2 * * * *")
     public void openFolder() throws MessagingException, IOException {
         IMAPFolder folder = (IMAPFolder) store.getFolder("INBOX");
         String subject = null;
@@ -108,29 +121,61 @@ public class MailReceiver {
                         sb.append(line);
                     }
 
+                    Address[] froms = msg.getFrom();
+                    String email = froms == null ? null : ((InternetAddress) froms[0]).getAddress();
+                    Optional<UserDetails> user = userService.getUserDetailsByLogin(email);
                     TiqueteElectronico deserializedData = invoiceXMLService.save(sb.toString());
-                    if (deserializedData == null) {
-                        log.debug("\n Correo con XML invalido: \n");
+
+                    if (user.isEmpty()) {
+                        log.debug("Error login no encontrado: \n" + email);
                         msg.setFlag(Flags.Flag.DELETED, true);
                         continue;
                     }
-                    Address[] froms = msg.getFrom();
-                    String email = froms == null ? null : ((InternetAddress) froms[0]).getAddress();
+
+                    if (deserializedData == null) {
+                        log.debug("\n Correo con XML invalido: \n");
+                        eventService.createEventAndNotification(
+                            EventType.INVALID_ATTACHMENT,
+                            user.get().getInternalUser().getId(),
+                            SourceEntity.TRANSACTION,
+                            user.get()
+                        );
+                        msg.setFlag(Flags.Flag.DELETED, true);
+                        continue;
+                    }
                     log.debug("Creando: \n" + email);
 
                     if (!transactionService.canAddMoreImportedTransactions(email)) {
-                        log.debug("Error login no encontrado o no puede agregar más: \n" + email);
+                        log.debug("No puede agregar más: \n" + email);
+                        eventService.createEventAndNotification(
+                            EventType.INVALID_ATTACHMENT,
+                            user.get().getInternalUser().getId(),
+                            SourceEntity.TRANSACTION,
+                            user.get()
+                        );
                         msg.setFlag(Flags.Flag.DELETED, true);
                         continue;
                     }
 
                     Transaction transaction = transactionService.saveXML(deserializedData, email, TransactionType.EMAIL);
                     if (transaction == null) {
-                        log.debug("Error login no encontrado: \n" + email);
+                        log.debug("Error OTRO: \n" + email);
+                        eventService.createEventAndNotification(
+                            EventType.INVALID_ATTACHMENT,
+                            user.get().getInternalUser().getId(),
+                            SourceEntity.TRANSACTION,
+                            user.get()
+                        );
                         msg.setFlag(Flags.Flag.DELETED, true);
                         continue;
                     }
 
+                    eventService.createEventAndNotification(
+                        EventType.POSSIBLE_TRANSACTION_ADDED_EMAIL,
+                        user.get().getInternalUser().getId(),
+                        SourceEntity.TRANSACTION,
+                        user.get()
+                    );
                     log.debug("Transaction creada para " + email + "\n");
                 }
             }

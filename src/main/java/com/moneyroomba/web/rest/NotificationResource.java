@@ -92,10 +92,11 @@ public class NotificationResource {
         }
 
         Notification result = notificationRepository.save(notification);
-        return ResponseEntity
-            .ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, notification.getId().toString()))
-            .body(result);
+        //        return ResponseEntity
+        //            .ok()
+        //            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, notification.getId().toString()))
+        //            .body(result);
+        return ResponseEntity.ok().build();
     }
 
     /**
