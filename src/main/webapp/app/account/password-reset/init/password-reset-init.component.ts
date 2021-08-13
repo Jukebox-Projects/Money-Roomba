@@ -1,3 +1,4 @@
+import { Router } from '@angular/router';
 import { Component, AfterViewInit, ElementRef, ViewChild } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 
@@ -16,7 +17,7 @@ export class PasswordResetInitComponent implements AfterViewInit {
     email: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(254), Validators.email]],
   });
 
-  constructor(private passwordResetInitService: PasswordResetInitService, private fb: FormBuilder) {}
+  constructor(private router: Router, private passwordResetInitService: PasswordResetInitService, private fb: FormBuilder) {}
 
   ngAfterViewInit(): void {
     if (this.email) {
@@ -25,6 +26,11 @@ export class PasswordResetInitComponent implements AfterViewInit {
   }
 
   requestReset(): void {
-    this.passwordResetInitService.save(this.resetRequestForm.get(['email'])!.value).subscribe(() => (this.success = true));
+    this.passwordResetInitService.save(this.resetRequestForm.get(['email'])!.value).subscribe(() => {
+      this.success = true;
+      setTimeout(() => {
+        this.router.navigate(['/login']);
+      }, 2500);
+    });
   }
 }

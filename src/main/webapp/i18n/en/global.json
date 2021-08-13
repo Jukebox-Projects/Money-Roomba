@@ -200,6 +200,8 @@
     "nomorewallets": "User has reached the max amount of wallets that his accounts can handle.",
     "negativeincome": "You cannot register a transaction with an income lower than 0.",
     "categorydeleteerror": "Cannot delete category because there are transactions associated to it",
+    "notvalidcontact": "There were no registered users associated to the provided information.",
+    "nowallets": "The receiving user currently has no wallets registered.",
     "file": {
       "could.not.extract": "Could not extract file",
       "not.image": "File was expected to be an image but was found to be \"{{ fileType }}\"",

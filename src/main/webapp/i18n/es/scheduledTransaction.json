@@ -2,39 +2,39 @@
   "moneyRoombaApp": {
     "scheduledTransaction": {
       "home": {
-        "title": "Scheduled Transactions",
+        "title": "Transacciones Programadas",
         "refreshListLabel": "Refrescar lista",
         "createLabel": "Crear nuevo Scheduled Transaction",
-        "createOrEditLabel": "Crear o editar Scheduled Transaction",
-        "notFound": "Ningún Scheduled Transactions encontrado"
+        "createOrEditLabel": "Crear o editar transacción programada",
+        "notFound": "Ninguna transacción programada encontrada"
       },
-      "created": "Un nuevo Scheduled Transaction ha sido creado con el identificador {{ param }}",
-      "updated": "Un Scheduled Transaction ha sido actualizado con el identificador {{ param }}",
-      "deleted": "Un Scheduled Transaction ha sido eliminado con el identificador {{ param }}",
+      "created": "Una nueva transacción programada ha sido creada",
+      "updated": "La transacción programada ha sido actualizada",
+      "deleted": "La transacción programada ha sido eliminada",
       "delete": {
-        "question": "¿Seguro que quiere eliminar Scheduled Transaction {{ id }}?"
+        "question": "¿Seguro que quiere eliminar la transacción programada {{ id }}?"
       },
       "detail": {
-        "title": "Scheduled Transaction"
+        "title": "Transacción Programada"
       },
       "id": "ID",
-      "name": "Name",
-      "description": "Description",
-      "originalAmount": "Original Amount",
-      "movementType": "Movement Type",
-      "startDate": "Start Date",
-      "endDate": "End Date",
-      "addToReports": "Add To Reports",
-      "recurringType": "Recurring Type",
-      "separationCount": "Separation Count",
-      "maxNumberOfOcurrences": "Max Number Of Ocurrences",
-      "dayOfWeek": "Day Of Week",
-      "weekOfMonth": "Week Of Month",
-      "dayOfMonth": "Day Of Month",
-      "monthOfYear": "Month Of Year",
-      "currency": "Currency",
-      "sourceUser": "Source User",
-      "category": "Category"
+      "name": "Nombre",
+      "description": "Descripción",
+      "originalAmount": "Monto",
+      "movementType": "Tipo de Movimiento",
+      "startDate": "Fecha de Inicio",
+      "endDate": "Fecha límite",
+      "addToReports": "En reportes",
+      "recurringType": "Período",
+      "separationCount": "Separación",
+      "maxNumberOfOcurrences": "Ocurrencias Máximas",
+      "dayOfWeek": "Día de la semana",
+      "weekOfMonth": "Semana del mes",
+      "dayOfMonth": "Día del mes",
+      "monthOfYear": "Mes del año",
+      "currency": "Tipo de Moneda",
+      "sourceUser": "Usuario",
+      "category": "Categoría"
     }
   }
 }
