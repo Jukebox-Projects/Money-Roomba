@@ -122,7 +122,7 @@
               </div>
               <div class="dropdown-menu dropdown-menu-right" ngbDropdownMenu>
                 <a class="dropdown-item" [routerLink]="['/license', license.id, 'view']" jhiTranslate="entity.action.view">view</a>
-                <a class="dropdown-item" [routerLink]="['/license', license.id, 'edit']" jhiTranslate="entity.action.edit">Edit</a>
+                <!-- <a class="dropdown-item" [routerLink]="['/license', license.id, 'edit']" jhiTranslate="entity.action.edit">Edit</a> -->
                 <a
                   (click)="setActive(license, true)"
                   *ngIf="!license.isActive && !license.isAssigned"

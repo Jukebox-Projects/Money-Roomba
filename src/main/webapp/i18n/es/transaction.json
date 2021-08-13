@@ -45,7 +45,9 @@
       "contactModalTitle": "Ingrese un correo electrónico o teléfono válido",
       "contactModalHeader": "Agregar nuevo contacto favorito",
       "active": "Activo",
-      "inactive": "Inactivo"
+      "inactive": "Inactivo",
+      "accepted": "Aceptada",
+      "denied": "Denegada"
     }
   }
 }

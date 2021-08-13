@@ -1,521 +1,468 @@
-<div class="row justify-content-center">
-  <div class="col-8">
-    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
-      <h2
-        id="jhi-scheduled-transaction-heading"
-        data-cy="ScheduledTransactionCreateUpdateHeading"
-        jhiTranslate="moneyRoombaApp.scheduledTransaction.home.createOrEditLabel"
-      >
-        Create or edit a Scheduled Transaction
-      </h2>
-
-      <div>
-        <jhi-alert-error></jhi-alert-error>
-
-        <div class="form-group" [hidden]="editForm.get('id')!.value == null">
-          <label class="form-control-label" jhiTranslate="global.field.id" for="field_id">ID</label>
-          <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
-        </div>
-
-        <div class="form-group">
-          <label class="form-control-label required-input" jhiTranslate="moneyRoombaApp.scheduledTransaction.name" for="field_name"
-            >Name</label
+<form name="editForm" style="padding-top: -40px" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+  <input type="checkbox" name="incomingTransaction" formControlName="incomingTransaction" hidden />
+  <input type="number" name="id" formControlName="id" [readonly]="true" hidden />
+  <select name="transactionType" formControlName="transactionType" id="field_transactionType" data-cy="transactionType" hidden>
+    <option value="MANUAL">{{ 'moneyRoombaApp.TransactionType.MANUAL' | translate }}</option>
+    <option value="SCHEDULED">{{ 'moneyRoombaApp.TransactionType.SCHEDULED' | translate }}</option>
+    <option value="EMAIL">{{ 'moneyRoombaApp.TransactionType.EMAIL' | translate }}</option>
+    <option value="API">{{ 'moneyRoombaApp.TransactionType.API' | translate }}</option>
+    <option value="SHARED">{{ 'moneyRoombaApp.TransactionType.SHARED' | translate }}</option>
+  </select>
+  <div class="container-fluid" style="padding-top: 0 !important">
+    <div class="row page-titles mx-0 p-2">
+      <div class="col-sm-6 p-0">
+        <div class="welcome-text">
+          <h2
+            class="text-black font-w600 mb-0"
+            id="jhi-transaction-heading"
+            data-cy="TransactionCreateUpdateHeading"
+            jhiTranslate="moneyRoombaApp.transaction.home.createOrEditLabel"
           >
-          <input type="text" class="form-control" name="name" id="field_name" data-cy="name" formControlName="name" />
-          <div *ngIf="editForm.get('name')!.invalid && (editForm.get('name')!.dirty || editForm.get('name')!.touched)">
-            <small class="form-text text-danger" *ngIf="editForm.get('name')?.errors?.required" jhiTranslate="entity.validation.required">
-              This field is required.
-            </small>
+            Create or edit a Transaction
+          </h2>
+        </div>
+      </div>
+      <div class="col-sm-6 p-0 justify-content-sm-end mt-2 mt-sm-0 d-flex" *ngIf="editForm.get('id')!.value != null">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item active" jhiTranslate="global.field.id">ID</li>
+          <li class="breadcrumb-item">#{{ editForm.get('id')!.value }}</li>
+        </ol>
+      </div>
+      <jhi-alert-error></jhi-alert-error>
+    </div>
+    <div class="row">
+      <div class="col-xl-8">
+        <div class="row">
+          <div class="col-xl-12">
+            <div class="card">
+              <div class="card-header d-sm-flex d-block border-0 pb-0">
+                <div class="w-100 mb-sm-0 mb-3">
+                  <div class="form-group form-group-lg">
+                    <label class="form-control-label required-input" jhiTranslate="moneyRoombaApp.transaction.name" for="field_name"
+                      >Name</label
+                    >
+                    <input type="text" class="form-control" name="name" id="field_name" data-cy="name" formControlName="name" />
+                    <div *ngIf="editForm.get('name')!.invalid && (editForm.get('name')!.dirty || editForm.get('name')!.touched)">
+                      <small
+                        class="form-text text-danger"
+                        *ngIf="editForm.get('name')?.errors?.required"
+                        jhiTranslate="entity.validation.namerequired"
+                      >
+                        This field is required.
+                      </small>
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <div class="custom-control custom-checkbox mb-3 checkbox-info">
+                      <input
+                        type="checkbox"
+                        class="custom-control-input"
+                        name="addToReports"
+                        id="field_addToReports"
+                        data-cy="addToReports"
+                        formControlName="addToReports"
+                      />
+                      <label
+                        class="pl-2 custom-control-label"
+                        jhiTranslate="moneyRoombaApp.transaction.addToReports"
+                        for="field_addToReports"
+                        >Add To Reports
+                      </label>
+                      <div
+                        *ngIf="
+                          editForm.get('addToReports')!.invalid &&
+                          (editForm.get('addToReports')!.dirty || editForm.get('addToReports')!.touched)
+                        "
+                      >
+                        <small
+                          class="form-text text-danger"
+                          *ngIf="editForm.get('addToReports')?.errors?.required"
+                          jhiTranslate="entity.validation.required"
+                        >
+                          This field is required.
+                        </small>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="card-body border-bottom">
+                <div class="form-group" *ngIf="editForm.get('id')!.value == null">
+                  <div class="custom-control custom-checkbox mb-3 checkbox-info">
+                    <input
+                      type="checkbox"
+                      class="custom-control-input"
+                      name="outgoingTransaction"
+                      id="field_outgoingTransaction"
+                      data-cy="outgoingTransaction"
+                      [(ngModel)]="isOutgoing"
+                      (click)="this.toggleOutgoing()"
+                    />
+                    <label
+                      class="pl-2 custom-control-label"
+                      jhiTranslate="moneyRoombaApp.transaction.outgoingTransaction"
+                      for="field_outgoingTransaction"
+                      >Outgoing Transaction
+                    </label>
+                  </div>
+                </div>
+                <div class="form-group" *ngIf="this.isOutgoing">
+                  <button type="button" id="add-contact" data-cy="addContactButton" class="btn btn-primary" (click)="this.open()">
+                    <fa-icon icon="plus"></fa-icon>&nbsp;<span jhiTranslate="moneyRoombaApp.transaction.addNewContact"
+                      >Add new contact</span
+                    >
+                  </button>
+                </div>
+
+                <div class="form-group" *ngIf="this.isOutgoing">
+                  <label
+                    class="form-control-label required-input"
+                    jhiTranslate="moneyRoombaApp.transaction.recievingUser"
+                    for="field_recievingUser"
+                    >Receiving User</label
+                  >
+                  <select
+                    class="form-control"
+                    id="field_recievingUser"
+                    data-cy="recievingUser"
+                    name="recievingUser"
+                    formControlName="recievingUser"
+                  >
+                    <option
+                      [ngValue]="
+                        contactOption.id === editForm.get('recievingUser')!.value?.id ? editForm.get('recievingUser')!.value : contactOption
+                      "
+                      *ngFor="let contactOption of contactSharedCollection; trackBy: trackContactById"
+                    >
+                      {{ contactOption.name }}
+                    </option>
+                  </select>
+                </div>
+                <div>
+                  <div>
+                    <div class="form-group row">
+                      <div class="col-xl-4 col-sm-12 col-md-6">
+                        <label
+                          class="form-control-label required-input"
+                          jhiTranslate="moneyRoombaApp.transaction.currency"
+                          for="field_currency"
+                          >Currency</label
+                        >
+                        <select class="form-control" id="field_currency" data-cy="currency" name="currency" formControlName="currency">
+                          <option
+                            [ngValue]="
+                              currencyOption.id === editForm.get('currency')!.value?.id ? editForm.get('currency')!.value : currencyOption
+                            "
+                            *ngFor="let currencyOption of currenciesSharedCollection; trackBy: trackCurrencyById"
+                          >
+                            {{ currencyOption.code }}
+                          </option>
+                        </select>
+                        <div
+                          *ngIf="
+                            editForm.get('currency')!.invalid && (editForm.get('currency')!.dirty || editForm.get('currency')!.touched)
+                          "
+                        >
+                          <small
+                            class="form-text text-danger"
+                            *ngIf="editForm.get('currency')?.errors?.required"
+                            jhiTranslate="entity.validation.required"
+                          >
+                            This field is required.
+                          </small>
+                        </div>
+                      </div>
+
+                      <div class="col-xl-4 col-sm-12 col-md-6">
+                        <label
+                          class="form-control-label required-input"
+                          jhiTranslate="moneyRoombaApp.transaction.amount"
+                          for="field_originalAmount"
+                          >Amount</label
+                        >
+                        <input
+                          type="number"
+                          class="form-control"
+                          name="originalAmount"
+                          id="field_originalAmount"
+                          data-cy="originalAmount"
+                          formControlName="originalAmount"
+                          style="-moz-appearance: textfield; -webkit-appearance: none"
+                        />
+                        <div
+                          *ngIf="
+                            editForm.get('originalAmount')!.invalid &&
+                            (editForm.get('originalAmount')!.dirty || editForm.get('originalAmount')!.touched)
+                          "
+                        >
+                          <small
+                            class="form-text text-danger"
+                            *ngIf="editForm.get('originalAmount')?.errors?.required"
+                            jhiTranslate="entity.validation.required"
+                          >
+                            This field is required.
+                          </small>
+                          <small
+                            class="form-text text-danger"
+                            *ngIf="editForm.get('originalAmount')?.errors?.min"
+                            jhiTranslate="entity.validation.min"
+                            [translateValues]="{ min: 0 }"
+                          >
+                            This field should be at least 0.
+                          </small>
+                          <small
+                            class="form-text text-danger"
+                            [hidden]="!editForm.get('originalAmount')?.errors?.number"
+                            jhiTranslate="entity.validation.number"
+                          >
+                            This field should be a number.
+                          </small>
+                        </div>
+                      </div>
+                      <div class="col-xl-4 col-sm-12 col-md-6">
+                        <label
+                          class="form-control-label required-input"
+                          jhiTranslate="moneyRoombaApp.transaction.movementType"
+                          for="field_movementType"
+                          >Movement Type</label
+                        >
+                        <div class="d-flex">
+                          <select
+                            class="form-control"
+                            name="movementType"
+                            formControlName="movementType"
+                            id="field_movementType"
+                            data-cy="movementType"
+                          >
+                            <option value="INCOME">{{ 'moneyRoombaApp.MovementType.INCOME' | translate }}</option>
+                            <option value="EXPENSE">{{ 'moneyRoombaApp.MovementType.EXPENSE' | translate }}</option>
+                          </select>
+                          <div class="ml-2">
+                            <span
+                              *ngIf="
+                                editForm.get('movementType')?.value != null &&
+                                editForm.get('movementType')?.value.toLowerCase().includes('expense')
+                              "
+                              class="mr-2 oi-icon {{ 'bgl-danger' }}"
+                            >
+                              <img src="{{ 'assets/images/ic_out.svg' }}" />
+                            </span>
+
+                            <span
+                              *ngIf="
+                                editForm.get('movementType')?.value != null &&
+                                editForm.get('movementType')?.value.toLowerCase().includes('income')
+                              "
+                              class="mr-2 oi-icon {{ 'bgl-success' }}"
+                            >
+                              <img src="{{ 'assets/images/ic_in.svg' }}" />
+                            </span>
+                          </div>
+                        </div>
+                        <div
+                          *ngIf="
+                            editForm.get('movementType')!.invalid &&
+                            (editForm.get('movementType')!.dirty || editForm.get('movementType')!.touched)
+                          "
+                        >
+                          <small
+                            class="form-text text-danger"
+                            *ngIf="editForm.get('movementType')?.errors?.required"
+                            jhiTranslate="entity.validation.movementtyperequired"
+                          >
+                            This field is required.
+                          </small>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-xl-6 col-sm-12">
+                    <div class="form-group">
+                      <label
+                        class="form-control-label required-input"
+                        jhiTranslate="moneyRoombaApp.transaction.dateAdded"
+                        for="field_dateAdded"
+                        >Date Added</label
+                      >
+                      <div class="input-group">
+                        <input
+                          id="field_dateAdded"
+                          data-cy="dateAdded"
+                          type="text"
+                          class="form-control"
+                          name="dateAdded"
+                          ngbDatepicker
+                          #dateAddedDp="ngbDatepicker"
+                          formControlName="dateAdded"
+                        />
+                        <span class="input-group-append">
+                          <button type="button" class="btn btn-secondary" (click)="dateAddedDp.toggle()">
+                            <fa-icon icon="calendar-alt"></fa-icon>
+                          </button>
+                        </span>
+                      </div>
+                      <div
+                        *ngIf="
+                          editForm.get('dateAdded')!.invalid && (editForm.get('dateAdded')!.dirty || editForm.get('dateAdded')!.touched)
+                        "
+                      >
+                        <small
+                          class="form-text text-danger"
+                          *ngIf="editForm.get('dateAdded')?.errors?.required"
+                          jhiTranslate="entity.validation.daterequired"
+                        >
+                          This field is required.
+                        </small>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-xl-6 col-sm-12">
+                    <div class="form-group">
+                      <label
+                        class="form-control-label required-input"
+                        jhiTranslate="moneyRoombaApp.transaction.category"
+                        for="field_category"
+                        >Category</label
+                      >
+                      <select class="form-control" id="field_category" data-cy="category" name="category" formControlName="category">
+                        <option
+                          [ngValue]="
+                            categoryOption.id === editForm.get('category')!.value?.id ? editForm.get('category')!.value : categoryOption
+                          "
+                          *ngFor="let categoryOption of categoriesSharedCollection; trackBy: trackCategoryById"
+                        >
+                          {{ categoryOption.name }}
+                        </option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label class="form-control-label" jhiTranslate="moneyRoombaApp.transaction.description" for="field_description"
+                    >Description</label
+                  >
+                  <div class="p-3 bgl-dark rounded fs-14 d-flex">
+                    <svg class="mr-3 min-w24" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path
+                        d="M12 1C9.82441 1 7.69767 1.64514 5.88873 2.85384C4.07979 4.06253 2.66989 5.7805 1.83733 7.79049C1.00477 9.80047 0.786929 12.0122 1.21137 14.146C1.6358 16.2798 2.68345 18.2398 4.22183 19.7782C5.76021 21.3166 7.72022 22.3642 9.85401 22.7887C11.9878 23.2131 14.1995 22.9953 16.2095 22.1627C18.2195 21.3301 19.9375 19.9202 21.1462 18.1113C22.3549 16.3023 23 14.1756 23 12C22.9966 9.08368 21.8365 6.28778 19.7744 4.22563C17.7122 2.16347 14.9163 1.00344 12 1ZM12 21C10.22 21 8.47992 20.4722 6.99987 19.4832C5.51983 18.4943 4.36628 17.0887 3.68509 15.4442C3.0039 13.7996 2.82567 11.99 3.17294 10.2442C3.5202 8.49836 4.37737 6.89471 5.63604 5.63604C6.89472 4.37737 8.49836 3.5202 10.2442 3.17293C11.99 2.82567 13.7996 3.0039 15.4442 3.68509C17.0887 4.36627 18.4943 5.51983 19.4832 6.99987C20.4722 8.47991 21 10.22 21 12C20.9971 14.3861 20.0479 16.6736 18.3608 18.3608C16.6736 20.048 14.3861 20.9971 12 21Z"
+                        fill="#A4A4A4"
+                      />
+                      <path
+                        d="M12 9C11.7348 9 11.4804 9.10536 11.2929 9.29289C11.1054 9.48043 11 9.73478 11 10V17C11 17.2652 11.1054 17.5196 11.2929 17.7071C11.4804 17.8946 11.7348 18 12 18C12.2652 18 12.5196 17.8946 12.7071 17.7071C12.8947 17.5196 13 17.2652 13 17V10C13 9.73478 12.8947 9.48043 12.7071 9.29289C12.5196 9.10536 12.2652 9 12 9Z"
+                        fill="#A4A4A4"
+                      />
+                      <path
+                        d="M12 8C12.5523 8 13 7.55228 13 7C13 6.44771 12.5523 6 12 6C11.4477 6 11 6.44771 11 7C11 7.55228 11.4477 8 12 8Z"
+                        fill="#A4A4A4"
+                      />
+                    </svg>
+                    <p class="mb-0" style="width: 900px; height: 50px">
+                      <input
+                        type="text"
+                        class="form-control"
+                        name="description"
+                        id="field_description"
+                        data-cy="description"
+                        formControlName="description"
+                      />
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
+      </div>
+      <div class="col-xl-4">
+        <div class="row">
+          <div class="col-xl-12 col-lg-6 col-md-12 mb-5">
+            <div class="card-bx mb-0">
+              <img src="assets/images/card/card1.png" alt="" class="w-100" />
+              <div class="card-info text-white">
+                <div class="form-group">
+                  <label class="form-control-label required-input" jhiTranslate="moneyRoombaApp.transaction.wallet" for="field_wallet"
+                    >Wallet</label
+                  >
+                  <select class="form-control" id="field_wallet" data-cy="wallet" name="wallet" formControlName="wallet">
+                    <option
+                      [ngValue]="walletOption.id === editForm.get('wallet')!.value?.id ? editForm.get('wallet')!.value : walletOption"
+                      *ngFor="let walletOption of walletsSharedCollection; trackBy: trackWalletById"
+                    >
+                      {{ walletOption.name }}
+                    </option>
+                  </select>
+                </div>
+                <div *ngIf="editForm.get(['wallet'])!.invalid && (editForm.get(['wallet'])!.dirty || editForm.get(['wallet'])!.touched)">
+                  <small
+                    class="form-text text-danger"
+                    *ngIf="editForm.get(['wallet'])?.errors?.required"
+                    jhiTranslate="entity.validation.mustaddwallet"
+                  >
+                    You must select a wallet.
+                  </small>
+                </div>
+                <div class="d-flex align-items-center justify-content-between mb-sm-5 mb-3">
+                  <img src="assets/images/dual-dot.png" alt="" class="dot-img" />
+                  <!--<h4 class="fs-20 text-white mb-0">Icon:</h4>-->
+                </div>
 
-        <div class="form-group">
-          <label class="form-control-label" jhiTranslate="moneyRoombaApp.scheduledTransaction.description" for="field_description"
-            >Description</label
-          >
-          <input
-            type="text"
-            class="form-control"
-            name="description"
-            id="field_description"
-            data-cy="description"
-            formControlName="description"
-          />
-        </div>
-
-        <div class="form-group">
-          <label
-            class="form-control-label required-input"
-            jhiTranslate="moneyRoombaApp.scheduledTransaction.originalAmount"
-            for="field_originalAmount"
-            >Original Amount</label
-          >
-          <input
-            type="number"
-            class="form-control"
-            name="originalAmount"
-            id="field_originalAmount"
-            data-cy="originalAmount"
-            formControlName="originalAmount"
-          />
-          <div
-            *ngIf="
-              editForm.get('originalAmount')!.invalid && (editForm.get('originalAmount')!.dirty || editForm.get('originalAmount')!.touched)
-            "
-          >
-            <small
-              class="form-text text-danger"
-              *ngIf="editForm.get('originalAmount')?.errors?.required"
-              jhiTranslate="entity.validation.required"
-            >
-              This field is required.
-            </small>
-            <small
-              class="form-text text-danger"
-              *ngIf="editForm.get('originalAmount')?.errors?.min"
-              jhiTranslate="entity.validation.min"
-              [translateValues]="{ min: 0 }"
-            >
-              This field should be at least 0.
-            </small>
-            <small
-              class="form-text text-danger"
-              [hidden]="!editForm.get('originalAmount')?.errors?.number"
-              jhiTranslate="entity.validation.number"
-            >
-              This field should be a number.
-            </small>
-          </div>
-        </div>
-
-        <!--        Currency-->
-        <div class="form-group">
-          <label class="form-control-label required-input" jhiTranslate="moneyRoombaApp.scheduledTransaction.currency" for="field_currency"
-            >Currency</label
-          >
-          <select class="form-control" id="field_currency" data-cy="currency" name="currency" formControlName="currency">
-            <option [ngValue]="null"></option>
-            <option
-              [ngValue]="currencyOption.id === editForm.get('currency')!.value?.id ? editForm.get('currency')!.value : currencyOption"
-              *ngFor="let currencyOption of currenciesSharedCollection; trackBy: trackCurrencyById"
-            >
-              {{ currencyOption.code }}
-            </option>
-          </select>
-        </div>
-
-        <!--        <div class="form-group">-->
-        <!--          <label class="form-control-label" jhiTranslate="moneyRoombaApp.scheduledTransaction.sourceUser" for="field_sourceUser"-->
-        <!--          >Source User</label-->
-        <!--          >-->
-        <!--          <select class="form-control" id="field_sourceUser" data-cy="sourceUser" name="sourceUser" formControlName="sourceUser">-->
-        <!--            <option [ngValue]="null"></option>-->
-        <!--            <option-->
-        <!--              [ngValue]="-->
-        <!--                userDetailsOption.id === editForm.get('sourceUser')!.value?.id ? editForm.get('sourceUser')!.value : userDetailsOption-->
-        <!--              "-->
-        <!--              *ngFor="let userDetailsOption of userDetailsSharedCollection; trackBy: trackUserDetailsById"-->
-        <!--            >-->
-        <!--              {{ userDetailsOption.id }}-->
-        <!--            </option>-->
-        <!--          </select>-->
-        <!--        </div>-->
-
-        <div class="form-group">
-          <label
-            class="form-control-label required-input"
-            jhiTranslate="moneyRoombaApp.scheduledTransaction.movementType"
-            for="field_movementType"
-            >Movement Type</label
-          >
-          <select class="form-control" name="movementType" formControlName="movementType" id="field_movementType" data-cy="movementType">
-            <option [ngValue]="null">{{ 'moneyRoombaApp.MovementType.null' | translate }}</option>
-            <option value="INCOME">{{ 'moneyRoombaApp.MovementType.INCOME' | translate }}</option>
-            <option value="EXPENSE">{{ 'moneyRoombaApp.MovementType.EXPENSE' | translate }}</option>
-          </select>
-          <div
-            *ngIf="editForm.get('movementType')!.invalid && (editForm.get('movementType')!.dirty || editForm.get('movementType')!.touched)"
-          >
-            <small
-              class="form-text text-danger"
-              *ngIf="editForm.get('movementType')?.errors?.required"
-              jhiTranslate="entity.validation.required"
-            >
-              This field is required.
-            </small>
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label class="form-control-label required-input" jhiTranslate="moneyRoombaApp.scheduledTransaction.wallet" for="field_wallet"
-            >Wallet</label
-          >
-          <select class="form-control" id="field_wallet" data-cy="wallet" name="wallet" formControlName="wallet">
-            <option
-              [ngValue]="walletOption.id === editForm.get('wallet')!.value?.id ? editForm.get('wallet')!.value : walletOption"
-              *ngFor="let walletOption of walletsSharedCollection; trackBy: trackWalletById"
-            >
-              {{ walletOption.name }}
-            </option>
-          </select>
-        </div>
-        <div *ngIf="editForm.get(['wallet'])!.invalid && (editForm.get(['wallet'])!.dirty || editForm.get(['wallet'])!.touched)">
-          <small
-            class="form-text text-danger"
-            *ngIf="editForm.get(['wallet'])?.errors?.required"
-            jhiTranslate="entity.validation.mustaddwallet"
-          >
-            You must select a wallet.
-          </small>
-        </div>
-
-        <div class="form-group">
-          <label class="form-control-label required-input" jhiTranslate="moneyRoombaApp.scheduledTransaction.category" for="field_category"
-            >Category</label
-          >
-          <select class="form-control" id="field_category" data-cy="category" name="category" formControlName="category">
-            <option [ngValue]="null"></option>
-            <option
-              [ngValue]="categoryOption.id === editForm.get('category')!.value?.id ? editForm.get('category')!.value : categoryOption"
-              *ngFor="let categoryOption of categoriesSharedCollection; trackBy: trackCategoryById"
-            >
-              {{ categoryOption.name }}
-            </option>
-          </select>
-        </div>
-
-        <div class="form-group">
-          <label
-            class="form-control-label required-input"
-            jhiTranslate="moneyRoombaApp.scheduledTransaction.startDate"
-            for="field_startDate"
-            >Start Date</label
-          >
-          <div class="input-group">
-            <input
-              id="field_startDate"
-              data-cy="startDate"
-              type="text"
-              class="form-control"
-              name="startDate"
-              ngbDatepicker
-              #startDateDp="ngbDatepicker"
-              formControlName="startDate"
-            />
-            <span class="input-group-append">
-              <button type="button" class="btn btn-secondary" (click)="startDateDp.toggle()">
-                <fa-icon icon="calendar-alt"></fa-icon>
+                <div class="form-group" *ngIf="isIncoming() || isAPIorEmail()">
+                  <label
+                    class="form-control-label required-input"
+                    jhiTranslate="moneyRoombaApp.transaction.transactionState"
+                    for="field_transactionState"
+                    >Transaction State</label
+                  >
+                  <select
+                    class="form-control"
+                    name="transactionState"
+                    formControlName="transactionState"
+                    id="field_transactionState"
+                    data-cy="transactionState"
+                  >
+                    <option value="ACCEPTED">{{ 'moneyRoombaApp.TransactionState.Accept' | translate }}</option>
+                    <option value="DENIED">{{ 'moneyRoombaApp.TransactionState.Deny' | translate }}</option>
+                  </select>
+                  <div
+                    *ngIf="
+                      editForm.get('transactionState')!.invalid &&
+                      (editForm.get('transactionState')!.dirty || editForm.get('transactionState')!.touched)
+                    "
+                  >
+                    <small
+                      class="form-text text-danger"
+                      *ngIf="editForm.get('transactionState')?.errors?.required"
+                      jhiTranslate="entity.validation.movementtyperequired"
+                    >
+                      This field is required.
+                    </small>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="text-center mt-3">
+              <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+                <fa-icon icon="ban"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
               </button>
-            </span>
-          </div>
-          <div *ngIf="editForm.get('startDate')!.invalid && (editForm.get('startDate')!.dirty || editForm.get('startDate')!.touched)">
-            <small
-              class="form-text text-danger"
-              *ngIf="editForm.get('startDate')?.errors?.required"
-              jhiTranslate="entity.validation.required"
-            >
-              This field is required.
-            </small>
-          </div>
-        </div>
 
-        <div class="form-group">
-          <label class="form-control-label" jhiTranslate="moneyRoombaApp.scheduledTransaction.endDate" for="field_endDate">End Date</label>
-          <div class="input-group">
-            <input
-              id="field_endDate"
-              data-cy="endDate"
-              type="text"
-              class="form-control"
-              name="endDate"
-              ngbDatepicker
-              #endDateDp="ngbDatepicker"
-              formControlName="endDate"
-            />
-            <span class="input-group-append">
-              <button type="button" class="btn btn-secondary" (click)="endDateDp.toggle()"><fa-icon icon="calendar-alt"></fa-icon></button>
-            </span>
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label class="form-control-label" jhiTranslate="moneyRoombaApp.scheduledTransaction.addToReports" for="field_addToReports"
-            >Add To Reports</label
-          >
-          <input
-            type="checkbox"
-            class="form-check"
-            name="addToReports"
-            id="field_addToReports"
-            data-cy="addToReports"
-            formControlName="addToReports"
-          />
-          <div
-            *ngIf="editForm.get('addToReports')!.invalid && (editForm.get('addToReports')!.dirty || editForm.get('addToReports')!.touched)"
-          >
-            <small
-              class="form-text text-danger"
-              *ngIf="editForm.get('addToReports')?.errors?.required"
-              jhiTranslate="entity.validation.required"
-            >
-              This field is required.
-            </small>
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label
-            class="form-control-label required-input"
-            jhiTranslate="moneyRoombaApp.scheduledTransaction.recurringType"
-            for="field_recurringType"
-            >Recurring Type</label
-          >
-          <select
-            class="form-control"
-            name="recurringType"
-            formControlName="recurringType"
-            id="field_recurringType"
-            data-cy="recurringType"
-          >
-            <option [ngValue]="null">{{ 'moneyRoombaApp.RecurringType.null' | translate }}</option>
-            <option value="DAILY">{{ 'moneyRoombaApp.RecurringType.DAILY' | translate }}</option>
-            <option value="WEEKLY">{{ 'moneyRoombaApp.RecurringType.WEEKLY' | translate }}</option>
-            <option value="MONTHLY">{{ 'moneyRoombaApp.RecurringType.MONTHLY' | translate }}</option>
-            <option value="YEARLY">{{ 'moneyRoombaApp.RecurringType.YEARLY' | translate }}</option>
-          </select>
-          <div
-            *ngIf="
-              editForm.get('recurringType')!.invalid && (editForm.get('recurringType')!.dirty || editForm.get('recurringType')!.touched)
-            "
-          >
-            <small
-              class="form-text text-danger"
-              *ngIf="editForm.get('recurringType')?.errors?.required"
-              jhiTranslate="entity.validation.required"
-            >
-              This field is required.
-            </small>
-          </div>
-        </div>
-
-        <!--        <div class="form-group">-->
-        <!--          <label class="form-control-label" jhiTranslate="moneyRoombaApp.scheduledTransaction.separationCount" for="field_separationCount"-->
-        <!--            >Separation Count</label-->
-        <!--          >-->
-        <!--          <input-->
-        <!--            type="number"-->
-        <!--            class="form-control"-->
-        <!--            name="separationCount"-->
-        <!--            id="field_separationCount"-->
-        <!--            data-cy="separationCount"-->
-        <!--            formControlName="separationCount"-->
-        <!--          />-->
-        <!--          <div-->
-        <!--            *ngIf="-->
-        <!--              editForm.get('separationCount')!.invalid &&-->
-        <!--              (editForm.get('separationCount')!.dirty || editForm.get('separationCount')!.touched)-->
-        <!--            "-->
-        <!--          >-->
-        <!--            <small-->
-        <!--              class="form-text text-danger"-->
-        <!--              *ngIf="editForm.get('separationCount')?.errors?.min"-->
-        <!--              jhiTranslate="entity.validation.min"-->
-        <!--              [translateValues]="{ min: 0 }"-->
-        <!--            >-->
-        <!--              This field should be at least 0.-->
-        <!--            </small>-->
-        <!--            <small-->
-        <!--              class="form-text text-danger"-->
-        <!--              [hidden]="!editForm.get('separationCount')?.errors?.number"-->
-        <!--              jhiTranslate="entity.validation.number"-->
-        <!--            >-->
-        <!--              This field should be a number.-->
-        <!--            </small>-->
-        <!--          </div>-->
-        <!--        </div>-->
-
-        <!--        <div class="form-group">-->
-        <!--          <label-->
-        <!--            class="form-control-label"-->
-        <!--            jhiTranslate="moneyRoombaApp.scheduledTransaction.maxNumberOfOcurrences"-->
-        <!--            for="field_maxNumberOfOcurrences"-->
-        <!--            >Max Number Of Ocurrences</label-->
-        <!--          >-->
-        <!--          <input-->
-        <!--            type="number"-->
-        <!--            class="form-control"-->
-        <!--            name="maxNumberOfOcurrences"-->
-        <!--            id="field_maxNumberOfOcurrences"-->
-        <!--            data-cy="maxNumberOfOcurrences"-->
-        <!--            formControlName="maxNumberOfOcurrences"-->
-        <!--          />-->
-        <!--        </div>-->
-
-        <div class="form-group" *ngIf="isWeekly()">
-          <label class="form-control-label" jhiTranslate="moneyRoombaApp.scheduledTransaction.dayOfWeek" for="field_dayOfWeek"
-            >Day Of Week</label
-          >
-          <input type="number" class="form-control" name="dayOfWeek" id="field_dayOfWeek" data-cy="dayOfWeek" formControlName="dayOfWeek" />
-          <div *ngIf="editForm.get('dayOfWeek')!.invalid && (editForm.get('dayOfWeek')!.dirty || editForm.get('dayOfWeek')!.touched)">
-            <small
-              class="form-text text-danger"
-              *ngIf="editForm.get('dayOfWeek')?.errors?.min"
-              jhiTranslate="entity.validation.min"
-              [translateValues]="{ min: 0 }"
-            >
-              This field should be at least 0.
-            </small>
-            <small
-              class="form-text text-danger"
-              *ngIf="editForm.get('dayOfWeek')?.errors?.max"
-              jhiTranslate="entity.validation.max"
-              [translateValues]="{ max: 6 }"
-            >
-              This field cannot be more than 6.
-            </small>
-            <small
-              class="form-text text-danger"
-              [hidden]="!editForm.get('dayOfWeek')?.errors?.number"
-              jhiTranslate="entity.validation.number"
-            >
-              This field should be a number.
-            </small>
-          </div>
-        </div>
-
-        <!--        <div class="form-group" *ngIf="">-->
-        <!--          <label class="form-control-label" jhiTranslate="moneyRoombaApp.scheduledTransaction.weekOfMonth" for="field_weekOfMonth"-->
-        <!--            >Week Of Month</label-->
-        <!--          >-->
-        <!--          <input-->
-        <!--            type="number"-->
-        <!--            class="form-control"-->
-        <!--            name="weekOfMonth"-->
-        <!--            id="field_weekOfMonth"-->
-        <!--            data-cy="weekOfMonth"-->
-        <!--            formControlName="weekOfMonth"-->
-        <!--          />-->
-        <!--          <div *ngIf="editForm.get('weekOfMonth')!.invalid && (editForm.get('weekOfMonth')!.dirty || editForm.get('weekOfMonth')!.touched)">-->
-        <!--            <small-->
-        <!--              class="form-text text-danger"-->
-        <!--              *ngIf="editForm.get('weekOfMonth')?.errors?.min"-->
-        <!--              jhiTranslate="entity.validation.min"-->
-        <!--              [translateValues]="{ min: 0 }"-->
-        <!--            >-->
-        <!--              This field should be at least 0.-->
-        <!--            </small>-->
-        <!--            <small-->
-        <!--              class="form-text text-danger"-->
-        <!--              *ngIf="editForm.get('weekOfMonth')?.errors?.max"-->
-        <!--              jhiTranslate="entity.validation.max"-->
-        <!--              [translateValues]="{ max: 5 }"-->
-        <!--            >-->
-        <!--              This field cannot be more than 5.-->
-        <!--            </small>-->
-        <!--            <small-->
-        <!--              class="form-text text-danger"-->
-        <!--              [hidden]="!editForm.get('weekOfMonth')?.errors?.number"-->
-        <!--              jhiTranslate="entity.validation.number"-->
-        <!--            >-->
-        <!--              This field should be a number.-->
-        <!--            </small>-->
-        <!--          </div>-->
-        <!--        </div>-->
-
-        <div class="form-group" *ngIf="isMonthly() || isYearly()">
-          <label class="form-control-label" jhiTranslate="moneyRoombaApp.scheduledTransaction.dayOfMonth" for="field_dayOfMonth"
-            >Day Of Month</label
-          >
-          <input
-            type="number"
-            class="form-control"
-            name="dayOfMonth"
-            id="field_dayOfMonth"
-            data-cy="dayOfMonth"
-            formControlName="dayOfMonth"
-          />
-          <div *ngIf="editForm.get('dayOfMonth')!.invalid && (editForm.get('dayOfMonth')!.dirty || editForm.get('dayOfMonth')!.touched)">
-            <small
-              class="form-text text-danger"
-              *ngIf="editForm.get('dayOfMonth')?.errors?.min"
-              jhiTranslate="entity.validation.min"
-              [translateValues]="{ min: 0 }"
-            >
-              This field should be at least 0.
-            </small>
-            <small
-              class="form-text text-danger"
-              *ngIf="editForm.get('dayOfMonth')?.errors?.max"
-              jhiTranslate="entity.validation.max"
-              [translateValues]="{ max: 31 }"
-            >
-              This field cannot be more than 31.
-            </small>
-            <small
-              class="form-text text-danger"
-              [hidden]="!editForm.get('dayOfMonth')?.errors?.number"
-              jhiTranslate="entity.validation.number"
-            >
-              This field should be a number.
-            </small>
-          </div>
-        </div>
-
-        <div class="form-group" *ngIf="isYearly()">
-          <label class="form-control-label" jhiTranslate="moneyRoombaApp.scheduledTransaction.monthOfYear" for="field_monthOfYear"
-            >Month Of Year</label
-          >
-          <input
-            type="number"
-            class="form-control"
-            name="monthOfYear"
-            id="field_monthOfYear"
-            data-cy="monthOfYear"
-            formControlName="monthOfYear"
-          />
-          <div *ngIf="editForm.get('monthOfYear')!.invalid && (editForm.get('monthOfYear')!.dirty || editForm.get('monthOfYear')!.touched)">
-            <small
-              class="form-text text-danger"
-              *ngIf="editForm.get('monthOfYear')?.errors?.min"
-              jhiTranslate="entity.validation.min"
-              [translateValues]="{ min: 0 }"
-            >
-              This field should be at least 0.
-            </small>
-            <small
-              class="form-text text-danger"
-              *ngIf="editForm.get('monthOfYear')?.errors?.max"
-              jhiTranslate="entity.validation.max"
-              [translateValues]="{ max: 11 }"
-            >
-              This field cannot be more than 11.
-            </small>
-            <small
-              class="form-text text-danger"
-              [hidden]="!editForm.get('monthOfYear')?.errors?.number"
-              jhiTranslate="entity.validation.number"
-            >
-              This field should be a number.
-            </small>
+              <button
+                type="submit"
+                id="save-entity"
+                data-cy="entityCreateSaveButton"
+                [disabled]="editForm.invalid || isSaving"
+                class="btn btn-primary"
+              >
+                <fa-icon icon="save"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
+              </button>
+            </div>
           </div>
         </div>
       </div>
-
-      <div>
-        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
-          <fa-icon icon="ban"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
-        </button>
-
-        <button
-          type="submit"
-          id="save-entity"
-          data-cy="entityCreateSaveButton"
-          [disabled]="editForm.invalid || isSaving"
-          class="btn btn-primary"
-        >
-          <fa-icon icon="save"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
-        </button>
-      </div>
-    </form>
+    </div>
   </div>
-</div>
+</form>

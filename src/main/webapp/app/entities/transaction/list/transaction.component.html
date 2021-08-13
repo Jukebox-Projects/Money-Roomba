@@ -109,7 +109,9 @@
                 </div>
               </td>
               <td>
-                <span class="text-black fs-20 font-w600">{{ transaction.currency?.code }}{{ ' ' }}{{ transaction.originalAmount }} </span>
+                <span class="text-black fs-20 font-w600">{{
+                  transaction.originalAmount | currency: transaction.currency?.code:'symbol':'1.2-2'
+                }}</span>
               </td>
 
               <td>
@@ -135,8 +137,18 @@
                 />
               </td>
               <td>
-                <a class="btn btn-rounded btn-outline-warning" *ngIf="isPending(transaction.state)">Pending</a>
-                <a class="btn btn-rounded btn-outline-success" *ngIf="!isPending(transaction.state)">Accepted</a>
+                <a
+                  class="btn btn-rounded btn-outline-warning"
+                  jhiTranslate="moneyRoombaApp.TransactionState.pending"
+                  *ngIf="isPending(transaction.state)"
+                  >Pending</a
+                >
+                <a
+                  class="btn btn-rounded btn-outline-success"
+                  jhiTranslate="moneyRoombaApp.TransactionState.accepted"
+                  *ngIf="!isPending(transaction.state)"
+                  >Accepted</a
+                >
                 <!--{{ transaction.transactionType }}-->
               </td>
 

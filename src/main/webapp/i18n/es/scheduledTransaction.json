@@ -4,9 +4,9 @@
       "home": {
         "title": "Transacciones Programadas",
         "refreshListLabel": "Refrescar lista",
-        "createLabel": "Crear nuevo Scheduled Transaction",
+        "createLabel": "Crear una nueva transacción programada",
         "createOrEditLabel": "Crear o editar transacción programada",
-        "notFound": "Ninguna transacción programada encontrada"
+        "notFound": "Ninguna transacción programada fue encontrada"
       },
       "created": "Una nueva transacción programada ha sido creada",
       "updated": "La transacción programada ha sido actualizada",
@@ -18,9 +18,11 @@
         "title": "Transacción Programada"
       },
       "id": "ID",
+      "wallet": "Cartera",
       "name": "Nombre",
       "description": "Descripción",
       "originalAmount": "Monto",
+      "wallet": "Cartera",
       "movementType": "Tipo de Movimiento",
       "startDate": "Fecha de Inicio",
       "endDate": "Fecha límite",

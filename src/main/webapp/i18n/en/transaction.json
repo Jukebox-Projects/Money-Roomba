@@ -45,7 +45,9 @@
       "contactModalTitle": "Please enter a valid Email or Phone Number",
       "contactModalHeader": "Add new favorite contact",
       "active": "Active",
-      "inactive": "Inactive"
+      "inactive": "Inactive",
+      "accepted": "Accepted",
+      "denied": "Denied"
     }
   }
 }
