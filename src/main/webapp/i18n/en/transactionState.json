@@ -6,8 +6,10 @@
       "DENIED": "Denied",
       "PENDING_APPROVAL": "Pending approval",
       "NA": "Does not apply",
-      "Accept": "Accept",
-      "Deny": "Deny"
+      "Accept": "Accepted",
+      "Deny": "Denied",
+      "accepted": "Accepted",
+      "pending": "Pending"
     }
   }
 }

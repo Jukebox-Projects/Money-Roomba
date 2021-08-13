@@ -147,7 +147,13 @@ public class TransactionService {
             Optional<UserDetails> userDetails = userDetailsRepository.findOneByInternalUser(user.get());
             Optional<Transaction> existingTransaction = transactionRepository.findById(transaction.getId());
             Optional<Wallet> oldWallet = walletRepository.findById(existingTransaction.get().getWallet().getId());
-
+            if (!userService.currentUserIsAdmin() && !userDetails.get().equals(existingTransaction.get().getSourceUser())) {
+                throw new BadRequestAlertException(
+                    "You cannot access or modify this transaction's information",
+                    ENTITY_NAME,
+                    "transactionnoaccess"
+                );
+            }
             transaction.setTransactionType(
                 transaction.getTransactionType() == null ? existingTransaction.get().getTransactionType() : transaction.getTransactionType()
             );
@@ -411,6 +417,11 @@ public class TransactionService {
         log.debug("Request to save Transaction : {}", transaction);
         if (!SecurityUtils.hasCurrentUserThisAuthority(AuthoritiesConstants.ADMIN)) {
             List<Wallet> wallets = walletRepository.findAllByUser(userDetails.get());
+
+            if (wallets.size() == 0) {
+                throw new BadRequestAlertException("You do not currently have registered wallets.", ENTITY_NAME, "nowalletsCurrentUser");
+            }
+
             transaction.setSourceUser(userDetails.get());
             transaction.setTransactionType(transactionType);
             transaction.setIncomingTransaction(false);
@@ -492,7 +503,21 @@ public class TransactionService {
     @Transactional(readOnly = true)
     public Optional<Transaction> findOne(Long id) {
         log.debug("Request to get Transaction : {}", id);
-        return transactionRepository.findById(id);
+        Optional<User> user = userRepository.findOneByLogin(
+            SecurityUtils
+                .getCurrentUserLogin()
+                .orElseThrow(() -> new BadRequestAlertException("A new wallet cannot already have an ID", ENTITY_NAME, "idexists"))
+        );
+        Optional<UserDetails> userDetails = userDetailsRepository.findOneByInternalUser(user.get());
+        Optional<Transaction> transaction = transactionRepository.findById(id);
+        if (!userService.currentUserIsAdmin() && !userDetails.get().equals(transaction.get().getSourceUser())) {
+            throw new BadRequestAlertException(
+                "You cannot access or modify this transaction's information",
+                ENTITY_NAME,
+                "transactionnoaccess"
+            );
+        }
+        return transaction;
     }
 
     /**

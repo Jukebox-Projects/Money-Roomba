@@ -45,18 +45,22 @@ public class WalletService {
 
     private final EventRepository eventRepository;
 
+    private final UserService userService;
+
     public WalletService(
         WalletRepository walletRepository,
         UserRepository userRepository,
         UserDetailsRepository userDetailsRepository,
         TransactionRepository transactionRepository,
-        EventRepository eventRepository
+        EventRepository eventRepository,
+        UserService userService
     ) {
         this.walletRepository = walletRepository;
         this.userRepository = userRepository;
         this.userDetailsRepository = userDetailsRepository;
         this.transactionRepository = transactionRepository;
         this.eventRepository = eventRepository;
+        this.userService = userService;
     }
 
     /**
@@ -100,6 +104,9 @@ public class WalletService {
             }
         } else {
             Optional<Wallet> existingWallet = walletRepository.findById(wallet.getId());
+            if (!userService.currentUserIsAdmin() && !userDetails.get().equals(existingWallet.get().getUser())) {
+                throw new BadRequestAlertException("You cannot access or modify this wallet's information", ENTITY_NAME, "walletnoaccess");
+            }
             wallet.setUser(existingWallet.get().getUser());
             createEvent(EventType.UPDATE);
             return walletRepository.save(wallet);
@@ -200,13 +207,33 @@ public class WalletService {
     @Transactional(readOnly = true)
     public Optional<Wallet> findOne(Long id) {
         log.debug("Request to get Wallet : {}", id);
-        return walletRepository.findById(id);
+        Optional<User> user = userRepository.findOneByLogin(
+            SecurityUtils
+                .getCurrentUserLogin()
+                .orElseThrow(() -> new BadRequestAlertException("A new wallet cannot already have an ID", ENTITY_NAME, "idexists"))
+        );
+        Optional<UserDetails> userDetails = userDetailsRepository.findOneByInternalUser(user.get());
+        Optional<Wallet> wallet = walletRepository.findById(id);
+        if (!userService.currentUserIsAdmin() && !userDetails.get().equals(wallet.get().getUser())) {
+            throw new BadRequestAlertException("You cannot access or modify this wallet's information", ENTITY_NAME, "walletnoaccess");
+        }
+        return wallet;
     }
 
     @Transactional(readOnly = true)
     public Optional<Wallet> findOneById(Long id) {
         log.debug("Request to get Wallet : {}", id);
-        return walletRepository.findById(id);
+        Optional<User> user = userRepository.findOneByLogin(
+            SecurityUtils
+                .getCurrentUserLogin()
+                .orElseThrow(() -> new BadRequestAlertException("A new wallet cannot already have an ID", ENTITY_NAME, "idexists"))
+        );
+        Optional<UserDetails> userDetails = userDetailsRepository.findOneByInternalUser(user.get());
+        Optional<Wallet> wallet = walletRepository.findById(id);
+        if (!userService.currentUserIsAdmin() && !userDetails.get().equals(wallet.get().getUser())) {
+            throw new BadRequestAlertException("You cannot access or modify this wallet's information", ENTITY_NAME, "walletnoaccess");
+        }
+        return wallet;
     }
 
     /**
@@ -216,8 +243,17 @@ public class WalletService {
      */
     public void delete(Long id) {
         log.debug("Request to delete Wallet : {}", id);
+        Optional<User> user = userRepository.findOneByLogin(
+            SecurityUtils
+                .getCurrentUserLogin()
+                .orElseThrow(() -> new BadRequestAlertException("A new wallet cannot already have an ID", ENTITY_NAME, "idexists"))
+        );
+        Optional<UserDetails> userDetails = userDetailsRepository.findOneByInternalUser(user.get());
         Optional<Wallet> wallet = walletRepository.findById(id);
         List<Transaction> transactions = transactionRepository.findAllByWallet(wallet.get());
+        if (!userService.currentUserIsAdmin() && !userDetails.get().equals(wallet.get().getUser())) {
+            throw new BadRequestAlertException("You cannot access or modify this wallet's information", ENTITY_NAME, "walletnoaccess");
+        }
         if (!transactions.isEmpty()) {
             for (Transaction t : transactions) {
                 transactionRepository.delete(t);

@@ -600,6 +600,21 @@ public class UserService {
         return userDetailsRepository.findOneByInternalUser(user.orElseThrow(() -> new NoSuchElementFoundException("No User found")));
     }
 
+    public UserDetails createUserDetails() {
+        Optional<User> user = userRepository.findOneByLogin(
+            this.getCurrentUserLogin().orElseThrow(() -> new NoSuchElementFoundException("No Login found"))
+        );
+        UserDetails userDetails = new UserDetails();
+        userDetails.setInternalUser(user.get());
+        userDetails.setPhone("");
+        userDetails.setCountry("CR");
+        userDetails.setIsTemporaryPassword(false);
+        userDetails.setIsActive(true);
+        userDetails.setNotifications(true);
+        userDetailsRepository.save(userDetails);
+        return userDetails;
+    }
+
     @Transactional(readOnly = true)
     public Optional<UserDetails> getUserDetailsByLogin(String login) {
         Optional<User> user = userRepository.findOneByLogin(login);
