@@ -59,7 +59,7 @@ export class WalletStatisticComponent implements OnInit {
         position: 'bottom',
         show: false,
       },
-      colors: ['#1EAAE7', '#2BC155', '#6418C3', '#FFA500', '#808080'],
+      colors: ['#1EAAE7', '#2BC155', '#6418C3', '#FFA500', '#808080', '#FF0000', '#00CCCC', '#FF007F', '#FFFF33', '#994C00'],
       responsive: [
         {
           breakpoint: 480,

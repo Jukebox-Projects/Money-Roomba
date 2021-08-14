@@ -20,6 +20,10 @@
       "detail": {
         "title": "Cartera"
       },
+      "walletStatistic": {
+        "statisticTitle": "Estadistíca de balance",
+        "statisticDescription": "El balance que abarca cada cartera"
+      },
       "id": "ID",
       "name": "Nombre",
       "description": "Descripción",
