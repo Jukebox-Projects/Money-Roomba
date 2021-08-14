@@ -20,6 +20,10 @@
       "detail": {
         "title": "Wallet"
       },
+      "walletStatistic": {
+        "statisticTitle": "Balance statistic",
+        "statisticDescription": "Balance covered by each wallet"
+      },
       "id": "ID",
       "name": "Name",
       "description": "Description",

@@ -141,8 +141,10 @@
                 </svg>
               </div>
               <div class="dropdown-menu dropdown-menu-right" ngbDropdownMenu>
-                <a class="dropdown-item" [routerLink]="['/category', category.id, 'view']" jhiTranslate="entity.action.view">view</a>
-                <a class="dropdown-item" [routerLink]="['/category', category.id, 'edit']" jhiTranslate="entity.action.edit">Edit</a>
+                <!--                <a class="dropdown-item" [routerLink]="['/category', category.id, 'view']" jhiTranslate="entity.action.view">view</a>-->
+                <a class="dropdown-item text-primary" [routerLink]="['/category', category.id, 'edit']" jhiTranslate="entity.action.edit"
+                  >Edit</a
+                >
                 <a
                   *ngIf="!category.userCreated && adminUser"
                   class="dropdown-item"
@@ -155,11 +157,11 @@
                   class="dropdown-item"
                   (click)="status(category)"
                   jhiTranslate="{{ category.isActive ? 'entity.action.deactivate' : 'entity.action.activate' }}"
-                  >Activate</a
+                  >Deactive</a
                 >
                 <a
                   *ngIf="(!category.userCreated && adminUser) || (category.userCreated && !adminUser)"
-                  class="dropdown-item"
+                  class="dropdown-item text-danger"
                   (click)="delete(category)"
                   jhiTranslate="entity.action.delete"
                   >Delete</a

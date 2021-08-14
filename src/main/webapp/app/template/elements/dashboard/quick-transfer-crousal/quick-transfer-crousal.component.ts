@@ -50,7 +50,10 @@ export class QuickTransferCrousalComponent implements OnInit {
     nav: false,
     center: true,
     dots: false,
-    navText: ['<', '>'],
+    navText: [
+      '<img src="../../../../../assets/icons/dashboard/left-arrow-angle-big-gross-symbol.png"></img>',
+      '<img src="../../../../../assets/icons/dashboard/right-arrow.png"></img>',
+    ],
     responsive: {
       0: {
         items: 2,
