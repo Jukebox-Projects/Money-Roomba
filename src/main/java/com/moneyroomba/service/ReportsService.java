@@ -333,38 +333,6 @@ public class ReportsService {
         return finalResults;
     }
 
-    /*
-    @Transactional(readOnly = true)
-    public List<TransactionsByCategoryDTO> getTransactionsByCategory(String startDate, String endDate) {
-        log.debug("Request to get a transaction by category balance report for all wallets");
-        Optional<UserDetails> user = userService.getUserDetailsByLogin();
-        List<TransactionsByCategoryDTO> results = null;
-        if (user.isPresent()) {
-            Long daysInBetween = DAYS.between(LocalDate.parse(startDate), LocalDate.parse(endDate));
-            results =
-                transactionRepository.getTransactionByCategoryReport(
-                    user.get().getId(),
-                    true,
-                    TransactionState.NA,
-                    daysInBetween.intValue());
-            System.out.println("GET TRANSACTIONS BY CATEGORY");
-            System.out.println(results);
-            System.out.println("GET TRANSACTIONS BY CATEGORY");
-            if (!results.isEmpty()) {
-                if (!sameCurrencyTransactionsByCategory(results)) {
-                    Currency defaultCurrency = getDefaultCurrency();
-                    results = convertConversionTransactionsByCategory(results, defaultCurrency);
-                }
-            }
-        } else {
-            throw new BadRequestAlertException("Could not find the user", ENTITY_NAME, "nouserfound");
-        }
-        System.out.println("GET TRANSACTIONS BY CATEGORY WITH FORMATED");
-        System.out.println(results);
-        System.out.println("GET TRANSACTIONS BY CATEGORY WITH FORMATED");
-        return results;
-    }
-*/
     private Boolean sameCurrencyTransactionsByCategory(List<TransactionsByCategoryDTO> results) {
         String previousCurrencyCode = null;
         for (int i = 0; i < results.size(); i++) {
@@ -382,20 +350,75 @@ public class ReportsService {
         Currency targetCurrency
     ) {
         ArrayList<TransactionsByCategoryDTO> formatedResults = new ArrayList<>();
-        for (int i = 0; i < results.size(); i++) {
-            formatedResults.add(
-                i,
-                new TransactionsByCategoryDTO(
-                    0D,
-                    results.get(i).getCounter(),
-                    results.get(i).getCategory(),
-                    results.get(i).getMovementType(),
-                    targetCurrency
-                )
-            );
-            results.get(i).setTotal(convertAmount(results.get(i).getCurrency(), targetCurrency, results.get(i).getTotal()));
-            formatedResults.get(i).setTotal(formatedResults.get(0).getTotal() + results.get(i).getTotal());
+        results.forEach(
+            currentItem -> {
+                currentItem.setTotal(convertAmount(currentItem.getCurrency(), targetCurrency, currentItem.getTotal()));
+                formatedResults.add(currentItem);
+            }
+        );
+        return formatedResults;
+    }
+
+    /**
+     * Get report with expenses and income total from all wallets
+     *
+     * @return the report data needed in the front end graph.
+     */
+    @Transactional(readOnly = true)
+    public List<WalletStatisticDTO> getWalletStatistic() {
+        log.debug("Request to get total balance report for all wallets");
+        Optional<UserDetails> user = userService.getUserDetailsByLogin();
+        List<WalletStatisticDTO> results = null;
+        if (user.isPresent()) {
+            results = walletRepository.getWalletStatistic(user.get().getId(), true, true);
+            if (!results.isEmpty()) {
+                if (!sameCurrencyWalletStatistic(results)) {
+                    Currency defaultCurrency = getDefaultCurrency();
+                    results = convertConversionWalletStatistic(results, defaultCurrency);
+                }
+                results = calculatePercentage(results);
+            }
+        } else {
+            throw new BadRequestAlertException("Could not find the user", ENTITY_NAME, "nouserfound");
         }
+
+        return results;
+    }
+
+    private List<WalletStatisticDTO> calculatePercentage(List<WalletStatisticDTO> results) {
+        List<WalletStatisticDTO> finalResults = new ArrayList<WalletStatisticDTO>();
+        double totalBalance = 0;
+        for (WalletStatisticDTO balanceSum : results) {
+            totalBalance += balanceSum.getBalance();
+        }
+        for (WalletStatisticDTO result : results) {
+            double percentage = (result.getBalance() / totalBalance) * 100;
+            result.setPercentage(Math.round(percentage));
+            finalResults.add(result);
+        }
+        return finalResults;
+    }
+
+    private Boolean sameCurrencyWalletStatistic(List<WalletStatisticDTO> results) {
+        String previousCurrencyCode = null;
+        for (int i = 0; i < results.size(); i++) {
+            if (results.get(i).getCurrency().getCode().equals(previousCurrencyCode) || i == 0) {
+                previousCurrencyCode = results.get(i).getCurrency().getCode();
+            } else {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private List<WalletStatisticDTO> convertConversionWalletStatistic(List<WalletStatisticDTO> results, Currency targetCurrency) {
+        ArrayList<WalletStatisticDTO> formatedResults = new ArrayList<>();
+        results.forEach(
+            currentItem -> {
+                currentItem.setBalance(convertAmount(currentItem.getCurrency(), targetCurrency, currentItem.getBalance()));
+                formatedResults.add(currentItem);
+            }
+        );
         return formatedResults;
     }
 }
