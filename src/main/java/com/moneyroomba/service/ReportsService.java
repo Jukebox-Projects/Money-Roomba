@@ -280,6 +280,8 @@ public class ReportsService {
                     results = convertConversionTransactionsByCategory(results, defaultCurrency);
                 }
                 results = orderTransactionsByCategory(results);
+            } else {
+                throw new BadRequestAlertException("No transactions found", ENTITY_NAME, "nouserfound");
             }
         } else {
             throw new BadRequestAlertException("Could not find the user", ENTITY_NAME, "nouserfound");
@@ -324,7 +326,9 @@ public class ReportsService {
                 other.setCounter(other.getCounter() + formatedResults.get(i).getCounter());
             }
         }
-        finalResults.add(other);
+        if (formatedResults.size() > 3) {
+            finalResults.add(other);
+        }
 
         for (TransactionsByCategoryDTO result : finalResults) {
             double percentage = (result.getTotal() / total) * 100;
