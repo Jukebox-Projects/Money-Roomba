@@ -7,6 +7,8 @@ import { ScheduledTransactionService } from '../service/scheduled-transaction.se
 import { ScheduledTransactionDeleteDialogComponent } from '../delete/scheduled-transaction-delete-dialog.component';
 import { IICon } from '../../../shared/icon-picker/icon.model';
 import { IconService } from '../../../shared/icon-picker/service/icon.service';
+import { AccountService } from 'app/core/auth/account.service';
+import { Authority } from 'app/config/authority.constants';
 
 @Component({
   selector: 'jhi-scheduled-transaction',
@@ -19,11 +21,13 @@ export class ScheduledTransactionComponent implements OnInit {
   isLoading = false;
   inputText = '';
   filterType: string = 'name';
+  adminUser: boolean = false;
 
   constructor(
     protected scheduledTransactionService: ScheduledTransactionService,
     protected modalService: NgbModal,
-    protected iconService: IconService
+    protected iconService: IconService,
+    protected accountService: AccountService
   ) {}
 
   loadAll(): void {
@@ -43,6 +47,11 @@ export class ScheduledTransactionComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadAll();
+    this.isAdmin();
+  }
+
+  isAdmin(): void {
+    this.adminUser = this.accountService.hasAnyAuthority(Authority.ADMIN);
   }
 
   trackId(index: number, item: IScheduledTransaction): number {

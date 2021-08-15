@@ -50,6 +50,7 @@
           data-cy="entityCreateButton"
           class="btn btn-primary jh-create-entity create-transaction"
           [routerLink]="['/transaction/new']"
+          *ngIf="!adminUser"
         >
           <fa-icon icon="plus"></fa-icon>
           <span jhiTranslate="moneyRoombaApp.transaction.home.createLabel"> Create a new Transaction </span>
