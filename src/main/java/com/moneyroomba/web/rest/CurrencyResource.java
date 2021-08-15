@@ -2,6 +2,7 @@ package com.moneyroomba.web.rest;
 
 import com.moneyroomba.domain.Currency;
 import com.moneyroomba.repository.CurrencyRepository;
+import com.moneyroomba.security.AuthoritiesConstants;
 import com.moneyroomba.service.CurrencyQueryService;
 import com.moneyroomba.service.CurrencyService;
 import com.moneyroomba.service.criteria.CurrencyCriteria;
@@ -17,6 +18,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import tech.jhipster.web.util.HeaderUtil;
 import tech.jhipster.web.util.ResponseUtil;
@@ -59,6 +61,7 @@ public class CurrencyResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/currencies")
+    @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\")")
     public ResponseEntity<Currency> createCurrency(@Valid @RequestBody Currency currency) throws URISyntaxException {
         log.debug("REST request to save Currency : {}", currency);
         if (currency.getId() != null) {
@@ -82,6 +85,7 @@ public class CurrencyResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/currencies/{id}")
+    @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\")")
     public ResponseEntity<Currency> updateCurrency(
         @PathVariable(value = "id", required = false) final Long id,
         @Valid @RequestBody Currency currency
@@ -117,6 +121,7 @@ public class CurrencyResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PatchMapping(value = "/currencies/{id}", consumes = "application/merge-patch+json")
+    @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\")")
     public ResponseEntity<Currency> partialUpdateCurrency(
         @PathVariable(value = "id", required = false) final Long id,
         @NotNull @RequestBody Currency currency
@@ -186,6 +191,7 @@ public class CurrencyResource {
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/currencies/{id}")
+    @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\")")
     public ResponseEntity<Void> deleteCurrency(@PathVariable Long id) {
         log.debug("REST request to delete Currency : {}", id);
         currencyService.delete(id);

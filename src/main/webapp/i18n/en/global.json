@@ -227,13 +227,17 @@
     "notvalidcontact": "There were no registered users associated to the provided information.",
     "nowallets": "The receiving user currently has no wallets registered.",
     "nowalletsCurrentUser": "You do not currently have registered wallets.",
+    "currencyNoAccess": "You cannot access or modify currency's information.",
     "file": {
       "could.not.extract": "Could not extract file",
       "not.image": "File was expected to be an image but was found to be \"{{ fileType }}\"",
       "noFileSelected": "No file was selected",
       "wrongFileType": "File type not supported, File type must be XML",
       "reachedMaximumTransactions": "You have reached the maximum amount of imported transactions"
-    }
+    },
+    "categoryOwnParent": "A category cannot be its own parent.",
+    "childCategoryAsParent": "Child category cannot be a parent category.",
+    "categoryIsParent": "Parent category cannot be a child category at the same time."
   },
   "footer": "© 2021 Money Roomba"
 }

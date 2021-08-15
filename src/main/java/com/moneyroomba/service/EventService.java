@@ -8,6 +8,7 @@ import com.moneyroomba.domain.enumeration.SourceEntity;
 import com.moneyroomba.repository.EventRepository;
 import com.moneyroomba.repository.NotificationRepository;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import org.slf4j.Logger;
@@ -107,9 +108,12 @@ public class EventService {
     public List<Event> findAllNotificationsNotOpened() {
         log.debug("Request to get all unopened notifications");
         Optional<UserDetails> user = userService.getUserDetailsByLogin();
-        List<Event> results = eventRepository.findAllByNotificationStatus(user.get().getId(), UNOPENED_STATUS);
-        if (!results.isEmpty()) {
-            addDestinationPath(results);
+        List<Event> results = new ArrayList<>();
+        if (user.isPresent() && user.get().getNotifications()) {
+            results = eventRepository.findAllByNotificationStatus(user.get().getId(), UNOPENED_STATUS);
+            if (!results.isEmpty()) {
+                addDestinationPath(results);
+            }
         }
         return results;
     }
