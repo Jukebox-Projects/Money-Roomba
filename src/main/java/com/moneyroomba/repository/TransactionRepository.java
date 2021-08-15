@@ -28,7 +28,7 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long>,
     int countImportedTransactions(Long source_user_id, LocalDate startOfMonth, LocalDate endOfMonth);
 
     @Query(
-        value = "SELECT new com.moneyroomba.service.dto.reports.WalletBalanceReportDTO(SUM(tr.amount), tr.movementType, tr.wallet, tr.currency) " +
+        value = "SELECT new com.moneyroomba.service.dto.reports.WalletBalanceReportDTO(SUM(tr.originalAmount), tr.movementType, tr.wallet, tr.currency) " +
         "FROM Transaction tr " +
         "WHERE tr.sourceUser.id = ?1 AND" +
         " tr.wallet.id = ?2 AND" +
@@ -41,7 +41,7 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long>,
     public List<WalletBalanceReportDTO> getWalletBalanceReport(Long userId, Long walletId, Boolean addToReports, TransactionState state);
 
     @Query(
-        value = "SELECT new com.moneyroomba.service.dto.reports.WalletBalanceReportDTO(SUM(tr.amount), tr.movementType, tr.wallet, tr.currency) " +
+        value = "SELECT new com.moneyroomba.service.dto.reports.WalletBalanceReportDTO(SUM(tr.originalAmount), tr.movementType, tr.wallet, tr.currency) " +
         "FROM Transaction tr " +
         "WHERE tr.sourceUser.id = ?1 AND " +
         "tr.addToReports = ?2 AND " +
@@ -65,7 +65,7 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long>,
     public List<TransactionCountReportDTO> getTransactionCount(Long userId, Boolean addToReports, Integer daysInBetween);
 
     @Query(
-        value = "SELECT new com.moneyroomba.service.dto.reports.TransactionsByCategoryDTO( SUM(tr.amount), COUNT(tr.id),tr.category, tr.movementType, tr.currency ) " +
+        value = "SELECT new com.moneyroomba.service.dto.reports.TransactionsByCategoryDTO( SUM(tr.originalAmount), COUNT(tr.id),tr.category, tr.movementType, tr.currency ) " +
         "FROM Transaction tr " +
         "WHERE tr.sourceUser.id = ?1 AND " +
         "tr.addToReports = ?2 AND " +
