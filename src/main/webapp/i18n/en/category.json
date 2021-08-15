@@ -30,7 +30,7 @@
       },
       "id": "ID",
       "name": "Name",
-      "isActive": "Is Active",
+      "isActive": "State",
       "userCreated": "User Created",
       "category": "Category",
       "transaction": "Transaction",
