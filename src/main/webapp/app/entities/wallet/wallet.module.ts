@@ -9,7 +9,7 @@ import { IconService } from '../../shared/icon-picker/service/icon.service';
 import { UserTransactionsComponent } from '../transaction/user-transactions/user-transactions.component';
 import { UserScheduledTransactionsComponent } from '../scheduled-transaction/user-scheduled-transactions/user-scheduled-transactions.component';
 import { WalletSliderComponent } from './wallet-center/wallet-slider/wallet-slider.component';
-import { WalletStatisticComponent } from './wallet-center/wallet-statistic/wallet-statistic.component';
+import { WalletStatisticComponent } from '../../reports/wallet-statistic/wallet-statistic.component';
 import { CarouselModule } from 'ngx-owl-carousel-o';
 import { NgApexchartsModule } from 'ng-apexcharts';
 import { WalletBalanceModule } from '../../reports/wallet-balance/wallet-balance.module';
