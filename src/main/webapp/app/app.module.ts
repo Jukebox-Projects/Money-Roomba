@@ -161,6 +161,7 @@ import { NotificationsDialogComponent } from './layouts/notifications-dialog/not
     MatTreeModule,
     NgApexchartsModule,
     FontAwesomeModule,
+    BrowserAnimationsModule,
 
     // Set this to true to enable service worker (PWA)
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: false }),
