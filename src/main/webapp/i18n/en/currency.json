@@ -22,11 +22,13 @@
       "name": "Name",
       "conversionRate": "Conversion Rate",
       "adminCreated": "Admin Created",
-      "isActive": "Is Active",
+      "isActive": "State",
       "transaction": "Transaction",
       "scheduledTransaction": "Scheduled Transaction",
       "wallet": "Wallet",
-      "invoice": "Invoice"
+      "invoice": "Invoice",
+      "active": "Active",
+      "inactive": "Inactive"
     }
   }
 }

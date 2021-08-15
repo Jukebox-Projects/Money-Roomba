@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-
+import { AccountService } from '../../../core/auth/account.service';
 import { ICurrency } from '../currency.model';
 import { CurrencyService } from '../service/currency.service';
 import { CurrencyDeleteDialogComponent } from '../delete/currency-delete-dialog.component';
+import { Authority } from 'app/config/authority.constants';
 
 @Component({
   selector: 'jhi-currency',
@@ -13,8 +14,9 @@ import { CurrencyDeleteDialogComponent } from '../delete/currency-delete-dialog.
 export class CurrencyComponent implements OnInit {
   currencies?: ICurrency[];
   isLoading = false;
+  adminUser = false;
 
-  constructor(protected currencyService: CurrencyService, protected modalService: NgbModal) {}
+  constructor(protected currencyService: CurrencyService, protected modalService: NgbModal, protected accountService: AccountService) {}
 
   loadAll(): void {
     this.isLoading = true;
@@ -31,7 +33,12 @@ export class CurrencyComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.isAdmin();
     this.loadAll();
+  }
+
+  isAdmin(): void {
+    this.adminUser = this.accountService.hasAnyAuthority(Authority.ADMIN);
   }
 
   trackId(index: number, item: ICurrency): number {
