@@ -101,7 +101,10 @@
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let transaction of transactions; trackBy: trackId" data-cy="entityTable">
+            <tr
+              *ngFor="let transaction of transactions | slice: (page - 1) * pageSize:(page - 1) * pageSize + pageSize; trackBy: trackId"
+              data-cy="entityTable"
+            >
               <td>{{ transaction.name }}</td>
               <td class="text-black text-nowrap">{{ transaction.dateAdded | formatMediumDate }}</td>
               <td>
@@ -218,19 +221,11 @@
     </div>
   </div>
   <div class="d-flex justify-content-between p-2">
-    <ngb-pagination
-      class="mr-3"
-      [collectionSize]="collectionSize"
-      [(page)]="page"
-      [pageSize]="pageSize"
-      (pageChange)="updateTransactionListing()"
-    >
-    </ngb-pagination>
-
-    <select class="custom-select" style="width: auto" [(ngModel)]="pageSize" (ngModelChange)="updateTransactionListing()">
-      <option [ngValue]="5">5 items per page</option>
-      <option [ngValue]="10">10 items per page</option>
-      <option [ngValue]="20">20 items per page</option>
+    <ngb-pagination class="mr-3" [(page)]="page" [pageSize]="pageSize" [collectionSize]="this.transactions.length"></ngb-pagination>
+    <select class="custom-select" style="width: auto" [(ngModel)]="pageSize">
+      <option [ngValue]="5">5 <span jhiTranslate="global.menu.entities.items-per-page">items per page</span></option>
+      <option [ngValue]="10">10 <span jhiTranslate="global.menu.entities.items-per-page">items per page</span></option>
+      <option [ngValue]="20">20 <span jhiTranslate="global.menu.entities.items-per-page">items per page</span></option>
     </select>
   </div>
 </div>

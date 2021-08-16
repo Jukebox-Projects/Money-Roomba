@@ -40,9 +40,9 @@
     <ngb-pagination [collectionSize]="total$ | async" [(page)]="service.page" [pageSize]="service.pageSize"> </ngb-pagination>
 
     <select class="custom-select" style="width: auto" name="pageSize" [(ngModel)]="service.pageSize">
-      <option [ngValue]="2">2 items per page</option>
-      <option [ngValue]="4">4 items per page</option>
-      <option [ngValue]="6">6 items per page</option>
+      <option [ngValue]="2">2 <span jhiTranslate="global.menu.entities.items-per-page">items per page</span></option>
+      <option [ngValue]="4">4 <span jhiTranslate="global.menu.entities.items-per-page">items per page</span></option>
+      <option [ngValue]="6">6 <span jhiTranslate="global.menu.entities.items-per-page">items per page</span></option>
     </select>
   </div>
 </form>

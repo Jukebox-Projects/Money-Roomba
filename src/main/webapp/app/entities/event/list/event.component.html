@@ -52,7 +52,10 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let event of events; trackBy: trackId" data-cy="entityTable">
+        <tr
+          *ngFor="let event of events | slice: (page - 1) * pageSize:(page - 1) * pageSize + pageSize; trackBy: trackId"
+          data-cy="entityTable"
+        >
           <td>
             <a [routerLink]="['/event', event.id, 'view']">{{ event.id }}</a>
           </td>
@@ -94,5 +97,13 @@
         </tr>
       </tbody>
     </table>
+  </div>
+  <div class="d-flex justify-content-between p-2">
+    <ngb-pagination class="mr-3" [(page)]="page" [pageSize]="pageSize" [collectionSize]="this.events.length"></ngb-pagination>
+    <select class="custom-select" style="width: auto" [(ngModel)]="pageSize">
+      <option [ngValue]="5">5 <span jhiTranslate="global.menu.entities.items-per-page">items per page</span></option>
+      <option [ngValue]="10">10 <span jhiTranslate="global.menu.entities.items-per-page">items per page</span></option>
+      <option [ngValue]="20">20 <span jhiTranslate="global.menu.entities.items-per-page">items per page</span></option>
+    </select>
   </div>
 </div>

@@ -2,7 +2,7 @@
   "moneyRoombaApp": {
     "event": {
       "home": {
-        "title": "Events",
+        "title": "Eventos",
         "refreshListLabel": "Refrescar lista",
         "createLabel": "Crear nuevo Event",
         "createOrEditLabel": "Crear o editar Event",
