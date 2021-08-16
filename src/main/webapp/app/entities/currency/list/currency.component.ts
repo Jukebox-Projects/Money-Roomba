@@ -15,6 +15,8 @@ export class CurrencyComponent implements OnInit {
   currencies?: ICurrency[];
   isLoading = false;
   adminUser = false;
+  page = 1;
+  pageSize = 10;
 
   constructor(protected currencyService: CurrencyService, protected modalService: NgbModal, protected accountService: AccountService) {}
 

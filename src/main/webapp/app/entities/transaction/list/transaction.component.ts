@@ -23,10 +23,11 @@ export class TransactionComponent implements OnInit {
   isLoading = false;
   inputText = '';
   slctDataType: string;
-  collectionSize: any;
   selcetedValue: string;
   adminUser = false;
   fileName = '';
+  page = 1;
+  pageSize = 5;
 
   range = new FormGroup({
     start: new FormControl(),
@@ -49,7 +50,6 @@ export class TransactionComponent implements OnInit {
         this.isLoading = false;
         this.transactions = res.body ?? [];
         this.allTransactions = res.body ?? [];
-        this.collectionSize = this.transactions.length;
       },
       () => {
         this.isLoading = false;
@@ -123,14 +123,6 @@ export class TransactionComponent implements OnInit {
         this.loadAll();
       }
     });
-  }
-  page = 1;
-  pageSize = 5;
-
-  updateTransactionListing() {
-    this.transactions
-      .map((customer, i) => ({ id: i + 1, ...customer }))
-      .slice((this.page - 1) * this.pageSize, (this.page - 1) * this.pageSize + this.pageSize);
   }
 
   trackId(index: number, item: ITransaction): number {

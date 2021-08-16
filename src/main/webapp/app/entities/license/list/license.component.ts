@@ -17,6 +17,8 @@ export class LicenseComponent implements OnInit {
   allLicenses?: ILicense[];
   inputText = '';
   isLoading = false;
+  page = 1;
+  pageSize = 10;
 
   constructor(protected licenseService: LicenseService, protected modalService: NgbModal) {}
 
