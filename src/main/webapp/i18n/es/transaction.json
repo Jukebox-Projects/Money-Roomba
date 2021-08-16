@@ -48,7 +48,8 @@
       "active": "Activo",
       "inactive": "Inactivo",
       "accepted": "Aceptada",
-      "denied": "Denegada"
+      "denied": "Denegada",
+      "choose": "Seleccione..."
     }
   }
 }
