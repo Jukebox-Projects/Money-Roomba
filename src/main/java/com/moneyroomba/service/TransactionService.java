@@ -15,6 +15,7 @@ import java.time.ZoneId;
 import java.time.temporal.TemporalAdjusters;
 import java.util.List;
 import java.util.Optional;
+import javax.swing.text.html.Option;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -51,6 +52,7 @@ public class TransactionService {
     private final CurrencyRepository currencyRepository;
 
     private final EventRepository eventRepository;
+    private final EventService eventService;
 
     public TransactionService(
         TransactionRepository transactionRepository,
@@ -59,7 +61,8 @@ public class TransactionService {
         UserDetailsRepository userDetailsRepository,
         WalletRepository walletRepository,
         CurrencyRepository currencyRepository,
-        EventRepository eventRepository
+        EventRepository eventRepository,
+        EventService eventService
     ) {
         this.transactionRepository = transactionRepository;
         this.userRepository = userRepository;
@@ -68,6 +71,7 @@ public class TransactionService {
         this.walletRepository = walletRepository;
         this.currencyRepository = currencyRepository;
         this.eventRepository = eventRepository;
+        this.eventService = eventService;
     }
 
     /**
@@ -280,6 +284,12 @@ public class TransactionService {
             }
             System.out.println(incomingTransaction.toString());
             transactionRepository.save(incomingTransaction);
+            eventService.createEventAndNotification(
+                EventType.TRANSCTION_RECEIVED,
+                incomingTransaction.getId(),
+                SourceEntity.TRANSACTION,
+                receivingUser
+            );
             return create(transaction);
         } else {
             throw new BadRequestAlertException("Los administradores no pueden crear transacciones", ENTITY_NAME, "nopermission");
