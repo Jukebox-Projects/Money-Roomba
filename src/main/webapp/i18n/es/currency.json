@@ -22,11 +22,13 @@
       "name": "Nombre",
       "conversionRate": "Tipo de cambio",
       "adminCreated": "Creada por administrador",
-      "isActive": "Activa",
+      "isActive": "Estado",
       "transaction": "Transacción",
       "scheduledTransaction": "Transacción programada",
       "wallet": "Monedero",
-      "invoice": "Factura"
+      "invoice": "Factura",
+      "active": "Activa",
+      "inactive": "Inactiva"
     }
   }
 }

@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { TotalBalanceService } from '../../../../reports/total-balance/Service/total-balance.service';
-import { ITotalBalance } from '../../../../reports/total-balance/total-balance.model';
+import { HttpResponse } from '@angular/common/http';
+import { WalletStatisticService } from './service/wallet-statistic.service';
+import { IWalletStatistic } from './wallet-statistic.model';
 import {
   ChartComponent,
   ApexNonAxisChartSeries,
@@ -11,6 +12,7 @@ import {
   ApexLegend,
   ApexStroke,
 } from 'ng-apexcharts';
+import { each } from 'chart.js/helpers';
 
 export type ChartOptions = {
   series: ApexNonAxisChartSeries;
@@ -32,12 +34,13 @@ export type ChartOptions = {
 export class WalletStatisticComponent implements OnInit {
   @ViewChild('chart') chart: ChartComponent;
   public chartOptions: Partial<ChartOptions>;
-  reportData: ITotalBalance;
-  totalBalance: number;
-
-  constructor(protected totalBalanceService: TotalBalanceService) {
+  reportData: IWalletStatistic[];
+  percentages: number[] = [];
+  colorList: string[] = [];
+  nameList: string[] = [];
+  constructor(protected walletStatisticService: WalletStatisticService) {
     this.chartOptions = {
-      series: [34, 12, 41, 22, 15],
+      series: this.percentages,
       chart: {
         width: 300,
         type: 'donut',
@@ -45,6 +48,7 @@ export class WalletStatisticComponent implements OnInit {
       dataLabels: {
         enabled: false,
       },
+      labels: this.nameList,
       stroke: {
         width: 0,
       },
@@ -55,7 +59,7 @@ export class WalletStatisticComponent implements OnInit {
         position: 'bottom',
         show: false,
       },
-      colors: ['#1EAAE7', '#6418C3', '#2BC155', '#FF7A30', '#FFEF5F'],
+      colors: ['#1EAAE7', '#2BC155', '#6418C3', '#FFA500', '#808080', '#FF0000', '#00CCCC', '#FF007F', '#FFFF33', '#994C00'],
       responsive: [
         {
           breakpoint: 480,
@@ -73,5 +77,28 @@ export class WalletStatisticComponent implements OnInit {
     };
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.loadAll();
+  }
+
+  loadAll(): void {
+    this.walletStatisticService.queryAll().subscribe(
+      (res: HttpResponse<IWalletStatistic[]>) => {
+        this.reportData = res.body ?? [];
+        this.resolveData(this.reportData);
+      },
+      error => {}
+    );
+  }
+
+  protected resolveData(reportData: IWalletStatistic[]): void {
+    /* eslint-disable no-console */
+    console.log(reportData);
+    for (let i = 0; i < reportData.length; i++) {
+      this.percentages[i] = reportData[i].percentage;
+      this.nameList[i] = reportData[i].name;
+    }
+    console.log(this.percentages);
+    this.colorList = ['#1EAAE7', '#6418C3', '#2BC155'];
+  }
 }

@@ -28,55 +28,63 @@
     <span jhiTranslate="moneyRoombaApp.currency.home.notFound">No currencies found</span>
   </div>
 
-  <div class="table-responsive" id="entities" *ngIf="currencies && currencies.length > 0">
-    <table class="table table-striped" aria-describedby="page-heading">
+  <div class="table-responsive table-hover fs-14 card-table" id="entities" *ngIf="currencies && currencies.length > 0">
+    <table class="table display mb-4 dataTablesCard dataTable card-table" aria-describedby="page-heading">
       <thead>
         <tr>
-          <th scope="col"><span jhiTranslate="global.field.id">ID</span></th>
           <th scope="col"><span jhiTranslate="moneyRoombaApp.currency.code">Code</span></th>
           <th scope="col"><span jhiTranslate="moneyRoombaApp.currency.name">Name</span></th>
           <th scope="col"><span jhiTranslate="moneyRoombaApp.currency.conversionRate">Conversion Rate</span></th>
           <th scope="col"><span jhiTranslate="moneyRoombaApp.currency.adminCreated">Admin Created</span></th>
-          <th scope="col"><span jhiTranslate="moneyRoombaApp.currency.isActive">Is Active</span></th>
+          <th scope="col"><span jhiTranslate="moneyRoombaApp.currency.isActive">State</span></th>
           <th scope="col"></th>
         </tr>
       </thead>
-      <tbody>
+      <tbody style="max-height: 600px !important; overflow: scroll !important">
         <tr *ngFor="let currency of currencies; trackBy: trackId" data-cy="entityTable">
-          <td>
-            <a [routerLink]="['/currency', currency.id, 'view']">{{ currency.id }}</a>
-          </td>
           <td>{{ currency.code }}</td>
           <td>{{ currency.name }}</td>
           <td>{{ currency.conversionRate }}</td>
-          <td>{{ currency.adminCreated }}</td>
-          <td>{{ currency.isActive }}</td>
+          <td>
+            <span *ngIf="currency.adminCreated" class="badge badge-success" jhiTranslate="moneyRoombaApp.wallet.reportsTrue"> yes </span>
+            <span *ngIf="!currency.adminCreated" class="badge badge-danger" jhiTranslate="moneyRoombaApp.wallet.reportsFalse"> no </span>
+          </td>
+          <td>
+            <span *ngIf="currency.isActive" class="badge badge-success" jhiTranslate="moneyRoombaApp.currency.active"> Active </span>
+            <span *ngIf="!currency.isActive" class="badge badge-danger" jhiTranslate="moneyRoombaApp.currency.inactive"> Inactive </span>
+          </td>
+
           <td class="text-right">
-            <div class="btn-group">
-              <button
-                type="submit"
-                [routerLink]="['/currency', currency.id, 'view']"
-                class="btn btn-info btn-sm"
-                data-cy="entityDetailsButton"
-              >
-                <fa-icon icon="eye"></fa-icon>
-                <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
-              </button>
-
-              <button
-                type="submit"
-                [routerLink]="['/currency', currency.id, 'edit']"
-                class="btn btn-primary btn-sm"
-                data-cy="entityEditButton"
-              >
-                <fa-icon icon="pencil-alt"></fa-icon>
-                <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
-              </button>
-
-              <button type="submit" (click)="delete(currency)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
-                <fa-icon icon="times"></fa-icon>
-                <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
-              </button>
+            <div class="dropdown pb-3 dropdown-no-icon" ngbDropdown *ngIf="adminUser">
+              <div class="btn-link" role="button" data-toggle="dropdown" aria-expanded="false" ngbDropdownToggle>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path
+                    d="M10 11.9999C10 13.1045 10.8954 13.9999 12 13.9999C13.1046 13.9999 14 13.1045 14 11.9999C14 10.8954 13.1046 9.99994 12 9.99994C10.8954 9.99994 10 10.8954 10 11.9999Z"
+                    fill="black"
+                  ></path>
+                  <path
+                    d="M10 4.00006C10 5.10463 10.8954 6.00006 12 6.00006C13.1046 6.00006 14 5.10463 14 4.00006C14 2.89549 13.1046 2.00006 12 2.00006C10.8954 2.00006 10 2.89549 10 4.00006Z"
+                    fill="black"
+                  ></path>
+                  <path
+                    d="M10 20C10 21.1046 10.8954 22 12 22C13.1046 22 14 21.1046 14 20C14 18.8954 13.1046 18 12 18C10.8954 18 10 18.8954 10 20Z"
+                    fill="black"
+                  ></path>
+                </svg>
+              </div>
+              <div class="dropdown-menu dropdown-menu-right" ngbDropdownMenu>
+                <!--                <a class="dropdown-item" [routerLink]="['/category', category.id, 'view']" jhiTranslate="entity.action.view">view</a>-->
+                <a class="dropdown-item text-primary" [routerLink]="['/currency', currency.id, 'edit']" jhiTranslate="entity.action.edit"
+                  >Edit</a
+                >
+                <a
+                  class="dropdown-item text-danger"
+                  *ngIf="currency.adminCreated"
+                  (click)="delete(currency)"
+                  jhiTranslate="entity.action.delete"
+                  >Delete</a
+                >
+              </div>
             </div>
           </td>
         </tr>

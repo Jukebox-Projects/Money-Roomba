@@ -4,11 +4,13 @@ import com.moneyroomba.domain.Category;
 import com.moneyroomba.domain.Event;
 import com.moneyroomba.domain.Transaction;
 import com.moneyroomba.domain.User;
+import com.moneyroomba.domain.UserDetails;
 import com.moneyroomba.domain.enumeration.EventType;
 import com.moneyroomba.domain.enumeration.SourceEntity;
 import com.moneyroomba.repository.CategoryRepository;
 import com.moneyroomba.repository.EventRepository;
 import com.moneyroomba.repository.TransactionRepository;
+import com.moneyroomba.repository.UserDetailsRepository;
 import com.moneyroomba.repository.UserRepository;
 import com.moneyroomba.security.SecurityUtils;
 import com.moneyroomba.service.exception.Category.CategoryDepthException;
@@ -43,18 +45,22 @@ public class CategoryService {
 
     private final UserRepository userRepository;
 
+    private final UserDetailsRepository userDetailsRepository;
+
     public CategoryService(
         CategoryRepository categoryRepository,
         UserService userService,
         TransactionRepository transactionRepository,
         EventRepository eventRepository,
-        UserRepository userRepository
+        UserRepository userRepository,
+        UserDetailsRepository userDetailsRepository
     ) {
         this.categoryRepository = categoryRepository;
         this.userService = userService;
         this.transactionRepository = transactionRepository;
         this.eventRepository = eventRepository;
         this.userRepository = userRepository;
+        this.userDetailsRepository = userDetailsRepository;
     }
 
     /**
@@ -81,6 +87,29 @@ public class CategoryService {
         }
         if (category.getId() != null) {
             createEvent(EventType.UPDATE);
+            Optional<User> user = userRepository.findOneByLogin(
+                SecurityUtils
+                    .getCurrentUserLogin()
+                    .orElseThrow(() -> new BadRequestAlertException("A new wallet cannot already have an ID", ENTITY_NAME, "idexists"))
+            );
+            Optional<UserDetails> userDetails = userDetailsRepository.findOneByInternalUser(user.get());
+            Category existingCategory = categoryRepository.getOne(category.getId());
+            if (
+                (userService.currentUserIsAdmin() && existingCategory.getUserCreated()) ||
+                (
+                    !userService.currentUserIsAdmin() &&
+                    (
+                        (existingCategory.getUserCreated() && !userDetails.get().equals(existingCategory.getUser())) ||
+                        !existingCategory.getUserCreated()
+                    )
+                )
+            ) {
+                throw new BadRequestAlertException(
+                    "You cannot access or modify this wallet's information",
+                    ENTITY_NAME,
+                    "categorynoaccess"
+                );
+            }
         } else {
             createEvent(EventType.CREATE);
         }
@@ -169,7 +198,20 @@ public class CategoryService {
     @Transactional(readOnly = true)
     public Optional<Category> findOne(Long id) {
         log.debug("Request to get Category : {}", id);
-        return categoryRepository.findById(id);
+        Optional<User> user = userRepository.findOneByLogin(
+            SecurityUtils
+                .getCurrentUserLogin()
+                .orElseThrow(() -> new BadRequestAlertException("A new wallet cannot already have an ID", ENTITY_NAME, "idexists"))
+        );
+        Optional<UserDetails> userDetails = userDetailsRepository.findOneByInternalUser(user.get());
+        Optional<Category> category = categoryRepository.findById(id);
+        if (
+            (userService.currentUserIsAdmin() && category.get().getUserCreated()) ||
+            (!userService.currentUserIsAdmin() && (category.get().getUserCreated() && !userDetails.get().equals(category.get().getUser())))
+        ) {
+            throw new BadRequestAlertException("You cannot access or modify this wallet's information", ENTITY_NAME, "categorynoaccess");
+        }
+        return category;
     }
 
     /**

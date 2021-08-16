@@ -123,7 +123,11 @@
                 <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
               </button>
             </div>-->
-            <div class="dropdown pb-3 dropdown-no-icon" ngbDropdown>
+            <div
+              class="dropdown pb-3 dropdown-no-icon"
+              ngbDropdown
+              *ngIf="(!category.userCreated && adminUser) || (category.userCreated && !adminUser)"
+            >
               <div class="btn-link" role="button" data-toggle="dropdown" aria-expanded="false" ngbDropdownToggle>
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path
@@ -140,9 +144,15 @@
                   ></path>
                 </svg>
               </div>
-              <div class="dropdown-menu dropdown-menu-right" ngbDropdownMenu>
-                <a class="dropdown-item" [routerLink]="['/category', category.id, 'view']" jhiTranslate="entity.action.view">view</a>
-                <a class="dropdown-item" [routerLink]="['/category', category.id, 'edit']" jhiTranslate="entity.action.edit">Edit</a>
+              <div
+                class="dropdown-menu dropdown-menu-right"
+                ngbDropdownMenu
+                *ngIf="(!category.userCreated && adminUser) || (category.userCreated && !adminUser)"
+              >
+                <!--                <a class="dropdown-item" [routerLink]="['/category', category.id, 'view']" jhiTranslate="entity.action.view">view</a>-->
+                <a class="dropdown-item text-primary" [routerLink]="['/category', category.id, 'edit']" jhiTranslate="entity.action.edit"
+                  >Edit</a
+                >
                 <a
                   *ngIf="!category.userCreated && adminUser"
                   class="dropdown-item"
@@ -155,15 +165,9 @@
                   class="dropdown-item"
                   (click)="status(category)"
                   jhiTranslate="{{ category.isActive ? 'entity.action.deactivate' : 'entity.action.activate' }}"
-                  >Activate</a
+                  >Deactive</a
                 >
-                <a
-                  *ngIf="(!category.userCreated && adminUser) || (category.userCreated && !adminUser)"
-                  class="dropdown-item"
-                  (click)="delete(category)"
-                  jhiTranslate="entity.action.delete"
-                  >Delete</a
-                >
+                <a class="dropdown-item text-danger" (click)="delete(category)" jhiTranslate="entity.action.delete">Delete</a>
               </div>
             </div>
           </td>

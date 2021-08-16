@@ -50,6 +50,7 @@
           data-cy="entityCreateButton"
           class="btn btn-primary jh-create-entity create-transaction"
           [routerLink]="['/transaction/new']"
+          *ngIf="!adminUser"
         >
           <fa-icon icon="plus"></fa-icon>
           <span jhiTranslate="moneyRoombaApp.transaction.home.createLabel"> Create a new Transaction </span>
@@ -200,10 +201,13 @@
                     <a class="dropdown-item" [routerLink]="['/transaction', transaction.id, 'view']" jhiTranslate="entity.action.view"
                       >view</a
                     >
-                    <a class="dropdown-item" [routerLink]="['/transaction', transaction.id, 'edit']" jhiTranslate="entity.action.edit"
+                    <a
+                      class="dropdown-item text-primary"
+                      [routerLink]="['/transaction', transaction.id, 'edit']"
+                      jhiTranslate="entity.action.edit"
                       >Edit</a
                     >
-                    <a class="dropdown-item" (click)="delete(transaction)" jhiTranslate="entity.action.delete">Delete</a>
+                    <a class="dropdown-item text-danger" (click)="delete(transaction)" jhiTranslate="entity.action.delete">Delete</a>
                   </div>
                 </div>
               </td>

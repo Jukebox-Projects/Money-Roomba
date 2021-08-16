@@ -92,4 +92,13 @@ public class ReportsResource {
         ImportedTransactionCountReportDTO report = reportsService.getImportedTransactionsCount();
         return ResponseEntity.ok().body(report);
     }
+
+    /**
+     * GET totalBalance
+     */
+    @GetMapping("/wallet-statistic")
+    public ResponseEntity<List<WalletStatisticDTO>> walletStatistic() {
+        List<WalletStatisticDTO> report = reportsService.getWalletStatistic();
+        return ResponseEntity.ok().body(report);
+    }
 }

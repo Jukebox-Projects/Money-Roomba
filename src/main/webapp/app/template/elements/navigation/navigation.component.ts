@@ -8,8 +8,10 @@ import { LANGUAGES } from 'app/config/language.constants';
 import { Component, OnInit } from '@angular/core';
 import { Location } from '@angular/common';
 import { Router } from '@angular/router';
+import { SharedService } from '../../../shared.service';
 
 import { VERSION } from 'app/app.constants';
+import { Authority } from '../../../config/authority.constants';
 @Component({
   selector: 'app-navigation',
   templateUrl: './navigation.component.html',
@@ -23,6 +25,7 @@ export class NavigationComponent implements OnInit {
   openAPIEnabled?: boolean;
   version = '';
   account: Account | null = null;
+  adminUser = false;
 
   constructor(
     location: Location,
@@ -31,7 +34,8 @@ export class NavigationComponent implements OnInit {
     private translateService: TranslateService,
     private sessionStorageService: SessionStorageService,
     private accountService: AccountService,
-    private profileService: ProfileService
+    private profileService: ProfileService,
+    public sharedService: SharedService
   ) {
     if (VERSION) {
       this.version = VERSION.toLowerCase().startsWith('v') ? VERSION : 'v' + VERSION;
@@ -46,6 +50,7 @@ export class NavigationComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.isAdmin();
     this.profileService.getProfileInfo().subscribe(profileInfo => {
       this.inProduction = profileInfo.inProduction;
       this.openAPIEnabled = profileInfo.openAPIEnabled;
@@ -61,6 +66,10 @@ export class NavigationComponent implements OnInit {
 
   toggleLoveIcon() {
     this.toggleIcon = !this.toggleIcon;
+  }
+
+  isAdmin(): void {
+    this.adminUser = this.accountService.hasAnyAuthority(Authority.ADMIN);
   }
 
   dashboardArray = ['/', '/wallet', '/category', '/transaction', '/scheduled-transaction'];

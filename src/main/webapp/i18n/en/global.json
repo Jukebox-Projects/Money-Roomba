@@ -228,6 +228,8 @@
     "nowallets": "The receiving user currently has no wallets registered.",
     "nowalletsCurrentUser": "You do not currently have registered wallets.",
     "currencyNoAccess": "You cannot access or modify currency's information.",
+    "categorynoaccess": "You cannot access or modify this category's information.",
+
     "file": {
       "could.not.extract": "Could not extract file",
       "not.image": "File was expected to be an image but was found to be \"{{ fileType }}\"",
