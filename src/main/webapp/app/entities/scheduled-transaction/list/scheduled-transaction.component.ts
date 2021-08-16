@@ -22,6 +22,8 @@ export class ScheduledTransactionComponent implements OnInit {
   inputText = '';
   filterType: string = 'name';
   adminUser: boolean = false;
+  page = 1;
+  pageSize = 5;
 
   constructor(
     protected scheduledTransactionService: ScheduledTransactionService,

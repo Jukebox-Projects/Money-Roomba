@@ -4,42 +4,47 @@
 
     <div class="d-flex justify-content-end">
       <div class="pt-3" style="font-size: 24px">
-        <select [(ngModel)]="filterType" name="filterType">
-          <option class="dropdown-item" value="name" jhiTranslate="moneyRoombaApp.scheduledTransaction.name">Name</option>
-          <option class="dropdown-item" value="currency" jhiTranslate="moneyRoombaApp.scheduledTransaction.currency">Currency</option>
+        <select [(ngModel)]="filterType" name="filterType" class="btn light btn-rounded form-control default-select">
+          <option value="name" jhiTranslate="moneyRoombaApp.scheduledTransaction.name">Name</option>
+          <option value="currency" jhiTranslate="moneyRoombaApp.scheduledTransaction.currency">Currency</option>
         </select>
       </div>
       <div *ngIf="filterType === 'currency'" class="pt-3 p-1" style="font-size: 24px">
         <input
-          jhiTranslate="moneyRoombaApp.wallet.home.searchbar"
           type="text"
+          class="form-control input-rounded"
           [(ngModel)]="inputText"
           (input)="filterTransactionsByCurrency()"
+          placeholder="{{ 'moneyRoombaApp.wallet.home.searchbar' | translate }}"
         />
       </div>
       <div *ngIf="filterType === 'name'" class="pt-3 p-1" style="font-size: 24px">
         <input
-          jhiTranslate="moneyRoombaApp.wallet.home.searchbar"
+          class="form-control input-rounded"
           type="text"
           [(ngModel)]="inputText"
           (input)="filterTransactionsByName()"
+          placeholder="{{ 'moneyRoombaApp.wallet.home.searchbar' | translate }}"
         />
       </div>
-      <button class="btn btn-info mr-2" (click)="loadAll()" [disabled]="isLoading">
-        <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
-        <span jhiTranslate="moneyRoombaApp.scheduledTransaction.home.refreshListLabel">Refresh List</span>
-      </button>
 
-      <button
-        id="jh-create-entity"
-        data-cy="entityCreateButton"
-        class="btn btn-primary jh-create-entity create-scheduled-transaction"
-        [routerLink]="['/scheduled-transaction/new']"
-        *ngIf="!adminUser"
-      >
-        <fa-icon icon="plus"></fa-icon>
-        <span jhiTranslate="moneyRoombaApp.scheduledTransaction.home.createLabel"> Create a new Scheduled Transaction </span>
-      </button>
+      <div class="pt-3 p-1">
+        <button class="btn btn-info mr-2" (click)="loadAll()" [disabled]="isLoading">
+          <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
+          <span jhiTranslate="moneyRoombaApp.scheduledTransaction.home.refreshListLabel">Refresh List</span>
+        </button>
+
+        <button
+          id="jh-create-entity"
+          data-cy="entityCreateButton"
+          class="btn btn-primary jh-create-entity create-scheduled-transaction"
+          [routerLink]="['/scheduled-transaction/new']"
+          *ngIf="!adminUser"
+        >
+          <fa-icon icon="plus"></fa-icon>
+          <span jhiTranslate="moneyRoombaApp.scheduledTransaction.home.createLabel"> Create a new Scheduled Transaction </span>
+        </button>
+      </div>
     </div>
   </h2>
 
@@ -70,7 +75,13 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let scheduledTransaction of scheduledTransactions; trackBy: trackId" data-cy="entityTable">
+        <tr
+          *ngFor="
+            let scheduledTransaction of scheduledTransactions | slice: (page - 1) * pageSize:(page - 1) * pageSize + pageSize;
+            trackBy: trackId
+          "
+          data-cy="entityTable"
+        >
           <td>{{ scheduledTransaction.name }}</td>
           <td>{{ scheduledTransaction.originalAmount | currency: scheduledTransaction.currency?.code:'symbol':'1.2-2' }}</td>
           <td>
@@ -147,5 +158,19 @@
         </tr>
       </tbody>
     </table>
+  </div>
+
+  <div class="d-flex justify-content-between p-2">
+    <ngb-pagination
+      class="mr-3"
+      [(page)]="page"
+      [pageSize]="pageSize"
+      [collectionSize]="this.scheduledTransactions.length"
+    ></ngb-pagination>
+    <select class="custom-select" style="width: auto" [(ngModel)]="pageSize">
+      <option [ngValue]="5">5 <span jhiTranslate="global.menu.entities.items-per-page">items per page</span></option>
+      <option [ngValue]="10">10 <span jhiTranslate="global.menu.entities.items-per-page">items per page</span></option>
+      <option [ngValue]="20">20 <span jhiTranslate="global.menu.entities.items-per-page">items per page</span></option>
+    </select>
   </div>
 </div>

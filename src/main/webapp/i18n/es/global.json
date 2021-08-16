@@ -24,7 +24,8 @@
         "event": "Eventos",
         "systemSetting": "Configuración de sistema",
         "currency-converter": "Conversor de monedas",
-        "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)"
+        "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)",
+        "items-per-page": "elementos por página"
       },
       "account": {
         "main": "Cuenta",
@@ -194,7 +195,8 @@
       "maxbytes": "Este campo no puede tener más de {{max}} bytes.",
       "pattern": "Este campo debe seguir el patrón {{pattern}}.",
       "number": "Este campo debe ser un número.",
-      "datetimelocal": "Este campo debe ser una fecha y hora."
+      "datetimelocal": "Este campo debe ser una fecha y hora.",
+      "patternLogin": "Este campo solo puede contener letras, dígitos y direcciones de correo electrónico."
     }
   },
   "error": {
@@ -219,13 +221,13 @@
     "nouserfound": "No se ha podido completar la acción debido a que el usuario en sesión no tiene detalles asociados.",
     "nomorewallets": "Ha registrado el máximo de carteras permitidas para su cuenta.",
     "negativeincome": "No es posible registrar una transacción con un ingreso menor a 0.",
-    "categorydeleteerror": "No se puede eliminar la categoría porque hay transacciones asocidas.",
     "walletnoaccess": "No puede accesar o modificar la información de la cartera solicitada.",
     "transactionnoaccess": "No puede accesar o modificar la información de la transacción solicitada.",
     "categorydeleteerror": "No se puede eliminar la categoría porque hay transacciones asocidas",
     "notvalidcontact": "No se pudo encontrar ningún contacto con la información proporcionada.",
     "nowallets": "El usuario receptor no tiene carteras registradas actualmente.",
     "nowalletsCurrentUser": "Actualmente no tiene carteras registradas.",
+    "currencyNoAccess": "No puede accesar o modificar la información de las monedas.",
     "categorynoaccess": "No puede accesar o modificar la información de la categoría solicitada.",
     "file": {
       "could.not.extract": "No se pudo extraer el fichero",
@@ -233,7 +235,10 @@
       "noFileSelected": "No se seleccionó ningún archivo",
       "wrongFileType": "El tipo de archivo no es compatible, el tipo de archivo debe ser XML",
       "reachedMaximumTransactions": "Ha alcanzado la cantidad máxima de transacciones importadas"
-    }
+    },
+    "categoryOwnParent": "Una categoría no puede ser su propio padre.",
+    "childCategoryAsParent": "Una subcategoría no puede ser una categoría padre.",
+    "categoryIsParent": "Una categoría padre no puede ser una subcategoría al mismo tiempo."
   },
   "footer": "© 2021 Money Roomba"
 }

@@ -15,6 +15,8 @@ export class EventComponent implements OnInit {
   allEvents?: IEvent[];
   isLoading = false;
   inputText = '';
+  page = 1;
+  pageSize = 10;
 
   constructor(protected eventService: EventService, protected modalService: NgbModal) {}
 
@@ -25,7 +27,9 @@ export class EventComponent implements OnInit {
       (res: HttpResponse<IEvent[]>) => {
         this.isLoading = false;
         this.events = res.body ?? [];
+        this.events = this.events.sort((a, b) => (b.dateAdded.isBefore(a.dateAdded) ? -1 : 1));
         this.allEvents = res.body ?? [];
+        this.allEvents = this.allEvents.sort((a, b) => (b.dateAdded.isBefore(a.dateAdded) ? -1 : 1));
       },
       () => {
         this.isLoading = false;

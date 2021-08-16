@@ -254,7 +254,7 @@ public class WalletService {
         );
         Optional<UserDetails> userDetails = userDetailsRepository.findOneByInternalUser(user.get());
         Optional<Wallet> wallet = walletRepository.findById(id);
-        List<Transaction> transactions = transactionRepository.findAllByWallet(wallet.get());
+        List<Transaction> transactions = transactionRepository.findAllByWalletOrderByDateAddedDesc(wallet.get());
         List<ScheduledTransaction> scheduledTransactions = scheduledTransactionRepository.findAllByWallet(wallet.get());
         if (!userService.currentUserIsAdmin() && !userDetails.get().equals(wallet.get().getUser())) {
             throw new BadRequestAlertException("You cannot access or modify this wallet's information", ENTITY_NAME, "walletnoaccess");

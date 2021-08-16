@@ -74,9 +74,15 @@ public class CategoryService {
         // Checks category depth. It can only goes 2 levels deep
         if (category.getParent() != null) {
             if (category.getParent().getId().equals(category.getId())) {
-                throw new ParentCategoryIsSameCategory("The parent category cannot be the same category");
+                throw new BadRequestAlertException("A category cannot be its own parent", ENTITY_NAME, "categoryOwnParent");
             } else if (category.getParent().getParent() != null) {
-                throw new CategoryDepthException("Child category cannot be a parent category");
+                throw new BadRequestAlertException("Child category cannot be a parent category", ENTITY_NAME, "childCategoryAsParent");
+            } else if (categoryRepository.findOneByParentId(category.getId()).isPresent()) {
+                throw new BadRequestAlertException(
+                    "Parent category cannot be a child category at the same time.",
+                    ENTITY_NAME,
+                    "categoryIsParent"
+                );
             }
         }
         if (category.getId() != null) {

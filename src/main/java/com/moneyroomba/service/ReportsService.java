@@ -271,12 +271,12 @@ public class ReportsService {
         } else {
             mType = MovementType.INCOME;
         }
-
+        Currency defaultCurrency = null;
         if (user.isPresent()) {
             results = transactionRepository.getTransactionByCategoryReport(user.get().getId(), true, mType);
             if (!results.isEmpty()) {
                 if (!sameCurrencyTransactionsByCategory(results)) {
-                    Currency defaultCurrency = getDefaultCurrency();
+                    defaultCurrency = getDefaultCurrency();
                     results = convertConversionTransactionsByCategory(results, defaultCurrency);
                 }
                 results = orderTransactionsByCategory(results);
@@ -285,6 +285,10 @@ public class ReportsService {
             }
         } else {
             throw new BadRequestAlertException("Could not find the user", ENTITY_NAME, "nouserfound");
+        }
+
+        if (defaultCurrency != null) {
+            results.get(0).setCurrency(defaultCurrency);
         }
 
         return results;
