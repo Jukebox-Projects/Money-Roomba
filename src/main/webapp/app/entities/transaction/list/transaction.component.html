@@ -4,15 +4,14 @@
 
     <div class="d-flex justify-content-end">
       <div class="pt-3" style="font-size: 24px">
-        <select [(ngModel)]="slctDataType" name="slctDataType">
-          <option class="dropdown-item" value="">-</option>
-          <option class="dropdown-item" value="Name" jhiTranslate="moneyRoombaApp.transaction.name">Name</option>
-          <option class="dropdown-item" value="Date" jhiTranslate="moneyRoombaApp.transaction.dateAdded">Date</option>
+        <select [(ngModel)]="slctDataType" name="slctDataType" class="btn light btn-rounded form-control default-select">
+          <option selected jhiTranslate="moneyRoombaApp.transaction.choose">Choose...</option>
+          <option value="Name" jhiTranslate="moneyRoombaApp.transaction.name">Name</option>
+          <option value="Date" jhiTranslate="moneyRoombaApp.transaction.dateAdded">Date</option>
         </select>
       </div>
-      <!-- Input date Range -->
-      <div class="pt-3 p-1" style="font-size: 14px">
-        <form *ngIf="slctDataType == 'Date'">
+      <div *ngIf="slctDataType == 'Date'" class="pt-3 p-1" style="font-size: 15px">
+        <form>
           <mat-form-field appearance="fill" (submit)="filterDateRange()">
             <mat-label>Enter a date range</mat-label>
             <mat-date-range-input [formGroup]="range" [rangePicker]="picker">
@@ -25,26 +24,26 @@
             <mat-error *ngIf="range.controls.start.hasError('matStartDateInvalid')">Invalid start date</mat-error>
             <mat-error *ngIf="range.controls.end.hasError('matEndDateInvalid')">Invalid end date</mat-error>
           </mat-form-field>
-          <button class="btn btn-info mr-2" (click)="filterDateRange()">Submit</button>
         </form>
       </div>
-      <!-- Input nombre y descripcion -->
-      <div class="pt-3 p-1" style="font-size: 24px">
+
+      <div class="form-group pt-3 pl-1">
+        <button *ngIf="slctDataType == 'Date'" class="btn btn-info mr-2" (click)="filterDateRange()">Submit</button>
         <input
           *ngIf="slctDataType == 'Name'"
-          jhiTranslate="moneyRoombaApp.transaction.home.searchbar"
           type="text"
+          class="form-control input-rounded"
+          placeholder="{{ 'moneyRoombaApp.category.home.searchbar' | translate }}"
           [(ngModel)]="inputText"
           (input)="filterTransactions()"
         />
       </div>
-
-      <button class="btn btn-info mr-2" (click)="loadAll()" [disabled]="isLoading">
-        <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
-        <span jhiTranslate="moneyRoombaApp.transaction.home.refreshListLabel">Refresh List</span>
-      </button>
-
-      <div>
+      <!-- Input date Range -->
+      <div class="pt-3 p-1" style="font-size: 15px">
+        <button class="btn btn-info mr-2" (click)="loadAll()" [disabled]="isLoading">
+          <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
+          <span jhiTranslate="moneyRoombaApp.transaction.home.refreshListLabel">Refresh List</span>
+        </button>
         <button
           id="jh-create-entity"
           data-cy="entityCreateButton"
@@ -68,6 +67,10 @@
           <span jhiTranslate="moneyRoombaApp.wallet.home.upload"> Upload a transaction </span>
         </button>
       </div>
+      <!-- Input nombre y descripcion -->
+      <div class="pt-3 p-1"></div>
+
+      <div></div>
     </div>
   </h2>
 
@@ -158,31 +161,31 @@
 
               <td class="text-right">
                 <!-- <div class="btn-group">
-                  <button
-                    type="submit"
-                    [routerLink]="['/transaction', transaction.id, 'view']"
-                    class="btn btn-info btn-sm"
-                    data-cy="entityDetailsButton"
-                  >
-                    <fa-icon icon="eye"></fa-icon>
-                    <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
-                  </button>
+                <button
+                  type="submit"
+                  [routerLink]="['/transaction', transaction.id, 'view']"
+                  class="btn btn-info btn-sm"
+                  data-cy="entityDetailsButton"
+                >
+                  <fa-icon icon="eye"></fa-icon>
+                  <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
+                </button>
 
-                  <button
-                    type="submit"
-                    [routerLink]="['/transaction', transaction.id, 'edit']"
-                    class="btn btn-primary btn-sm"
-                    data-cy="entityEditButton"
-                  >
-                    <fa-icon icon="pencil-alt"></fa-icon>
-                    <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
-                  </button>
+                <button
+                  type="submit"
+                  [routerLink]="['/transaction', transaction.id, 'edit']"
+                  class="btn btn-primary btn-sm"
+                  data-cy="entityEditButton"
+                >
+                  <fa-icon icon="pencil-alt"></fa-icon>
+                  <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
+                </button>
 
-                  <button type="submit" (click)="delete(transaction)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
-                    <fa-icon icon="times"></fa-icon>
-                    <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
-                  </button>
-                </div>-->
+                <button type="submit" (click)="delete(transaction)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
+                  <fa-icon icon="times"></fa-icon>
+                  <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
+                </button>
+              </div>-->
                 <div class="dropdown pb-3 dropdown-no-icon" ngbDropdown>
                   <div class="btn-link" role="button" data-toggle="dropdown" aria-expanded="false" ngbDropdownToggle>
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">

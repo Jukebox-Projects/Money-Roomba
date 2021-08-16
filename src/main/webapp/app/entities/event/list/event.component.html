@@ -4,12 +4,20 @@
 
     <div class="d-flex justify-content-end">
       <div class="pt-3 p-1" style="font-size: 24px">
-        <input jhiTranslate="moneyRoombaApp.transaction.home.searchbar" type="text" [(ngModel)]="inputText" (input)="filterEvents()" />
+        <input
+          class="form-control input-rounded"
+          type="text"
+          [(ngModel)]="inputText"
+          (input)="filterEvents()"
+          placeholder="{{ 'moneyRoombaApp.wallet.home.searchbar' | translate }}"
+        />
       </div>
-      <button class="btn btn-info mr-2" (click)="loadAll()" [disabled]="isLoading">
-        <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
-        <span jhiTranslate="moneyRoombaApp.event.home.refreshListLabel">Refresh List</span>
-      </button>
+      <div class="pt-3 p-1">
+        <button class="btn btn-info mr-2" (click)="loadAll()" [disabled]="isLoading">
+          <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
+          <span jhiTranslate="moneyRoombaApp.event.home.refreshListLabel">Refresh List</span>
+        </button>
+      </div>
       <!--
       <button
         id="jh-create-entity"

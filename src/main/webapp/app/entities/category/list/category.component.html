@@ -4,22 +4,32 @@
 
     <div class="d-flex justify-content-end">
       <div class="pt-3 p-1" style="font-size: 24px">
-        <input jhiTranslate="moneyRoombaApp.category.home.searchbar" type="text" [(ngModel)]="inputText" (input)="filterCategory()" />
+        <input
+          class="form-control input-rounded"
+          placeholder="{{ 'moneyRoombaApp.category.home.searchbar' | translate }}"
+          type="text"
+          [(ngModel)]="inputText"
+          (input)="filterCategory()"
+          i18n-placeholder
+        />
       </div>
-      <button class="btn btn-info mr-2" (click)="loadAll()" [disabled]="isLoading">
-        <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
-        <span jhiTranslate="moneyRoombaApp.category.home.refreshListLabel">Refresh List</span>
-      </button>
 
-      <button
-        id="jh-create-entity"
-        data-cy="entityCreateButton"
-        class="btn btn-primary jh-create-entity create-category"
-        [routerLink]="['/category/new']"
-      >
-        <fa-icon icon="plus"></fa-icon>
-        <span jhiTranslate="moneyRoombaApp.category.home.createLabel"> Create a new Category </span>
-      </button>
+      <div class="pt-3 p-1">
+        <button class="btn btn-info mr-2" (click)="loadAll()" [disabled]="isLoading">
+          <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
+          <span jhiTranslate="moneyRoombaApp.category.home.refreshListLabel">Refresh List</span>
+        </button>
+
+        <button
+          id="jh-create-entity"
+          data-cy="entityCreateButton"
+          class="btn btn-primary jh-create-entity create-category"
+          [routerLink]="['/category/new']"
+        >
+          <fa-icon icon="plus"></fa-icon>
+          <span jhiTranslate="moneyRoombaApp.category.home.createLabel"> Create a new Category </span>
+        </button>
+      </div>
     </div>
   </h2>
 

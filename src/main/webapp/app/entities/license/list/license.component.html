@@ -4,17 +4,30 @@
 
     <div class="d-flex justify-content-end">
       <div class="pt-3 p-1" style="font-size: 24px">
-        <input jhiTranslate="moneyRoombaApp.category.home.searchbar" type="text" [(ngModel)]="inputText" (input)="filter()" />
+        <input
+          class="form-control input-rounded"
+          type="text"
+          [(ngModel)]="inputText"
+          (input)="filter()"
+          placeholder="{{ 'moneyRoombaApp.category.home.searchbar' | translate }}"
+        />
       </div>
-      <button class="btn btn-info mr-2" (click)="loadAll()" [disabled]="isLoading">
-        <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
-        <span jhiTranslate="moneyRoombaApp.license.home.refreshListLabel">Refresh List</span>
-      </button>
+      <div class="pt-3 p-1">
+        <button class="btn btn-info mr-2" (click)="loadAll()" [disabled]="isLoading">
+          <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
+          <span jhiTranslate="moneyRoombaApp.license.home.refreshListLabel">Refresh List</span>
+        </button>
 
-      <button id="jh-create-entity" data-cy="entityCreateButton" class="btn btn-primary jh-create-entity create-license" (click)="create()">
-        <fa-icon icon="plus"></fa-icon>
-        <span jhiTranslate="moneyRoombaApp.license.home.createLabel"> Create a new License </span>
-      </button>
+        <button
+          id="jh-create-entity"
+          data-cy="entityCreateButton"
+          class="btn btn-primary jh-create-entity create-license"
+          (click)="create()"
+        >
+          <fa-icon icon="plus"></fa-icon>
+          <span jhiTranslate="moneyRoombaApp.license.home.createLabel"> Create a new License </span>
+        </button>
+      </div>
     </div>
   </h2>
 

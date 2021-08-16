@@ -4,15 +4,23 @@
 
     <div class="d-flex justify-content-end">
       <div class="pt-3 p-1" style="font-size: 24px">
-        <input jhiTranslate="userManagement.home.searchbar" type="text" [(ngModel)]="inputText" (input)="filter()" />
+        <input
+          class="form-control input-rounded"
+          type="text"
+          [(ngModel)]="inputText"
+          (input)="filter()"
+          placeholder="{{ 'userManagement.home.searchbar' | translate }}"
+        />
       </div>
-      <button class="btn btn-info mr-2" (click)="loadAll()" [disabled]="isLoading">
-        <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
-        <span jhiTranslate="userManagement.home.refreshListLabel">Refresh List</span>
-      </button>
-      <button class="btn btn-primary jh-create-entity" [routerLink]="['./new']">
-        <fa-icon icon="plus"></fa-icon> <span jhiTranslate="userManagement.home.createLabel">Create a new User</span>
-      </button>
+      <div class="pt-3">
+        <button class="btn btn-info mr-2" (click)="loadAll()" [disabled]="isLoading">
+          <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
+          <span jhiTranslate="userManagement.home.refreshListLabel">Refresh List</span>
+        </button>
+        <button class="btn btn-primary jh-create-entity" [routerLink]="['./new']">
+          <fa-icon icon="plus"></fa-icon> <span jhiTranslate="userManagement.home.createLabel">Create a new User</span>
+        </button>
+      </div>
     </div>
   </h2>
 
