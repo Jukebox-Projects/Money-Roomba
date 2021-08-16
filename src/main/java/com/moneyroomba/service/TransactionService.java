@@ -530,7 +530,7 @@ public class TransactionService {
     public List<Transaction> findAllByWallet(Long id) {
         log.debug("Request to get Transaction : {}", id);
         Optional<Wallet> wallet = walletRepository.findById(id);
-        return transactionRepository.findAllByWallet(wallet.get());
+        return transactionRepository.findAllByWalletOrderByDateAddedDesc(wallet.get());
     }
 
     /**

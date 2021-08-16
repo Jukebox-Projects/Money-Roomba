@@ -194,7 +194,8 @@
       "maxbytes": "Este campo no puede tener más de {{max}} bytes.",
       "pattern": "Este campo debe seguir el patrón {{pattern}}.",
       "number": "Este campo debe ser un número.",
-      "datetimelocal": "Este campo debe ser una fecha y hora."
+      "datetimelocal": "Este campo debe ser una fecha y hora.",
+      "patternLogin": "Este campo solo puede contener letras, dígitos y direcciones de correo electrónico."
     }
   },
   "error": {
@@ -226,6 +227,7 @@
     "notvalidcontact": "No se pudo encontrar ningún contacto con la información proporcionada.",
     "nowallets": "El usuario receptor no tiene carteras registradas actualmente.",
     "nowalletsCurrentUser": "Actualmente no tiene carteras registradas.",
+    "currencyNoAccess": "No puede accesar o modificar la información de las monedas.",
     "categorynoaccess": "No puede accesar o modificar la información de la categoría solicitada.",
     "file": {
       "could.not.extract": "No se pudo extraer el fichero",
@@ -233,7 +235,10 @@
       "noFileSelected": "No se seleccionó ningún archivo",
       "wrongFileType": "El tipo de archivo no es compatible, el tipo de archivo debe ser XML",
       "reachedMaximumTransactions": "Ha alcanzado la cantidad máxima de transacciones importadas"
-    }
+    },
+    "categoryOwnParent": "Una categoría no puede ser su propio padre.",
+    "childCategoryAsParent": "Una subcategoría no puede ser una categoría padre.",
+    "categoryIsParent": "Una categoría padre no puede ser una subcategoría al mismo tiempo."
   },
   "footer": "© 2021 Money Roomba"
 }

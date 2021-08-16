@@ -2,6 +2,7 @@ package com.moneyroomba.service;
 
 import com.moneyroomba.domain.Currency;
 import com.moneyroomba.repository.CurrencyRepository;
+import com.moneyroomba.web.rest.errors.BadRequestAlertException;
 import java.util.List;
 import java.util.Optional;
 import org.slf4j.Logger;
@@ -20,8 +21,13 @@ public class CurrencyService {
 
     private final CurrencyRepository currencyRepository;
 
-    public CurrencyService(CurrencyRepository currencyRepository) {
+    private final UserService userService;
+
+    private static final String ENTITY_NAME = "currency";
+
+    public CurrencyService(CurrencyRepository currencyRepository, UserService userService) {
         this.currencyRepository = currencyRepository;
+        this.userService = userService;
     }
 
     /**
@@ -32,6 +38,9 @@ public class CurrencyService {
      */
     public Currency save(Currency currency) {
         log.debug("Request to save Currency : {}", currency);
+        if (!userService.currentUserIsAdmin()) {
+            throw new BadRequestAlertException("You cannot access or modify currency's information.", ENTITY_NAME, "currencyNoAccess");
+        }
         return currencyRepository.save(currency);
     }
 
@@ -43,6 +52,9 @@ public class CurrencyService {
      */
     public Optional<Currency> partialUpdate(Currency currency) {
         log.debug("Request to partially update Currency : {}", currency);
+        if (!userService.currentUserIsAdmin()) {
+            throw new BadRequestAlertException("You cannot access or modify currency's information.", ENTITY_NAME, "currencyNoAccess");
+        }
 
         return currencyRepository
             .findById(currency.getId())
@@ -100,6 +112,9 @@ public class CurrencyService {
      */
     public void delete(Long id) {
         log.debug("Request to delete Currency : {}", id);
+        if (!userService.currentUserIsAdmin()) {
+            throw new BadRequestAlertException("You cannot access or modify currency's information.", ENTITY_NAME, "currencyNoAccess");
+        }
         currencyRepository.deleteById(id);
     }
 }

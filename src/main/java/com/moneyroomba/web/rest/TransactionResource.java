@@ -102,7 +102,6 @@ public class TransactionResource {
     /**
      * {@code POST  /transactions} : Create a new transaction.
      *
-     * @param transaction the transaction to create.
      * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new transaction, or with status {@code 400 (Bad Request)} if the transaction has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
@@ -213,10 +212,10 @@ public class TransactionResource {
             SecurityUtils.getCurrentUserLogin().orElseThrow(() -> new NoSuchElementFoundException("No Login found"))
         );
         Optional<UserDetails> userDetails = userDetailsRepository.findOneByInternalUser(user.get());
-        List<Transaction> entityList = transactionRepository.findAll();
+        List<Transaction> entityList = transactionRepository.findAllOrderedByDateAdded();
         List<Transaction> res = new ArrayList<Transaction>();
         if (SecurityUtils.hasCurrentUserThisAuthority(AuthoritiesConstants.ADMIN)) {
-            List<Transaction> resAll = transactionRepository.findAll();
+            List<Transaction> resAll = transactionRepository.findAllOrderedByDateAdded();
             log.debug("Request to get all transactions for Admin");
             return ResponseEntity.ok().body(resAll);
         } else {
