@@ -24,7 +24,8 @@
         "event": "Events",
         "systemSetting": "System Setting",
         "currency-converter": "Currency converter",
-        "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)"
+        "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)",
+        "items-per-page": "items per page"
       },
       "account": {
         "main": "Account",

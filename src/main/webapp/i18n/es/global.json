@@ -24,7 +24,8 @@
         "event": "Eventos",
         "systemSetting": "Configuración de sistema",
         "currency-converter": "Conversor de monedas",
-        "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)"
+        "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)",
+        "items-per-page": "elementos por página"
       },
       "account": {
         "main": "Cuenta",
@@ -220,7 +221,6 @@
     "nouserfound": "No se ha podido completar la acción debido a que el usuario en sesión no tiene detalles asociados.",
     "nomorewallets": "Ha registrado el máximo de carteras permitidas para su cuenta.",
     "negativeincome": "No es posible registrar una transacción con un ingreso menor a 0.",
-    "categorydeleteerror": "No se puede eliminar la categoría porque hay transacciones asocidas.",
     "walletnoaccess": "No puede accesar o modificar la información de la cartera solicitada.",
     "transactionnoaccess": "No puede accesar o modificar la información de la transacción solicitada.",
     "categorydeleteerror": "No se puede eliminar la categoría porque hay transacciones asocidas",

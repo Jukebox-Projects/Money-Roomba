@@ -22,6 +22,8 @@ export class CategoryComponent implements OnInit {
   isLoading = false;
   inputText = '';
   adminUser = false;
+  page = 1;
+  pageSize = 5;
 
   constructor(
     protected categoryService: CategoryService,
@@ -37,7 +39,9 @@ export class CategoryComponent implements OnInit {
       (res: HttpResponse<ICategory[]>) => {
         this.isLoading = false;
         this.categories = res.body ?? [];
+        this.categories = this.categories.sort((a, b) => a.name.localeCompare(b.name));
         this.allCategories = res.body ?? [];
+        this.allCategories = this.allCategories.sort((a, b) => a.name.localeCompare(b.name));
       },
       () => {
         this.isLoading = false;

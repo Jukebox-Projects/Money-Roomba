@@ -2,25 +2,25 @@
   "moneyRoombaApp": {
     "notification": {
       "home": {
-        "title": "Notifications",
+        "title": "Notificaciones",
         "refreshListLabel": "Refrescar lista",
-        "createLabel": "Crear nuevo Notification",
-        "createOrEditLabel": "Crear o editar Notification",
-        "notFound": "Ningún Notifications encontrado"
+        "createLabel": "Crear nueva Notificación",
+        "createOrEditLabel": "Crear o editar Notificación",
+        "notFound": "Ningúna notificación encontrada"
       },
-      "created": "Un nuevo Notification ha sido creado con el identificador {{ param }}",
-      "updated": "Un Notification ha sido actualizado con el identificador {{ param }}",
-      "deleted": "Un Notification ha sido eliminado con el identificador {{ param }}",
+      "created": "Una nueva Notificación ha sido creado con el identificador {{ param }}",
+      "updated": "Una Notificación ha sido actualizado con el identificador {{ param }}",
+      "deleted": "Una Notificación ha sido eliminado con el identificador {{ param }}",
       "delete": {
-        "question": "¿Seguro que quiere eliminar Notification {{ id }}?"
+        "question": "¿Seguro que quiere eliminar Notificación {{ id }}?"
       },
       "detail": {
-        "title": "Notification"
+        "title": "Notificación"
       },
       "id": "ID",
-      "dateOpened": "Date Opened",
-      "opened": "Opened",
-      "event": "Event"
+      "dateOpened": "Fecha de apertura",
+      "opened": "Abierta",
+      "event": "Evento"
     }
   }
 }
