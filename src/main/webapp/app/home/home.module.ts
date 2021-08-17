@@ -26,6 +26,8 @@ import { AvatarModule } from 'ngx-avatar';
 import { TotalBalanceModule } from '../reports/total-balance/total-balance.module';
 import { TransactionsCategoryModule } from '../reports/transactions-category/transactions-category.module';
 import { TransactionsCategoryComponent } from '../reports/transactions-category/transactions-category.component';
+import { HealthComponent } from '../admin/health/health.component';
+import { HealthModule } from '../admin/health/health.module';
 
 @NgModule({
   imports: [
@@ -54,6 +56,7 @@ import { TransactionsCategoryComponent } from '../reports/transactions-category/
     PropertyComponent,
     RestaurantComponent, // End spendings components
     QuickTransferCrousalComponent,
+    HealthComponent,
   ],
 })
 export class HomeModule {}

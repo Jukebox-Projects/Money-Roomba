@@ -8,6 +8,7 @@ import { faCaretDown } from '@fortawesome/free-solid-svg-icons';
 import { Account } from 'app/core/auth/account.model';
 import { AccountService } from 'app/core/auth/account.service';
 import { faCalendarAlt } from '@fortawesome/free-solid-svg-icons';
+import { Authority } from '../../config/authority.constants';
 
 @Component({
   selector: 'app-dashboard',
@@ -20,12 +21,13 @@ export class DashboardComponent implements OnInit {
   faCalendarAlt = faCalendarAlt;
   account: Account | null = null;
   showDateInputs: boolean = false;
+  adminUser = false;
   constructor(protected totalBalanceService: TotalBalanceService, private accountService: AccountService) {}
 
   ngOnInit(): void {
     this.loadAll();
-
     this.accountService.getAuthenticationState().subscribe(async account => (this.account = account));
+    this.isAdmin();
   }
 
   loadAll(): void {
@@ -43,5 +45,9 @@ export class DashboardComponent implements OnInit {
   }
   onClick() {
     this.showDateInputs = true;
+  }
+
+  isAdmin(): void {
+    this.adminUser = this.accountService.hasAnyAuthority(Authority.ADMIN);
   }
 }

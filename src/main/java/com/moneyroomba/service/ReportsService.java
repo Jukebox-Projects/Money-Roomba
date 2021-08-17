@@ -280,8 +280,6 @@ public class ReportsService {
                     results = convertConversionTransactionsByCategory(results, defaultCurrency);
                 }
                 results = orderTransactionsByCategory(results);
-            } else {
-                throw new BadRequestAlertException("No transactions found", ENTITY_NAME, "nouserfound");
             }
         } else {
             throw new BadRequestAlertException("Could not find the user", ENTITY_NAME, "nouserfound");
