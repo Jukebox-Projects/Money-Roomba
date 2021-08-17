@@ -5,6 +5,7 @@
     "menu": {
       "home": "Inicio",
       "profile": "Perfil",
+      "dashboardTitle": "Panel de control",
       "personalInformation": "Información Personal",
       "jhipster-needle-menu-add-element": "JHipster will add additional menu entries here (do not translate!)",
       "entities": {
@@ -229,6 +230,7 @@
     "nowalletsCurrentUser": "Actualmente no tiene carteras registradas.",
     "currencyNoAccess": "No puede accesar o modificar la información de las monedas.",
     "categorynoaccess": "No puede accesar o modificar la información de la categoría solicitada.",
+    "noContacts": "No tiene contactos favoritos",
     "file": {
       "could.not.extract": "No se pudo extraer el fichero",
       "not.image": "Se esperaba que el fichero fuera una imagen pero se encontro \"{{ fileType }}\"",

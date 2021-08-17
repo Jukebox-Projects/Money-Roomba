@@ -1,14 +1,16 @@
 <!-- row -->
-
-<div class="container-fluid mt-0 pt-0">
+<div *ngIf="adminUser" class="container-fluid mt-0 pt-0">
+  <jhi-health></jhi-health>
+</div>
+<div *ngIf="!adminUser" class="container-fluid mt-0 pt-0">
   <div class="d-sm-flex d-block align-items-center mb-4">
     <div class="mr-auto">
-      <h2 class="text-black font-w600 mb-3">Dashboard</h2>
+      <h2 class="text-black font-w600 mb-3" jhiTranslate="global.menu.dashboardTitle">Dashboard</h2>
     </div>
     <div *ngIf="showDateInputs">
       <app-datepicker-range-popup></app-datepicker-range-popup>
     </div>
-    <div class="dropdown custom-dropdown mb-0 mt-3 mt-sm-0 dropdown-no-icon" ngbDropdown>
+    <!--    <div class="dropdown custom-dropdown mb-0 mt-3 mt-sm-0 dropdown-no-icon" ngbDropdown>
       <div class="btn btn-light btn-rounded ml-2" role="button" data-toggle="dropdown" aria-expanded="false" ngbDropdownToggle>
         <i class="las la-calendar-alt scale5 mr-3"></i>
         <fa-icon class="scale2 mr-3" [icon]="faCalendarAlt"></fa-icon>
@@ -19,13 +21,12 @@
       <div class="dropdown-menu dropdown-menu-right" ngbDropdownMenu>
         <a class="dropdown-item" (click)="onClick()">Date</a>
       </div>
-    </div>
+    </div>-->
   </div>
   <div class="form-head mb-4">
     <!--    -->
     <jhi-transaction-count></jhi-transaction-count>
   </div>
-
   <div class="row">
     <div class="col-xl-6">
       <div class="row">

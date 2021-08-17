@@ -5,6 +5,7 @@
     "menu": {
       "home": "Home",
       "profile": "Profile",
+      "dashboardTitle": "Dashboard",
       "personalInformation": "Personal information",
       "jhipster-needle-menu-add-element": "JHipster will add additional menu entries here (do not translate!)",
       "entities": {
@@ -230,6 +231,7 @@
     "nowalletsCurrentUser": "You do not currently have registered wallets.",
     "currencyNoAccess": "You cannot access or modify currency's information.",
     "categorynoaccess": "You cannot access or modify this category's information.",
+    "noContacts": "You don't have any contacts",
 
     "file": {
       "could.not.extract": "Could not extract file",
