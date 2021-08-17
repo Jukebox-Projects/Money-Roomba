@@ -8,7 +8,7 @@ import { healthRoute } from './health.route';
 
 @NgModule({
   imports: [SharedModule, RouterModule.forChild([healthRoute])],
-  declarations: [HealthComponent, HealthModalComponent],
+  declarations: [HealthModalComponent],
   entryComponents: [HealthModalComponent],
 })
 export class HealthModule {}

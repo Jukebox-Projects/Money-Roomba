@@ -111,7 +111,12 @@ public class ContactService {
                 res.add(newContact);
             }
         }
+        res.sort(this::compare);
         return res;
+    }
+
+    public int compare(ContactDTO o1, ContactDTO o2) {
+        return o1.getName().compareToIgnoreCase(o2.getName());
     }
 
     public void delete(String contactIdentifier) {

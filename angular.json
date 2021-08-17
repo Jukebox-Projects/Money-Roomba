@@ -32,6 +32,7 @@
             "assets": [
               "src/main/webapp/assets",
               "src/main/webapp/favicon.ico",
+              "src/main/webapp/loaderio-8d30e75d8f4da3351146fdb617a69ed3.txt",
               {
                 "glob": "*.{js,css,html,png}",
                 "input": "./node_modules/swagger-ui-dist",

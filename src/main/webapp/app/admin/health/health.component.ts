@@ -12,7 +12,6 @@ import { HealthModalComponent } from './modal/health-modal.component';
 })
 export class HealthComponent implements OnInit {
   health?: Health;
-
   constructor(private modalService: NgbModal, private healthService: HealthService) {}
 
   ngOnInit(): void {
