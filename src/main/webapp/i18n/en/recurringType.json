@@ -2,10 +2,10 @@
   "moneyRoombaApp": {
     "RecurringType": {
       "null": "",
-      "DAILY": "Diariamente",
-      "WEEKLY": "Semanalmente",
-      "MONTHLY": "Mensualmente",
-      "YEARLY": "Anualmente"
+      "DAILY": "Daily",
+      "WEEKLY": "Weekly",
+      "MONTHLY": "Monthly",
+      "YEARLY": "Yearly"
     }
   }
 }
