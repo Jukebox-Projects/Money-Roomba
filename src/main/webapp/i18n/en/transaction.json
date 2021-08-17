@@ -6,7 +6,9 @@
         "refreshListLabel": "Refresh list",
         "createLabel": "Create a new Transaction",
         "createOrEditLabel": "Create or edit a Transaction",
-        "notFound": "No Transactions found"
+        "notFound": "No Transactions found",
+        "noIncomeTransactions": "No income found",
+        "noExpenseTransactions": "No expenses found"
       },
       "created": "A new Transaction is created with identifier {{ param }}",
       "updated": "A Transaction is updated with identifier {{ param }}",
@@ -15,8 +17,10 @@
         "question": "Are you sure you want to delete Transaction {{ id }}?"
       },
       "detail": {
-        "title": "Transaction"
+        "title": "Transaction",
+        "nameId": "Transaction ID"
       },
+      "upload": "Invoice has been imported",
       "id": "ID",
       "name": "Name",
       "description": "Description",
@@ -37,8 +41,15 @@
       "recievingUser": "Receiving User",
       "outgoingTransaction": "Outgoing Transaction",
       "transactionState": "Approval State",
+      "addNewContact": "Add new contact",
+      "addContact": "Add contact",
+      "contactModalTitle": "Please enter a valid Email or Phone Number",
+      "contactModalHeader": "Add new favorite contact",
       "active": "Active",
-      "inactive": "Inactive"
+      "inactive": "Inactive",
+      "accepted": "Accepted",
+      "denied": "Denied",
+      "choose": "Choose..."
     }
   }
 }

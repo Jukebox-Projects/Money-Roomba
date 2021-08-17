@@ -1,6 +1,7 @@
 package com.moneyroomba.service.criteria;
 
 import com.moneyroomba.domain.enumeration.MovementType;
+import com.moneyroomba.domain.enumeration.RecurringType;
 import java.io.Serializable;
 import java.util.Objects;
 import tech.jhipster.service.Criteria;
@@ -41,6 +42,23 @@ public class ScheduledTransactionCriteria implements Serializable, Criteria {
         }
     }
 
+    /**
+     * Class for filtering RecurringType
+     */
+    public static class RecurringTypeFilter extends Filter<RecurringType> {
+
+        public RecurringTypeFilter() {}
+
+        public RecurringTypeFilter(RecurringTypeFilter filter) {
+            super(filter);
+        }
+
+        @Override
+        public RecurringTypeFilter copy() {
+            return new RecurringTypeFilter(this);
+        }
+    }
+
     private static final long serialVersionUID = 1L;
 
     private LongFilter id;
@@ -59,11 +77,25 @@ public class ScheduledTransactionCriteria implements Serializable, Criteria {
 
     private BooleanFilter addToReports;
 
-    private BooleanFilter incomingTransaction;
+    private RecurringTypeFilter recurringType;
 
-    private LongFilter schedulePatternId;
+    private IntegerFilter separationCount;
+
+    private IntegerFilter maxNumberOfOcurrences;
+
+    private IntegerFilter dayOfWeek;
+
+    private IntegerFilter weekOfMonth;
+
+    private IntegerFilter dayOfMonth;
+
+    private IntegerFilter monthOfYear;
 
     private LongFilter currencyId;
+
+    private LongFilter sourceUserId;
+
+    private LongFilter categoryId;
 
     public ScheduledTransactionCriteria() {}
 
@@ -76,9 +108,16 @@ public class ScheduledTransactionCriteria implements Serializable, Criteria {
         this.startDate = other.startDate == null ? null : other.startDate.copy();
         this.endDate = other.endDate == null ? null : other.endDate.copy();
         this.addToReports = other.addToReports == null ? null : other.addToReports.copy();
-        this.incomingTransaction = other.incomingTransaction == null ? null : other.incomingTransaction.copy();
-        this.schedulePatternId = other.schedulePatternId == null ? null : other.schedulePatternId.copy();
+        this.recurringType = other.recurringType == null ? null : other.recurringType.copy();
+        this.separationCount = other.separationCount == null ? null : other.separationCount.copy();
+        this.maxNumberOfOcurrences = other.maxNumberOfOcurrences == null ? null : other.maxNumberOfOcurrences.copy();
+        this.dayOfWeek = other.dayOfWeek == null ? null : other.dayOfWeek.copy();
+        this.weekOfMonth = other.weekOfMonth == null ? null : other.weekOfMonth.copy();
+        this.dayOfMonth = other.dayOfMonth == null ? null : other.dayOfMonth.copy();
+        this.monthOfYear = other.monthOfYear == null ? null : other.monthOfYear.copy();
         this.currencyId = other.currencyId == null ? null : other.currencyId.copy();
+        this.sourceUserId = other.sourceUserId == null ? null : other.sourceUserId.copy();
+        this.categoryId = other.categoryId == null ? null : other.categoryId.copy();
     }
 
     @Override
@@ -206,34 +245,109 @@ public class ScheduledTransactionCriteria implements Serializable, Criteria {
         this.addToReports = addToReports;
     }
 
-    public BooleanFilter getIncomingTransaction() {
-        return incomingTransaction;
+    public RecurringTypeFilter getRecurringType() {
+        return recurringType;
     }
 
-    public BooleanFilter incomingTransaction() {
-        if (incomingTransaction == null) {
-            incomingTransaction = new BooleanFilter();
+    public RecurringTypeFilter recurringType() {
+        if (recurringType == null) {
+            recurringType = new RecurringTypeFilter();
         }
-        return incomingTransaction;
+        return recurringType;
     }
 
-    public void setIncomingTransaction(BooleanFilter incomingTransaction) {
-        this.incomingTransaction = incomingTransaction;
+    public void setRecurringType(RecurringTypeFilter recurringType) {
+        this.recurringType = recurringType;
     }
 
-    public LongFilter getSchedulePatternId() {
-        return schedulePatternId;
+    public IntegerFilter getSeparationCount() {
+        return separationCount;
     }
 
-    public LongFilter schedulePatternId() {
-        if (schedulePatternId == null) {
-            schedulePatternId = new LongFilter();
+    public IntegerFilter separationCount() {
+        if (separationCount == null) {
+            separationCount = new IntegerFilter();
         }
-        return schedulePatternId;
+        return separationCount;
     }
 
-    public void setSchedulePatternId(LongFilter schedulePatternId) {
-        this.schedulePatternId = schedulePatternId;
+    public void setSeparationCount(IntegerFilter separationCount) {
+        this.separationCount = separationCount;
+    }
+
+    public IntegerFilter getMaxNumberOfOcurrences() {
+        return maxNumberOfOcurrences;
+    }
+
+    public IntegerFilter maxNumberOfOcurrences() {
+        if (maxNumberOfOcurrences == null) {
+            maxNumberOfOcurrences = new IntegerFilter();
+        }
+        return maxNumberOfOcurrences;
+    }
+
+    public void setMaxNumberOfOcurrences(IntegerFilter maxNumberOfOcurrences) {
+        this.maxNumberOfOcurrences = maxNumberOfOcurrences;
+    }
+
+    public IntegerFilter getDayOfWeek() {
+        return dayOfWeek;
+    }
+
+    public IntegerFilter dayOfWeek() {
+        if (dayOfWeek == null) {
+            dayOfWeek = new IntegerFilter();
+        }
+        return dayOfWeek;
+    }
+
+    public void setDayOfWeek(IntegerFilter dayOfWeek) {
+        this.dayOfWeek = dayOfWeek;
+    }
+
+    public IntegerFilter getWeekOfMonth() {
+        return weekOfMonth;
+    }
+
+    public IntegerFilter weekOfMonth() {
+        if (weekOfMonth == null) {
+            weekOfMonth = new IntegerFilter();
+        }
+        return weekOfMonth;
+    }
+
+    public void setWeekOfMonth(IntegerFilter weekOfMonth) {
+        this.weekOfMonth = weekOfMonth;
+    }
+
+    public IntegerFilter getDayOfMonth() {
+        return dayOfMonth;
+    }
+
+    public IntegerFilter dayOfMonth() {
+        if (dayOfMonth == null) {
+            dayOfMonth = new IntegerFilter();
+        }
+        return dayOfMonth;
+    }
+
+    public void setDayOfMonth(IntegerFilter dayOfMonth) {
+        this.dayOfMonth = dayOfMonth;
+    }
+
+    public IntegerFilter getMonthOfYear() {
+        return monthOfYear;
+    }
+
+    public IntegerFilter monthOfYear() {
+        if (monthOfYear == null) {
+            monthOfYear = new IntegerFilter();
+        }
+        return monthOfYear;
+    }
+
+    public void setMonthOfYear(IntegerFilter monthOfYear) {
+        this.monthOfYear = monthOfYear;
     }
 
     public LongFilter getCurrencyId() {
@@ -249,6 +363,36 @@ public class ScheduledTransactionCriteria implements Serializable, Criteria {
 
     public void setCurrencyId(LongFilter currencyId) {
         this.currencyId = currencyId;
+    }
+
+    public LongFilter getSourceUserId() {
+        return sourceUserId;
+    }
+
+    public LongFilter sourceUserId() {
+        if (sourceUserId == null) {
+            sourceUserId = new LongFilter();
+        }
+        return sourceUserId;
+    }
+
+    public void setSourceUserId(LongFilter sourceUserId) {
+        this.sourceUserId = sourceUserId;
+    }
+
+    public LongFilter getCategoryId() {
+        return categoryId;
+    }
+
+    public LongFilter categoryId() {
+        if (categoryId == null) {
+            categoryId = new LongFilter();
+        }
+        return categoryId;
+    }
+
+    public void setCategoryId(LongFilter categoryId) {
+        this.categoryId = categoryId;
     }
 
     @Override
@@ -269,9 +413,16 @@ public class ScheduledTransactionCriteria implements Serializable, Criteria {
             Objects.equals(startDate, that.startDate) &&
             Objects.equals(endDate, that.endDate) &&
             Objects.equals(addToReports, that.addToReports) &&
-            Objects.equals(incomingTransaction, that.incomingTransaction) &&
-            Objects.equals(schedulePatternId, that.schedulePatternId) &&
-            Objects.equals(currencyId, that.currencyId)
+            Objects.equals(recurringType, that.recurringType) &&
+            Objects.equals(separationCount, that.separationCount) &&
+            Objects.equals(maxNumberOfOcurrences, that.maxNumberOfOcurrences) &&
+            Objects.equals(dayOfWeek, that.dayOfWeek) &&
+            Objects.equals(weekOfMonth, that.weekOfMonth) &&
+            Objects.equals(dayOfMonth, that.dayOfMonth) &&
+            Objects.equals(monthOfYear, that.monthOfYear) &&
+            Objects.equals(currencyId, that.currencyId) &&
+            Objects.equals(sourceUserId, that.sourceUserId) &&
+            Objects.equals(categoryId, that.categoryId)
         );
     }
 
@@ -286,9 +437,16 @@ public class ScheduledTransactionCriteria implements Serializable, Criteria {
             startDate,
             endDate,
             addToReports,
-            incomingTransaction,
-            schedulePatternId,
-            currencyId
+            recurringType,
+            separationCount,
+            maxNumberOfOcurrences,
+            dayOfWeek,
+            weekOfMonth,
+            dayOfMonth,
+            monthOfYear,
+            currencyId,
+            sourceUserId,
+            categoryId
         );
     }
 
@@ -304,9 +462,16 @@ public class ScheduledTransactionCriteria implements Serializable, Criteria {
             (startDate != null ? "startDate=" + startDate + ", " : "") +
             (endDate != null ? "endDate=" + endDate + ", " : "") +
             (addToReports != null ? "addToReports=" + addToReports + ", " : "") +
-            (incomingTransaction != null ? "incomingTransaction=" + incomingTransaction + ", " : "") +
-            (schedulePatternId != null ? "schedulePatternId=" + schedulePatternId + ", " : "") +
+            (recurringType != null ? "recurringType=" + recurringType + ", " : "") +
+            (separationCount != null ? "separationCount=" + separationCount + ", " : "") +
+            (maxNumberOfOcurrences != null ? "maxNumberOfOcurrences=" + maxNumberOfOcurrences + ", " : "") +
+            (dayOfWeek != null ? "dayOfWeek=" + dayOfWeek + ", " : "") +
+            (weekOfMonth != null ? "weekOfMonth=" + weekOfMonth + ", " : "") +
+            (dayOfMonth != null ? "dayOfMonth=" + dayOfMonth + ", " : "") +
+            (monthOfYear != null ? "monthOfYear=" + monthOfYear + ", " : "") +
             (currencyId != null ? "currencyId=" + currencyId + ", " : "") +
+            (sourceUserId != null ? "sourceUserId=" + sourceUserId + ", " : "") +
+            (categoryId != null ? "categoryId=" + categoryId + ", " : "") +
             "}";
     }
 }

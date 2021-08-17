@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpResponse } from '@angular/common/http';
+import { HttpResponse, HttpClient } from '@angular/common/http';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { AccountService } from '../../../core/auth/account.service';
 import { IWallet } from '../wallet.model';
@@ -21,6 +21,8 @@ export class WalletComponent implements OnInit {
   inputText = '';
   adminUser = false;
   filterType: string = 'name';
+  page = 1;
+  pageSize = 5;
 
   constructor(
     protected walletService: WalletService,
@@ -36,7 +38,9 @@ export class WalletComponent implements OnInit {
       (res: HttpResponse<IWallet[]>) => {
         this.isLoading = false;
         this.wallets = res.body ?? [];
+        this.wallets = this.wallets.sort((a, b) => a.name.localeCompare(b.name));
         this.allwallets = res.body ?? [];
+        this.allwallets = this.allwallets.sort((a, b) => a.name.localeCompare(b.name));
       },
       () => {
         this.isLoading = false;

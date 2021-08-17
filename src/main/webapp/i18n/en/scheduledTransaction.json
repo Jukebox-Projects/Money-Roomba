@@ -15,19 +15,48 @@
         "question": "Are you sure you want to delete Scheduled Transaction {{ id }}?"
       },
       "detail": {
-        "title": "Scheduled Transaction"
+        "title": "Scheduled Transaction",
+        "nameId": "Scheduled Transaction ID"
       },
       "id": "ID",
       "name": "Name",
       "description": "Description",
       "originalAmount": "Original Amount",
+      "amount": "Amount",
+      "wallet": "Wallet",
       "movementType": "Movement Type",
       "startDate": "Start Date",
       "endDate": "End Date",
-      "addToReports": "Add To Reports",
-      "incomingTransaction": "Incoming Transaction",
-      "schedulePattern": "Schedule Pattern",
-      "currency": "Currency"
+      "addToReports": "In Reports",
+      "recurringType": "Recurring Type",
+      "separationCount": "Separation Count",
+      "maxNumberOfOcurrences": "Max Number Of Ocurrences",
+      "dayOfWeek": "Day Of Week",
+      "weekOfMonth": "Week Of Month",
+      "dayOfMonth": "Day Of Month",
+      "monthOfYear": "Month Of Year",
+      "currency": "Currency",
+      "sourceUser": "Source User",
+      "category": "Category",
+      "monday": "Monday",
+      "tuesday": "Tuesday",
+      "wednesday": "Wednesday",
+      "thursday": "Thursday",
+      "friday": "Friday",
+      "saturday": "Saturday",
+      "sunday": "Sunday",
+      "january": "January",
+      "february": "February",
+      "march": "March",
+      "april": "April",
+      "may": "May",
+      "june": "June",
+      "july": "July",
+      "august": "August",
+      "september": "September",
+      "october": "October",
+      "november": "November",
+      "december": "December"
     }
   }
 }

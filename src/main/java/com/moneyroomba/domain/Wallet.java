@@ -48,8 +48,13 @@ public class Wallet implements Serializable {
 
     @OneToMany(mappedBy = "wallet")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @JsonIgnoreProperties(value = { "attachment", "wallet", "currency", "category", "sourceUser" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "attachment", "wallet", "currency", "category", "sourceUser", "recievingUser" }, allowSetters = true)
     private Set<Transaction> transactions = new HashSet<>();
+
+    @OneToMany(mappedBy = "wallet")
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @JsonIgnoreProperties(value = { "currency", "sourceUser", "category", "wallet" }, allowSetters = true)
+    private Set<ScheduledTransaction> scheduledTransactions = new HashSet<>();
 
     @ManyToOne(optional = false)
     @NotNull
@@ -61,7 +66,9 @@ public class Wallet implements Serializable {
             "categories",
             "events",
             "transactions",
+            "scheduledTransactions",
             "userDetails",
+            "recievedTransactions",
             "targetContacts",
             "contact",
             "sourceContacts",
@@ -195,6 +202,37 @@ public class Wallet implements Serializable {
             transactions.forEach(i -> i.setWallet(this));
         }
         this.transactions = transactions;
+    }
+
+    public Set<ScheduledTransaction> getScheduledTransactions() {
+        return this.scheduledTransactions;
+    }
+
+    public Wallet scheduledTransactions(Set<ScheduledTransaction> scheduledTransactions) {
+        this.setScheduledTransactions(scheduledTransactions);
+        return this;
+    }
+
+    public Wallet addScheduledTransaction(ScheduledTransaction scheduledTransaction) {
+        this.scheduledTransactions.add(scheduledTransaction);
+        scheduledTransaction.setWallet(this);
+        return this;
+    }
+
+    public Wallet removeScheduledTransaction(ScheduledTransaction scheduledTransaction) {
+        this.scheduledTransactions.remove(scheduledTransaction);
+        scheduledTransaction.setWallet(null);
+        return this;
+    }
+
+    public void setScheduledTransactions(Set<ScheduledTransaction> scheduledTransactions) {
+        if (this.scheduledTransactions != null) {
+            this.scheduledTransactions.forEach(i -> i.setWallet(null));
+        }
+        if (scheduledTransactions != null) {
+            scheduledTransactions.forEach(i -> i.setWallet(this));
+        }
+        this.scheduledTransactions = scheduledTransactions;
     }
 
     public UserDetails getUser() {

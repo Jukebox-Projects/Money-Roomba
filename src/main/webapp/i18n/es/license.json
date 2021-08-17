@@ -31,6 +31,8 @@
       "deactivated": "Desactivada",
       "created": "Una nueva licencia ha sido creada con el identificador {{ param }}",
       "createdBulk": "Se han generado {{ param }} licencias",
+      "bought": "MoneyRoomba premium comprado con éxito",
+      "gift": "Regalo de MoneyRoomba comprado con éxito",
       "activate": "La licencia ha sido activada",
       "updated": "Una licencia ha sido actualizada con el identificador {{ param }}",
       "deleted": "Una licencia ha sido eliminado con el identificador {{ param }}",
@@ -47,10 +49,15 @@
       "buyOrActivate": {
         "title": "Compra o activa una licencia",
         "activateLicenseText": "Por favor ingresa el código de la licencia",
-        "activateText": "Activar"
+        "giftText": "Por favor ingresa el correo electrónico al cual la licencia será enviada",
+        "activateText": "Activar",
+        "send": "Enviar",
+        "buyForMe": "Comprar para mí",
+        "gift": "Regalar"
       },
       "id": "ID",
       "code": "Código",
+      "email": "Correo electrónico",
       "isAssigned": "Redimida",
       "isActive": "Está activa",
       "createMethod": "Método de creación",

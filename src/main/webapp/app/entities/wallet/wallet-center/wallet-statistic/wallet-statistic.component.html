@@ -1,0 +1,60 @@
+<div class="card">
+  <div class="card-header border-0 pb-0">
+    <div>
+      <h4 class="fs-20 text-black">Card Statistic</h4>
+      <span class="fs-12">Lorem ipsum dolor sit amet, consectetur</span>
+    </div>
+  </div>
+  <div class="card-body">
+    <div class="row">
+      <div class="col-xl-12 col-sm-6">
+        <div id="pieChart">
+          <apx-chart
+            [series]="chartOptions.series"
+            [chart]="chartOptions.chart"
+            [labels]="chartOptions.labels"
+            [fill]="chartOptions.fill"
+            [dataLabels]="chartOptions.dataLabels"
+            [colors]="chartOptions.colors"
+            [stroke]="chartOptions.stroke"
+            [responsive]="chartOptions.responsive"
+          ></apx-chart>
+        </div>
+      </div>
+      <div class="col-xl-12 col-sm-6">
+        <div class="d-flex flex-wrap text-black fs-12 mt-4">
+          <span class="mr-4 mb-3">
+            <svg class="mr-2" width="19" height="19" viewBox="0 0 19 19" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect width="19" height="19" rx="9.5" fill="#1EAAE7" />
+            </svg>
+            Main Card
+          </span>
+          <span class="mr-4 mb-3">
+            <svg class="mr-2" width="19" height="19" viewBox="0 0 19 19" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect width="19" height="19" rx="9.5" fill="#FF7A30" />
+            </svg>
+            Orange Card
+          </span>
+          <span class="mr-4 mb-3">
+            <svg class="mr-2" width="19" height="19" viewBox="0 0 19 19" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect width="19" height="19" rx="9.5" fill="#6418C3" />
+            </svg>
+            Purple Card
+          </span>
+          <span class="mr-4 mb-3">
+            <svg class="mr-2" width="19" height="19" viewBox="0 0 19 19" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect width="19" height="19" rx="9.5" fill="#FFEF5F" />
+            </svg>
+            Yellow Card
+          </span>
+          <span class="mr-4 mb-3">
+            <svg class="mr-2" width="19" height="19" viewBox="0 0 19 19" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect width="19" height="19" rx="9.5" fill="#2BC155" />
+            </svg>
+            Green Card
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

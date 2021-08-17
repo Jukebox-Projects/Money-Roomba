@@ -4,6 +4,7 @@ import com.moneyroomba.domain.Category;
 import com.moneyroomba.domain.Transaction;
 import com.moneyroomba.domain.User;
 import com.moneyroomba.domain.UserDetails;
+import com.moneyroomba.domain.enumeration.TransactionType;
 import com.moneyroomba.repository.TransactionRepository;
 import com.moneyroomba.repository.UserDetailsRepository;
 import com.moneyroomba.repository.UserRepository;
@@ -13,6 +14,7 @@ import com.moneyroomba.service.TransactionQueryService;
 import com.moneyroomba.service.TransactionService;
 import com.moneyroomba.service.UserService;
 import com.moneyroomba.service.criteria.TransactionCriteria;
+import com.moneyroomba.service.dto.TransactionDTO;
 import com.moneyroomba.service.exception.NoSuchElementFoundException;
 import com.moneyroomba.web.rest.errors.BadRequestAlertException;
 import java.net.URI;
@@ -69,25 +71,54 @@ public class TransactionResource {
         this.userDetailsRepository = userDetailsRepository;
     }
 
+    public Transaction getTransactionFromDTO(TransactionDTO dto) {
+        Transaction transaction = new Transaction();
+        UserDetails receivingUser = null;
+        if (dto.getRecievingUser() != null) {
+            receivingUser = userDetailsRepository.findOneByPhone(dto.getRecievingUser().getPhone()).get();
+        }
+
+        transaction.setId(dto.getId());
+        transaction.setName(dto.getName());
+        transaction.setDescription(dto.getDescription());
+        transaction.setDateAdded(dto.getDateAdded());
+        transaction.setAmount(dto.getAmount());
+        transaction.setOriginalAmount(dto.getOriginalAmount());
+        transaction.setMovementType(dto.getMovementType());
+        transaction.setScheduled(dto.getScheduled());
+        transaction.setAddToReports(dto.getAddToReports());
+        transaction.setIncomingTransaction(dto.getIncomingTransaction());
+        transaction.setTransactionType(dto.getTransactionType());
+        transaction.setState(dto.getState());
+        transaction.setAttachment(dto.getAttachment());
+        transaction.setWallet(dto.getWallet());
+        transaction.setCurrency(dto.getCurrency());
+        transaction.setCategory(dto.getCategory());
+        transaction.setSourceUser(dto.getSourceUser());
+        transaction.setRecievingUser(receivingUser);
+        return transaction;
+    }
+
     /**
      * {@code POST  /transactions} : Create a new transaction.
      *
-     * @param transaction the transaction to create.
      * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new transaction, or with status {@code 400 (Bad Request)} if the transaction has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/transactions")
-    public ResponseEntity<Transaction> createTransaction(@Valid @RequestBody Transaction transaction) throws URISyntaxException {
-        log.debug("REST request to save Transaction : {}", transaction);
+    public ResponseEntity<Transaction> createTransaction(@Valid @RequestBody TransactionDTO transactionDTO) throws URISyntaxException {
+        log.debug("REST request to save Transaction : {}", transactionDTO);
+        Transaction transaction = getTransactionFromDTO(transactionDTO);
         Transaction result;
         if (transaction.getId() != null) {
             throw new BadRequestAlertException("A new transaction cannot already have an ID", ENTITY_NAME, "idexists");
         }
+
         if (!SecurityUtils.hasCurrentUserThisAuthority(AuthoritiesConstants.ADMIN)) {
             if (transaction.getRecievingUser() != null) {
                 result = transactionService.saveOutgoingTransaction(transaction);
             } else {
-                result = transactionService.save(transaction);
+                result = transactionService.create(transaction);
             }
 
             return ResponseEntity
@@ -126,7 +157,7 @@ public class TransactionResource {
             throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
         }
 
-        Transaction result = transactionService.save(transaction);
+        Transaction result = transactionService.update(transaction);
         return ResponseEntity
             .ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, transaction.getId().toString()))
@@ -181,10 +212,10 @@ public class TransactionResource {
             SecurityUtils.getCurrentUserLogin().orElseThrow(() -> new NoSuchElementFoundException("No Login found"))
         );
         Optional<UserDetails> userDetails = userDetailsRepository.findOneByInternalUser(user.get());
-        List<Transaction> entityList = transactionRepository.findAll();
+        List<Transaction> entityList = transactionRepository.findAllOrderedByDateAdded();
         List<Transaction> res = new ArrayList<Transaction>();
         if (SecurityUtils.hasCurrentUserThisAuthority(AuthoritiesConstants.ADMIN)) {
-            List<Transaction> resAll = transactionRepository.findAll();
+            List<Transaction> resAll = transactionRepository.findAllOrderedByDateAdded();
             log.debug("Request to get all transactions for Admin");
             return ResponseEntity.ok().body(resAll);
         } else {
@@ -238,5 +269,18 @@ public class TransactionResource {
             .noContent()
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()))
             .build();
+    }
+
+    /**
+     * {@code GET  /transactions/:id} : get the "id" transaction.
+     *
+     * @param id the id of the transaction to retrieve.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the transaction, or with status {@code 404 (Not Found)}.
+     */
+    @GetMapping("/transactions/wallet/{id}")
+    public ResponseEntity<List<Transaction>> getTransactionsByWallet(@PathVariable Long id) {
+        log.debug("REST request to get Transaction : {}", id);
+        List<Transaction> entityList = transactionService.findAllByWallet(id);
+        return ResponseEntity.ok().body(entityList);
     }
 }

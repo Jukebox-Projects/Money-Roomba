@@ -4,9 +4,13 @@
     "browsehappy": "You are using an <strong>outdated</strong> browser. Please <a href=\"http://browsehappy.com/?locale=en\">upgrade your browser</a> to improve your experience.",
     "menu": {
       "home": "Home",
+      "profile": "Profile",
+      "dashboardTitle": "Dashboard",
+      "personalInformation": "Personal information",
       "jhipster-needle-menu-add-element": "JHipster will add additional menu entries here (do not translate!)",
       "entities": {
         "main": "Entities",
+        "details": "Details",
         "userDetails": "User Details",
         "wallet": "Wallets",
         "transaction": "Transactions",
@@ -18,10 +22,12 @@
         "license": "License",
         "currency": "Currency",
         "notification": "Notification",
-        "event": "Event",
+        "event": "Events",
         "systemSetting": "System Setting",
         "currency-converter": "Currency converter",
-        "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)"
+        "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)",
+        "items-per-page": "items per page",
+        "Scheduled Transactions": "Scheduled Transactions"
       },
       "account": {
         "main": "Account",
@@ -30,6 +36,7 @@
         "settings": "Settings",
         "password": "Password",
         "sessions": "Sessions",
+        "premium": "Premium",
         "login": "Sign in",
         "logout": "Sign out",
         "register": "Register"
@@ -47,6 +54,23 @@
         "jhipster-needle-menu-add-admin-element": "JHipster will add additional menu entries here (do not translate!)"
       },
       "language": "Language"
+    },
+    "time": {
+      "format": "{{quantity}} {{time}} ago",
+      "year": "Year",
+      "yearPlural": "Years",
+      "month": "Month",
+      "monthPlural": "Months",
+      "week": "Week",
+      "weekPlural": "Weeks",
+      "day": "Day",
+      "dayPlural": "Days",
+      "hour": "Hour",
+      "hourPlural": "Hours",
+      "minute": "Minute",
+      "minutePlural": "Minutes",
+      "second": "Second",
+      "secondPlural": "Seconds"
     },
     "form": {
       "username.label": "Email",
@@ -68,7 +92,8 @@
       "phone.label": "Phone",
       "phone.placeholder": "Your phone",
       "apiKey.label": "API key",
-      "apiKey.placeholder": "API key"
+      "apiKey.placeholder": "API key",
+      "joinDate": "Join Date"
     },
     "messages": {
       "info": {
@@ -177,32 +202,48 @@
     }
   },
   "error": {
-    "internalServerError": "Internal server error",
-    "server.not.reachable": "Server not reachable",
-    "url.not.found": "Not found",
+    "internalServerError": "Internal server error.",
+    "server.not.reachable": "Server not reachable.",
+    "url.not.found": "Not found.",
     "NotNull": "Field {{ fieldName }} cannot be empty!",
     "Size": "Field {{ fieldName }} does not meet min/max size requirements!",
     "userexists": "Login name already used!",
     "emailexists": "Email is already in use!",
-    "idexists": "A new {{ entityName }} cannot already have an ID",
-    "idnull": "Invalid ID",
-    "idinvalid": "Invalid ID",
-    "idnotfound": "ID cannot be found",
-    "licenseNotFound": "License cannot be found",
-    "licenseAssigned": "License is assigned",
-    "licenseInvalid": "License format is invalid",
-    "licenseNotActive": "License is not active",
+    "idexists": "A new {{ entityName }} cannot already have an ID.",
+    "idnull": "Invalid ID.",
+    "idinvalid": "Invalid ID.",
+    "idnotfound": "ID cannot be found.",
+    "licenseNotFound": "License cannot be found.",
+    "licenseAssigned": "License is assigned.",
+    "licenseInvalid": "License format is invalid.",
+    "licenseNotActive": "License is not active.",
     "insufficientfunds": "You cannot register this transaction because of insufficient balance.",
     "nopermission": "Could not complete action due to lack of permission according to your user roles.",
-    "admincantregister": "Admin cannot register {{ entityName }}.",
-    "nouserfound": "Current user has no details on its account, could not complete action",
+    "admincantregister": "Admin cannot register or modify {{ entityName }}.",
+    "nouserfound": "Current user has no details on its account, could not complete action.",
     "nomorewallets": "User has reached the max amount of wallets that his accounts can handle.",
     "negativeincome": "You cannot register a transaction with an income lower than 0.",
+    "categorydeleteerror": "Cannot delete category because there are transactions associated to it.",
+    "walletnoaccess": "You cannot access or modify this wallet's information.",
+    "transactionnoaccess": "You cannot access or modify this transaction's information.",
     "categorydeleteerror": "Cannot delete category because there are transactions associated to it",
+    "notvalidcontact": "There were no registered users associated to the provided information.",
+    "nowallets": "The receiving user currently has no wallets registered.",
+    "nowalletsCurrentUser": "You do not currently have registered wallets.",
+    "currencyNoAccess": "You cannot access or modify currency's information.",
+    "categorynoaccess": "You cannot access or modify this category's information.",
+    "noContacts": "You don't have any contacts",
+    "nomoreschtransactions": "Regular users cannot register more than 3 scheduled transactions",
     "file": {
       "could.not.extract": "Could not extract file",
-      "not.image": "File was expected to be an image but was found to be \"{{ fileType }}\""
-    }
+      "not.image": "File was expected to be an image but was found to be \"{{ fileType }}\"",
+      "noFileSelected": "No file was selected",
+      "wrongFileType": "File type not supported, File type must be XML",
+      "reachedMaximumTransactions": "You have reached the maximum amount of imported transactions"
+    },
+    "categoryOwnParent": "A category cannot be its own parent.",
+    "childCategoryAsParent": "Child category cannot be a parent category.",
+    "categoryIsParent": "Parent category cannot be a child category at the same time."
   },
   "footer": "© 2021 Money Roomba"
 }

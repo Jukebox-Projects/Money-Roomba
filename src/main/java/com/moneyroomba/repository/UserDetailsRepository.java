@@ -30,4 +30,7 @@ public interface UserDetailsRepository extends JpaRepository<UserDetails, Long> 
 
     Optional<UserDetails> findOneByInternalUserId(Long id);
     Optional<UserDetails> findOneByInternalUser(User user);
+    Optional<UserDetails> findOneByPhone(String phone);
+    Optional<UserDetails> findOneByApiKey(String key);
+    Optional<UserDetails> findOneById(Long id);
 }

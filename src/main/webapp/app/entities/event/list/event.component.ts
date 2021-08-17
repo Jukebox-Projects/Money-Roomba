@@ -12,7 +12,11 @@ import { EventDeleteDialogComponent } from '../delete/event-delete-dialog.compon
 })
 export class EventComponent implements OnInit {
   events?: IEvent[];
+  allEvents?: IEvent[];
   isLoading = false;
+  inputText = '';
+  page = 1;
+  pageSize = 10;
 
   constructor(protected eventService: EventService, protected modalService: NgbModal) {}
 
@@ -23,6 +27,9 @@ export class EventComponent implements OnInit {
       (res: HttpResponse<IEvent[]>) => {
         this.isLoading = false;
         this.events = res.body ?? [];
+        this.events = this.events.sort((a, b) => (b.dateAdded.isBefore(a.dateAdded) ? -1 : 1));
+        this.allEvents = res.body ?? [];
+        this.allEvents = this.allEvents.sort((a, b) => (b.dateAdded.isBefore(a.dateAdded) ? -1 : 1));
       },
       () => {
         this.isLoading = false;
@@ -32,6 +39,23 @@ export class EventComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadAll();
+  }
+
+  filterEvents(): void {
+    if (this.events !== undefined) {
+      this.events = this.events.filter(event => {
+        if (event.eventType !== undefined) {
+          return event.eventType.toLowerCase().includes(this.inputText.toLowerCase());
+        } else {
+          return false;
+        }
+      });
+      if (this.inputText === '') {
+        this.events = this.allEvents;
+      }
+    } else {
+      this.loadAll();
+    }
   }
 
   trackId(index: number, item: IEvent): number {

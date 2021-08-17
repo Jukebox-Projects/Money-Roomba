@@ -1,0 +1,24 @@
+<div class="card bgl-primary card-body overflow-hidden p-0 d-flex rounded">
+  <div class="p-0 text-center mt-3 mb-auto">
+    <span class="text-black" jhiTranslate="moneyRoombaApp.report.imported-transaction-count.totalMoneyRoombaImportedTransactionsThisMonth"
+      >Imported transactions of this month</span
+    >
+    <h3 class="text-black fs-20 mb-0 font-w600">{{ reportData.count == -1 ? '∞' : reportData.count }}</h3>
+    <small>/10</small>
+  </div>
+
+  <apx-chart
+    [series]="chartOptions.series"
+    [chart]="chartOptions.chart"
+    [xaxis]="chartOptions.xaxis"
+    [yaxis]="chartOptions.yaxis"
+    [stroke]="chartOptions.stroke"
+    [tooltip]="chartOptions.tooltip"
+    [dataLabels]="chartOptions.dataLabels"
+    [colors]="chartOptions.colors"
+    [fill]="chartOptions.fill"
+    [grid]="chartOptions.grid"
+  ></apx-chart>
+
+  <!-- <canvas id="lineChart" height="300" class="mt-auto line-chart-demo"></canvas> -->
+</div>

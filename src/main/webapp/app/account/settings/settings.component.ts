@@ -1,3 +1,5 @@
+import { Authority } from 'app/config/authority.constants';
+import { COUNTRYLIST } from './../../shared/country';
 import { AccountDeleteDialogComponent } from './delete/delete-dialog.component';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { UserDetails } from './../../entities/user-details/user-details.model';
@@ -18,12 +20,14 @@ export class SettingsComponent implements OnInit {
   userDetails!: UserDetails;
   success = false;
   languages = LANGUAGES;
+  countryList = COUNTRYLIST;
+  authorities = Authority;
   settingsForm = this.fb.group({
     firstName: [undefined, [Validators.required, Validators.minLength(1), Validators.maxLength(50)]],
     lastName: [undefined, [Validators.required, Validators.minLength(1), Validators.maxLength(50)]],
     email: [undefined, [Validators.required, Validators.minLength(5), Validators.maxLength(254), Validators.email]],
     phone: [undefined, [Validators.required, Validators.pattern(/\(?([0-9]{3})\)?([ .-]?)([0-9]{4})\2([0-9]{4})/)]],
-    country: [undefined, [Validators.required]],
+    country: [this.countryList[0].value, [Validators.required]],
     apiKey: [
       {
         value: '',
@@ -62,11 +66,27 @@ export class SettingsComponent implements OnInit {
         notifications: userDetails.notifications,
         apiKey: userDetails.apiKey,
       });
-      this.userDetails.country = userDetails.country;
-      this.userDetails.phone = userDetails.phone;
-      this.userDetails.notifications = userDetails.notifications;
-      this.userDetails.apiKey = userDetails.apiKey;
+      this.userDetails = {
+        country: userDetails?.country,
+        phone: userDetails?.phone,
+        notifications: userDetails?.notifications,
+        apiKey: userDetails?.apiKey,
+      };
     });
+  }
+
+  getCountry(): string {
+    if (this.userDetails && this.userDetails?.country) {
+      return this.countryList.find(x => x.value === this.userDetails.country)?.name;
+    } else {
+      return '';
+    }
+  }
+
+  enumAuthorities(rol: string): string {
+    return Object.keys(this.authorities)
+      .find(key => this.authorities[key] === rol)
+      .replace('_', ' ');
   }
 
   generateApiKey(): void {

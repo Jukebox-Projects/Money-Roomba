@@ -7,22 +7,29 @@
         "createLabel": "Create a new Wallet",
         "createOrEditLabel": "Create or edit a Wallet",
         "searchbar": "Search",
-        "notFound": "No Wallets found"
+        "upload": "Import an invoice XML",
+        "notFound": "No Wallets found",
+        "mainBalance": "Main balance"
       },
       "created": "A new Wallet has been created.",
       "updated": "A Wallet has been updated.",
       "deleted": "A Wallet has been deleted.",
       "delete": {
-        "question": "Are you sure you want to delete Wallet {{ id }}?"
+        "question": "Are you sure you want to delete Wallet {{ id }}? All associated transactions will also be deleted."
       },
       "detail": {
         "title": "Wallet"
+      },
+      "walletStatistic": {
+        "statisticTitle": "Balance statistic",
+        "statisticDescription": "Balance covered by each wallet"
       },
       "id": "ID",
       "name": "Name",
       "description": "Description",
       "inReports": "In Reports",
       "isActive": "Is Active",
+      "state": "State",
       "balance": "Balance",
       "icon": "Icon",
       "transaction": "Transaction",

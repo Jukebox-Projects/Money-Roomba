@@ -4,15 +4,23 @@
 
     <div class="d-flex justify-content-end">
       <div class="pt-3 p-1" style="font-size: 24px">
-        <input jhiTranslate="userManagement.home.searchbar" type="text" [(ngModel)]="inputText" (input)="filter()" />
+        <input
+          class="form-control input-rounded"
+          type="text"
+          [(ngModel)]="inputText"
+          (input)="filter()"
+          placeholder="{{ 'userManagement.home.searchbar' | translate }}"
+        />
       </div>
-      <button class="btn btn-info mr-2" (click)="loadAll()" [disabled]="isLoading">
-        <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
-        <span jhiTranslate="userManagement.home.refreshListLabel">Refresh List</span>
-      </button>
-      <button class="btn btn-primary jh-create-entity" [routerLink]="['./new']">
-        <fa-icon icon="plus"></fa-icon> <span jhiTranslate="userManagement.home.createLabel">Create a new User</span>
-      </button>
+      <div class="pt-3">
+        <button class="btn btn-info mr-2" (click)="loadAll()" [disabled]="isLoading">
+          <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
+          <span jhiTranslate="userManagement.home.refreshListLabel">Refresh List</span>
+        </button>
+        <button class="btn btn-primary jh-create-entity" [routerLink]="['./new']">
+          <fa-icon icon="plus"></fa-icon> <span jhiTranslate="userManagement.home.createLabel">Create a new User</span>
+        </button>
+      </div>
     </div>
   </h2>
 
@@ -43,7 +51,7 @@
       <tbody *ngIf="users">
         <tr *ngFor="let user of users; trackBy: trackIdentity">
           <td>
-            <a [routerLink]="['./', user.login, 'view']">{{ user.id }}</a>
+            <a [routerLink]="['/user-details', user.id, 'view']">{{ user.id }}</a>
           </td>
           <td>{{ user.firstName }}</td>
           <td>{{ user.lastName }}</td>
@@ -78,7 +86,7 @@
           </td>
           <td>{{ user.createdDate | date: 'dd/MM/yy HH:mm' }}</td>
           <td class="text-right">
-            <div class="btn-group">
+            <!--<div class="btn-group">
               <button type="submit" [routerLink]="['./', user.login, 'view']" class="btn btn-info btn-sm">
                 <fa-icon icon="eye"></fa-icon>
                 <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
@@ -103,6 +111,42 @@
                 <fa-icon icon="times"></fa-icon>
                 <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
               </button>
+            </div>-->
+            <div class="dropdown pb-3 dropdown-no-icon" ngbDropdown>
+              <div class="btn-link" role="button" data-toggle="dropdown" aria-expanded="false" ngbDropdownToggle>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path
+                    d="M10 11.9999C10 13.1045 10.8954 13.9999 12 13.9999C13.1046 13.9999 14 13.1045 14 11.9999C14 10.8954 13.1046 9.99994 12 9.99994C10.8954 9.99994 10 10.8954 10 11.9999Z"
+                    fill="black"
+                  ></path>
+                  <path
+                    d="M10 4.00006C10 5.10463 10.8954 6.00006 12 6.00006C13.1046 6.00006 14 5.10463 14 4.00006C14 2.89549 13.1046 2.00006 12 2.00006C10.8954 2.00006 10 2.89549 10 4.00006Z"
+                    fill="black"
+                  ></path>
+                  <path
+                    d="M10 20C10 21.1046 10.8954 22 12 22C13.1046 22 14 21.1046 14 20C14 18.8954 13.1046 18 12 18C10.8954 18 10 18.8954 10 20Z"
+                    fill="black"
+                  ></path>
+                </svg>
+              </div>
+              <div class="dropdown-menu dropdown-menu-right" ngbDropdownMenu>
+                <a class="dropdown-item" [routerLink]="['/user-details', user.id, 'view']" jhiTranslate="entity.action.view">view</a>
+                <a
+                  class="dropdown-item"
+                  [routerLink]="['/user-details', user.id, 'view']"
+                  [queryParams]="{ active: 2 }"
+                  jhiTranslate="entity.action.edit"
+                  >Edit</a
+                >
+                <a (click)="resetPassword(user)" class="dropdown-item" jhiTranslate="entity.action.resetPassword">Reset Password</a>
+                <a
+                  *ngIf="!(currentAccount.login === user.login)"
+                  class="dropdown-item"
+                  (click)="deleteUser(user)"
+                  jhiTranslate="entity.action.delete"
+                  >Delete</a
+                >
+              </div>
             </div>
           </td>
         </tr>

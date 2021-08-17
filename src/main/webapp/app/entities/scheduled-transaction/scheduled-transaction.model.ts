@@ -1,7 +1,10 @@
 import * as dayjs from 'dayjs';
-import { ISchedulePattern } from 'app/entities/schedule-pattern/schedule-pattern.model';
 import { ICurrency } from 'app/entities/currency/currency.model';
+import { IUserDetails } from 'app/entities/user-details/user-details.model';
+import { ICategory } from 'app/entities/category/category.model';
 import { MovementType } from 'app/entities/enumerations/movement-type.model';
+import { RecurringType } from 'app/entities/enumerations/recurring-type.model';
+import { IWallet } from 'app/entities/wallet/wallet.model';
 
 export interface IScheduledTransaction {
   id?: number;
@@ -12,9 +15,17 @@ export interface IScheduledTransaction {
   startDate?: dayjs.Dayjs;
   endDate?: dayjs.Dayjs | null;
   addToReports?: boolean;
-  incomingTransaction?: boolean;
-  schedulePatterns?: ISchedulePattern[] | null;
+  recurringType?: RecurringType;
+  separationCount?: number | null;
+  maxNumberOfOcurrences?: number | null;
+  dayOfWeek?: number | null;
+  weekOfMonth?: number | null;
+  dayOfMonth?: number | null;
+  monthOfYear?: number | null;
   currency?: ICurrency | null;
+  sourceUser?: IUserDetails | null;
+  category?: ICategory | null;
+  wallet?: IWallet;
 }
 
 export class ScheduledTransaction implements IScheduledTransaction {
@@ -27,12 +38,19 @@ export class ScheduledTransaction implements IScheduledTransaction {
     public startDate?: dayjs.Dayjs,
     public endDate?: dayjs.Dayjs | null,
     public addToReports?: boolean,
-    public incomingTransaction?: boolean,
-    public schedulePatterns?: ISchedulePattern[] | null,
-    public currency?: ICurrency | null
+    public recurringType?: RecurringType,
+    public separationCount?: number | null,
+    public maxNumberOfOcurrences?: number | null,
+    public dayOfWeek?: number | null,
+    public weekOfMonth?: number | null,
+    public dayOfMonth?: number | null,
+    public monthOfYear?: number | null,
+    public currency?: ICurrency | null,
+    public sourceUser?: IUserDetails | null,
+    public category?: ICategory | null,
+    public wallet?: IWallet
   ) {
     this.addToReports = this.addToReports ?? false;
-    this.incomingTransaction = this.incomingTransaction ?? false;
   }
 }
 

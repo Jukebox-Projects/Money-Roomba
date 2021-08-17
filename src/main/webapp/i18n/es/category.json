@@ -30,15 +30,15 @@
       },
       "id": "ID",
       "name": "Nombre",
-      "isActive": "Activa",
+      "isActive": "Estado",
       "userCreated": "Creada por usuario",
       "category": "Categoría",
       "transaction": "Transacción",
       "icon": "Ícono",
       "parent": "Categoría padre",
       "user": "Dueño de la Categoría",
-      "active": "Activo",
-      "inactive": "Inactivo"
+      "active": "Activa",
+      "inactive": "Inactiva"
     }
   }
 }

@@ -1,4 +1,5 @@
-import { UserDetails } from 'app/entities/user-details/user-details.model';
+import { Account } from 'app/core/auth/account.model';
+import { UserDetails, IUserDetails } from 'app/entities/user-details/user-details.model';
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
@@ -32,6 +33,11 @@ export class UserManagementService {
   findUserDetails(login: string): Observable<UserDetails> {
     return this.http.get<UserDetails>(`api/account/userDetails/${login}`);
   }
+
+  findUserDetailsById(id: number): Observable<any> {
+    return this.http.get<Account>(`${this.resourceUrl}/userDetails/${id}`);
+  }
+
   resetPassword(user: IUser): Observable<IUser> {
     return this.http.post<IUser>(`${this.resourceUrl}/change-password`, user);
   }

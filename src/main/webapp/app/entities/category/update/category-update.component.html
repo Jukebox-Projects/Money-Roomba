@@ -14,7 +14,7 @@
         </div>
 
         <div class="form-group">
-          <label class="form-control-label" jhiTranslate="moneyRoombaApp.category.name" for="field_name">Name</label>
+          <label class="form-control-label required-input" jhiTranslate="moneyRoombaApp.category.name" for="field_name">Name</label>
           <input type="text" class="form-control" name="name" id="field_name" data-cy="name" formControlName="name" />
           <div *ngIf="editForm.get('name')!.invalid && (editForm.get('name')!.dirty || editForm.get('name')!.touched)">
             <small class="form-text text-danger" *ngIf="editForm.get('name')?.errors?.required" jhiTranslate="entity.validation.required">
@@ -24,7 +24,7 @@
         </div>
 
         <div class="form-group h-auto">
-          <label class="form-control-label" jhiTranslate="moneyRoombaApp.category.icon" for="field_icon">Icon</label>
+          <label class="form-control-label required-input" jhiTranslate="moneyRoombaApp.category.icon" for="field_icon">Icon</label>
           <div class="form-control p-0 icon-container" id="field_icon" (click)="openIconPickerModal()">
             <div *ngIf="selectedIcon">
               <img src="{{ selectedIcon.path }}" alt="{{ selectedIcon.name }}" class="icon rounded m-1 float-left" />

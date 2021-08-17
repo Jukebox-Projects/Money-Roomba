@@ -1,3 +1,4 @@
+import { AvatarModule } from 'ngx-avatar';
 import { NavHeaderComponent } from './template/elements/nav-header/nav-header.component';
 import { NgModule, LOCALE_ID } from '@angular/core';
 import { registerLocaleData } from '@angular/common';
@@ -41,6 +42,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NestableModule } from 'ngx-nestable';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { LightboxModule } from 'ngx-lightbox';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 import { FullCalendarModule } from '@fullcalendar/angular';
 import dayGridPlugin from '@fullcalendar/daygrid';
@@ -56,7 +58,6 @@ import { PERFECT_SCROLLBAR_CONFIG } from 'ngx-perfect-scrollbar';
 import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar';
 
 import { NgxDropzoneModule } from 'ngx-dropzone';
-import { CarouselModule } from 'ngx-owl-carousel-o';
 
 import { MatListModule } from '@angular/material/list';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
@@ -97,6 +98,12 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatTreeModule } from '@angular/material/tree';
 import { IconPickerComponent } from './shared/icon-picker/icon-picker.component';
 import { LandingPageComponent } from './landing/landing-page/landing-page.component';
+import { NgApexchartsModule } from 'ng-apexcharts';
+import { AddContactModalComponent } from './entities/contact/add-contact-modal/add-contact-modal/add-contact-modal.component';
+import { TotalBalanceComponent } from './reports/total-balance/total-balance.component';
+import { TransactionsCategoryComponent } from './reports/transactions-category/transactions-category.component';
+import { NotificationsDialogComponent } from './layouts/notifications-dialog/notifications-dialog.component';
+//import { ChartComponent} from "ng-apexcharts";
 
 @NgModule({
   imports: [
@@ -114,8 +121,7 @@ import { LandingPageComponent } from './landing/landing-page/landing-page.compon
     MetismenuAngularModule,
     PerfectScrollbarModule,
     NgxDropzoneModule,
-    CarouselModule,
-
+    AvatarModule,
     MatListModule,
     MatAutocompleteModule,
     MatFormFieldModule,
@@ -153,6 +159,10 @@ import { LandingPageComponent } from './landing/landing-page/landing-page.compon
     MatTableModule,
     MatTooltipModule,
     MatTreeModule,
+    NgApexchartsModule,
+    FontAwesomeModule,
+    BrowserAnimationsModule,
+
     // Set this to true to enable service worker (PWA)
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: false }),
     HttpClientModule,
@@ -188,8 +198,13 @@ import { LandingPageComponent } from './landing/landing-page/landing-page.compon
     NavigationComponent,
     IconPickerComponent,
     LandingPageComponent,
+    AddContactModalComponent,
+    NotificationsDialogComponent,
+    //   ChartComponent
   ],
+  entryComponents: [NotificationsDialogComponent],
   bootstrap: [MainComponent],
+  exports: [],
 })
 export class AppModule {
   constructor(

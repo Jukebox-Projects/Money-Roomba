@@ -37,23 +37,77 @@
       "fieldValidateRules": ["required"]
     },
     {
-      "fieldName": "incomingTransaction",
-      "fieldType": "Boolean",
+      "fieldName": "recurringType",
+      "fieldType": "RecurringType",
+      "fieldValues": "DAILY (Diariamente),WEEKLY (Semanalmente),MONTHLY (Mensualmente),YEARLY (Anualmente)",
       "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "separationCount",
+      "fieldType": "Integer",
+      "fieldValidateRules": ["min"],
+      "fieldValidateRulesMin": "0"
+    },
+    {
+      "fieldName": "maxNumberOfOcurrences",
+      "fieldType": "Integer"
+    },
+    {
+      "fieldName": "dayOfWeek",
+      "fieldType": "Integer",
+      "fieldValidateRules": ["min", "max"],
+      "fieldValidateRulesMin": "0",
+      "fieldValidateRulesMax": "6"
+    },
+    {
+      "fieldName": "weekOfMonth",
+      "fieldType": "Integer",
+      "fieldValidateRules": ["min", "max"],
+      "fieldValidateRulesMin": "0",
+      "fieldValidateRulesMax": "5"
+    },
+    {
+      "fieldName": "dayOfMonth",
+      "fieldType": "Integer",
+      "fieldValidateRules": ["min", "max"],
+      "fieldValidateRulesMin": "0",
+      "fieldValidateRulesMax": "31"
+    },
+    {
+      "fieldName": "monthOfYear",
+      "fieldType": "Integer",
+      "fieldValidateRules": ["min", "max"],
+      "fieldValidateRulesMin": "0",
+      "fieldValidateRulesMax": "11"
     }
   ],
   "relationships": [
-    {
-      "relationshipType": "one-to-many",
-      "otherEntityName": "schedulePattern",
-      "otherEntityRelationshipName": "scheduleTransaction",
-      "relationshipName": "schedulePattern"
-    },
     {
       "relationshipType": "many-to-one",
       "otherEntityName": "currency",
       "otherEntityRelationshipName": "scheduledTransaction",
       "relationshipName": "currency"
+    },
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "userDetails",
+      "otherEntityRelationshipName": "scheduledTransaction",
+      "relationshipName": "sourceUser"
+    },
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "category",
+      "otherEntityRelationshipName": "scheduledTransaction",
+      "relationshipName": "category",
+      "otherEntityField": "name"
+    },
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "wallet",
+      "otherEntityRelationshipName": "scheduledTransaction",
+      "relationshipValidateRules": "required",
+      "relationshipName": "wallet",
+      "otherEntityField": "name"
     }
   ],
   "entityTableName": "t_scheduled_transaction",

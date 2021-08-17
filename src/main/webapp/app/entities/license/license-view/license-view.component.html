@@ -14,9 +14,9 @@
             <li class="pricing-features-item" jhiTranslate="moneyRoombaApp.license.view.regular.importedTransactions">
               Limit of 10 imported transactions
             </li>
-            <li class="pricing-features-item" jhiTranslate="moneyRoombaApp.license.view.regular.reports">
+            <!-- <li class="pricing-features-item" jhiTranslate="moneyRoombaApp.license.view.regular.reports">
               Limited time period for reports
-            </li>
+            </li> -->
           </ul>
           <span class="pricing-price">Free</span>
         </div>
@@ -32,11 +32,13 @@
             <li class="pricing-features-item" jhiTranslate="moneyRoombaApp.license.view.premium.importedTransactions">
               Unlimited imported transactions
             </li>
-            <li class="pricing-features-item" jhiTranslate="moneyRoombaApp.license.view.premium.reports">
+            <!-- <li class="pricing-features-item" jhiTranslate="moneyRoombaApp.license.view.premium.reports">
               Extended time frame for reports
-            </li>
+            </li> -->
           </ul>
-          <span class="pricing-price">${{ getPrice() }}</span>
+          <span class="pricing-price"
+            >${{ getPrice() }} <sup>+{{ getTax() }}%</sup></span
+          >
           <button type="button" class="btn btn-primary pricing-button is-featured">
             <fa-icon icon="shopping-cart"></fa-icon>&nbsp;<span jhiTranslate="moneyRoombaApp.license.view.buyNow" (click)="open()"
               >Buy now</span

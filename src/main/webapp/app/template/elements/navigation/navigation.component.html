@@ -1,28 +1,50 @@
 <div class="deznav">
   <div class="deznav-scroll" [perfectScrollbar]>
     <ul class="metismenu" id="menu" metis-menu>
-      <li [ngClass]="{ 'mm-active': dashboardArray.indexOf(currentHref) > -1 }" *ngIf="isAuthenticated()">
-        <a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="false">
-          <i class="flaticon-381-networking"></i>
-          <span class="nav-text">Dashboard</span>
+      <li *ngIf="isAuthenticated()">
+        <a aria-expanded="false">
+          <i class="flaticon-381-networking">
+            <img src="../../../../assets/icons/dashboard/business-report.png" style="width: 30px; height: 30px" />
+          </i>
+          <span class="{{ currentHref == '/' || currentHref == '/' ? 'mm-active' : '' }}" [routerLink]="['/']" class="nav-text"
+            >Dashboard</span
+          >
         </a>
-        <ul aria-expanded="false" [ngClass]="{ 'mm-show': dashboardArray.indexOf(currentHref) > -1 }">
-          <li>
-            <a
-              class="{{ currentHref == '/' || currentHref == '/' ? 'mm-active' : '' }}"
-              [routerLink]="['/']"
-              jhiTranslate="global.menu.home"
-              >Home</a
-            >
-          </li>
-          <li>
-            <a
-              class="{{ currentHref == '/wallet' ? 'mm-active' : '' }}"
-              [routerLink]="['/wallet']"
-              jhiTranslate="global.menu.entities.wallet"
-              >Wallet</a
-            >
-          </li>
+        <ul>
+          <a [routerLink]="['/']" [ngClass]="{ 'd-none': !sharedService.hamburgerClass, '': sharedService.hamburgerClass }">Home</a>
+        </ul>
+      </li>
+
+      <li *ngIf="isAuthenticated()">
+        <a>
+          <i class="flaticon-381-networking">
+            <img src="../../../../assets/icons/dashboard/wallet.png" style="width: 30px; height: 30px" />
+          </i>
+          <span
+            class="{{ currentHref == '/wallet' ? 'mm-active' : '' }}"
+            [routerLink]="['/wallet']"
+            class="nav-text"
+            jhiTranslate="global.menu.entities.wallet"
+            >Wallets</span
+          >
+        </a>
+        <ul>
+          <a
+            [routerLink]="['/wallet']"
+            [ngClass]="{ 'd-none': !sharedService.hamburgerClass, '': sharedService.hamburgerClass }"
+            jhiTranslate="global.menu.entities.wallet"
+          ></a>
+        </ul>
+      </li>
+
+      <li *ngIf="isAuthenticated()">
+        <a class="has-arrow ai-icon" aria-expanded="false">
+          <i>
+            <img src="../../../../assets/icons/dashboard/money.png" />
+          </i>
+          <span class="nav-text" jhiTranslate="global.menu.entities.transaction">Transaction</span>
+        </a>
+        <ul aria-expanded="false">
           <li>
             <a
               class="{{ currentHref == '/transaction' ? 'mm-active' : '' }}"
@@ -31,7 +53,6 @@
               >Transaction</a
             >
           </li>
-          <!--
           <li>
             <a
               class="{{ currentHref == '/scheduled-transaction' ? 'mm-active' : '' }}"
@@ -39,31 +60,62 @@
               jhiTranslate="global.menu.entities.scheduledTransaction"
               >Scheduled Transaction</a
             >
-          </li>-->
-          <li>
-            <a
-              class="{{ currentHref == '/category' ? 'mm-active' : '' }}"
-              [routerLink]="['/category']"
-              jhiTranslate="global.menu.entities.category"
-              >Category</a
-            >
-          </li>
-          <li>
-            <a
-              class="{{ currentHref == '/currency-converter' ? 'mm-active' : '' }}"
-              [routerLink]="['/currency-converter']"
-              jhiTranslate="global.menu.entities.currency-converter"
-              >Wallet</a
-            >
           </li>
         </ul>
       </li>
-      <li [ngClass]="{ 'mm-active': adminArray.indexOf(currentHref) > -1 }" *jhiHasAnyAuthority="'ROLE_ADMIN'">
-        <a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="false">
-          <i class="flaticon-381-television"></i>
+
+      <li *ngIf="isAuthenticated()">
+        <a aria-expanded="false">
+          <i class="flaticon-381-networking">
+            <img src="../../../../assets/icons/dashboard/color-wheel.png" />
+          </i>
+          <span
+            class="{{ currentHref == '/category' ? 'mm-active' : '' }}"
+            [routerLink]="['/category']"
+            class="nav-text"
+            jhiTranslate="global.menu.entities.category"
+            >Category</span
+          >
+        </a>
+        <ul>
+          <a
+            [routerLink]="['/category']"
+            [ngClass]="{ 'd-none': !sharedService.hamburgerClass, '': sharedService.hamburgerClass }"
+            jhiTranslate="global.menu.entities.category"
+          ></a>
+        </ul>
+      </li>
+
+      <li *ngIf="isAuthenticated()">
+        <a aria-expanded="false">
+          <i class="flaticon-381-networking">
+            <img src="../../../../assets/icons/dashboard/currencies.png" style="width: 30px; height: 30px" />
+          </i>
+          <span
+            class="{{ currentHref == '/currency-converter' ? 'mm-active' : '' }}"
+            class="nav-text"
+            [routerLink]="['/currency-converter']"
+            jhiTranslate="global.menu.entities.currency-converter"
+            >Currency converter</span
+          >
+        </a>
+        <ul>
+          <a
+            [routerLink]="['/currency-converter']"
+            [ngClass]="{ 'd-none': !sharedService.hamburgerClass, '': sharedService.hamburgerClass }"
+            jhiTranslate="global.menu.entities.currency-converter"
+          ></a>
+        </ul>
+      </li>
+
+      <li *ngIf="adminUser">
+        <a class="has-arrow ai-icon" aria-expanded="false">
+          <i class="flaticon-381-television">
+            <img src="../../../../assets/icons/dashboard/settings.png" />
+          </i>
           <span class="nav-text" jhiTranslate="global.menu.admin.main">Administration</span>
         </a>
-        <ul aria-expanded="false" [ngClass]="{ 'mm-show': adminArray.indexOf(currentHref) > -1 }">
+        <ul aria-expanded="false">
           <li>
             <a
               [routerLink]="['/admin/user-management']"
@@ -73,6 +125,12 @@
             >
           </li>
           <li>
+            <a [routerLink]="['/event']" class="{{ currentHref == '/event' ? 'mm-active' : '' }}" jhiTranslate="global.menu.entities.event"
+              >Events</a
+            >
+          </li>
+
+          <li>
             <a
               [routerLink]="['/admin/metrics']"
               class="{{ currentHref == '/admin/metrics' ? 'mm-active' : '' }}"
@@ -80,14 +138,14 @@
               >Metrics</a
             >
           </li>
-          <li>
+          <!--   <li>
             <a
               [routerLink]="['/admin/health']"
               class="{{ currentHref == '/admin/health' ? 'mm-active' : '' }}"
               jhiTranslate="global.menu.admin.health"
               >Health</a
             >
-          </li>
+          </li>-->
           <li>
             <a
               [routerLink]="['/admin/logs']"
@@ -126,6 +184,15 @@
               class="{{ currentHref == '/license' ? 'mm-active' : '' }}"
               jhiTranslate="global.menu.entities.license"
               >Licenses</a
+            >
+          </li>
+
+          <li>
+            <a
+              [routerLink]="['/currency']"
+              class="{{ currentHref == '/currency' ? 'mm-active' : '' }}"
+              jhiTranslate="global.menu.entities.currency"
+              >Currency</a
             >
           </li>
         </ul>

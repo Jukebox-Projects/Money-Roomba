@@ -4,17 +4,30 @@
 
     <div class="d-flex justify-content-end">
       <div class="pt-3 p-1" style="font-size: 24px">
-        <input jhiTranslate="moneyRoombaApp.category.home.searchbar" type="text" [(ngModel)]="inputText" (input)="filter()" />
+        <input
+          class="form-control input-rounded"
+          type="text"
+          [(ngModel)]="inputText"
+          (input)="filter()"
+          placeholder="{{ 'moneyRoombaApp.category.home.searchbar' | translate }}"
+        />
       </div>
-      <button class="btn btn-info mr-2" (click)="loadAll()" [disabled]="isLoading">
-        <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
-        <span jhiTranslate="moneyRoombaApp.license.home.refreshListLabel">Refresh List</span>
-      </button>
+      <div class="pt-3 p-1">
+        <button class="btn btn-info mr-2" (click)="loadAll()" [disabled]="isLoading">
+          <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
+          <span jhiTranslate="moneyRoombaApp.license.home.refreshListLabel">Refresh List</span>
+        </button>
 
-      <button id="jh-create-entity" data-cy="entityCreateButton" class="btn btn-primary jh-create-entity create-license" (click)="create()">
-        <fa-icon icon="plus"></fa-icon>
-        <span jhiTranslate="moneyRoombaApp.license.home.createLabel"> Create a new License </span>
-      </button>
+        <button
+          id="jh-create-entity"
+          data-cy="entityCreateButton"
+          class="btn btn-primary jh-create-entity create-license"
+          (click)="create()"
+        >
+          <fa-icon icon="plus"></fa-icon>
+          <span jhiTranslate="moneyRoombaApp.license.home.createLabel"> Create a new License </span>
+        </button>
+      </div>
     </div>
   </h2>
 
@@ -42,7 +55,10 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let license of licenses; trackBy: trackId" data-cy="entityTable">
+        <tr
+          *ngFor="let license of licenses | slice: (page - 1) * pageSize:(page - 1) * pageSize + pageSize; trackBy: trackId"
+          data-cy="entityTable"
+        >
           <td>
             <a [routerLink]="['/license', license.id, 'view']">{{ license.id }}</a>
           </td>
@@ -54,58 +70,104 @@
           <td jhiTranslate="{{ 'moneyRoombaApp.LicenseCreateMethod.' + license.createMethod }}">{{ license.createMethod }}</td>
           <td class="text-right">
             <div class="btn-group">
-              <button
-                type="submit"
-                [routerLink]="['/license', license.id, 'view']"
-                class="btn btn-info btn-sm"
-                data-cy="entityDetailsButton"
-              >
-                <fa-icon icon="eye"></fa-icon>
-                <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
-              </button>
+              <!-- <button
+                 type="submit"
+                 [routerLink]="['/license', license.id, 'view']"
+                 class="btn btn-info btn-sm"
+                 data-cy="entityDetailsButton"
+               >
+                 <fa-icon icon="eye"></fa-icon>
+                 <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
+               </button>
 
-              <button
-                type="submit"
-                [routerLink]="['/license', license.id, 'edit']"
-                class="btn btn-primary btn-sm"
-                data-cy="entityEditButton"
-              >
-                <fa-icon icon="pencil-alt"></fa-icon>
-                <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
-              </button>
+               <button
+                 type="submit"
+                 [routerLink]="['/license', license.id, 'edit']"
+                 class="btn btn-primary btn-sm"
+                 data-cy="entityEditButton"
+               >
+                 <fa-icon icon="pencil-alt"></fa-icon>
+                 <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
+               </button>
 
-              <button
-                class="btn btn-secondary btn-sm"
-                (click)="setActive(license, true)"
-                *ngIf="!license.isActive"
-                jhiTranslate="moneyRoombaApp.license.deactivated"
-              >
-                Deactivated
-              </button>
-              <button
-                class="btn btn-secondary btn-sm"
-                (click)="setActive(license, false)"
-                *ngIf="license.isActive"
-                [disabled]="license.isAssigned"
-                jhiTranslate="moneyRoombaApp.license.activated"
-              >
-                Activated
-              </button>
+               <button
+                 class="btn btn-secondary btn-sm"
+                 (click)="setActive(license, true)"
+                 *ngIf="!license.isActive"
+                 jhiTranslate="moneyRoombaApp.license.deactivated"
+               >
+                 Deactivated
+               </button>
+               <button
+                 class="btn btn-secondary btn-sm"
+                 (click)="setActive(license, false)"
+                 *ngIf="license.isActive"
+                 [disabled]="license.isAssigned"
+                 jhiTranslate="moneyRoombaApp.license.activated"
+               >
+                 Activated
+               </button>
 
-              <button
-                type="submit"
-                [disabled]="license.isAssigned == true"
-                (click)="delete(license)"
-                class="btn btn-danger btn-sm"
-                data-cy="entityDeleteButton"
-              >
-                <fa-icon icon="times"></fa-icon>
-                <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
-              </button>
+               <button
+                 type="submit"
+                 [disabled]="license.isAssigned == true"
+                 (click)="delete(license)"
+                 class="btn btn-danger btn-sm"
+                 data-cy="entityDeleteButton"
+               >
+                 <fa-icon icon="times"></fa-icon>
+                 <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
+               </button>-->
+            </div>
+            <div class="dropdown pb-3 dropdown-no-icon" ngbDropdown>
+              <div class="btn-link" role="button" data-toggle="dropdown" aria-expanded="false" ngbDropdownToggle>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path
+                    d="M10 11.9999C10 13.1045 10.8954 13.9999 12 13.9999C13.1046 13.9999 14 13.1045 14 11.9999C14 10.8954 13.1046 9.99994 12 9.99994C10.8954 9.99994 10 10.8954 10 11.9999Z"
+                    fill="black"
+                  ></path>
+                  <path
+                    d="M10 4.00006C10 5.10463 10.8954 6.00006 12 6.00006C13.1046 6.00006 14 5.10463 14 4.00006C14 2.89549 13.1046 2.00006 12 2.00006C10.8954 2.00006 10 2.89549 10 4.00006Z"
+                    fill="black"
+                  ></path>
+                  <path
+                    d="M10 20C10 21.1046 10.8954 22 12 22C13.1046 22 14 21.1046 14 20C14 18.8954 13.1046 18 12 18C10.8954 18 10 18.8954 10 20Z"
+                    fill="black"
+                  ></path>
+                </svg>
+              </div>
+              <div class="dropdown-menu dropdown-menu-right" ngbDropdownMenu>
+                <a class="dropdown-item" [routerLink]="['/license', license.id, 'view']" jhiTranslate="entity.action.view">view</a>
+                <!-- <a class="dropdown-item" [routerLink]="['/license', license.id, 'edit']" jhiTranslate="entity.action.edit">Edit</a> -->
+                <a
+                  (click)="setActive(license, true)"
+                  *ngIf="!license.isActive && !license.isAssigned"
+                  class="dropdown-item"
+                  jhiTranslate="moneyRoombaApp.license.deactivated"
+                  >Deactivated</a
+                >
+                <a
+                  (click)="setActive(license, false)"
+                  *ngIf="license.isActive && !license.isAssigned"
+                  class="dropdown-item"
+                  jhiTranslate="moneyRoombaApp.license.activated"
+                  >Activated</a
+                >
+                <a class="dropdown-item" (click)="delete(license)" jhiTranslate="entity.action.delete">Delete</a>
+              </div>
             </div>
           </td>
         </tr>
       </tbody>
     </table>
+  </div>
+
+  <div class="d-flex justify-content-between p-2">
+    <ngb-pagination class="mr-3" [(page)]="page" [pageSize]="pageSize" [collectionSize]="this.licenses.length"></ngb-pagination>
+    <select class="custom-select" style="width: auto" [(ngModel)]="pageSize">
+      <option [ngValue]="10">10 <span jhiTranslate="global.menu.entities.items-per-page">items per page</span></option>
+      <option [ngValue]="25">25 <span jhiTranslate="global.menu.entities.items-per-page">items per page</span></option>
+      <option [ngValue]="50">50 <span jhiTranslate="global.menu.entities.items-per-page">items per page</span></option>
+    </select>
   </div>
 </div>

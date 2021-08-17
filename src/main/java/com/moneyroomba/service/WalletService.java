@@ -1,16 +1,13 @@
 package com.moneyroomba.service;
 
-import com.moneyroomba.domain.Transaction;
-import com.moneyroomba.domain.User;
-import com.moneyroomba.domain.UserDetails;
-import com.moneyroomba.domain.Wallet;
-import com.moneyroomba.repository.TransactionRepository;
-import com.moneyroomba.repository.UserDetailsRepository;
-import com.moneyroomba.repository.UserRepository;
-import com.moneyroomba.repository.WalletRepository;
+import com.moneyroomba.domain.*;
+import com.moneyroomba.domain.enumeration.EventType;
+import com.moneyroomba.domain.enumeration.SourceEntity;
+import com.moneyroomba.repository.*;
 import com.moneyroomba.security.AuthoritiesConstants;
 import com.moneyroomba.security.SecurityUtils;
 import com.moneyroomba.web.rest.errors.BadRequestAlertException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -46,16 +43,28 @@ public class WalletService {
 
     private final TransactionRepository transactionRepository;
 
+    private final EventRepository eventRepository;
+
+    private final UserService userService;
+
+    private final ScheduledTransactionRepository scheduledTransactionRepository;
+
     public WalletService(
         WalletRepository walletRepository,
         UserRepository userRepository,
         UserDetailsRepository userDetailsRepository,
-        TransactionRepository transactionRepository
+        TransactionRepository transactionRepository,
+        EventRepository eventRepository,
+        UserService userService,
+        ScheduledTransactionRepository scheduledTransactionRepository
     ) {
         this.walletRepository = walletRepository;
         this.userRepository = userRepository;
         this.userDetailsRepository = userDetailsRepository;
         this.transactionRepository = transactionRepository;
+        this.eventRepository = eventRepository;
+        this.userService = userService;
+        this.scheduledTransactionRepository = scheduledTransactionRepository;
     }
 
     /**
@@ -90,14 +99,20 @@ public class WalletService {
                         "nomorewallets"
                     );
                 } else {
+                    createEvent(EventType.CREATE);
                     return walletRepository.save(wallet);
                 }
             } else {
+                createEvent(EventType.CREATE);
                 return walletRepository.save(wallet);
             }
         } else {
             Optional<Wallet> existingWallet = walletRepository.findById(wallet.getId());
+            if (!userService.currentUserIsAdmin() && !userDetails.get().equals(existingWallet.get().getUser())) {
+                throw new BadRequestAlertException("You cannot access or modify this wallet's information", ENTITY_NAME, "walletnoaccess");
+            }
             wallet.setUser(existingWallet.get().getUser());
+            createEvent(EventType.UPDATE);
             return walletRepository.save(wallet);
         }
     }
@@ -110,7 +125,7 @@ public class WalletService {
      */
     public Optional<Wallet> partialUpdate(Wallet wallet) {
         log.debug("Request to partially update Wallet : {}", wallet);
-
+        createEvent(EventType.UPDATE);
         return walletRepository
             .findById(wallet.getId())
             .map(
@@ -196,13 +211,33 @@ public class WalletService {
     @Transactional(readOnly = true)
     public Optional<Wallet> findOne(Long id) {
         log.debug("Request to get Wallet : {}", id);
-        return walletRepository.findById(id);
+        Optional<User> user = userRepository.findOneByLogin(
+            SecurityUtils
+                .getCurrentUserLogin()
+                .orElseThrow(() -> new BadRequestAlertException("A new wallet cannot already have an ID", ENTITY_NAME, "idexists"))
+        );
+        Optional<UserDetails> userDetails = userDetailsRepository.findOneByInternalUser(user.get());
+        Optional<Wallet> wallet = walletRepository.findById(id);
+        if (!userService.currentUserIsAdmin() && !userDetails.get().equals(wallet.get().getUser())) {
+            throw new BadRequestAlertException("You cannot access or modify this wallet's information", ENTITY_NAME, "walletnoaccess");
+        }
+        return wallet;
     }
 
     @Transactional(readOnly = true)
     public Optional<Wallet> findOneById(Long id) {
         log.debug("Request to get Wallet : {}", id);
-        return walletRepository.findById(id);
+        Optional<User> user = userRepository.findOneByLogin(
+            SecurityUtils
+                .getCurrentUserLogin()
+                .orElseThrow(() -> new BadRequestAlertException("A new wallet cannot already have an ID", ENTITY_NAME, "idexists"))
+        );
+        Optional<UserDetails> userDetails = userDetailsRepository.findOneByInternalUser(user.get());
+        Optional<Wallet> wallet = walletRepository.findById(id);
+        if (!userService.currentUserIsAdmin() && !userDetails.get().equals(wallet.get().getUser())) {
+            throw new BadRequestAlertException("You cannot access or modify this wallet's information", ENTITY_NAME, "walletnoaccess");
+        }
+        return wallet;
     }
 
     /**
@@ -212,13 +247,52 @@ public class WalletService {
      */
     public void delete(Long id) {
         log.debug("Request to delete Wallet : {}", id);
+        Optional<User> user = userRepository.findOneByLogin(
+            SecurityUtils
+                .getCurrentUserLogin()
+                .orElseThrow(() -> new BadRequestAlertException("A new wallet cannot already have an ID", ENTITY_NAME, "idexists"))
+        );
+        Optional<UserDetails> userDetails = userDetailsRepository.findOneByInternalUser(user.get());
         Optional<Wallet> wallet = walletRepository.findById(id);
-        List<Transaction> transactions = transactionRepository.findAllByWallet(wallet.get());
+        List<Transaction> transactions = transactionRepository.findAllByWalletOrderByDateAddedDesc(wallet.get());
+        List<ScheduledTransaction> scheduledTransactions = scheduledTransactionRepository.findAllByWallet(wallet.get());
+        if (!userService.currentUserIsAdmin() && !userDetails.get().equals(wallet.get().getUser())) {
+            throw new BadRequestAlertException("You cannot access or modify this wallet's information", ENTITY_NAME, "walletnoaccess");
+        }
         if (!transactions.isEmpty()) {
             for (Transaction t : transactions) {
                 transactionRepository.delete(t);
             }
         }
+        if (!scheduledTransactions.isEmpty()) {
+            for (ScheduledTransaction t : scheduledTransactions) {
+                scheduledTransactionRepository.delete(t);
+            }
+        }
+        createEvent(EventType.DELETE);
         walletRepository.deleteById(id);
+    }
+
+    /**
+     * Create event.
+     *
+     * @param eventType of the entity.
+     */
+    public void createEvent(EventType eventType) {
+        Optional<User> user = userRepository.findOneByLogin(
+            SecurityUtils
+                .getCurrentUserLogin()
+                .orElseThrow(() -> new BadRequestAlertException("Current user login not found", ENTITY_NAME, ""))
+        );
+
+        Event event = new Event();
+        event.setEventType(eventType);
+        event.setDateAdded(LocalDate.now());
+        event.setSourceId(user.get().getId());
+        event.setSourceEntity(SourceEntity.WALLET);
+        event.setUserName(user.get().getFirstName());
+        event.setUserLastName(user.get().getLastName());
+        System.out.println(event);
+        eventRepository.save(event);
     }
 }

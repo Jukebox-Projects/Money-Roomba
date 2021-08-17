@@ -1,527 +1,292 @@
-<div>
-  <div class="row justify-content-center">
-    <div class="col-md-8">
-      <h1 jhiTranslate="register.title" data-cy="registerTitle">Registration</h1>
+<div class="pt-5">
+  <div class="card pt-5">
+    <div class="row justify-content-center">
+      <div class="col-md-8">
+        <h1 jhiTranslate="register.title" data-cy="registerTitle">Registration</h1>
 
-      <div class="alert alert-success" *ngIf="success" jhiTranslate="register.messages.success">
-        <strong>Registration saved!</strong> Please check your email for confirmation.
-      </div>
+        <div class="alert alert-success" *ngIf="success" jhiTranslate="register.messages.success">
+          <strong>Registration saved!</strong> Please check your email for confirmation.
+        </div>
 
-      <div class="alert alert-danger" *ngIf="error" jhiTranslate="register.messages.error.fail">
-        <strong>Registration failed!</strong> Please try again later.
-      </div>
+        <div class="alert alert-danger" *ngIf="error" jhiTranslate="register.messages.error.fail">
+          <strong>Registration failed!</strong> Please try again later.
+        </div>
 
-      <div class="alert alert-danger" *ngIf="errorUserExists" jhiTranslate="register.messages.error.userexists">
-        <strong>Login name already registered!</strong> Please choose another one.
-      </div>
+        <div class="alert alert-danger" *ngIf="errorUserExists" jhiTranslate="register.messages.error.userexists">
+          <strong>Login name already registered!</strong> Please choose another one.
+        </div>
 
-      <div class="alert alert-danger" *ngIf="errorEmailExists" jhiTranslate="register.messages.error.emailexists">
-        <strong>Email is already in use!</strong> Please choose another one.
-      </div>
+        <div class="alert alert-danger" *ngIf="errorEmailExists" jhiTranslate="register.messages.error.emailexists">
+          <strong>Email is already in use!</strong> Please choose another one.
+        </div>
 
-      <div class="alert alert-danger" *ngIf="doNotMatch" jhiTranslate="global.messages.error.dontmatch">
-        The password and its confirmation do not match!
+        <div class="alert alert-danger" *ngIf="doNotMatch" jhiTranslate="global.messages.error.dontmatch">
+          The password and its confirmation do not match!
+        </div>
       </div>
     </div>
-  </div>
 
-  <div class="row justify-content-center">
-    <div class="col-md-8">
-      <form name="form" role="form" (ngSubmit)="register()" [formGroup]="registerForm" *ngIf="!success">
-        <div class="form-group">
-          <label class="form-control-label" for="firstName" jhiTranslate="global.form.firstName.label">Name</label>
-          <input
-            type="text"
-            class="form-control"
-            id="firstName"
-            name="firstName"
-            placeholder="{{ 'global.form.firstName.placeholder' | translate }}"
-            formControlName="firstName"
-            data-cy="firstName"
-          />
+    <div class="row justify-content-center">
+      <div class="col-md-8 pb-5">
+        <form name="form" role="form" (ngSubmit)="register()" [formGroup]="registerForm" *ngIf="!success">
+          <div class="form-row">
+            <div class="form-group col-md-6">
+              <label class="form-control-label required-input" for="firstName" jhiTranslate="global.form.firstName.label">Name</label>
+              <input
+                type="text"
+                class="form-control"
+                id="firstName"
+                name="firstName"
+                placeholder="{{ 'global.form.firstName.placeholder' | translate }}"
+                formControlName="firstName"
+                data-cy="firstName"
+              />
 
-          <div
-            *ngIf="
-              registerForm.get('firstName')!.invalid && (registerForm.get('firstName')!.dirty || registerForm.get('firstName')!.touched)
-            "
-          >
-            <small
-              class="form-text text-danger"
-              *ngIf="registerForm.get('firstName')?.errors?.required"
-              jhiTranslate="global.messages.validate.firstName.required"
-            >
-              Your name is required.
-            </small>
-          </div>
-        </div>
+              <div
+                *ngIf="
+                  registerForm.get('firstName')!.invalid && (registerForm.get('firstName')!.dirty || registerForm.get('firstName')!.touched)
+                "
+              >
+                <small
+                  class="form-text text-danger"
+                  *ngIf="registerForm.get('firstName')?.errors?.required"
+                  jhiTranslate="global.messages.validate.firstName.required"
+                >
+                  Your name is required.
+                </small>
+              </div>
+            </div>
 
-        <div class="form-group">
-          <label class="form-control-label" for="lastName" jhiTranslate="global.form.lastName.label">Last Name</label>
-          <input
-            type="lastName"
-            class="form-control"
-            id="lastName"
-            name="lastName"
-            placeholder="{{ 'global.form.lastName.placeholder' | translate }}"
-            formControlName="lastName"
-            data-cy="lastName"
-          />
+            <div class="form-group col-md-6">
+              <label class="form-control-label required-input" for="lastName" jhiTranslate="global.form.lastName.label">Last Name</label>
+              <input
+                type="text"
+                class="form-control"
+                id="lastName"
+                name="lastName"
+                placeholder="{{ 'global.form.lastName.placeholder' | translate }}"
+                formControlName="lastName"
+                data-cy="lastName"
+              />
 
-          <div
-            *ngIf="registerForm.get('lastName')!.invalid && (registerForm.get('lastName')!.dirty || registerForm.get('lastName')!.touched)"
-          >
-            <small
-              class="form-text text-danger"
-              *ngIf="registerForm.get('lastName')?.errors?.required"
-              jhiTranslate="global.messages.validate.lastName.required"
-            >
-              Your lastName is required.
-            </small>
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label class="form-control-label" jhiTranslate="global.form.country.label" for="field_country">Country</label>
-
-          <select class="form-control" id="field_country" data-cy="country" name="country" formControlName="country">
-            <option [ngValue]="null"></option>
-            <option ngValue="AF">Afghanistan</option>
-            <option ngValue="AX">Åland Islands</option>
-            <option ngValue="AL">Albania</option>
-            <option ngValue="DZ">Algeria</option>
-            <option ngValue="AS">American Samoa</option>
-            <option ngValue="AD">Andorra</option>
-            <option ngValue="AO">Angola</option>
-            <option ngValue="AI">Anguilla</option>
-            <option ngValue="AQ">Antarctica</option>
-            <option ngValue="AG">Antigua and Barbuda</option>
-            <option ngValue="AR">Argentina</option>
-            <option ngValue="AM">Armenia</option>
-            <option ngValue="AW">Aruba</option>
-            <option ngValue="AU">Australia</option>
-            <option ngValue="AT">Austria</option>
-            <option ngValue="AZ">Azerbaijan</option>
-            <option ngValue="BS">Bahamas</option>
-            <option ngValue="BH">Bahrain</option>
-            <option ngValue="BD">Bangladesh</option>
-            <option ngValue="BB">Barbados</option>
-            <option ngValue="BY">Belarus</option>
-            <option ngValue="BE">Belgium</option>
-            <option ngValue="BZ">Belize</option>
-            <option ngValue="BJ">Benin</option>
-            <option ngValue="BM">Bermuda</option>
-            <option ngValue="BT">Bhutan</option>
-            <option ngValue="BO">Bolivia, Plurinational State of</option>
-            <option ngValue="BQ">Bonaire, Sint Eustatius and Saba</option>
-            <option ngValue="BA">Bosnia and Herzegovina</option>
-            <option ngValue="BW">Botswana</option>
-            <option ngValue="BV">Bouvet Island</option>
-            <option ngValue="BR">Brazil</option>
-            <option ngValue="IO">British Indian Ocean Territory</option>
-            <option ngValue="BN">Brunei Darussalam</option>
-            <option ngValue="BG">Bulgaria</option>
-            <option ngValue="BF">Burkina Faso</option>
-            <option ngValue="BI">Burundi</option>
-            <option ngValue="KH">Cambodia</option>
-            <option ngValue="CM">Cameroon</option>
-            <option ngValue="CA">Canada</option>
-            <option ngValue="CV">Cape Verde</option>
-            <option ngValue="KY">Cayman Islands</option>
-            <option ngValue="CF">Central African Republic</option>
-            <option ngValue="TD">Chad</option>
-            <option ngValue="CL">Chile</option>
-            <option ngValue="CN">China</option>
-            <option ngValue="CX">Christmas Island</option>
-            <option ngValue="CC">Cocos (Keeling) Islands</option>
-            <option ngValue="CO">Colombia</option>
-            <option ngValue="KM">Comoros</option>
-            <option ngValue="CG">Congo</option>
-            <option ngValue="CD">Congo, the Democratic Republic of the</option>
-            <option ngValue="CK">Cook Islands</option>
-            <option ngValue="CR">Costa Rica</option>
-            <option ngValue="CI">Côte d'Ivoire</option>
-            <option ngValue="HR">Croatia</option>
-            <option ngValue="CU">Cuba</option>
-            <option ngValue="CW">Curaçao</option>
-            <option ngValue="CY">Cyprus</option>
-            <option ngValue="CZ">Czech Republic</option>
-            <option ngValue="DK">Denmark</option>
-            <option ngValue="DJ">Djibouti</option>
-            <option ngValue="DM">Dominica</option>
-            <option ngValue="DO">Dominican Republic</option>
-            <option ngValue="EC">Ecuador</option>
-            <option ngValue="EG">Egypt</option>
-            <option ngValue="SV">El Salvador</option>
-            <option ngValue="GQ">Equatorial Guinea</option>
-            <option ngValue="ER">Eritrea</option>
-            <option ngValue="EE">Estonia</option>
-            <option ngValue="ET">Ethiopia</option>
-            <option ngValue="FK">Falkland Islands (Malvinas)</option>
-            <option ngValue="FO">Faroe Islands</option>
-            <option ngValue="FJ">Fiji</option>
-            <option ngValue="FI">Finland</option>
-            <option ngValue="FR">France</option>
-            <option ngValue="GF">French Guiana</option>
-            <option ngValue="PF">French Polynesia</option>
-            <option ngValue="TF">French Southern Territories</option>
-            <option ngValue="GA">Gabon</option>
-            <option ngValue="GM">Gambia</option>
-            <option ngValue="GE">Georgia</option>
-            <option ngValue="DE">Germany</option>
-            <option ngValue="GH">Ghana</option>
-            <option ngValue="GI">Gibraltar</option>
-            <option ngValue="GR">Greece</option>
-            <option ngValue="GL">Greenland</option>
-            <option ngValue="GD">Grenada</option>
-            <option ngValue="GP">Guadeloupe</option>
-            <option ngValue="GU">Guam</option>
-            <option ngValue="GT">Guatemala</option>
-            <option ngValue="GG">Guernsey</option>
-            <option ngValue="GN">Guinea</option>
-            <option ngValue="GW">Guinea-Bissau</option>
-            <option ngValue="GY">Guyana</option>
-            <option ngValue="HT">Haiti</option>
-            <option ngValue="HM">Heard Island and McDonald Islands</option>
-            <option ngValue="VA">Holy See (Vatican City State)</option>
-            <option ngValue="HN">Honduras</option>
-            <option ngValue="HK">Hong Kong</option>
-            <option ngValue="HU">Hungary</option>
-            <option ngValue="IS">Iceland</option>
-            <option ngValue="IN">India</option>
-            <option ngValue="ID">Indonesia</option>
-            <option ngValue="IR">Iran, Islamic Republic of</option>
-            <option ngValue="IQ">Iraq</option>
-            <option ngValue="IE">Ireland</option>
-            <option ngValue="IM">Isle of Man</option>
-            <option ngValue="IL">Israel</option>
-            <option ngValue="IT">Italy</option>
-            <option ngValue="JM">Jamaica</option>
-            <option ngValue="JP">Japan</option>
-            <option ngValue="JE">Jersey</option>
-            <option ngValue="JO">Jordan</option>
-            <option ngValue="KZ">Kazakhstan</option>
-            <option ngValue="KE">Kenya</option>
-            <option ngValue="KI">Kiribati</option>
-            <option ngValue="KP">Korea, Democratic People's Republic of</option>
-            <option ngValue="KR">Korea, Republic of</option>
-            <option ngValue="KW">Kuwait</option>
-            <option ngValue="KG">Kyrgyzstan</option>
-            <option ngValue="LA">Lao People's Democratic Republic</option>
-            <option ngValue="LV">Latvia</option>
-            <option ngValue="LB">Lebanon</option>
-            <option ngValue="LS">Lesotho</option>
-            <option ngValue="LR">Liberia</option>
-            <option ngValue="LY">Libya</option>
-            <option ngValue="LI">Liechtenstein</option>
-            <option ngValue="LT">Lithuania</option>
-            <option ngValue="LU">Luxembourg</option>
-            <option ngValue="MO">Macao</option>
-            <option ngValue="MK">Macedonia, the former Yugoslav Republic of</option>
-            <option ngValue="MG">Madagascar</option>
-            <option ngValue="MW">Malawi</option>
-            <option ngValue="MY">Malaysia</option>
-            <option ngValue="MV">Maldives</option>
-            <option ngValue="ML">Mali</option>
-            <option ngValue="MT">Malta</option>
-            <option ngValue="MH">Marshall Islands</option>
-            <option ngValue="MQ">Martinique</option>
-            <option ngValue="MR">Mauritania</option>
-            <option ngValue="MU">Mauritius</option>
-            <option ngValue="YT">Mayotte</option>
-            <option ngValue="MX">Mexico</option>
-            <option ngValue="FM">Micronesia, Federated States of</option>
-            <option ngValue="MD">Moldova, Republic of</option>
-            <option ngValue="MC">Monaco</option>
-            <option ngValue="MN">Mongolia</option>
-            <option ngValue="ME">Montenegro</option>
-            <option ngValue="MS">Montserrat</option>
-            <option ngValue="MA">Morocco</option>
-            <option ngValue="MZ">Mozambique</option>
-            <option ngValue="MM">Myanmar</option>
-            <option ngValue="NA">Namibia</option>
-            <option ngValue="NR">Nauru</option>
-            <option ngValue="NP">Nepal</option>
-            <option ngValue="NL">Netherlands</option>
-            <option ngValue="NC">New Caledonia</option>
-            <option ngValue="NZ">New Zealand</option>
-            <option ngValue="NI">Nicaragua</option>
-            <option ngValue="NE">Niger</option>
-            <option ngValue="NG">Nigeria</option>
-            <option ngValue="NU">Niue</option>
-            <option ngValue="NF">Norfolk Island</option>
-            <option ngValue="MP">Northern Mariana Islands</option>
-            <option ngValue="NO">Norway</option>
-            <option ngValue="OM">Oman</option>
-            <option ngValue="PK">Pakistan</option>
-            <option ngValue="PW">Palau</option>
-            <option ngValue="PS">Palestinian Territory, Occupied</option>
-            <option ngValue="PA">Panama</option>
-            <option ngValue="PG">Papua New Guinea</option>
-            <option ngValue="PY">Paraguay</option>
-            <option ngValue="PE">Peru</option>
-            <option ngValue="PH">Philippines</option>
-            <option ngValue="PN">Pitcairn</option>
-            <option ngValue="PL">Poland</option>
-            <option ngValue="PT">Portugal</option>
-            <option ngValue="PR">Puerto Rico</option>
-            <option ngValue="QA">Qatar</option>
-            <option ngValue="RE">Réunion</option>
-            <option ngValue="RO">Romania</option>
-            <option ngValue="RU">Russian Federation</option>
-            <option ngValue="RW">Rwanda</option>
-            <option ngValue="BL">Saint Barthélemy</option>
-            <option ngValue="SH">Saint Helena, Ascension and Tristan da Cunha</option>
-            <option ngValue="KN">Saint Kitts and Nevis</option>
-            <option ngValue="LC">Saint Lucia</option>
-            <option ngValue="MF">Saint Martin (French part)</option>
-            <option ngValue="PM">Saint Pierre and Miquelon</option>
-            <option ngValue="VC">Saint Vincent and the Grenadines</option>
-            <option ngValue="WS">Samoa</option>
-            <option ngValue="SM">San Marino</option>
-            <option ngValue="ST">Sao Tome and Principe</option>
-            <option ngValue="SA">Saudi Arabia</option>
-            <option ngValue="SN">Senegal</option>
-            <option ngValue="RS">Serbia</option>
-            <option ngValue="SC">Seychelles</option>
-            <option ngValue="SL">Sierra Leone</option>
-            <option ngValue="SG">Singapore</option>
-            <option ngValue="SX">Sint Maarten (Dutch part)</option>
-            <option ngValue="SK">Slovakia</option>
-            <option ngValue="SI">Slovenia</option>
-            <option ngValue="SB">Solomon Islands</option>
-            <option ngValue="SO">Somalia</option>
-            <option ngValue="ZA">South Africa</option>
-            <option ngValue="GS">South Georgia and the South Sandwich Islands</option>
-            <option ngValue="SS">South Sudan</option>
-            <option ngValue="ES">Spain</option>
-            <option ngValue="LK">Sri Lanka</option>
-            <option ngValue="SD">Sudan</option>
-            <option ngValue="SR">Suriname</option>
-            <option ngValue="SJ">Svalbard and Jan Mayen</option>
-            <option ngValue="SZ">Swaziland</option>
-            <option ngValue="SE">Sweden</option>
-            <option ngValue="CH">Switzerland</option>
-            <option ngValue="SY">Syrian Arab Republic</option>
-            <option ngValue="TW">Taiwan, Province of China</option>
-            <option ngValue="TJ">Tajikistan</option>
-            <option ngValue="TZ">Tanzania, United Republic of</option>
-            <option ngValue="TH">Thailand</option>
-            <option ngValue="TL">Timor-Leste</option>
-            <option ngValue="TG">Togo</option>
-            <option ngValue="TK">Tokelau</option>
-            <option ngValue="TO">Tonga</option>
-            <option ngValue="TT">Trinidad and Tobago</option>
-            <option ngValue="TN">Tunisia</option>
-            <option ngValue="TR">Turkey</option>
-            <option ngValue="TM">Turkmenistan</option>
-            <option ngValue="TC">Turks and Caicos Islands</option>
-            <option ngValue="TV">Tuvalu</option>
-            <option ngValue="UG">Uganda</option>
-            <option ngValue="UA">Ukraine</option>
-            <option ngValue="AE">United Arab Emirates</option>
-            <option ngValue="GB">United Kingdom</option>
-            <option ngValue="US">United States</option>
-            <option ngValue="UM">United States Minor Outlying Islands</option>
-            <option ngValue="UY">Uruguay</option>
-            <option ngValue="UZ">Uzbekistan</option>
-            <option ngValue="VU">Vanuatu</option>
-            <option ngValue="VE">Venezuela, Bolivarian Republic of</option>
-            <option ngValue="VN">Viet Nam</option>
-            <option ngValue="VG">Virgin Islands, British</option>
-            <option ngValue="VI">Virgin Islands, U.S.</option>
-            <option ngValue="WF">Wallis and Futuna</option>
-            <option ngValue="EH">Western Sahara</option>
-            <option ngValue="YE">Yemen</option>
-            <option ngValue="ZM">Zambia</option>
-            <option ngValue="ZW">Zimbabwe</option>
-          </select>
-
-          <small
-            class="form-text text-danger"
-            *ngIf="registerForm.get('country')?.errors?.required"
-            jhiTranslate="global.messages.validate.country.required"
-          >
-            Your country is required.
-          </small>
-        </div>
-
-        <div class="form-group">
-          <label class="form-control-label" for="phone" jhiTranslate="global.form.phone.label">phone</label>
-          <input
-            type="text"
-            class="form-control"
-            id="phone"
-            name="phone"
-            placeholder="(XXX) XXXX XXXX"
-            formControlName="phone"
-            data-cy="phone"
-          />
-
-          <div>
-            <small
-              class="form-text text-danger"
-              *ngIf="registerForm.get('phone')?.errors?.pattern"
-              jhiTranslate="global.messages.validate.phone.required"
-            >
-              Your phone is required. Format (XXX) XXXX XXXX.
-            </small>
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label class="form-control-label" for="email" jhiTranslate="global.form.email.label">Email</label>
-          <input
-            type="email"
-            class="form-control"
-            id="email"
-            name="email"
-            placeholder="{{ 'global.form.email.placeholder' | translate }}"
-            formControlName="email"
-            data-cy="email"
-          />
-
-          <div *ngIf="registerForm.get('email')!.invalid && (registerForm.get('email')!.dirty || registerForm.get('email')!.touched)">
-            <small
-              class="form-text text-danger"
-              *ngIf="registerForm.get('email')?.errors?.required"
-              jhiTranslate="global.messages.validate.email.required"
-            >
-              Your email is required.
-            </small>
-
-            <small
-              class="form-text text-danger"
-              *ngIf="registerForm.get('email')?.errors?.invalid"
-              jhiTranslate="global.messages.validate.email.invalid"
-            >
-              Your email is invalid.
-            </small>
-
-            <small
-              class="form-text text-danger"
-              *ngIf="registerForm.get('email')?.errors?.minlength"
-              jhiTranslate="global.messages.validate.email.minlength"
-            >
-              Your email is required to be at least 5 characters.
-            </small>
-
-            <small
-              class="form-text text-danger"
-              *ngIf="registerForm.get('email')?.errors?.maxlength"
-              jhiTranslate="global.messages.validate.email.maxlength"
-            >
-              Your email cannot be longer than 100 characters.
-            </small>
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label class="form-control-label" for="password" jhiTranslate="global.form.newpassword.label">New password</label>
-          <input
-            type="password"
-            class="form-control"
-            id="password"
-            name="password"
-            placeholder="{{ 'global.form.newpassword.placeholder' | translate }}"
-            formControlName="password"
-            data-cy="firstPassword"
-          />
-
-          <div
-            *ngIf="registerForm.get('password')!.invalid && (registerForm.get('password')!.dirty || registerForm.get('password')!.touched)"
-          >
-            <small
-              class="form-text text-danger"
-              *ngIf="registerForm.get('password')?.errors?.required"
-              jhiTranslate="global.messages.validate.newpassword.required"
-            >
-              Your password is required.
-            </small>
-
-            <small
-              class="form-text text-danger"
-              *ngIf="registerForm.get('password')?.errors?.minlength"
-              jhiTranslate="global.messages.validate.newpassword.minlength"
-            >
-              Your password is required to be at least 4 characters.
-            </small>
-
-            <small
-              class="form-text text-danger"
-              *ngIf="registerForm.get('password')?.errors?.maxlength"
-              jhiTranslate="global.messages.validate.newpassword.maxlength"
-            >
-              Your password cannot be longer than 50 characters.
-            </small>
-
-            <small
-              class="form-text text-danger"
-              *ngIf="registerForm.get('password')?.errors?.pattern"
-              jhiTranslate="global.messages.validate.newpassword.maxlength"
-            >
-              Your password requires a minimum of 8 characters, atleast one uppercase, one lowercase, one number, and a special character.
-            </small>
+              <div
+                *ngIf="
+                  registerForm.get('lastName')!.invalid && (registerForm.get('lastName')!.dirty || registerForm.get('lastName')!.touched)
+                "
+              >
+                <small
+                  class="form-text text-danger"
+                  *ngIf="registerForm.get('lastName')?.errors?.required"
+                  jhiTranslate="global.messages.validate.lastName.required"
+                >
+                  Your lastName is required.
+                </small>
+              </div>
+            </div>
           </div>
 
-          <jhi-password-strength-bar [passwordToCheck]="registerForm.get('password')!.value"></jhi-password-strength-bar>
-        </div>
+          <div class="form-row">
+            <div class="form-group col-md-6">
+              <label class="form-control-label required-input" jhiTranslate="global.form.country.label" for="field_country">Country</label>
 
-        <div class="form-group">
-          <label class="form-control-label" for="confirmPassword" jhiTranslate="global.form.confirmpassword.label"
-            >New password confirmation</label
-          >
-          <input
-            type="password"
-            class="form-control"
-            id="confirmPassword"
-            name="confirmPassword"
-            placeholder="{{ 'global.form.confirmpassword.placeholder' | translate }}"
-            formControlName="confirmPassword"
-            data-cy="secondPassword"
-          />
+              <select class="form-control" id="field_country" data-cy="country" name="country" formControlName="country">
+                <option *ngFor="let country of countryList" [ngValue]="country.value">
+                  {{ country.name }}
+                </option>
+              </select>
 
-          <div
-            *ngIf="
-              registerForm.get('confirmPassword')!.invalid &&
-              (registerForm.get('confirmPassword')!.dirty || registerForm.get('confirmPassword')!.touched)
-            "
-          >
-            <small
-              class="form-text text-danger"
-              *ngIf="registerForm.get('confirmPassword')?.errors?.required"
-              jhiTranslate="global.messages.validate.confirmpassword.required"
-            >
-              Your confirmation password is required.
-            </small>
+              <small
+                class="form-text text-danger"
+                *ngIf="registerForm.get('country')?.errors?.required"
+                jhiTranslate="global.messages.validate.country.required"
+              >
+                Your country is required.
+              </small>
+            </div>
 
-            <small
-              class="form-text text-danger"
-              *ngIf="registerForm.get('confirmPassword')?.errors?.minlength"
-              jhiTranslate="global.messages.validate.confirmpassword.minlength"
-            >
-              Your confirmation password is required to be at least 4 characters.
-            </small>
+            <div class="form-group col-md-6">
+              <label class="form-control-label required-input" for="phone" jhiTranslate="global.form.phone.label">phone</label>
+              <input
+                type="text"
+                class="form-control"
+                id="phone"
+                name="phone"
+                placeholder="(XXX) XXXX XXXX"
+                formControlName="phone"
+                data-cy="phone"
+              />
 
-            <small
-              class="form-text text-danger"
-              *ngIf="registerForm.get('confirmPassword')?.errors?.maxlength"
-              jhiTranslate="global.messages.validate.confirmpassword.maxlength"
-            >
-              Your confirmation password cannot be longer than 50 characters.
-            </small>
+              <div>
+                <small
+                  class="form-text text-danger"
+                  *ngIf="registerForm.get('phone')?.errors?.pattern"
+                  jhiTranslate="global.messages.validate.phone.required"
+                >
+                  Your phone is required. Format (XXX) XXXX XXXX.
+                </small>
+              </div>
+            </div>
           </div>
-        </div>
 
-        <button
-          type="submit"
-          [disabled]="registerForm.invalid"
-          class="btn btn-primary"
-          jhiTranslate="register.form.button"
-          data-cy="submit"
-        >
-          Register
-        </button>
-      </form>
+          <div class="form-group">
+            <label class="form-control-label required-input" for="email" jhiTranslate="global.form.email.label">Email</label>
+            <input
+              type="email"
+              class="form-control"
+              id="email"
+              name="email"
+              placeholder="{{ 'global.form.email.placeholder' | translate }}"
+              formControlName="email"
+              data-cy="email"
+            />
+
+            <div *ngIf="registerForm.get('email')!.invalid && (registerForm.get('email')!.dirty || registerForm.get('email')!.touched)">
+              <small
+                class="form-text text-danger"
+                *ngIf="registerForm.get('email')?.errors?.required"
+                jhiTranslate="global.messages.validate.email.required"
+              >
+                Your email is required.
+              </small>
+
+              <small
+                class="form-text text-danger"
+                *ngIf="registerForm.get('email')?.errors?.invalid"
+                jhiTranslate="global.messages.validate.email.invalid"
+              >
+                Your email is invalid.
+              </small>
+
+              <small
+                class="form-text text-danger"
+                *ngIf="registerForm.get('email')?.errors?.minlength"
+                jhiTranslate="global.messages.validate.email.minlength"
+              >
+                Your email is required to be at least 5 characters.
+              </small>
+
+              <small
+                class="form-text text-danger"
+                *ngIf="registerForm.get('email')?.errors?.maxlength"
+                jhiTranslate="global.messages.validate.email.maxlength"
+              >
+                Your email cannot be longer than 100 characters.
+              </small>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-control-label required-input" for="password" jhiTranslate="global.form.newpassword.label"
+              >New password</label
+            >
+            <input
+              type="password"
+              class="form-control"
+              id="password"
+              name="password"
+              placeholder="{{ 'global.form.newpassword.placeholder' | translate }}"
+              formControlName="password"
+              data-cy="firstPassword"
+            />
+
+            <div
+              *ngIf="
+                registerForm.get('password')!.invalid && (registerForm.get('password')!.dirty || registerForm.get('password')!.touched)
+              "
+            >
+              <small
+                class="form-text text-danger"
+                *ngIf="registerForm.get('password')?.errors?.required"
+                jhiTranslate="global.messages.validate.newpassword.required"
+              >
+                Your password is required.
+              </small>
+
+              <small
+                class="form-text text-danger"
+                *ngIf="registerForm.get('password')?.errors?.minlength"
+                jhiTranslate="global.messages.validate.newpassword.minlength"
+              >
+                Your password is required to be at least 4 characters.
+              </small>
+
+              <small
+                class="form-text text-danger"
+                *ngIf="registerForm.get('password')?.errors?.maxlength"
+                jhiTranslate="global.messages.validate.newpassword.maxlength"
+              >
+                Your password cannot be longer than 50 characters.
+              </small>
+
+              <small
+                class="form-text text-danger"
+                *ngIf="registerForm.get('password')?.errors?.pattern"
+                jhiTranslate="global.messages.validate.newpassword.maxlength"
+              >
+                Your password requires a minimum of 8 characters, atleast one uppercase, one lowercase, one number, and a special character.
+              </small>
+            </div>
+
+            <jhi-password-strength-bar [passwordToCheck]="registerForm.get('password')!.value"></jhi-password-strength-bar>
+          </div>
+
+          <div class="form-group">
+            <label class="form-control-label required-input" for="confirmPassword" jhiTranslate="global.form.confirmpassword.label"
+              >New password confirmation</label
+            >
+            <input
+              type="password"
+              class="form-control"
+              id="confirmPassword"
+              name="confirmPassword"
+              placeholder="{{ 'global.form.confirmpassword.placeholder' | translate }}"
+              formControlName="confirmPassword"
+              data-cy="secondPassword"
+            />
+
+            <div
+              *ngIf="
+                registerForm.get('confirmPassword')!.invalid &&
+                (registerForm.get('confirmPassword')!.dirty || registerForm.get('confirmPassword')!.touched)
+              "
+            >
+              <small
+                class="form-text text-danger"
+                *ngIf="registerForm.get('confirmPassword')?.errors?.required"
+                jhiTranslate="global.messages.validate.confirmpassword.required"
+              >
+                Your confirmation password is required.
+              </small>
+
+              <small
+                class="form-text text-danger"
+                *ngIf="registerForm.get('confirmPassword')?.errors?.minlength"
+                jhiTranslate="global.messages.validate.confirmpassword.minlength"
+              >
+                Your confirmation password is required to be at least 4 characters.
+              </small>
+
+              <small
+                class="form-text text-danger"
+                *ngIf="registerForm.get('confirmPassword')?.errors?.maxlength"
+                jhiTranslate="global.messages.validate.confirmpassword.maxlength"
+              >
+                Your confirmation password cannot be longer than 50 characters.
+              </small>
+            </div>
+          </div>
+
+          <button
+            type="submit"
+            [disabled]="registerForm.invalid"
+            class="btn btn-primary"
+            jhiTranslate="register.form.button"
+            data-cy="submit"
+          >
+            Register
+          </button>
+        </form>
+      </div>
     </div>
   </div>
 </div>

@@ -40,6 +40,8 @@ public class WalletCriteria implements Serializable, Criteria {
 
     private LongFilter transactionId;
 
+    private LongFilter scheduledTransactionId;
+
     private LongFilter userId;
 
     private LongFilter currencyId;
@@ -55,6 +57,7 @@ public class WalletCriteria implements Serializable, Criteria {
         this.balance = other.balance == null ? null : other.balance.copy();
         this.icon = other.icon == null ? null : other.icon.copy();
         this.transactionId = other.transactionId == null ? null : other.transactionId.copy();
+        this.scheduledTransactionId = other.scheduledTransactionId == null ? null : other.scheduledTransactionId.copy();
         this.userId = other.userId == null ? null : other.userId.copy();
         this.currencyId = other.currencyId == null ? null : other.currencyId.copy();
     }
@@ -184,6 +187,21 @@ public class WalletCriteria implements Serializable, Criteria {
         this.transactionId = transactionId;
     }
 
+    public LongFilter getScheduledTransactionId() {
+        return scheduledTransactionId;
+    }
+
+    public LongFilter scheduledTransactionId() {
+        if (scheduledTransactionId == null) {
+            scheduledTransactionId = new LongFilter();
+        }
+        return scheduledTransactionId;
+    }
+
+    public void setScheduledTransactionId(LongFilter scheduledTransactionId) {
+        this.scheduledTransactionId = scheduledTransactionId;
+    }
+
     public LongFilter getUserId() {
         return userId;
     }
@@ -232,6 +250,7 @@ public class WalletCriteria implements Serializable, Criteria {
             Objects.equals(balance, that.balance) &&
             Objects.equals(icon, that.icon) &&
             Objects.equals(transactionId, that.transactionId) &&
+            Objects.equals(scheduledTransactionId, that.scheduledTransactionId) &&
             Objects.equals(userId, that.userId) &&
             Objects.equals(currencyId, that.currencyId)
         );
@@ -239,7 +258,19 @@ public class WalletCriteria implements Serializable, Criteria {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, description, inReports, isActive, balance, icon, transactionId, userId, currencyId);
+        return Objects.hash(
+            id,
+            name,
+            description,
+            inReports,
+            isActive,
+            balance,
+            icon,
+            transactionId,
+            scheduledTransactionId,
+            userId,
+            currencyId
+        );
     }
 
     // prettier-ignore
@@ -254,6 +285,7 @@ public class WalletCriteria implements Serializable, Criteria {
             (balance != null ? "balance=" + balance + ", " : "") +
             (icon != null ? "icon=" + icon + ", " : "") +
             (transactionId != null ? "transactionId=" + transactionId + ", " : "") +
+            (scheduledTransactionId != null ? "scheduledTransactionId=" + scheduledTransactionId + ", " : "") +
             (userId != null ? "userId=" + userId + ", " : "") +
             (currencyId != null ? "currencyId=" + currencyId + ", " : "") +
             "}";

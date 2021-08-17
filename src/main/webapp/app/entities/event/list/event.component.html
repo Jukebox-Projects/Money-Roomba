@@ -3,11 +3,22 @@
     <span jhiTranslate="moneyRoombaApp.event.home.title">Events</span>
 
     <div class="d-flex justify-content-end">
-      <button class="btn btn-info mr-2" (click)="loadAll()" [disabled]="isLoading">
-        <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
-        <span jhiTranslate="moneyRoombaApp.event.home.refreshListLabel">Refresh List</span>
-      </button>
-
+      <div class="pt-3 p-1" style="font-size: 24px">
+        <input
+          class="form-control input-rounded"
+          type="text"
+          [(ngModel)]="inputText"
+          (input)="filterEvents()"
+          placeholder="{{ 'moneyRoombaApp.wallet.home.searchbar' | translate }}"
+        />
+      </div>
+      <div class="pt-3 p-1">
+        <button class="btn btn-info mr-2" (click)="loadAll()" [disabled]="isLoading">
+          <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
+          <span jhiTranslate="moneyRoombaApp.event.home.refreshListLabel">Refresh List</span>
+        </button>
+      </div>
+      <!--
       <button
         id="jh-create-entity"
         data-cy="entityCreateButton"
@@ -16,7 +27,7 @@
       >
         <fa-icon icon="plus"></fa-icon>
         <span jhiTranslate="moneyRoombaApp.event.home.createLabel"> Create a new Event </span>
-      </button>
+      </button>-->
     </div>
   </h2>
 
@@ -28,43 +39,51 @@
     <span jhiTranslate="moneyRoombaApp.event.home.notFound">No events found</span>
   </div>
 
-  <div class="table-responsive" id="entities" *ngIf="events && events.length > 0">
-    <table class="table table-striped" aria-describedby="page-heading">
+  <div
+    class="etabl-responsive table-hover fs-14 card-tableetabl-responsive table-hover fs-14 card-table"
+    id="entities"
+    *ngIf="events && events.length > 0"
+  >
+    <table class="table display mb-4 dataTablesCard dataTable card-table" aria-describedby="page-heading">
       <thead>
         <tr>
           <th scope="col"><span jhiTranslate="global.field.id">ID</span></th>
           <th scope="col"><span jhiTranslate="moneyRoombaApp.event.eventType">Event Type</span></th>
           <th scope="col"><span jhiTranslate="moneyRoombaApp.event.dateAdded">Date Added</span></th>
-          <th scope="col"><span jhiTranslate="moneyRoombaApp.event.sourceId">Source Id</span></th>
+          <th scope="col"><span jhiTranslate="moneyRoombaApp.event.user">User ID</span></th>
           <th scope="col"><span jhiTranslate="moneyRoombaApp.event.sourceEntity">Source Entity</span></th>
           <th scope="col"><span jhiTranslate="moneyRoombaApp.event.userName">User Name</span></th>
           <th scope="col"><span jhiTranslate="moneyRoombaApp.event.userLastName">User Last Name</span></th>
-          <th scope="col"><span jhiTranslate="moneyRoombaApp.event.notification">Notification</span></th>
-          <th scope="col"><span jhiTranslate="moneyRoombaApp.event.user">User</span></th>
-          <th scope="col"></th>
+          <!-- <th scope="col"><span jhiTranslate="moneyRoombaApp.event.notification">Notification</span></th>-->
+          <!-- <th scope="col"><span jhiTranslate="moneyRoombaApp.event.user">User</span></th>
+          <th scope="col"></th>-->
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let event of events; trackBy: trackId" data-cy="entityTable">
+        <tr
+          *ngFor="let event of events | slice: (page - 1) * pageSize:(page - 1) * pageSize + pageSize; trackBy: trackId"
+          data-cy="entityTable"
+        >
           <td>
             <a [routerLink]="['/event', event.id, 'view']">{{ event.id }}</a>
           </td>
           <td jhiTranslate="{{ 'moneyRoombaApp.EventType.' + event.eventType }}">{{ event.eventType }}</td>
           <td>{{ event.dateAdded | formatMediumDate }}</td>
-          <td>{{ event.sourceId }}</td>
+          <td [routerLink]="['/user-details', event.sourceId, 'view']">{{ event.sourceId }}</td>
           <td jhiTranslate="{{ 'moneyRoombaApp.SourceEntity.' + event.sourceEntity }}">{{ event.sourceEntity }}</td>
           <td>{{ event.userName }}</td>
           <td>{{ event.userLastName }}</td>
           <td>
+            <!--
             <div *ngIf="event.notification">
               <a [routerLink]="['/notification', event.notification?.id, 'view']">{{ event.notification?.id }}</a>
-            </div>
+            </div>-->
           </td>
-          <td>
-            <div *ngIf="event.user">
-              <a [routerLink]="['/user-details', event.user?.id, 'view']">{{ event.user?.id }}</a>
-            </div>
-          </td>
+          <!-- <td>
+             <div *ngIf="event.user">
+               <a [routerLink]="['/user-details', event.user?.id, 'view']">{{ event.user?.id }}</a>
+             </div>
+           </td>--><!--
           <td class="text-right">
             <div class="btn-group">
               <button type="submit" [routerLink]="['/event', event.id, 'view']" class="btn btn-info btn-sm" data-cy="entityDetailsButton">
@@ -82,9 +101,17 @@
                 <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
               </button>
             </div>
-          </td>
+          </td>-->
         </tr>
       </tbody>
     </table>
+  </div>
+  <div class="d-flex justify-content-between p-2">
+    <ngb-pagination class="mr-3" [(page)]="page" [pageSize]="pageSize" [collectionSize]="this.events.length"></ngb-pagination>
+    <select class="custom-select" style="width: auto" [(ngModel)]="pageSize">
+      <option [ngValue]="5">5 <span jhiTranslate="global.menu.entities.items-per-page">items per page</span></option>
+      <option [ngValue]="10">10 <span jhiTranslate="global.menu.entities.items-per-page">items per page</span></option>
+      <option [ngValue]="20">20 <span jhiTranslate="global.menu.entities.items-per-page">items per page</span></option>
+    </select>
   </div>
 </div>

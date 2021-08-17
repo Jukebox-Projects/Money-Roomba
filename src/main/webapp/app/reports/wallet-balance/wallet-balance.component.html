@@ -1,0 +1,64 @@
+<div class="row justify-content-center">
+  <div class="col-xl-6 col-sm-6">
+    <div class="card">
+      <div class="card-header flex-wrap border-0 pb-4">
+        <div class="mr-5 pr-5 pb-2">
+          <p class="fs-14 mb-1" jhiTranslate="moneyRoombaApp.report.income">Income</p>
+          <span *ngIf="income" class="fs-24 text-black font-w600">{{
+            income.total | currency: income.currency.code:'symbol':'1.2-2'
+          }}</span>
+          <span *ngIf="!income" class="fs-24 text-black font-w600" jhiTranslate="moneyRoombaApp.report.noData">No data</span>
+        </div>
+        <span *ngIf="income" class="fs-12 mb-2">
+          <svg width="21" height="15" viewBox="0 0 21 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path
+              d="M0.999939 13.5C1.91791 12.4157 4.89722 9.22772 6.49994 7.5L12.4999 10.5L19.4999 1.5"
+              stroke="#2BC155"
+              stroke-width="2"
+            />
+            <path
+              d="M6.49994 7.5C4.89722 9.22772 1.91791 12.4157 0.999939 13.5H19.4999V1.5L12.4999 10.5L6.49994 7.5Z"
+              fill="url(#paint0_linear)"
+            />
+            <defs>
+              <linearGradient id="paint0_linear" x1="10.2499" y1="3" x2="10.9999" y2="13.5" gradientUnits="userSpaceOnUse">
+                <stop offset="0" stop-color="#2BC155" stop-opacity="0.73" />
+                <stop offset="1" stop-color="#2BC155" stop-opacity="0" />
+              </linearGradient>
+            </defs>
+          </svg>
+        </span>
+      </div>
+    </div>
+  </div>
+  <div class="col-xl-6 col-sm-6">
+    <div class="card">
+      <div class="card-header flex-wrap border-0 pb-4">
+        <div class="mr-5 pr-5 pb-2">
+          <p class="fs-14 mb-1" jhiTranslate="moneyRoombaApp.report.expense">Expense</p>
+          <span *ngIf="expense" class="fs-24 text-black font-w600">{{
+            expense.total | currency: expense.currency.code:'symbol':'1.2-2'
+          }}</span>
+          <span *ngIf="!expense" class="fs-24 text-black font-w600" jhiTranslate="moneyRoombaApp.report.noData">No data</span>
+        </div>
+        <span *ngIf="expense" class="fs-12 mb-2">
+          <svg width="21" height="15" viewBox="0 0 21 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M14.3514 7.5C15.9974 9.37169 19.0572 12.8253 20 14H1V1L8.18919 10.75L14.3514 7.5Z" fill="url(#paint0_linear1)" />
+            <path
+              d="M19.5 13.5C18.582 12.4157 15.6027 9.22772 14 7.5L8 10.5L1 1.5"
+              stroke="#FF2E2E"
+              stroke-width="2"
+              stroke-linecap="round"
+            />
+            <defs>
+              <linearGradient id="paint0_linear1" x1="10.5" y1="2.625" x2="9.64345" y2="13.9935" gradientUnits="userSpaceOnUse">
+                <stop offset="0" stop-color="#FF2E2E" />
+                <stop offset="1" stop-color="#FF2E2E" stop-opacity="0.03" />
+              </linearGradient>
+            </defs>
+          </svg>
+        </span>
+      </div>
+    </div>
+  </div>
+</div>

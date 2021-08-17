@@ -1,0 +1,20 @@
+{
+  "moneyRoombaApp": {
+    "report": {
+      "balance-report": {
+        "title": "Reporte de balance de cartera"
+      },
+      "transaction-count": {
+        "totalMoneyRoombaTransactions": "Total de transacciones en Money Roomba",
+        "incomeTransactions": "Total de ingresos",
+        "expenseTransactions": "Total de egresos"
+      },
+      "imported-transaction-count": {
+        "totalMoneyRoombaImportedTransactionsThisMonth": "Transacciones importadas de este mes"
+      },
+      "noData": "Sin datos",
+      "income": "Ingresos",
+      "expense": "Gastos"
+    }
+  }
+}

@@ -98,4 +98,10 @@ export class TransactionService {
     }
     return res;
   }
+
+  getAllByWallet(id: number): Observable<EntityArrayResponseType> {
+    return this.http
+      .get<ITransaction[]>(this.resourceUrl + '/wallet/' + id, { observe: 'response' })
+      .pipe(map((res: EntityArrayResponseType) => this.convertDateArrayFromServer(res)));
+  }
 }

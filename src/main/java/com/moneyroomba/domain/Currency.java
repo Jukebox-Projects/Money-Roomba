@@ -45,33 +45,23 @@ public class Currency implements Serializable {
 
     @OneToMany(mappedBy = "currency")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @JsonIgnoreProperties(value = { "attachment", "wallet", "currency", "category", "sourceUser" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "attachment", "wallet", "currency", "category", "sourceUser", "recievingUser" }, allowSetters = true)
     private Set<Transaction> transactions = new HashSet<>();
 
     @OneToMany(mappedBy = "currency")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @JsonIgnoreProperties(value = { "schedulePatterns", "currency" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "currency", "sourceUser", "category", "wallet" }, allowSetters = true)
     private Set<ScheduledTransaction> scheduledTransactions = new HashSet<>();
 
     @OneToMany(mappedBy = "currency")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @JsonIgnoreProperties(value = { "transactions", "user", "currency" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "transactions", "scheduledTransactions", "user", "currency" }, allowSetters = true)
     private Set<Wallet> wallets = new HashSet<>();
 
     @OneToMany(mappedBy = "currency")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     @JsonIgnoreProperties(value = { "currency" }, allowSetters = true)
     private Set<Invoice> invoices = new HashSet<>();
-
-    public Currency(String code, String name, Float conversionRate, Boolean adminCreated, Boolean isActive) {
-        this.code = code;
-        this.name = name;
-        this.conversionRate = conversionRate;
-        this.adminCreated = adminCreated;
-        this.isActive = isActive;
-    }
-
-    public Currency() {}
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
     public Long getId() {

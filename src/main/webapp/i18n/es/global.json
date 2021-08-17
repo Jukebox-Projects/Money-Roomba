@@ -4,9 +4,13 @@
     "browsehappy": "Está usando un navegador <strong>no actualizado</strong>. Por favor, <a href=\"http://browsehappy.com/?locale=es\">actualice su navegador</a> para mejorar su experiencia.",
     "menu": {
       "home": "Inicio",
+      "profile": "Perfil",
+      "dashboardTitle": "Panel de control",
+      "personalInformation": "Información Personal",
       "jhipster-needle-menu-add-element": "JHipster will add additional menu entries here (do not translate!)",
       "entities": {
         "main": "Entidades",
+        "details": "Detalles",
         "userDetails": "Detalles de usuarios",
         "wallet": "Carteras",
         "transaction": "Transacciones",
@@ -18,10 +22,12 @@
         "license": "Licencia",
         "currency": "Moneda",
         "notification": "Notificación",
-        "event": "Evento",
+        "event": "Eventos",
         "systemSetting": "Configuración de sistema",
         "currency-converter": "Conversor de monedas",
-        "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)"
+        "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)",
+        "items-per-page": "elementos por página",
+        "Scheduled Transactions": "Transacciones Programadas"
       },
       "account": {
         "main": "Cuenta",
@@ -30,6 +36,7 @@
         "settings": "Ajustes",
         "password": "Contraseña",
         "sessions": "Sesiones",
+        "premium": "Premium",
         "login": "Iniciar sesión",
         "logout": "Cerrar la sesión",
         "register": "Crear una cuenta"
@@ -47,6 +54,23 @@
         "jhipster-needle-menu-add-admin-element": "JHipster will add additional menu entries here (do not translate!)"
       },
       "language": "Idioma"
+    },
+    "time": {
+      "format": "Hace {{quantity}} {{time}}",
+      "year": "Año",
+      "yearPlural": "Años",
+      "month": "Mes",
+      "monthPlural": "Meses",
+      "week": "Semana",
+      "weekPlural": "Semanas",
+      "day": "Día",
+      "dayPlural": "Días",
+      "hour": "Hora",
+      "hourPlural": "Horas",
+      "minute": "Minuto",
+      "minutePlural": "Minutos",
+      "second": "Segundo",
+      "secondPlural": "Segundos"
     },
     "form": {
       "username.label": "Correo electrónico",
@@ -68,7 +92,8 @@
       "phone.label": "Teléfono",
       "phone.placeholder": "Su teléfono",
       "apiKey.label": "Llave API",
-      "apiKey.placeholder": "Llave API"
+      "apiKey.placeholder": "Llave API",
+      "joinDate": "Fecha de Registro"
     },
     "messages": {
       "info": {
@@ -90,7 +115,7 @@
           "pattern": "La contraseña requiere un mínimo de 8 caracteres, al menos una mayúscula, una minúscula, un número y un carácter especial.",
           "required": "La contraseña requiere un mínimo de 8 caracteres, mayúsculas, minúsculas, un número y un carácter especial.",
           "minlength": "Se requiere que su contraseña tenga por lo menos 8 caracteres",
-          "maxlength": "Su contraseña no puede tener más de 25 caracteres",
+          "maxlength": "La contraseña requiere un mínimo de 8 caracteres, máximo de 25 caracteres, al menos una mayúscula, una minúscula, un número y un carácter especial.",
           "strength": "Seguridad de la contraseña:"
         },
         "confirmpassword": {
@@ -172,36 +197,52 @@
       "maxbytes": "Este campo no puede tener más de {{max}} bytes.",
       "pattern": "Este campo debe seguir el patrón {{pattern}}.",
       "number": "Este campo debe ser un número.",
-      "datetimelocal": "Este campo debe ser una fecha y hora."
+      "datetimelocal": "Este campo debe ser una fecha y hora.",
+      "patternLogin": "Este campo solo puede contener letras, dígitos y direcciones de correo electrónico."
     }
   },
   "error": {
-    "internalServerError": "Error interno en el servidor",
-    "server.not.reachable": "Servidor no accesible",
-    "url.not.found": "No existe",
+    "internalServerError": "Error interno en el servidor.",
+    "server.not.reachable": "Servidor no accesible.",
+    "url.not.found": "No existe.",
     "NotNull": "¡El campo {{fieldName}} no puede estar vacío!",
     "Size": "¡El campo {{fieldName}} no cumple con los requisitos de tamaño mínimo/máximo!",
     "userexists": "¡El nombre de usuario ya existe!",
     "emailexists": "¡La cuenta de correo ya está en uso!",
-    "idexists": "Un/a nuevo/a {{entityName}} no puede tener ID",
-    "idnull": "ID inválido",
-    "idinvalid": "ID inválido",
-    "idnotfound": "ID no encontrado",
-    "licenseNotFound": "La licencia no se encontró",
-    "licenseAssigned": "La licencia está asignada",
-    "licenseInvalid": "El formato de la licencia es inválido",
-    "licenseNotActive": "La licencia está desactivada",
+    "idexists": "Un/a nuevo/a {{entityName}} no puede tener ID.",
+    "idnull": "ID inválido.",
+    "idinvalid": "ID inválido.",
+    "idnotfound": "ID no encontrado.",
+    "licenseNotFound": "La licencia no se encontró.",
+    "licenseAssigned": "La licencia está asignada.",
+    "licenseInvalid": "El formato de la licencia es inválido.",
+    "licenseNotActive": "La licencia está desactivada.",
     "insufficientfunds": "No es posible registrar esta transacción debido a balance insuficiente.",
     "nopermission": "No es posible realizar esta acción ya que no está incluida dentro de los permisos de su rol.",
-    "admincantregister": "El administrador no puede registrar {{ entityName }}.",
+    "admincantregister": "El administrador no puede modificar o registrar {{ entityName }}.",
     "nouserfound": "No se ha podido completar la acción debido a que el usuario en sesión no tiene detalles asociados.",
     "nomorewallets": "Ha registrado el máximo de carteras permitidas para su cuenta.",
     "negativeincome": "No es posible registrar una transacción con un ingreso menor a 0.",
-    "categorydeleteerror": "No se puede eliminar la categoria porque hay transacciones asocidas",
+    "walletnoaccess": "No puede accesar o modificar la información de la cartera solicitada.",
+    "transactionnoaccess": "No puede accesar o modificar la información de la transacción solicitada.",
+    "categorydeleteerror": "No se puede eliminar la categoría porque hay transacciones asocidas",
+    "notvalidcontact": "No se pudo encontrar ningún contacto con la información proporcionada.",
+    "nowallets": "El usuario receptor no tiene carteras registradas actualmente.",
+    "nowalletsCurrentUser": "Actualmente no tiene carteras registradas.",
+    "currencyNoAccess": "No puede accesar o modificar la información de las monedas.",
+    "categorynoaccess": "No puede accesar o modificar la información de la categoría solicitada.",
+    "noContacts": "No tiene contactos favoritos",
+    "nomoreschtransactions": "Como usuario regular, no puede registrar más de 3 transacciones programadas.",
     "file": {
       "could.not.extract": "No se pudo extraer el fichero",
-      "not.image": "Se esperaba que el fichero fuera una imagen pero se encontro \"{{ fileType }}\""
-    }
+      "not.image": "Se esperaba que el fichero fuera una imagen pero se encontro \"{{ fileType }}\"",
+      "noFileSelected": "No se seleccionó ningún archivo",
+      "wrongFileType": "El tipo de archivo no es compatible, el tipo de archivo debe ser XML",
+      "reachedMaximumTransactions": "Ha alcanzado la cantidad máxima de transacciones importadas"
+    },
+    "categoryOwnParent": "Una categoría no puede ser su propio padre.",
+    "childCategoryAsParent": "Una subcategoría no puede ser una categoría padre.",
+    "categoryIsParent": "Una categoría padre no puede ser una subcategoría al mismo tiempo."
   },
   "footer": "© 2021 Money Roomba"
 }

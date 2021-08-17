@@ -17,7 +17,13 @@ export class LoginService {
   ) {}
 
   login(credentials: Login): Observable<Account | null> {
-    return this.authServerProvider.login(credentials).pipe(mergeMap(() => this.accountService.identity(true)));
+    return this.authServerProvider.login(credentials).pipe(
+      mergeMap(() => {
+        let loginResult = this.accountService.identity(true);
+        window.location.reload();
+        return loginResult;
+      })
+    );
   }
 
   logoutUrl(): string {

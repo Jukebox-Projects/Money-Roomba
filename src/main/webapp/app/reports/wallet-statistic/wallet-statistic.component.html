@@ -1,0 +1,29 @@
+<div class="card">
+  <div class="card-header border-0 pb-0">
+    <div>
+      <h4 class="fs-20 text-black" jhiTranslate="moneyRoombaApp.wallet.walletStatistic.statisticTitle">Balance statistic</h4>
+      <span class="fs-12" jhiTranslate="moneyRoombaApp.wallet.walletStatistic.statisticDescription">Balance covered by each wallet</span>
+    </div>
+  </div>
+  <div class="card-body">
+    <div class="row">
+      <div class="col-xl-12 col-sm-6">
+        <div id="pieChart">
+          <apx-chart
+            [series]="chartOptions.series"
+            [chart]="chartOptions.chart"
+            [labels]="chartOptions.labels"
+            [fill]="chartOptions.fill"
+            [dataLabels]="chartOptions.dataLabels"
+            [colors]="chartOptions.colors"
+            [stroke]="chartOptions.stroke"
+            [responsive]="chartOptions.responsive"
+          ></apx-chart>
+        </div>
+      </div>
+      <div class="col-xl-12 col-sm-6">
+        <div class="d-flex flex-wrap text-black fs-12 mt-4"></div>
+      </div>
+    </div>
+  </div>
+</div>
