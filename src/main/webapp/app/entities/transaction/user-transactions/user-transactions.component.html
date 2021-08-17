@@ -107,13 +107,16 @@
                         </svg>
                       </div>
                       <div class="dropdown-menu dropdown-menu-right dd-user-transactions" ngbDropdownMenu>
-                        <a class="dropdown-item" (click)="delete(transaction)" jhiTranslate="entity.action.delete">Delete</a>
-                        <a class="dropdown-item" [routerLink]="['/transaction', transaction.id, 'edit']" jhiTranslate="entity.action.edit"
-                          >Edit</a
-                        >
                         <a class="dropdown-item" [routerLink]="['/transaction', transaction.id, 'view']" jhiTranslate="entity.action.view"
                           >View</a
                         >
+                        <a
+                          class="dropdown-item text-primary"
+                          [routerLink]="['/transaction', transaction.id, 'edit']"
+                          jhiTranslate="entity.action.edit"
+                          >Edit</a
+                        >
+                        <a class="dropdown-item text-danger" (click)="delete(transaction)" jhiTranslate="entity.action.delete">Delete</a>
                       </div>
                     </div>
                   </td>

@@ -9,6 +9,7 @@ import com.moneyroomba.repository.UserDetailsRepository;
 import com.moneyroomba.repository.UserRepository;
 import com.moneyroomba.security.AuthoritiesConstants;
 import com.moneyroomba.security.SecurityUtils;
+import com.moneyroomba.service.scheduledTask.*;
 import com.moneyroomba.web.rest.errors.BadRequestAlertException;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -40,18 +41,22 @@ public class ScheduledTransactionService {
 
     private final UserService userService;
 
+    private final ScheduledTransactionCronTaskService scheduledTransactionCronTaskService;
+
     public ScheduledTransactionService(
         ScheduledTransactionRepository scheduledTransactionRepository,
         UserRepository userRepository,
         UserDetailsRepository userDetailsRepository,
         EventRepository eventRepository,
-        UserService userService
+        UserService userService,
+        ScheduledTransactionCronTaskService scheduledTransactionCronTaskService
     ) {
         this.scheduledTransactionRepository = scheduledTransactionRepository;
         this.userRepository = userRepository;
         this.userDetailsRepository = userDetailsRepository;
         this.eventRepository = eventRepository;
         this.userService = userService;
+        this.scheduledTransactionCronTaskService = scheduledTransactionCronTaskService;
     }
 
     /**
@@ -86,6 +91,9 @@ public class ScheduledTransactionService {
             );
         } else if (userService.currentUserIsAdmin()) {
             throw new BadRequestAlertException("Admins cannot register or modify", ENTITY_NAME, "admincantregister");
+        }
+        if (scheduledTransaction.getId() == null) {
+            scheduledTransactionCronTaskService.checkTransactionRegistry(scheduledTransaction);
         }
         return scheduledTransactionRepository.save(scheduledTransaction);
     }
