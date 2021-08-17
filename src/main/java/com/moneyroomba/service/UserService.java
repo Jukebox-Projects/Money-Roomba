@@ -607,11 +607,10 @@ public class UserService {
         return SecurityUtils.hasCurrentUserThisAuthority(AuthoritiesConstants.USER);
     }
 
-    /*
     @Transactional(readOnly = true)
     public boolean currentUserIsPremiumUser() {
         return SecurityUtils.hasCurrentUserThisAuthority(AuthoritiesConstants.PREMIUM_USER);
-    }*/
+    }
 
     @Transactional(readOnly = true)
     public Optional<User> getUser() {
