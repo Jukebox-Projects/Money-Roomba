@@ -26,7 +26,8 @@
         "systemSetting": "System Setting",
         "currency-converter": "Currency converter",
         "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)",
-        "items-per-page": "items per page"
+        "items-per-page": "items per page",
+        "Scheduled Transactions": "Scheduled Transactions"
       },
       "account": {
         "main": "Account",
@@ -218,7 +219,7 @@
     "licenseNotActive": "License is not active.",
     "insufficientfunds": "You cannot register this transaction because of insufficient balance.",
     "nopermission": "Could not complete action due to lack of permission according to your user roles.",
-    "admincantregister": "Admin cannot register {{ entityName }}.",
+    "admincantregister": "Admin cannot register or modify {{ entityName }}.",
     "nouserfound": "Current user has no details on its account, could not complete action.",
     "nomorewallets": "User has reached the max amount of wallets that his accounts can handle.",
     "negativeincome": "You cannot register a transaction with an income lower than 0.",
@@ -232,7 +233,7 @@
     "currencyNoAccess": "You cannot access or modify currency's information.",
     "categorynoaccess": "You cannot access or modify this category's information.",
     "noContacts": "You don't have any contacts",
-
+    "nomoreschtransactions": "Regular users cannot register more than 3 scheduled transactions",
     "file": {
       "could.not.extract": "Could not extract file",
       "not.image": "File was expected to be an image but was found to be \"{{ fileType }}\"",

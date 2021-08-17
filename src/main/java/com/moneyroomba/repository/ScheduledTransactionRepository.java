@@ -1,6 +1,9 @@
 package com.moneyroomba.repository;
 
 import com.moneyroomba.domain.ScheduledTransaction;
+import com.moneyroomba.domain.UserDetails;
+import com.moneyroomba.domain.Wallet;
+import java.util.List;
 import org.springframework.data.jpa.repository.*;
 import org.springframework.stereotype.Repository;
 
@@ -10,4 +13,8 @@ import org.springframework.stereotype.Repository;
 @SuppressWarnings("unused")
 @Repository
 public interface ScheduledTransactionRepository
-    extends JpaRepository<ScheduledTransaction, Long>, JpaSpecificationExecutor<ScheduledTransaction> {}
+    extends JpaRepository<ScheduledTransaction, Long>, JpaSpecificationExecutor<ScheduledTransaction> {
+    public List<ScheduledTransaction> findAllByWallet(Wallet wallet);
+
+    public List<ScheduledTransaction> findAllBySourceUser(UserDetails sourceUser);
+}

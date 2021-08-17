@@ -358,14 +358,15 @@
                     for="field_dayOfWeek"
                     >Day Of Week</label
                   >
-                  <input
-                    type="number"
-                    class="form-control"
-                    name="dayOfWeek"
-                    id="field_dayOfWeek"
-                    data-cy="dayOfWeek"
-                    formControlName="dayOfWeek"
-                  />
+                  <select class="form-control" name="dayOfWeek" formControlName="dayOfWeek" id="field_dayOfWeek" data-cy="dayOfWeek">
+                    <option jhiTranslate="moneyRoombaApp.scheduledTransaction.monday" value="0">Lunes</option>
+                    <option jhiTranslate="moneyRoombaApp.scheduledTransaction.tuesday" value="1">Martes</option>
+                    <option jhiTranslate="moneyRoombaApp.scheduledTransaction.wednesday" value="2">Miércoles</option>
+                    <option jhiTranslate="moneyRoombaApp.scheduledTransaction.thursday" value="3">Jueves</option>
+                    <option jhiTranslate="moneyRoombaApp.scheduledTransaction.friday" value="4">Viernes</option>
+                    <option jhiTranslate="moneyRoombaApp.scheduledTransaction.saturday" value="5">Sábado</option>
+                    <option jhiTranslate="moneyRoombaApp.scheduledTransaction.sunday" value="6">Domingo</option>
+                  </select>
                   <div
                     *ngIf="editForm.get('dayOfWeek')!.invalid && (editForm.get('dayOfWeek')!.dirty || editForm.get('dayOfWeek')!.touched)"
                   >
@@ -448,14 +449,27 @@
                     for="field_monthOfYear"
                     >Month Of Year</label
                   >
-                  <input
-                    type="number"
+                  <select
                     class="form-control"
                     name="monthOfYear"
+                    formControlName="monthOfYear"
                     id="field_monthOfYear"
                     data-cy="monthOfYear"
-                    formControlName="monthOfYear"
-                  />
+                  >
+                    <option jhiTranslate="moneyRoombaApp.scheduledTransaction.january" value="0">Enero</option>
+                    <option jhiTranslate="moneyRoombaApp.scheduledTransaction.february" value="1">Febrero</option>
+                    <option jhiTranslate="moneyRoombaApp.scheduledTransaction.march" value="2">Marzo</option>
+                    <option jhiTranslate="moneyRoombaApp.scheduledTransaction.april" value="3">Abril</option>
+                    <option jhiTranslate="moneyRoombaApp.scheduledTransaction.may" value="4">Mayo</option>
+                    <option jhiTranslate="moneyRoombaApp.scheduledTransaction.june" value="5">Junio</option>
+                    <option jhiTranslate="moneyRoombaApp.scheduledTransaction.july" value="6">Julio</option>
+                    <option jhiTranslate="moneyRoombaApp.scheduledTransaction.august" value="7">Agosto</option>
+                    <option jhiTranslate="moneyRoombaApp.scheduledTransaction.september" value="8">Septiembre</option>
+                    <option jhiTranslate="moneyRoombaApp.scheduledTransaction.october" value="9">Octubre</option>
+                    <option jhiTranslate="moneyRoombaApp.scheduledTransaction.november" value="10">Noviembre</option>
+                    <option jhiTranslate="moneyRoombaApp.scheduledTransaction.december" value="11">Diciembre</option>
+                  </select>
+
                   <div
                     *ngIf="
                       editForm.get('monthOfYear')!.invalid && (editForm.get('monthOfYear')!.dirty || editForm.get('monthOfYear')!.touched)

@@ -47,13 +47,16 @@ public class WalletService {
 
     private final UserService userService;
 
+    private final ScheduledTransactionRepository scheduledTransactionRepository;
+
     public WalletService(
         WalletRepository walletRepository,
         UserRepository userRepository,
         UserDetailsRepository userDetailsRepository,
         TransactionRepository transactionRepository,
         EventRepository eventRepository,
-        UserService userService
+        UserService userService,
+        ScheduledTransactionRepository scheduledTransactionRepository
     ) {
         this.walletRepository = walletRepository;
         this.userRepository = userRepository;
@@ -61,6 +64,7 @@ public class WalletService {
         this.transactionRepository = transactionRepository;
         this.eventRepository = eventRepository;
         this.userService = userService;
+        this.scheduledTransactionRepository = scheduledTransactionRepository;
     }
 
     /**
@@ -251,12 +255,18 @@ public class WalletService {
         Optional<UserDetails> userDetails = userDetailsRepository.findOneByInternalUser(user.get());
         Optional<Wallet> wallet = walletRepository.findById(id);
         List<Transaction> transactions = transactionRepository.findAllByWalletOrderByDateAddedDesc(wallet.get());
+        List<ScheduledTransaction> scheduledTransactions = scheduledTransactionRepository.findAllByWallet(wallet.get());
         if (!userService.currentUserIsAdmin() && !userDetails.get().equals(wallet.get().getUser())) {
             throw new BadRequestAlertException("You cannot access or modify this wallet's information", ENTITY_NAME, "walletnoaccess");
         }
         if (!transactions.isEmpty()) {
             for (Transaction t : transactions) {
                 transactionRepository.delete(t);
+            }
+        }
+        if (!scheduledTransactions.isEmpty()) {
+            for (ScheduledTransaction t : scheduledTransactions) {
+                scheduledTransactionRepository.delete(t);
             }
         }
         createEvent(EventType.DELETE);
