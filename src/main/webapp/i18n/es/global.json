@@ -25,7 +25,8 @@
         "systemSetting": "Configuración de sistema",
         "currency-converter": "Conversor de monedas",
         "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)",
-        "items-per-page": "elementos por página"
+        "items-per-page": "elementos por página",
+        "Scheduled Transactions": "Transacciones Programadas"
       },
       "account": {
         "main": "Cuenta",
@@ -217,7 +218,7 @@
     "licenseNotActive": "La licencia está desactivada.",
     "insufficientfunds": "No es posible registrar esta transacción debido a balance insuficiente.",
     "nopermission": "No es posible realizar esta acción ya que no está incluida dentro de los permisos de su rol.",
-    "admincantregister": "El administrador no puede registrar {{ entityName }}.",
+    "admincantregister": "El administrador no puede modificar o registrar {{ entityName }}.",
     "nouserfound": "No se ha podido completar la acción debido a que el usuario en sesión no tiene detalles asociados.",
     "nomorewallets": "Ha registrado el máximo de carteras permitidas para su cuenta.",
     "negativeincome": "No es posible registrar una transacción con un ingreso menor a 0.",
@@ -229,6 +230,7 @@
     "nowalletsCurrentUser": "Actualmente no tiene carteras registradas.",
     "currencyNoAccess": "No puede accesar o modificar la información de las monedas.",
     "categorynoaccess": "No puede accesar o modificar la información de la categoría solicitada.",
+    "nomoreschtransactions": "Como usuario regular, no puede registrar más de 3 transacciones programadas.",
     "file": {
       "could.not.extract": "No se pudo extraer el fichero",
       "not.image": "Se esperaba que el fichero fuera una imagen pero se encontro \"{{ fileType }}\"",

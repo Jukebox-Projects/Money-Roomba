@@ -26,7 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class ScheduledTransactionService {
 
-    private final String ENTITY_NAME = "Scheduled Transaction";
+    private final String ENTITY_NAME = "Scheduled Transactions";
 
     private final Logger log = LoggerFactory.getLogger(ScheduledTransactionService.class);
 
@@ -38,16 +38,20 @@ public class ScheduledTransactionService {
 
     private final EventRepository eventRepository;
 
+    private final UserService userService;
+
     public ScheduledTransactionService(
         ScheduledTransactionRepository scheduledTransactionRepository,
         UserRepository userRepository,
         UserDetailsRepository userDetailsRepository,
-        EventRepository eventRepository
+        EventRepository eventRepository,
+        UserService userService
     ) {
         this.scheduledTransactionRepository = scheduledTransactionRepository;
         this.userRepository = userRepository;
         this.userDetailsRepository = userDetailsRepository;
         this.eventRepository = eventRepository;
+        this.userService = userService;
     }
 
     /**
@@ -73,6 +77,16 @@ public class ScheduledTransactionService {
         Optional<UserDetails> userDetails = userDetailsRepository.findOneByInternalUser(user.get());
         scheduledTransaction.setSourceUser(userDetails.get());
         createEvent(EventType.CREATE);
+        List<ScheduledTransaction> userTransactionList = scheduledTransactionRepository.findAllBySourceUser(userDetails.get());
+        if (!userService.currentUserIsPremiumUser() && userTransactionList.size() >= 3) {
+            throw new BadRequestAlertException(
+                "Regular users cannot register more than 3 scheduled transactions",
+                ENTITY_NAME,
+                "nomoreschtransactions"
+            );
+        } else if (userService.currentUserIsAdmin()) {
+            throw new BadRequestAlertException("Admins cannot register or modify", ENTITY_NAME, "admincantregister");
+        }
         return scheduledTransactionRepository.save(scheduledTransaction);
     }
 
