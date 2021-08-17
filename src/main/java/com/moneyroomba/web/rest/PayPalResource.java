@@ -120,10 +120,11 @@ public class PayPalResource {
         transaction.setScheduled(false);
         transaction.setIncomingTransaction(false);
         List<Wallet> wallets = walletRepository.findAllByUser(userService.getUserDetailsByLogin().get());
-        transaction.setWallet(wallets.get(0));
-        transaction.setAttachment(null);
-        transactionService.create(transaction);
-
+        if (wallets.size() > 0) {
+            transaction.setWallet(wallets.get(0));
+            transaction.setAttachment(null);
+            transactionService.create(transaction);
+        }
         mailService.sendInvoice(invoice, user, license);
 
         if (!isGift) {
