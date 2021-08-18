@@ -57,7 +57,10 @@
                 <a class="dropdown-item" [routerLink]="['/system-setting', systemSetting.id, 'view']" jhiTranslate="entity.action.view"
                   >view</a
                 >
-                <a class="dropdown-item" [routerLink]="['/system-setting', systemSetting.id, 'edit']" jhiTranslate="entity.action.edit"
+                <a
+                  class="dropdown-item text-primary"
+                  [routerLink]="['/system-setting', systemSetting.id, 'edit']"
+                  jhiTranslate="entity.action.edit"
                   >Edit</a
                 >
               </div>

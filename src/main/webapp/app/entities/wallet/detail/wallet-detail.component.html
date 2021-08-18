@@ -58,9 +58,10 @@
                   </svg>
                 </div>
                 <div class="dropdown-menu dropdown-menu-right" ngbDropdownMenu>
-                  <a class="dropdown-item" (click)="previousState()" jhiTranslate="entity.action.back">Back</a>
-                  <a class="dropdown-item" jhiTranslate="entity.action.delete">Delete</a>
-                  <a class="dropdown-item" [routerLink]="['/wallet', wallet.id, 'edit']" jhiTranslate="entity.action.edit">Edit</a>
+                  <a class="dropdown-item text-primary" [routerLink]="['/wallet', wallet.id, 'edit']" jhiTranslate="entity.action.edit"
+                    >Edit</a
+                  >
+                  <a class="dropdown-item text-danger" jhiTranslate="entity.action.delete">Delete</a>
                 </div>
               </div>
             </div>
