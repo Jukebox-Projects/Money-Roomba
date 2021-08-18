@@ -27,13 +27,13 @@ public class MailReceiver {
 
     private final Logger log = LoggerFactory.getLogger(MailReceiver.class);
     //@Value("${mailReceiver.hostName}")
-    private String hostName = "imap.gmail.com";
+    private String hostName = "premium44.web-hosting.com";
     //@Value("${mailReceiver.port}")
     private String port = "993";
     //@Value("${mailReceiver.userName}")
-    private String userName = "moneyroomba@gmail.com";
+    private String userName = "moneyroomba@sau.ma";
     //@Value("${mailReceiver.password}")
-    private String password = "CashMoneyProductions123";
+    private String password = "MoneyRoomba123";
 
     private IMAPStore store;
 
@@ -123,7 +123,7 @@ public class MailReceiver {
 
                     Address[] froms = msg.getFrom();
                     String email = froms == null ? null : ((InternetAddress) froms[0]).getAddress();
-                    Optional<UserDetails> user = userService.getUserDetailsByLogin(email);
+                    Optional<UserDetails> user = userService.getUserDetailsByLogin2(email);
                     TiqueteElectronico deserializedData = invoiceXMLService.save(sb.toString());
 
                     if (user.isEmpty()) {

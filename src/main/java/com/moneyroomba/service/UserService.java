@@ -651,6 +651,16 @@ public class UserService {
     }
 
     @Transactional(readOnly = true)
+    public Optional<UserDetails> getUserDetailsByLogin2(String login) {
+        Optional<User> user = userRepository.findOneByLogin(login);
+        if (user.isEmpty()) {
+            return Optional.empty();
+        }
+        Optional<UserDetails> userDetails = userDetailsRepository.findOneByInternalUser(user.get());
+        return userDetails.isEmpty() ? Optional.empty() : userDetails;
+    }
+
+    @Transactional(readOnly = true)
     public UserDetails getUserDetailsById(Long id) {
         return userDetailsRepository.findOneByInternalUserId(id).orElseThrow(() -> new NoSuchElementFoundException("No User found"));
     }
