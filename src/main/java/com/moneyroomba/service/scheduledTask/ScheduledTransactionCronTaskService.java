@@ -37,32 +37,36 @@ public class ScheduledTransactionCronTaskService {
     @Scheduled(cron = "0 30 1 * * *")
     public void registerScheduledTransactions() throws Exception {
         List<ScheduledTransaction> allTransactions = scheduledTransactionRepository.findAll();
-        LocalDate today = LocalDate.now();
         for (ScheduledTransaction t : allTransactions) {
-            if (
-                (today.isAfter(t.getStartDate()) || today.isEqual(t.getStartDate())) &&
-                (t.getEndDate() == null || (today.isBefore(t.getEndDate()) || today.isEqual(t.getStartDate())))
-            ) {
-                switch (t.getRecurringType()) {
-                    case DAILY:
+            checkTransactionRegistry(t);
+        }
+    }
+
+    public void checkTransactionRegistry(ScheduledTransaction t) {
+        LocalDate today = LocalDate.now();
+        if (
+            (today.isAfter(t.getStartDate()) || today.isEqual(t.getStartDate())) &&
+            (t.getEndDate() == null || (today.isBefore(t.getEndDate()) || today.isEqual(t.getStartDate())))
+        ) {
+            switch (t.getRecurringType()) {
+                case DAILY:
+                    saveTransaction(t);
+                    break;
+                case WEEKLY:
+                    if ((today.getDayOfWeek().getValue() - 1) == t.getDayOfWeek()) {
                         saveTransaction(t);
-                        break;
-                    case WEEKLY:
-                        if ((today.getDayOfWeek().getValue() - 1) == t.getDayOfWeek()) {
-                            saveTransaction(t);
-                        }
-                        break;
-                    case MONTHLY:
-                        if (today.getDayOfMonth() == t.getDayOfMonth()) {
-                            saveTransaction(t);
-                        }
-                        break;
-                    case YEARLY:
-                        if (today.getDayOfMonth() == t.getDayOfMonth() && (today.getMonthValue() - 1) == t.getMonthOfYear()) {
-                            saveTransaction(t);
-                        }
-                        break;
-                }
+                    }
+                    break;
+                case MONTHLY:
+                    if (today.getDayOfMonth() == t.getDayOfMonth()) {
+                        saveTransaction(t);
+                    }
+                    break;
+                case YEARLY:
+                    if (today.getDayOfMonth() == t.getDayOfMonth() && (today.getMonthValue() - 1) == t.getMonthOfYear()) {
+                        saveTransaction(t);
+                    }
+                    break;
             }
         }
     }

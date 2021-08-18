@@ -146,12 +146,12 @@
                   >view</a
                 >
                 <a
-                  class="dropdown-item"
+                  class="dropdown-item text-primary"
                   [routerLink]="['/scheduled-transaction', scheduledTransaction.id, 'edit']"
                   jhiTranslate="entity.action.edit"
                   >Edit</a
                 >
-                <a class="dropdown-item" (click)="delete(scheduledTransaction)" jhiTranslate="entity.action.delete">Delete</a>
+                <a class="dropdown-item text-danger" (click)="delete(scheduledTransaction)" jhiTranslate="entity.action.delete">Delete</a>
               </div>
             </div>
           </td>

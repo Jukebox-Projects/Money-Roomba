@@ -128,9 +128,11 @@
                 </svg>
               </div>
               <div class="dropdown-menu dropdown-menu-right" ngbDropdownMenu>
-                <a class="dropdown-item" [routerLink]="['/wallet', wallet.id, 'view']" jhiTranslate="entity.action.view">view</a>
-                <a class="dropdown-item" [routerLink]="['/wallet', wallet.id, 'edit']" jhiTranslate="entity.action.edit">Edit</a>
-                <a class="dropdown-item" (click)="delete(wallet)" jhiTranslate="entity.action.delete">Delete</a>
+                <a class="dropdown-item" [routerLink]="['/wallet', wallet.id, 'view']" jhiTranslate="entity.action.view">View</a>
+                <a class="dropdown-item text-primary" [routerLink]="['/wallet', wallet.id, 'edit']" jhiTranslate="entity.action.edit"
+                  >Edit</a
+                >
+                <a class="dropdown-item text-danger" (click)="delete(wallet)" jhiTranslate="entity.action.delete">Delete</a>
               </div>
             </div>
           </td>
@@ -252,8 +254,10 @@
                   </div>
                   <div class="dropdown-menu dropdown-menu-right" ngbDropdownMenu>
                     <a class="dropdown-item" [routerLink]="['/wallet', wallet.id, 'view']" jhiTranslate="entity.action.view">view</a>
-                    <a class="dropdown-item" [routerLink]="['/wallet', wallet.id, 'edit']" jhiTranslate="entity.action.edit">Edit</a>
-                    <a class="dropdown-item" (click)="delete(wallet)" jhiTranslate="entity.action.delete">Delete</a>
+                    <a class="dropdown-item text-primary" [routerLink]="['/wallet', wallet.id, 'edit']" jhiTranslate="entity.action.edit"
+                      >Edit</a
+                    >
+                    <a class="dropdown-item text-danger" (click)="delete(wallet)" jhiTranslate="entity.action.delete">Delete</a>
                   </div>
                 </div>
               </div>

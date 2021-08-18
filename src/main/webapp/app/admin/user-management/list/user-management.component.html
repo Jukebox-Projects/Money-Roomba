@@ -132,7 +132,7 @@
               <div class="dropdown-menu dropdown-menu-right" ngbDropdownMenu>
                 <a class="dropdown-item" [routerLink]="['/user-details', user.id, 'view']" jhiTranslate="entity.action.view">view</a>
                 <a
-                  class="dropdown-item"
+                  class="dropdown-item text-primary"
                   [routerLink]="['/user-details', user.id, 'view']"
                   [queryParams]="{ active: 2 }"
                   jhiTranslate="entity.action.edit"
@@ -141,7 +141,7 @@
                 <a (click)="resetPassword(user)" class="dropdown-item" jhiTranslate="entity.action.resetPassword">Reset Password</a>
                 <a
                   *ngIf="!(currentAccount.login === user.login)"
-                  class="dropdown-item"
+                  class="dropdown-item text-danger"
                   (click)="deleteUser(user)"
                   jhiTranslate="entity.action.delete"
                   >Delete</a
