@@ -1,12 +1,16 @@
 <div class="deznav">
   <div class="deznav-scroll" [perfectScrollbar]>
     <ul class="metismenu" id="menu" metis-menu>
-      <li *ngIf="isAuthenticated()">
+      <li *ngIf="isAuthenticated()" style="cursor: pointer">
         <a aria-expanded="false">
           <i class="flaticon-381-networking">
             <img src="../../../../assets/icons/dashboard/business-report.png" style="width: 30px; height: 30px" />
           </i>
-          <span class="{{ currentHref == '/' || currentHref == '/' ? 'mm-active' : '' }}" [routerLink]="['/']" class="nav-text"
+          <span
+            class="{{ currentHref == '/' || currentHref == '/' ? 'mm-active' : '' }}"
+            [routerLink]="['/']"
+            class="nav-text"
+            jhiTranslate="global.menu.dashboardTitle"
             >Dashboard</span
           >
         </a>
@@ -15,7 +19,7 @@
         </ul>
       </li>
 
-      <li *ngIf="isAuthenticated()">
+      <li *ngIf="isAuthenticated()" style="cursor: pointer">
         <a>
           <i class="flaticon-381-networking">
             <img src="../../../../assets/icons/dashboard/wallet.png" style="width: 30px; height: 30px" />
@@ -37,7 +41,7 @@
         </ul>
       </li>
 
-      <li *ngIf="isAuthenticated()">
+      <li *ngIf="isAuthenticated()" style="cursor: pointer">
         <a class="has-arrow ai-icon" aria-expanded="false">
           <i>
             <img src="../../../../assets/icons/dashboard/money.png" />
@@ -64,7 +68,7 @@
         </ul>
       </li>
 
-      <li *ngIf="isAuthenticated()">
+      <li *ngIf="isAuthenticated()" style="cursor: pointer">
         <a aria-expanded="false">
           <i class="flaticon-381-networking">
             <img src="../../../../assets/icons/dashboard/color-wheel.png" />
@@ -86,7 +90,7 @@
         </ul>
       </li>
 
-      <li *ngIf="isAuthenticated()">
+      <li *ngIf="isAuthenticated()" style="cursor: pointer">
         <a aria-expanded="false">
           <i class="flaticon-381-networking">
             <img src="../../../../assets/icons/dashboard/currencies.png" style="width: 30px; height: 30px" />
@@ -108,7 +112,7 @@
         </ul>
       </li>
 
-      <li *ngIf="adminUser">
+      <li *ngIf="adminUser" style="cursor: pointer">
         <a class="has-arrow ai-icon" aria-expanded="false">
           <i class="flaticon-381-television">
             <img src="../../../../assets/icons/dashboard/settings.png" />
@@ -116,61 +120,7 @@
           <span class="nav-text" jhiTranslate="global.menu.admin.main">Administration</span>
         </a>
         <ul aria-expanded="false">
-          <li>
-            <a
-              [routerLink]="['/admin/user-management']"
-              class="{{ currentHref == '/admin/user-management' ? 'mm-active' : '' }}"
-              jhiTranslate="global.menu.admin.userManagement"
-              >User management</a
-            >
-          </li>
-          <li>
-            <a [routerLink]="['/event']" class="{{ currentHref == '/event' ? 'mm-active' : '' }}" jhiTranslate="global.menu.entities.event"
-              >Events</a
-            >
-          </li>
-
-          <li>
-            <a
-              [routerLink]="['/admin/metrics']"
-              class="{{ currentHref == '/admin/metrics' ? 'mm-active' : '' }}"
-              jhiTranslate="global.menu.admin.metrics"
-              >Metrics</a
-            >
-          </li>
-          <!--   <li>
-            <a
-              [routerLink]="['/admin/health']"
-              class="{{ currentHref == '/admin/health' ? 'mm-active' : '' }}"
-              jhiTranslate="global.menu.admin.health"
-              >Health</a
-            >
-          </li>-->
-          <li>
-            <a
-              [routerLink]="['/admin/logs']"
-              class="{{ currentHref == '/admin/logs' ? 'mm-active' : '' }}"
-              jhiTranslate="global.menu.admin.logs"
-              >Logs</a
-            >
-          </li>
-          <li *ngIf="openAPIEnabled">
-            <a
-              [routerLink]="['/admin/docs']"
-              class="{{ currentHref == '/admin/docs' ? 'mm-active' : '' }}"
-              jhiTranslate="global.menu.admin.apidocs"
-              >API</a
-            >
-          </li>
-          <li>
-            <a
-              [routerLink]="['/admin/configuration']"
-              class="{{ currentHref == '/admin/configuration' ? 'mm-active' : '' }}"
-              jhiTranslate="global.menu.admin.configuration"
-              >Configuration</a
-            >
-          </li>
-          <li>
+          <li style="cursor: pointer">
             <a
               [routerLink]="['/system-setting']"
               class="{{ currentHref == '/system-setting' ? 'mm-active' : '' }}"
@@ -178,12 +128,44 @@
               >System Setting</a
             >
           </li>
-          <li>
+          <li style="cursor: pointer">
+            <a [routerLink]="['/event']" class="{{ currentHref == '/event' ? 'mm-active' : '' }}" jhiTranslate="global.menu.entities.event"
+              >Events</a
+            >
+          </li>
+          <li style="cursor: pointer">
+            <a
+              [routerLink]="['/admin/user-management']"
+              class="{{ currentHref == '/admin/user-management' ? 'mm-active' : '' }}"
+              jhiTranslate="global.menu.admin.userManagement"
+              >User management</a
+            >
+          </li>
+
+          <li style="cursor: pointer">
             <a
               [routerLink]="['/license']"
               class="{{ currentHref == '/license' ? 'mm-active' : '' }}"
               jhiTranslate="global.menu.entities.license"
               >Licenses</a
+            >
+          </li>
+
+          <li style="cursor: pointer">
+            <a
+              [routerLink]="['/admin/logs']"
+              class="{{ currentHref == '/admin/logs' ? 'mm-active' : '' }}"
+              jhiTranslate="global.menu.admin.logs"
+              >Logs</a
+            >
+          </li>
+
+          <li style="cursor: pointer">
+            <a
+              [routerLink]="['/admin/metrics']"
+              class="{{ currentHref == '/admin/metrics' ? 'mm-active' : '' }}"
+              jhiTranslate="global.menu.admin.metrics"
+              >Metrics</a
             >
           </li>
 

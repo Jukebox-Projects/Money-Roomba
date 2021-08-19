@@ -38,7 +38,11 @@
       "active": "Activo",
       "inactive": "Inactivo",
       "reportsTrue": "Sí",
-      "reportsFalse": "No"
+      "reportsFalse": "No",
+      "walletTransactions": "Transacciones de la cartera",
+      "walletTransactionsDetail": "Lista de transacciones agregadas en esta cartera",
+      "scheduledTransactions": "Programadas",
+      "regularTransactions": "Manuales"
     }
   }
 }

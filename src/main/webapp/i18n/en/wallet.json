@@ -38,7 +38,11 @@
       "active": "Active",
       "inactive": "Inactive",
       "reportsTrue": "Yes",
-      "reportsFalse": "No"
+      "reportsFalse": "No",
+      "walletTransactions": "Wallet Transactions",
+      "walletTransactionsDetail": "List of transactions added in this wallet",
+      "scheduledTransactions": "Scheduled",
+      "regularTransactions": "Manual"
     }
   }
 }

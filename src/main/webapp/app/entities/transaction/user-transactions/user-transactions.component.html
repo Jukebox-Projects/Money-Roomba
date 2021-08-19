@@ -1,14 +1,24 @@
 <div class="card">
   <div class="card-header d-block d-sm-flex border-0">
     <div>
-      <h4 class="fs-20 text-black">Wallet Transactions</h4>
-      <p class="mb-0 fs-13">Transaction history of your wallet</p>
+      <h4 class="fs-20 text-black" jhiTranslate="moneyRoombaApp.wallet.walletTransactions">Wallet Transactions</h4>
+      <p class="mb-0 fs-13" jhiTranslate="moneyRoombaApp.wallet.walletTransactionsDetail">Transaction history of your wallet</p>
     </div>
     <div class="card-action card-tabs mt-3 mt-sm-0">
       <ul class="nav nav-tabs" role="tablist" ngbNav #nav="ngbNav">
         <!--TRANSACCIONES REGULARES -->
         <li class="nav-item" ngbNavItem="Monthly">
-          <a class="nav-link" data-toggle="tab" href="#Monthly" role="tab" aria-selected="false" ngbNavLink> Regular </a>
+          <a
+            class="nav-link"
+            data-toggle="tab"
+            href="#Monthly"
+            role="tab"
+            aria-selected="false"
+            jhiTranslate="moneyRoombaApp.wallet.regularTransactions"
+            ngbNavLink
+          >
+            Regular
+          </a>
           <!-- -->
           <!--<div *ngIf="transactions.length > 0">-->
           <!-- *ngFor="let transaction of transactions; trackBy: trackId"-->
@@ -150,7 +160,17 @@
 
         <!--<app-user-scheduled-transactions></app-user-scheduled-transactions>-->
         <li class="nav-item" ngbNavItem="Weekly">
-          <a class="nav-link" data-toggle="tab" href="#Weekly" role="tab" aria-selected="false" ngbNavLink> Scheduled </a>
+          <a
+            class="nav-link"
+            data-toggle="tab"
+            href="#Weekly"
+            role="tab"
+            aria-selected="false"
+            jhiTranslate="moneyRoombaApp.wallet.scheduledTransactions"
+            ngbNavLink
+          >
+            Scheduled
+          </a>
           <ng-template *ngIf="scheduledTransactions.length > 0" ngbNavContent>
             <ngb-accordion
               *ngFor="let scheduledTransaction of scheduledTransactions; trackBy: trackIdScheduled"
